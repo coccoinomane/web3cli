@@ -1,0 +1,18 @@
+{
+  "python.defaultInterpreterPath": "/usr/local/bin/python3",
+  "python.formatting.blackPath": "/usr/local/bin/black",
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "pypi-*/": true
+  },
+  "python.analysis.typeCheckingMode": "off",
+  "python.autoComplete.extraPaths": ["__pypackages__/3.10/lib"],
+  "python.analysis.extraPaths": ["__pypackages__/3.10/lib"],
+  "python.analysis.exclude": ["__pypackages__"],
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "__pypackages__/3.10/bin/mypy"
+}
