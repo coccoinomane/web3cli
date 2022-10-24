@@ -27,8 +27,8 @@ clean = "find . -name '*.py[co]' -delete"
 docker = "pdm run clean && docker build -t web3cli:latest ."
 
 [project.urls]
-homepage = "https://github.com/coccoinomane/web3cli.py"
-repository = "https://github.com/coccoinomane/web3cli.py"
+homepage = "https://github.com/coccoinomane/web3cli"
+repository = "https://github.com/coccoinomane/web3cli"
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
