@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.1.1"
+version = "0.1.2"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -10,7 +10,9 @@ keywords = ["web3", "cli", "blockchain", "ethereum", "evm"]
 license = {text = "MIT"}
 requires-python = ">=3.10,<4"
 dependencies = [
+    "cement[colorlog]>=3.0.8",
     "cement[jinja2]>=3.0.8",
+    "cement[yaml]>=3.0.8",
     "web3client>=0.3.4",
 ]
 
@@ -21,10 +23,18 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-test = "python -m pytest tests"
-publish_test = "pdm publish -r ${PDM_PUBLISH_TEST_REPO} -u ${PDM_PUBLISH_TEST_USERNAME} -P ${PDM_PUBLISH_TEST_PASSWORD}"
+web3cli.help = "Run the CLI in development mode"
+web3cli.cmd = "web3cli"
+test = "pytest tests"
+publish_test.help = """\
+Publish package to the test PyPI repository. Store credentials
+in PDM_PUBLISH_TEST_USERNAME and PDM_PUBLISH_TEST_PASSWORD"""
+publish_test.cmd = "pdm publish -r testpypi -u ${PDM_PUBLISH_TEST_USERNAME} -P ${PDM_PUBLISH_TEST_PASSWORD}"
 clean = "find . -name '*.py[co]' -delete"
 docker = "pdm run clean && docker build -t web3cli:latest ."
+
+[project.scripts]
+web3cli = "web3cli.main:main"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"
