@@ -13,6 +13,7 @@ class Network(Web3CliController):
 
     @ex(help="list available networks")
     def list(self) -> None:
+        print(self.app.network_name)
         self.app.render({"networks": get_supported_networks()}, "network/list.jinja2")
 
     @ex(help="get current network")
