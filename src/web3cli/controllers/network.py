@@ -7,6 +7,7 @@ from web3cli.core.exceptions import Web3CliError
 class Network(Web3CliController):
     class Meta:
         label = "network"
+        help = "show the networks (blockchains) available in web3cli"
         stacked_type = "nested"
         stacked_on = "base"
 
