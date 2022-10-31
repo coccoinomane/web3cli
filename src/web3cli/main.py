@@ -1,13 +1,13 @@
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
-from .core.exc import Web3CliError
+from .core.exceptions import Web3CliError
 from .controllers.base import Base
 
 # configuration defaults
 CONFIG = init_defaults("web3cli")
 CONFIG["web3cli"]["debug"] = False
-CONFIG["web3cli"]["network"] = "ethereum"
+CONFIG["web3cli"]["default_network"] = "ethereum"
 
 
 class Web3Cli(App):
@@ -55,7 +55,7 @@ class Web3CliTest(TestApp, Web3Cli):
         label = "web3cli"
 
 
-def main():
+def main() -> None:
     with Web3Cli() as app:
         try:
             app.run()

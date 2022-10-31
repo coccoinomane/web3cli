@@ -1,5 +1,4 @@
 from typing import List
-from xmlrpc.client import Boolean
 from web3factory import networks
 from web3factory.types import NetworkConfig
 

@@ -1,9 +1,9 @@
-from cement import Controller, ex
 from cement.utils.version import get_version_banner
+from web3cli.core.controller import Web3CliController
 from ..core.version import get_version
 
 VERSION_BANNER = """
-Interact with Ethereum and other blockchains with the command line %s
+web3cli %s
 %s
 """ % (
     get_version(),
@@ -11,7 +11,9 @@ Interact with Ethereum and other blockchains with the command line %s
 )
 
 
-class Base(Controller):
+class Base(Web3CliController):
+    """Controller for when web3cli is invoked with no arguments"""
+
     class Meta:
         label = "base"
 
@@ -23,6 +25,6 @@ class Base(Controller):
             (["-v", "--version"], {"action": "version", "version": VERSION_BANNER}),
         ]
 
-    def _default(self):
+    def _default(self) -> None:
         """Default action if no sub-command is passed."""
         self.app.args.print_help()

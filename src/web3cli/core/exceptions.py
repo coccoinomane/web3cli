@@ -1,4 +1,4 @@
-
 class Web3CliError(Exception):
-    """Generic errors."""
+    """Generic errors"""
+
     pass
