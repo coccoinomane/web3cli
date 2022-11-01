@@ -1,7 +1,6 @@
 from cement import ex
 from web3cli.core.controller import Web3CliController
-from web3cli.src.helpers.networks import get_supported_networks, is_network_supported
-from web3cli.core.exceptions import Web3CliError
+from web3cli.src.helpers.networks import get_supported_networks
 
 
 class Network(Web3CliController):

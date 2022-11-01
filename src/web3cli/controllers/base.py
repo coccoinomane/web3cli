@@ -19,11 +19,7 @@ class Base(Web3CliController):
             (
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
-            ),
-            (
-                ["--network"],
-                dict(help="which network to use", dest="network", action="store"),
-            ),
+            )
         ]
 
     def _default(self) -> None:
@@ -33,11 +29,4 @@ class Base(Web3CliController):
     def _post_argument_parsing(self) -> None:
         """Hooks called in every controller after argument
         parsing, before command execution"""
-
-        # Set the passed network as the global variable network_name
-        if self.app.pargs.network:
-            self.app.extend("network_name", self.app.pargs.network)
-        else:
-            self.app.extend(
-                "network_name", self.app.config.get("web3cli", "default_network")
-            )
+        pass

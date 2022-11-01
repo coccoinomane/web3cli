@@ -1,6 +1,7 @@
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
+from web3cli.core.arguments import add_global_arguments, handle_global_arguments
 from .core.exceptions import Web3CliError
 from .controllers.base import Base
 
@@ -47,6 +48,11 @@ class Web3Cli(App):
         # register handlers
         handlers = [Base, Network]
 
+        # register callbacks
+        hooks = [
+            ("post_argument_parsing", handle_global_arguments),
+        ]
+
 
 class Web3CliTest(TestApp, Web3Cli):
     """A sub-class of Web3Cli that is better suited for testing."""
@@ -57,6 +63,7 @@ class Web3CliTest(TestApp, Web3Cli):
 
 def main() -> None:
     with Web3Cli() as app:
+        add_global_arguments(app)
         try:
             app.run()
 
