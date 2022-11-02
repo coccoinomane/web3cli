@@ -1,0 +1,24 @@
+### Web3 Cli Configuration Settings
+### All settings can be overriden using snake case environment
+## variables, for example 'export WEB3CLI_NETWORK=ethereum'
+---
+
+web3cli:
+  ### Toggle application level debug
+  debug: false
+  ### Use this network unless otherwise specified
+  default_network: "ethereum"
+
+log.colorlog:
+  ### Where the log file lives (no log file by default)
+  file: null
+  ### The level for which to log.  One of: info, warning, error, fatal, debug
+  level: info
+  ### Whether or not to log to console
+  to_console: true
+  ### Whether or not to rotate the log file when it reaches `max_bytes`
+  rotate: false
+  ### Max size in bytes that a log file can grow until it is rotated.
+  max_bytes: 512000
+  ### The maximum number of log files to maintain when rotating
+  max_files: 4
