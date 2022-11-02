@@ -1,5 +1,6 @@
-from web3cli.core.controller import Web3CliController
+from web3cli.core.controllers import Web3CliController
 from web3cli.core.version import get_version_message
+import web3cli.core.args as args
 
 
 class Base(Web3CliController):
@@ -19,7 +20,15 @@ class Base(Web3CliController):
             (
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
-            )
+            ),
+            (
+                ["-n", "--network"],
+                {
+                    "action": "store",
+                    "dest": "network",
+                    "help": "network (blockchain) to use",
+                },
+            ),
         ]
 
     def _default(self) -> None:
@@ -27,6 +36,11 @@ class Base(Web3CliController):
         self.app.args.print_help()
 
     def _post_argument_parsing(self) -> None:
-        """Hooks called in every controller after argument
-        parsing, before command execution"""
-        pass
+        """Handle global arguments"""
+
+        # Command invoked from the CLI
+        command: str = args.get_command(self.app)
+        # Handle --network argument
+        if command and command.startswith("network"):
+            self.app.pargs.network = args.get_network(self.app)
+            args.validate_network(self.app.pargs.network)

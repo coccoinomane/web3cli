@@ -1,5 +1,5 @@
 from cement import ex
-from web3cli.core.controller import Web3CliController
+from web3cli.core.controllers import Web3CliController
 from web3cli.src.helpers.networks import get_supported_networks
 
 
@@ -12,9 +12,8 @@ class Network(Web3CliController):
 
     @ex(help="list available networks")
     def list(self) -> None:
-        print(self.app.network_name)
         self.app.render({"networks": get_supported_networks()}, "network/list.jinja2")
 
     @ex(help="get current network")
     def get(self) -> None:
-        print(self.get_option("web3cli.default_network"))
+        print(self.app.pargs.network)

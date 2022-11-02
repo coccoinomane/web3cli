@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.1.5"
+version = "0.1.6"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -23,8 +23,8 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-web3cli.help = "Run the CLI in development mode"
-web3cli.cmd = "web3cli"
+web3.help = "Run the CLI in development mode"
+web3.cmd = "web3"
 test = "pytest tests"
 publish_test.help = """\
 Publish package to the test PyPI repository. Store credentials
@@ -34,7 +34,7 @@ clean = "find . -name '*.py[co]' -delete"
 docker = "pdm run clean && docker build -t web3cli:latest ."
 
 [project.scripts]
-web3cli = "web3cli.main:main"
+web3 = "web3cli.main:main"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

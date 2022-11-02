@@ -65,8 +65,6 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Fix `web3cli network set`
-- Typing
 - Autocomplete
 - Allow to add networks
 - Command structure

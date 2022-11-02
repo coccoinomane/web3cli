@@ -1,9 +1,8 @@
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
-from web3cli.core.arguments import add_global_arguments, handle_global_arguments
-from .core.exceptions import Web3CliError
-from .controllers.base import Base
+from web3cli.core.exceptions import Web3CliError
+from web3cli.controllers.base import Base
 
 # configuration defaults
 CONFIG = init_defaults("web3cli")
@@ -34,7 +33,7 @@ class Web3Cli(App):
         config_handler = "yaml"
 
         # Path of configuration file(s)
-        config_files = ["config/web3cli.yml"]
+        config_files = ["config/web3cli.yml", "~/.web3cli/config/web3cli.yml"]
 
         # configuration file suffix
         config_file_suffix = ".yml"
@@ -48,11 +47,6 @@ class Web3Cli(App):
         # register handlers
         handlers = [Base, Network]
 
-        # register callbacks
-        hooks = [
-            ("post_argument_parsing", handle_global_arguments),
-        ]
-
 
 class Web3CliTest(TestApp, Web3Cli):
     """A sub-class of Web3Cli that is better suited for testing."""
@@ -63,7 +57,6 @@ class Web3CliTest(TestApp, Web3Cli):
 
 def main() -> None:
     with Web3Cli() as app:
-        add_global_arguments(app)
         try:
             app.run()
 
