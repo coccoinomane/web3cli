@@ -214,6 +214,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "exceptiongroup"
+version = "1.0.0"
+requires_python = ">=3.7"
+summary = "Backport of PEP 654 (exception groups)"
+
+[[package]]
 name = "frozenlist"
 version = "1.3.1"
 requires_python = ">=3.7"
@@ -345,12 +351,6 @@ requires_python = ">=3.5"
 summary = "Protocol Buffers"
 
 [[package]]
-name = "py"
-version = "1.11.0"
-requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-summary = "library with cross-python path, ini-parsing, io, code, log facilities"
-
-[[package]]
 name = "pycryptodome"
 version = "3.15.0"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -370,17 +370,17 @@ summary = "Persistent/Functional/Immutable data structures"
 
 [[package]]
 name = "pytest"
-version = "7.1.3"
+version = "7.2.0"
 requires_python = ">=3.7"
 summary = "pytest: simple powerful testing with Python"
 dependencies = [
     "attrs>=19.2.0",
     "colorama; sys_platform == \"win32\"",
+    "exceptiongroup>=1.0.0rc8; python_version < \"3.11\"",
     "iniconfig",
     "packaging",
     "pluggy<2.0,>=0.12",
-    "py>=1.8.2",
-    "tomli>=1.0.0",
+    "tomli>=1.0.0; python_version < \"3.11\"",
 ]
 
 [[package]]
@@ -474,9 +474,9 @@ dependencies = [
 
 [[package]]
 name = "web3client"
-version = "0.3.4"
+version = "0.3.6"
 requires_python = ">=3.10,<4"
-summary = "Client to interact with multiple EVM blockchain"
+summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
     "eth-typing>=2.3.0",
     "web3<6.0.0,>=5.31.1",
@@ -820,6 +820,10 @@ content_hash = "sha256:eae2717a055bb901fc887d463d86cfb62bbb4ba92778b75adba0527df
     {url = "https://files.pythonhosted.org/packages/99/71/78170b0fdeb7ee6aa24c2206ac2d0d4f097ff0d9ad4ab4f748e04ea73187/eth_utils-1.10.0-py3-none-any.whl", hash = "sha256:74240a8c6f652d085ed3c85f5f1654203d2f10ff9062f83b3bad0a12ff321c7a"},
     {url = "https://files.pythonhosted.org/packages/de/b1/fcae902be069ea771af755839b677d196ac0959bf93b6418f12e45212b5e/eth-utils-1.10.0.tar.gz", hash = "sha256:bf82762a46978714190b0370265a7148c954d3f0adaa31c6f085ea375e4c61af"},
 ]
+"exceptiongroup 1.0.0" = [
+    {url = "https://files.pythonhosted.org/packages/4f/7e/eca80dbb5c10ec12ffb50884f52ecbff653cb5f443b0529244a748f114da/exceptiongroup-1.0.0.tar.gz", hash = "sha256:affbabf13fb6e98988c38d9c5650e701569fe3c1de3233cfb61c5f33774690ad"},
+    {url = "https://files.pythonhosted.org/packages/de/4c/2854d9e3dcce78108126aa3634186a64ddbfd06d4d69af74954665529e52/exceptiongroup-1.0.0-py3-none-any.whl", hash = "sha256:2ac84b496be68464a2da60da518af3785fff8b7ec0d090a581604bc870bdee41"},
+]
 "frozenlist 1.3.1" = [
     {url = "https://files.pythonhosted.org/packages/04/a6/7d83ee70d9e4d5e4423fae9d0d6821359df0313f754eb4db4c79f779c624/frozenlist-1.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:625d8472c67f2d96f9a4302a947f92a7adbc1e20bedb6aff8dbc8ff039ca6189"},
     {url = "https://files.pythonhosted.org/packages/0b/e6/f833437ed197d03757039411c801ffefb1ecd316fe92daec93cb82bad66d/frozenlist-1.3.1-cp38-cp38-musllinux_1_1_s390x.whl", hash = "sha256:f5abc8b4d0c5b556ed8cd41490b606fe99293175a82b98e652c3f2711b452988"},
@@ -1134,10 +1138,6 @@ content_hash = "sha256:eae2717a055bb901fc887d463d86cfb62bbb4ba92778b75adba0527df
     {url = "https://files.pythonhosted.org/packages/c8/b9/472ff5c475e3f1254aeb863750d64d8fb5dd7755adecf65f22b6a230108d/protobuf-3.19.5-cp310-cp310-manylinux2014_aarch64.whl", hash = "sha256:f2b599a21c9a32e171ec29a2ac54e03297736c578698e11b099d031f79da114b"},
     {url = "https://files.pythonhosted.org/packages/e8/59/ca4c301a7b4ab60d8053695dc1b66317d5804a6bdbc766e1eef553cdf24b/protobuf-3.19.5-cp36-cp36m-win32.whl", hash = "sha256:f2bde37667b18c2b5280df83bc799204394a5d2d774e4deaf9de0eb741df6833"},
 ]
-"py 1.11.0" = [
-    {url = "https://files.pythonhosted.org/packages/98/ff/fec109ceb715d2a6b4c4a85a61af3b40c723a961e8828319fbcb15b868dc/py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
-    {url = "https://files.pythonhosted.org/packages/f6/f0/10642828a8dfb741e5f3fbaac830550a518a775c7fff6f04a007259b0548/py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
-]
 "pycryptodome 3.15.0" = [
     {url = "https://files.pythonhosted.org/packages/00/07/5a262e3213a9358e2f7caf9080aa8a984f44bf4aee84592dfb965dd34355/pycryptodome-3.15.0-cp35-abi3-win_amd64.whl", hash = "sha256:c77126899c4b9c9827ddf50565e93955cb3996813c18900c16b2ea0474e130e9"},
     {url = "https://files.pythonhosted.org/packages/01/bc/7c67348624581fc57e5cb34e650ba09ba668e08e41937d1d1bbdc8cd9e9b/pycryptodome-3.15.0-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:7c9ed8aa31c146bef65d89a1b655f5f4eab5e1120f55fc297713c89c9e56ff0b"},
@@ -1197,9 +1197,9 @@ content_hash = "sha256:eae2717a055bb901fc887d463d86cfb62bbb4ba92778b75adba0527df
     {url = "https://files.pythonhosted.org/packages/dc/4f/5588cd16135b6d75a042349df7c4e114eb091ffb213e11c2805a44a7e860/pyrsistent-0.18.1-cp310-cp310-win_amd64.whl", hash = "sha256:636ce2dc235046ccd3d8c56a7ad54e99d5c1cd0ef07d9ae847306c91d11b5fec"},
     {url = "https://files.pythonhosted.org/packages/fa/4b/f051c292400d013523d6ced81af83c313059fd494e45e94ea99ceb549b95/pyrsistent-0.18.1-cp38-cp38-win32.whl", hash = "sha256:b568f35ad53a7b07ed9b1b2bae09eb15cdd671a5ba5d2c66caee40dbf91c68ca"},
 ]
-"pytest 7.1.3" = [
-    {url = "https://files.pythonhosted.org/packages/a4/a7/8c63a4966935b0d0b039fd67ebf2e1ae00f1af02ceb912d838814d772a9a/pytest-7.1.3.tar.gz", hash = "sha256:4f365fec2dff9c1162f834d9f18af1ba13062db0c708bf7b946f8a5c76180c39"},
-    {url = "https://files.pythonhosted.org/packages/e3/b9/3541bbcb412a9fd56593005ff32183825634ef795a1c01ceb6dee86e7259/pytest-7.1.3-py3-none-any.whl", hash = "sha256:1377bda3466d70b55e3f5cecfa55bb7cfcf219c7964629b967c37cf0bda818b7"},
+"pytest 7.2.0" = [
+    {url = "https://files.pythonhosted.org/packages/0b/21/055f39bf8861580b43f845f9e8270c7786fe629b2f8562ff09007132e2e7/pytest-7.2.0.tar.gz", hash = "sha256:c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59"},
+    {url = "https://files.pythonhosted.org/packages/67/68/a5eb36c3a8540594b6035e6cdae40c1ef1b6a2bfacbecc3d1a544583c078/pytest-7.2.0-py3-none-any.whl", hash = "sha256:892f933d339f068883b6fd5a459f03d85bfcb355e4981e146d2c7616c21fef71"},
 ]
 "pywin32 304" = [
     {url = "https://files.pythonhosted.org/packages/05/6b/9f8421a9a2ab5f33cbb9fd2f282ac971e584f6a83d44f6672bd17f1d68b2/pywin32-304-cp310-cp310-win32.whl", hash = "sha256:3c7bacf5e24298c86314f03fa20e16558a4e4138fc34615d7de4070c23e65af3"},
@@ -1294,9 +1294,9 @@ content_hash = "sha256:eae2717a055bb901fc887d463d86cfb62bbb4ba92778b75adba0527df
     {url = "https://files.pythonhosted.org/packages/77/30/86687404ff01743e623fa5b15c8612dd7cbf3b42072ca6c1ddf329993335/web3-5.31.1-py3-none-any.whl", hash = "sha256:9c2e72688a5b35881062ef4f9da01c4a1e922afeb3134cfc92f6b4b95bb7df06"},
     {url = "https://files.pythonhosted.org/packages/93/5c/38795c8556bcbdc3cae319241b58f630572f130fa5f5819a5c83f75cd48c/web3-5.31.1.tar.gz", hash = "sha256:74732fbd4b2e2baff9d0ac61f268b3e7b25b09ca6572d619390a9d782c2289f2"},
 ]
-"web3client 0.3.4" = [
-    {url = "https://files.pythonhosted.org/packages/4f/87/5b89b869ca756d644d98f5735d65e4dedd2cbbb0a340873844bad9d536d3/web3client-0.3.4.tar.gz", hash = "sha256:e614f833ecf1e1fb2cf74a84dad5f6b1f0436462e8f7548ca180f51ed94b13be"},
-    {url = "https://files.pythonhosted.org/packages/e7/29/28134bb3767f40b6539d95a90aa79fc92e012a0c07c66cf8bec3af5abdc7/web3client-0.3.4-py3-none-any.whl", hash = "sha256:2f626846108cb350688b333e18d1e97e195ead597ba554e5e071cdf69e7c4247"},
+"web3client 0.3.6" = [
+    {url = "https://files.pythonhosted.org/packages/46/b0/75abada23b889310bb0a00fafa37ac007b9e269187030f77a7e9057effc7/web3client-0.3.6.tar.gz", hash = "sha256:e56340de569acd39625a128029682f1f29c63798550c1dcc8de632e839ab3db2"},
+    {url = "https://files.pythonhosted.org/packages/c5/5c/6da43687930bcc3e6389414ff8f16cb2f19b68a0b8e7f1d5374bee708540/web3client-0.3.6-py3-none-any.whl", hash = "sha256:769696ed80e7d7cbf834369ce805ed8030d7bc4e4ac4a56dc6fa81c8015f830a"},
 ]
 "websockets 9.1" = [
     {url = "https://files.pythonhosted.org/packages/0c/08/1b50891a5101d71e7b739085b425aefcafd06ec37116d8fff2381776d0e8/websockets-9.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:0dd4eb8e0bbf365d6f652711ce21b8fd2b596f873d32aabb0fbb53ec604418cc"},
