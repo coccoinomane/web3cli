@@ -1,5 +1,5 @@
 from web3cli.main import Web3CliTest
-import web3cli.core.args as args
+import web3cli.helpers.args as args
 
 
 def test_network_arg() -> None:

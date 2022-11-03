@@ -1,5 +1,5 @@
 from cement import App
-from web3cli.src.helpers.networks import is_network_supported
+from web3cli.core.helpers.networks import is_network_supported
 from web3cli.core.exceptions import Web3CliError
 
 

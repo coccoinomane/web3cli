@@ -1,10 +1,11 @@
-from web3cli.core.controllers import Web3CliController
-from web3cli.core.version import get_version_message
-import web3cli.core.args as args
+from web3cli.controllers.controller import Controller
+from web3cli.helpers.version import get_version_message
+import web3cli.helpers.args as args
 
 
-class Base(Web3CliController):
-    """Controller for when web3cli is invoked with no arguments"""
+class Base(Controller):
+    """Controller for when web3cli is invoked with no arguments;
+    also contains and handles global arguments."""
 
     class Meta:
         label = "base"

@@ -1,11 +1,11 @@
-from typing import Any, cast
-from cement import Controller
+from typing import Any
+from cement import Controller as CementController
 from cement.core.config import ConfigInterface
 from cement import App
 
 
-class Web3CliController(Controller):
-    """Parent class of all controllers"""
+class Controller(CementController):
+    """Extend this class to define new commands"""
 
     def __init__(self) -> None:
         """Make app attributes discoverable by IDEs. See

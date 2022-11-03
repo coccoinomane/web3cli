@@ -1,9 +1,11 @@
 from cement import ex
-from web3cli.core.controllers import Web3CliController
-from web3cli.src.helpers.networks import get_supported_networks
+from web3cli.controllers.controller import Controller
+from web3cli.core.helpers.networks import get_supported_networks
 
 
-class Network(Web3CliController):
+class Network(Controller):
+    """Controller for the `web3 network` commands"""
+
     class Meta:
         label = "network"
         help = "show the networks (blockchains) available in web3cli"
