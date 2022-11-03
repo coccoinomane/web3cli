@@ -10,14 +10,19 @@ pip3 install -U web3cli
 
 # Examples
 
+- Get the ETH balance of the Ethereum foundation:
+   ```bash
+   web3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   ```
+
+- Get the BNB balance of the Binance hot wallet on BNB chain:
+   ```bash
+   web3 -n binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   ```
+
 - List all supported networks (blockchains):
    ```bash
    web3 network list
-   ```
-
-- Get the network that is currently active
-   ```bash
-   web3 network get
    ```
 
 # Settings
@@ -65,8 +70,8 @@ Pull requests are welcome!
    ```
 
 # TODO
+- Test web3 balance
 - Autocomplete
 - Allow to add networks
 - Command structure
-- Chech ETH balance
 - Interactive vs non-interactive mode

@@ -15,20 +15,20 @@ def get_command(app: App) -> str:
         return None
 
 
-def get_network(app: App) -> str:
-    """If the network argument is passed, return it; otherwise, return
-    its default value from the options"""
+def parse_network(app: App, validate: bool = True) -> str:
+    """If the network argument was passed to the CLI, return it; otherwise,
+    return its default value from the config file"""
     network = None
     if not app.pargs.network:
         network = app.config.get("web3cli", "default_network")
-        app.log.info(f"Will use the default network '{network}'")
     else:
         network = app.pargs.network
-        app.log.info(f"Will use the provided network '{network}'")
     if not network:
         raise Web3CliError(
             f"Please provide a network, either via CLI (--network) or via environment (WEB3CLI_DEFAULT_NETWORK)"
         )
+    if validate:
+        validate_network(network)
     return network
 
 

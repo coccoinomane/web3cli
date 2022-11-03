@@ -1,11 +1,16 @@
+from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.version import get_version_message
-import web3cli.helpers.args as args
+from web3cli.helpers.factory import make_client
+from web3cli.core.helpers.networks import get_coin
+from web3cli.helpers import args
 
 
 class Base(Controller):
-    """Controller for when web3cli is invoked with no arguments;
-    also contains and handles global arguments."""
+    """Base controller. It:
+    1. Defines top-level commands, such as `web3 balance`.
+    2. Handles global arguments, such as --network
+    3. Controls what happens when web3cli is invoked without arguments."""
 
     class Meta:
         label = "base"
@@ -36,12 +41,16 @@ class Base(Controller):
         """Default action if no sub-command is passed."""
         self.app.args.print_help()
 
+    @ex(
+        help="Get the balance of the given address in the blockchain coin (ETH, BNB, AVAX, etc)",
+        arguments=[(["address"], {"action": "store"})],
+    )
+    def balance(self) -> None:
+        balance = make_client(self.app).getBalanceInEth(self.app.pargs.address)
+        print(f"{balance} {get_coin(self.app.network)}")
+
     def _post_argument_parsing(self) -> None:
         """Handle global arguments"""
 
-        # Command invoked from the CLI
-        command: str = args.get_command(self.app)
-        # Handle --network argument
-        if command and command.startswith("network"):
-            self.app.pargs.network = args.get_network(self.app)
-            args.validate_network(self.app.pargs.network)
+        # Store the network provided by the user
+        self.app.extend("network", args.parse_network(self.app, validate=False))

@@ -7,9 +7,9 @@ def test_network_arg() -> None:
     argv = ["network", "get"]
     with Web3CliTest(argv=argv) as app:
         app.run()
-        assert args.get_network(app) is app.config.get("web3cli", "default_network")
+        assert app.network is app.config.get("web3cli", "default_network")
     # With explicit argument
     argv = ["--network", "binance", "network", "get"]
     with Web3CliTest(argv=argv) as app:
         app.run()
-        assert args.get_network(app) is "binance"
+        assert app.network is "binance"

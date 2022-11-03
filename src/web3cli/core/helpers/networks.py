@@ -11,3 +11,9 @@ def get_supported_networks() -> List[NetworkConfig]:
 def is_network_supported(network: str) -> bool:
     """Is the given network supported?"""
     return networks.is_network_supported(network)
+
+
+def get_coin(network: str) -> str:
+    """Return the ticker of the coin for the given network,
+    e.g. ETH for ethereum, BNB for binance, etc."""
+    return networks.get_network_config(network).get("coin")
