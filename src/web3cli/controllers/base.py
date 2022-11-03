@@ -47,10 +47,16 @@ class Base(Controller):
     )
     def balance(self) -> None:
         balance = make_client(self.app).getBalanceInEth(self.app.pargs.address)
-        print(f"{balance} {get_coin(self.app.network)}")
+        self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
 
     def _post_argument_parsing(self) -> None:
-        """Handle global arguments"""
+        """Parse and handle global arguments"""
 
-        # Store the network provided by the user
-        self.app.extend("network", args.parse_network(self.app, validate=False))
+        # Do nothing if no command is invoked (for example
+        # if one simply runs `web3` or `web3 network`)
+        if not args.get_command(self.app):
+            return
+
+        # Save the network provided by the user
+        self.app.extend("network", args.parse_network(self.app))  # ethereum binance etc
+        self.app.extend("coin", get_coin(self.app.network))  # ETH BNB etc

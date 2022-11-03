@@ -8,6 +8,11 @@ import pytest
 from cement import fs
 
 
+@pytest.fixture()
+def address() -> str:
+    return "0x3A8c8833Abe2e8454F59574A2A18b9bA8A28Ea4F"
+
+
 @pytest.fixture(scope="function")
 def tmp(request: FixtureRequest) -> Any:
     """

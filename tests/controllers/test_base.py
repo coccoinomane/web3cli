@@ -13,3 +13,13 @@ def test_network_arg() -> None:
     with Web3CliTest(argv=argv) as app:
         app.run()
         assert app.network is "binance"
+
+
+def test_balance(address: str) -> None:
+    argv = ["balance", address]
+    with Web3CliTest(argv=argv) as app:
+        app.run()
+        data, output = app.last_rendered
+        assert type(data["amount"]) is float
+        assert data["amount"] >= 0
+        assert data["ticker"] is app.coin
