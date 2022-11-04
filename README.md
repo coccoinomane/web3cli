@@ -75,3 +75,4 @@ Pull requests are welcome!
 - Allow to add networks
 - Command structure
 - Interactive vs non-interactive mode
+- Allow to add custom networks (sqlite?)

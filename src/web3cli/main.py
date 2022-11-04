@@ -27,6 +27,7 @@ class Web3Cli(App):
             "yaml",
             "colorlog",
             "jinja2",
+            "print",
         ]
 
         # configuration handler

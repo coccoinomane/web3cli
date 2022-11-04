@@ -18,4 +18,4 @@ class Network(Controller):
 
     @ex(help="get current network")
     def get(self) -> None:
-        print(self.app.network)
+        self.app.print(self.app.network)
