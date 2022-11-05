@@ -70,10 +70,10 @@ Pull requests are welcome!
    ```
 
 # TODO
+- Test address CRUD
+- Test database creation
 - Do not mess with DB unless needed by the command
 - Config CRUD
-- Add address CRUD
-- Test database creation
 - Autocomplete
 - Command structure
 - Interactive vs non-interactive mode

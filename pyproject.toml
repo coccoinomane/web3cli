@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.2.0"
+version = "0.2.1"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -34,7 +34,7 @@ publish_test.cmd = "pdm publish -r testpypi -u ${PDM_PUBLISH_TEST_USERNAME} -P $
 clean = "find . -name '*.py[co]' -delete"
 docker = "pdm run clean && docker build -t web3cli:latest ."
 db_open = "open -a TablePlus $HOME/.web3cli/database/web3cli.sqlite"
-db_delete = "rm -rf $HOME/.web3cli/database"
+db_clean = "rm -rf $HOME/.web3cli/database"
 
 [project.scripts]
 web3 = "web3cli.main:main"

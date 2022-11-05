@@ -1,6 +1,7 @@
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
+from web3cli.controllers.address import Address
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
 from web3cli.helpers import database
@@ -49,7 +50,7 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Network]
+        handlers = [Base, Network, Address]
 
         hooks = [
             ("post_setup", database.attach_production_db),
