@@ -24,8 +24,8 @@ class Address(Controller):
     @ex(
         help="add a new address",
         arguments=[
-            (["address"], {"help": "blockchain address (0x...)", "action": "store"}),
             (["label"], {"help": "label identifying the address", "action": "store"}),
+            (["address"], {"help": "blockchain address (0x...)", "action": "store"}),
             (["-d", "--description"], {"action": "store"}),
             (
                 ["-u", "--update"],
@@ -43,8 +43,8 @@ class Address(Controller):
         address = Model.get_by_label(self.app.pargs.label)
         if not address:
             Model.create(
-                address=self.app.pargs.address,
                 label=self.app.pargs.label,
+                address=self.app.pargs.address,
                 description=self.app.pargs.description,
             )
             self.app.log.info(f"Address '{self.app.pargs.label}' added correctly")
@@ -65,4 +65,10 @@ class Address(Controller):
         ],
     )
     def delete(self) -> None:
-        Model.get_by_label(self.app.pargs.label).delete()
+        address = Model.get_by_label(self.app.pargs.label)
+        if not address:
+            raise Web3CliError(
+                f"Address '{self.app.pargs.label}' does not exist, can't delete it"
+            )
+        address.delete_instance()
+        self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")

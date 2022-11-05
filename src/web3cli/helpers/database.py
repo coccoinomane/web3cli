@@ -14,6 +14,6 @@ def attach_testing_db(app: App) -> None:
     """Empty the testing database and attach it to the app object, so
     that the controllers can access it."""
     db_path = os.path.expanduser(app.config.get("web3cli_test", "db_file"))
-    if os.path.isfile(db_path):
+    if app._meta.reset_db and os.path.isfile(db_path):
         os.remove(db_path)  # important!
     app.extend("db", init_db(db_path))

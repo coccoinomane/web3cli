@@ -53,7 +53,7 @@ class Web3Cli(App):
         # register handlers
         handlers = [Base, Network, Address]
 
-        #
+        # extend the app with cement hook system
         hooks = [
             ("post_setup", database.attach_production_db),
         ]
@@ -68,6 +68,9 @@ class Web3CliTest(TestApp, Web3Cli):
         hooks = [
             ("post_setup", database.attach_testing_db),
         ]
+
+        # if True, delete test db before any run
+        reset_db = True
 
 
 def main() -> None:

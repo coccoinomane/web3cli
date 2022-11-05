@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.2.1"
+version = "0.2.2"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -28,6 +28,7 @@ dev = [
 web3.help = "Run the CLI in development mode"
 web3.cmd = "web3"
 test = "pytest tests"
+test_verbose = "pytest tests -s"
 publish_test.help = """\
 Publish package to the test PyPI repository. Store credentials
 in PDM_PUBLISH_TEST_USERNAME and PDM_PUBLISH_TEST_PASSWORD"""

@@ -70,8 +70,8 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Test address CRUD
-- Test database creation
+- Example with address in README
+- Transfer ETH command
 - Do not mess with DB unless needed by the command
 - Config CRUD
 - Autocomplete
