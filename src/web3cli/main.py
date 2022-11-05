@@ -32,6 +32,7 @@ class Web3Cli(App):
             "colorlog",
             "jinja2",
             "print",
+            "tabulate",
         ]
 
         # configuration handler
@@ -52,6 +53,7 @@ class Web3Cli(App):
         # register handlers
         handlers = [Base, Network, Address]
 
+        #
         hooks = [
             ("post_setup", database.attach_production_db),
         ]

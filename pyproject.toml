@@ -13,6 +13,7 @@ dependencies = [
     "cement[colorlog]>=3.0.8",
     "cement[jinja2]>=3.0.8",
     "cement[yaml]>=3.0.8",
+    "cement[tabulate]>=3.0.8",
     "web3client>=0.3.4",
     "peewee>=3.15.3",
 ]
