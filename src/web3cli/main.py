@@ -3,11 +3,14 @@ from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
+from web3cli.helpers import database
 
 # configuration defaults
-CONFIG = init_defaults("web3cli")
+CONFIG = init_defaults("web3cli", "web3cli_test")
 CONFIG["web3cli"]["debug"] = False
 CONFIG["web3cli"]["default_network"] = "ethereum"
+CONFIG["web3cli"]["db_file"] = "~/.web3cli/database/web3cli.sqlite"
+CONFIG["web3cli_test"]["db_file"] = "~/.web3cli/database/web3cli_test.sqlite"
 
 
 class Web3Cli(App):
@@ -48,12 +51,20 @@ class Web3Cli(App):
         # register handlers
         handlers = [Base, Network]
 
+        hooks = [
+            ("post_setup", database.attach_production_db),
+        ]
+
 
 class Web3CliTest(TestApp, Web3Cli):
     """A sub-class of Web3Cli that is better suited for testing."""
 
     class Meta:
         label = "web3cli"
+
+        hooks = [
+            ("post_setup", database.attach_testing_db),
+        ]
 
 
 def main() -> None:

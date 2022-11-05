@@ -1,6 +1,13 @@
 ### Web3 Cli Configuration Settings
+###
 ### All settings can be overriden using snake case environment
-## variables, for example 'export WEB3CLI_NETWORK=ethereum'
+### variables, for example 'export WEB3CLI_DEFAULT_NETWORK=ethereum'
+###
+### Copy this file to ~/.web3cli/conf/web3cli.yml if you need
+### to change a settings in a more permanent way.
+###
+### Please be aware that any value specified by means of an environment
+### variable take precedence on the file's content.
 ---
 
 web3cli:
@@ -8,6 +15,13 @@ web3cli:
   debug: false
   ### Use this network unless otherwise specified
   default_network: "ethereum"
+  ### Location of the database - will be created if it does not exist.
+  db_file: "~/.web3cli/database/web3cli.sqlite"
+
+web3cli_test:
+  ### Database to be used for tests - it will be deleted before
+  ### each test run
+  db_file: "~/.web3cli/database/web3cli_test.sqlite"
 
 log.colorlog:
   ### Where the log file lives (no log file by default)

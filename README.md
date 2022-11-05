@@ -70,9 +70,11 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Test web3 balance
+- Do not mess with DB unless needed by the command
+- Config CRUD
+- Add address CRUD
+- Test database creation
 - Autocomplete
-- Allow to add networks
 - Command structure
 - Interactive vs non-interactive mode
-- Allow to add custom networks (sqlite?)
+- Allow to add custom networks?
