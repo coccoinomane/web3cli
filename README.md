@@ -105,12 +105,13 @@ Pull requests are welcome!
 
 # TODO
 - Wallet authentication
-- Tests for signer controller
-- Resolve signers
+- Config: config controller
+- Signer: test controller
+- Signer: resolve signers
+- Signer: update + delete signer
 - Transfer ETH command
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
-- Config CRUD
 - Autocomplete
 - Command structure
 - Interactive vs non-interactive mode

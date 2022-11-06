@@ -11,6 +11,8 @@
 ---
 
 web3cli:
+  ### Application key for encryption purposes
+  app_key: "b'O\x17\x89\xc73Ss \xec6.\xbf\x03\x80q\x83\xda\x1e\x12\xc6\x90\xbe\xcd\xdc?\xc1\xd7\x7f\xd2\xeb\xd6\xff'"
   ### Toggle application level debug
   debug: false
   ### Use this network unless otherwise specified
