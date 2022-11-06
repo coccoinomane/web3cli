@@ -2,7 +2,8 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address as Model
 from web3cli.core.helpers.validation import is_valid_address
-from web3cli.core.exceptions import Web3CliError
+from web3cli.core.exceptions import Web3CliError, AddressNotFound
+from web3cli.core.helpers.addresses import get_address
 
 
 class Address(Controller):
@@ -14,12 +15,20 @@ class Address(Controller):
 
     @ex(help="list address")
     def list(self) -> None:
-        addresses = [a for a in Model.select().order_by(Model.label).dicts()]
         self.app.render(
-            [[a["label"], a["address"]] for a in addresses],
+            [[a["label"], a["address"]] for a in Model.get_all(Model.label)],
             headers=["LABEL", "ADDRESS"],
             handler="tabulate",
         )
+
+    @ex(
+        help="show an address by its label",
+        arguments=[
+            (["label"], {"help": "label of the address to show", "action": "store"}),
+        ],
+    )
+    def get(self) -> None:
+        self.app.print(get_address(self.app.pargs.label))
 
     @ex(
         help="add a new address",
@@ -67,7 +76,7 @@ class Address(Controller):
     def delete(self) -> None:
         address = Model.get_by_label(self.app.pargs.label)
         if not address:
-            raise Web3CliError(
+            raise AddressNotFound(
                 f"Address '{self.app.pargs.label}' does not exist, can't delete it"
             )
         address.delete_instance()

@@ -12,6 +12,6 @@ class Address(BaseModel):
 
     @classmethod
     def get_by_label(cls, label: str) -> BaseModel:
-        """Return the address with the given label, or None if
+        """Return the address object with the given label, or None if
         it does not exist"""
         return cls.get_or_none(cls.label == label)
