@@ -105,7 +105,10 @@ Pull requests are welcome!
 
 # TODO
 - Wallet authentication
+- Config: set command
 - Config: config controller
+- Config: test controller
+- Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
 - Signer: test controller
 - Signer: resolve signers
 - Signer: update + delete signer

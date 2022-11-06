@@ -3,6 +3,7 @@ from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
 from web3cli.controllers.address import Address
 from web3cli.controllers.signer import Signer
+from web3cli.controllers.config import Config
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
 from web3cli.helpers import database
@@ -53,7 +54,7 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Network, Signer, Address]
+        handlers = [Base, Network, Signer, Address, Config]
 
         # extend the app with cement hook system
         hooks = [
