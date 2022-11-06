@@ -1,9 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address as Model
-from web3cli.core.helpers.validation import is_valid_address
 from web3cli.core.exceptions import Web3CliError, AddressNotFound
-from web3cli.core.helpers.addresses import get_address
 
 
 class Address(Controller):
@@ -28,7 +26,7 @@ class Address(Controller):
         ],
     )
     def get(self) -> None:
-        self.app.print(get_address(self.app.pargs.label))
+        self.app.print(Model.get_address(self.app.pargs.label))
 
     @ex(
         help="add a new address",
@@ -47,7 +45,7 @@ class Address(Controller):
         ],
     )
     def add(self) -> None:
-        if not is_valid_address(self.app.pargs.address):
+        if not Model.is_valid_address(self.app.pargs.address):
             raise Web3CliError(f"Invalid address given: {self.app.pargs.address}")
         address = Model.get_by_label(self.app.pargs.label)
         if not address:
