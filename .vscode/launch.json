@@ -19,5 +19,13 @@
             "justMyCode": true,
             "args": ["network", "list"]
         },
+        {
+            "name": "web3 user list",
+            "type": "python",
+            "request": "launch",
+            "module": "web3cli.main",
+            "justMyCode": true,
+            "args": ["user", "list"]
+        },
     ]
 }

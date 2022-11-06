@@ -26,3 +26,9 @@ class KeyIsInvalid(Web3CliError):
     """When a non-valid private key is provided"""
 
     pass
+
+
+class UserNotFound(Web3CliError):
+    """When a user does not exist in the DB"""
+
+    pass

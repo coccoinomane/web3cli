@@ -65,3 +65,7 @@ class User(Controller):
     #         )
     #     address.delete_instance()
     #     self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")
+
+    @ex(help="get current user")
+    def get(self) -> None:
+        self.app.print(self.app.user)

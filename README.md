@@ -105,11 +105,15 @@ Pull requests are welcome!
 
 # TODO
 - Wallet authentication
+- Tests for signer controller
+- Resolve signers
 - Transfer ETH command
 - Do not mess with DB unless needed by the command
+- Do not mess with signers unless needed by the command
 - Config CRUD
 - Autocomplete
 - Command structure
 - Interactive vs non-interactive mode
 - Allow to add custom networks?
 - Use chains and tokens from ethereum-lists
+- Model methods should return class instance, not BaseModel (python 3.11?)

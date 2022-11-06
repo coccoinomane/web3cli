@@ -5,6 +5,7 @@ from web3cli.helpers.factory import make_client
 from web3cli.core.helpers.networks import get_coin
 from web3cli.helpers import args
 from web3cli import resolve_address
+from web3cli.core.models.user import User
 
 
 class Base(Controller):
@@ -36,6 +37,14 @@ class Base(Controller):
                     "help": "network (blockchain) to use",
                 },
             ),
+            (
+                ["-u", "--user"],
+                {
+                    "action": "store",
+                    "dest": "user",
+                    "help": "user who will sign transactions (e.g. send tokens, interact with contracts, etc)",
+                },
+            ),
         ]
 
     def _default(self) -> None:
@@ -63,3 +72,6 @@ class Base(Controller):
         # Save the network provided by the user
         self.app.extend("network", args.parse_network(self.app))  # ethereum binance etc
         self.app.extend("coin", get_coin(self.app.network))  # ETH BNB etc
+
+        # Save the user (signer) provided by the user
+        self.app.extend("user", args.parse_user(self.app))

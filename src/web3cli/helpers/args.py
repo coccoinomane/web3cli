@@ -1,6 +1,7 @@
 from cement import App
 from web3cli.core.helpers.networks import is_network_supported
-from web3cli.core.exceptions import Web3CliError
+from web3cli.core.exceptions import Web3CliError, UserNotFound
+from web3cli.core.models.user import User
 
 
 def get_command(app: App) -> str:
@@ -31,3 +32,21 @@ def validate_network(network: str) -> None:
     """Throw error if the given network is not supported"""
     if not is_network_supported(network):
         raise Web3CliError(f"Network '{network}' not supported")
+
+
+def parse_user(app: App) -> str:
+    """If the user argument was passed to the CLI, return it; otherwise,
+    return its default value from the config file"""
+    if app.pargs.user:
+        user = app.pargs.user
+    else:
+        user = app.config.get("web3cli", "default_user")
+    if not user:
+        user = None
+    return user
+
+
+def validate_user(user: str) -> None:
+    """Throw error if the given user does not exist"""
+    if not User.get_by_label(user):
+        raise UserNotFound(f"User '{user}' not found")
