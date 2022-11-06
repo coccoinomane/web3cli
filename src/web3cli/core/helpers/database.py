@@ -1,7 +1,7 @@
 from peewee import SqliteDatabase
 from web3cli.core.models.base_model import db
 from web3cli.core.models.address import Address
-from web3cli.core.models.user import User
+from web3cli.core.models.signer import Signer
 from web3cli.core.helpers.os import create_folder
 import os
 
@@ -14,5 +14,5 @@ def init_db(db_path: str) -> SqliteDatabase:
     create_folder(os.path.dirname(db_path), 0o744)
     db.init(db_path)
     db.connect()
-    db.create_tables([User, Address])
+    db.create_tables([Signer, Address])
     return db

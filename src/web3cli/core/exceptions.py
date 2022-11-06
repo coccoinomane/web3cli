@@ -28,7 +28,7 @@ class KeyIsInvalid(Web3CliError):
     pass
 
 
-class UserNotFound(Web3CliError):
-    """When a user does not exist in the DB"""
+class SignerNotFound(Web3CliError):
+    """When a signer does not exist in the DB"""
 
     pass

@@ -2,7 +2,7 @@ from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
 from web3cli.controllers.address import Address
-from web3cli.controllers.user import User
+from web3cli.controllers.signer import Signer
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
 from web3cli.helpers import database
@@ -11,6 +11,7 @@ from web3cli.helpers import database
 CONFIG = init_defaults("web3cli", "web3cli_test")
 CONFIG["web3cli"]["debug"] = False
 CONFIG["web3cli"]["default_network"] = "ethereum"
+CONFIG["web3cli"]["default_signer"] = None
 CONFIG["web3cli"]["db_file"] = "~/.web3cli/database/web3cli.sqlite"
 CONFIG["web3cli_test"]["db_file"] = "~/.web3cli/database/web3cli_test.sqlite"
 
@@ -52,7 +53,7 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Network, User, Address]
+        handlers = [Base, Network, Signer, Address]
 
         # extend the app with cement hook system
         hooks = [
