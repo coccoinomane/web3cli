@@ -7,6 +7,7 @@ from web3cli.controllers.config import Config
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
 from web3cli.helpers import database
+import os
 
 # configuration defaults
 CONFIG = init_defaults("web3cli", "web3cli_test")
@@ -41,8 +42,13 @@ class Web3Cli(App):
         # configuration handler
         config_handler = "yaml"
 
-        # Path of configuration file(s)
-        config_files = ["config/web3cli.yml", "~/.web3cli/config/web3cli.yml"]
+        # Path of configuration file(s).
+        # The order is important as the later files override
+        # the settings in the previous ones.
+        config_files = [
+            os.path.join(os.path.expanduser("~"), ".web3cli", "config", "web3cli.yml"),
+            os.path.join(os.getcwd(), "web3cli.yml"),
+        ]
 
         # configuration file suffix
         config_file_suffix = ".yml"
