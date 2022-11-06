@@ -7,6 +7,8 @@ import getpass
 
 
 class Signer(Controller):
+    """Handler of the `web3 signer` commands"""
+
     class Meta:
         label = "signer"
         help = "add, list or delete signers"
