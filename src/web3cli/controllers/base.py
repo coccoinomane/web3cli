@@ -4,6 +4,7 @@ from web3cli.helpers.version import get_version_message
 from web3cli.helpers.factory import make_client
 from web3cli.core.helpers.networks import get_coin
 from web3cli.helpers import args
+from web3cli import resolve_address
 
 
 class Base(Controller):
@@ -46,7 +47,9 @@ class Base(Controller):
         arguments=[(["address"], {"action": "store"})],
     )
     def balance(self) -> None:
-        balance = make_client(self.app).getBalanceInEth(self.app.pargs.address)
+        balance = make_client(self.app).getBalanceInEth(
+            resolve_address(self.app.pargs.address)
+        )
         self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
 
     def _post_argument_parsing(self) -> None:

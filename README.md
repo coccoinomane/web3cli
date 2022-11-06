@@ -25,6 +25,40 @@ pip3 install -U web3cli
    web3 network list
    ```
 
+# Address book
+
+`web3cli` can store tags just like you would do on etherscan.io or bscscan.com:
+
+```bash
+web3 address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+web3 address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+```
+
+You can use these tags instead of the actual addresses:
+
+```bash
+web3 balance "Ethereum foundation"
+web3 -n binance balance "Binance hot wallet"
+```
+
+You can see the list of saved addresses. Running
+
+```bash
+web3 address list
+```
+
+will produce the following output:
+
+```
+| LABEL               | ADDRESS                                    |
+|---------------------+--------------------------------------------|
+| Binance hot wallet  | 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 |
+| Ethereum foundation | 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae |
+```
+
+To see all the actions that can be done with addresses, run `web3 address`.
+
+
 # Settings
 
 Settings are read from the configuration file `~/.web3cli/config/web3cli.yaml`, or from environment variables. (The symbol `~` refers to the home folder of your user.)
@@ -70,7 +104,6 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Example with address in README
 - Transfer ETH command
 - Do not mess with DB unless needed by the command
 - Config CRUD

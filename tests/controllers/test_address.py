@@ -53,7 +53,7 @@ def test_address_update() -> None:
         "address",
         "add",
         "Ethereum foundation",
-        "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",
+        "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",  # binance hot wallet
         "--description",
         "New description",
         "--update",

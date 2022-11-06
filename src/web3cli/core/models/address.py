@@ -1,6 +1,6 @@
 from peewee import TextField
 from web3cli.core.models.base_model import BaseModel
-from web3cli.core.exceptions import AddressNotFound
+from web3cli.core.exceptions import AddressNotFound, AddressNotResolved
 import web3
 
 
@@ -43,8 +43,13 @@ class Address(BaseModel):
     def resolve_address(cls, address_or_label: str) -> str:
         """Return the address with the given label, but if an actual valid
         address is passed (0x...) then return it"""
-        return (
-            address_or_label
-            if cls.is_valid_address(address_or_label)
-            else cls.get_address(address_or_label)
-        )
+        try:
+            return (
+                address_or_label
+                if cls.is_valid_address(address_or_label)
+                else cls.get_address(address_or_label)
+            )
+        except AddressNotFound:
+            raise AddressNotResolved(
+                f"Could not resolve '{address_or_label}': neither a valid address nor a label of a stored address"
+            )
