@@ -104,6 +104,7 @@ Pull requests are welcome!
    ```
 
 # TODO
+- Wallet authentication
 - Transfer ETH command
 - Do not mess with DB unless needed by the command
 - Config CRUD
@@ -111,3 +112,4 @@ Pull requests are welcome!
 - Command structure
 - Interactive vs non-interactive mode
 - Allow to add custom networks?
+- Use chains and tokens from ethereum-lists

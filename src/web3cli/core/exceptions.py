@@ -20,3 +20,9 @@ class AddressNotResolved(Web3CliError):
     """When a string cannot be resolved to a valid address"""
 
     pass
+
+
+class KeyIsInvalid(Web3CliError):
+    """When a non-valid private key is provided"""
+
+    pass
