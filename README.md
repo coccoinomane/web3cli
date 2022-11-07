@@ -125,6 +125,7 @@ Pull requests are welcome!
 
 # TODO
 - Wallet authentication
+- Test on Windows
 - Config: test controller
 - Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
 - Signer: test controller
