@@ -124,9 +124,10 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Wallet authentication
-- Test on Windows
-- Config: test controller
+- Signer: Wallet authentication
+- Windows: test on a Windows machine
+- Key: test controller
+- Config: test controller (requires web3cli_test.yml)
 - Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
 - Signer: test controller
 - Signer: resolve signers

@@ -4,6 +4,7 @@ from web3cli.controllers.network import Network
 from web3cli.controllers.address import Address
 from web3cli.controllers.signer import Signer
 from web3cli.controllers.config import Config
+from web3cli.controllers.key import Key
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
 from web3cli.helpers import database
@@ -11,6 +12,7 @@ import os
 
 # configuration defaults
 CONFIG = init_defaults("web3cli", "web3cli_test")
+CONFIG["web3cli"]["app_key"] = None
 CONFIG["web3cli"]["debug"] = False
 CONFIG["web3cli"]["default_network"] = "ethereum"
 CONFIG["web3cli"]["default_signer"] = None
@@ -60,7 +62,7 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Network, Signer, Address, Config]
+        handlers = [Base, Network, Signer, Address, Config, Key]
 
         # extend the app with cement hook system
         hooks = [

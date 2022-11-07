@@ -1,6 +1,6 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.helpers import yaml
+from web3cli.helpers.config import update_setting
 import argparse
 
 
@@ -66,21 +66,12 @@ class Config(Controller):
         ],
     )
     def set(self) -> None:
-        filepath = (
-            self.app.Meta.config_files[0]
-            if self.app.pargs.is_global
-            else self.app.Meta.config_files[-1]
-        )
-
-        print(self.app.pargs.is_global)
-        print(filepath)
-
-        yaml.set(
-            filepath=filepath,
+        update_setting(
+            self.app,
             setting=self.app.pargs.setting,
             value=self.app.pargs.value,
-            logger=self.app.log,
-            section="web3cli",
+            do_log=True,
+            is_global=self.app.pargs.is_global,
         )
 
     @ex(help="show the location of the configuration files")

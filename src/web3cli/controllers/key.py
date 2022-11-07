@@ -1,51 +1,47 @@
-# from cement import ex
-# from web3cli.controllers.controller import Controller
-# import secrets
+from cement import ex
+from web3cli.controllers.controller import Controller
+from web3cli.helpers.config import update_setting
+import secrets
+import sys
 
-# class Signer(Controller):
-#     """Handler of the `web3 key` commands"""
 
-#     class Meta:
-#         label = "key"
-#         help = "handle application keys"
-#         stacked_type = "nested"
-#         stacked_on = "base"
+class Key(Controller):
+    """Handler of the `web3 key` commands"""
 
-#     @ex(
-#         help="generate an app key, replacing the current one",
-#     )
-#     def add(self) -> None:
-#         key = secrets.token_bytes(32)
+    class Meta:
+        label = "key"
+        help = "handle password and application keys"
+        stacked_type = "nested"
+        stacked_on = "base"
 
-#         key = getpass.getpass("Private key: ")
-#         try:
-#             address = Account.from_key(key).address
-#         except:
-#             raise KeyIsInvalid(
-#                 "Invalid private key. Please note that private key is different from mnemonic password."
-#             )
-#         Model.create(
-#             label=self.app.pargs.label,
-#             key=key,
-#             address=address,
-#         )
-#         self.app.log.info(f"Signer '{self.app.pargs.label}' added correctly")
+    @ex(
+        help="generate a new random password and use it as the app key",
+    )
+    def create(self) -> None:
+        # If the app key already exists, warn the user before replacing it
+        if self.get_option("web3cli.app_key"):
+            proceed = input(
+                "An app key already exists, do you want to replace it?\nIf you do, you will need to recreate all signers that\nwere created without a custom password.\nType 'yes' to replace it: "
+            )
+            if proceed not in ("y", "yes"):
+                self.app.log.info("Exiting...")
+                self.app.exit_code = 0
+                sys.exit()
 
-#     # @ex(
-#     #     help="delete an address",
-#     #     arguments=[
-#     #         (["label"], {"help": "label of the address to delete", "action": "store"}),
-#     #     ],
-#     # )
-#     # def delete(self) -> None:
-#     #     address = Model.get_by_label(self.app.pargs.label)
-#     #     if not address:
-#     #         raise AddressNotFound(
-#     #             f"Address '{self.app.pargs.label}' does not exist, can't delete it"
-#     #         )
-#     #     address.delete_instance()
-#     #     self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")
+        # Generate new app key and store it
+        key = secrets.token_bytes(32)
+        update_setting(
+            self.app,
+            setting="app_key",
+            value=str(key),
+            do_log=False,
+            is_global=True,
+        )
+        self.app.log.info("Created new app key")
 
-#     @ex(help="get current signer")
-#     def get(self) -> None:
-#         self.app.print(self.app.signer)
+    @ex(
+        help="generate a new random password, suitable to encrypt a private key; the password will not be stored anywhere, so take note of it if you use it!",
+    )
+    def generate(self) -> None:
+        key = secrets.token_bytes(32)
+        self.app.print(str(key))
