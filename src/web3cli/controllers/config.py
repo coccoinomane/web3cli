@@ -1,6 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers import yaml
+import argparse
 
 
 class Config(Controller):
@@ -37,7 +38,7 @@ class Config(Controller):
             self.app.render(output, handler="yaml")
 
     @ex(
-        help="set the value of a setting; by default it writes to the local configuration file (web3cli.yml). IMPORTANT: supports only string settings!",
+        help="set the value of a setting. IMPORTANT: supports only string settings!",
         arguments=[
             (
                 ["setting"],
@@ -56,10 +57,10 @@ class Config(Controller):
             (
                 ["-g", "--global"],
                 {
-                    "help": "save to the configuration file in your home folder ( $HOME/.web3cli/config/web3cli.yml)",
+                    "help": "whether to save the setting globally (default) or locally",
                     "dest": "is_global",
-                    "action": "store_const",
-                    "const": True,
+                    "action": argparse.BooleanOptionalAction,
+                    "default": True,
                 },
             ),
         ],
@@ -70,6 +71,9 @@ class Config(Controller):
             if self.app.pargs.is_global
             else self.app.Meta.config_files[-1]
         )
+
+        print(self.app.pargs.is_global)
+        print(filepath)
 
         yaml.set(
             filepath=filepath,
