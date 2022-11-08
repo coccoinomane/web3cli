@@ -56,7 +56,7 @@ def signers() -> List[Dict[str, Any]]:
 
 @pytest.fixture()
 def app_key() -> str:
-    """Store a random app_key to the test config file and return it"""
+    """Set a new app_key in the test config file and return it"""
     key = secrets.token_bytes(32)
     yaml.set(
         filepath=Web3CliTest.Meta.config_files[0],
@@ -66,6 +66,19 @@ def app_key() -> str:
         section="web3cli",
     )
     return str(key)
+
+
+@pytest.fixture()
+def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Set a default_signer int the test config file and return the test signer"""
+    yaml.set(
+        filepath=Web3CliTest.Meta.config_files[0],
+        setting="default_signer",
+        value=signers[0]["label"],
+        logger=None,
+        section="web3cli",
+    )
+    return signers[0]
 
 
 @pytest.fixture(scope="function")

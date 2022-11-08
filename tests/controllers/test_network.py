@@ -15,6 +15,7 @@ def test_network_get() -> None:
     with Web3CliTest(argv=argv) as app:
         app.run()
         data, output = app.last_rendered
+        # TODO: include network config in web3cli_test.yml, crrenty it's empty!
         assert data["out"] is app.config.get("web3cli", "default_network")
     # With explicit argument
     argv = ["--network", "binance", "network", "get"]

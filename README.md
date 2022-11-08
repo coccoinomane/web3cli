@@ -130,9 +130,7 @@ Pull requests are welcome!
 - Key: test controller
 - Config: test controller (requires web3cli_test.yml)
 - Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
-- Signer: test controller
 - Signer: resolve signers
-- Signer: update + delete signer
 - Signer: readme documentation
 - Transfer ETH command
 - Do not mess with DB unless needed by the command
