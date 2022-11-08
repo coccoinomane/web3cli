@@ -2,6 +2,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.signer import Signer as Model
 from web3cli.core.exceptions import KeyIsInvalid
+from web3cli.helpers.crypto import encrypt_string_with_app_key
 from eth_account import Account
 import getpass
 
@@ -48,7 +49,7 @@ class Signer(Controller):
             )
         Model.create(
             label=self.app.pargs.label,
-            key=key,
+            key=encrypt_string_with_app_key(self.app, key),
             address=address,
         )
         self.app.log.info(f"Signer '{self.app.pargs.label}' added correctly")

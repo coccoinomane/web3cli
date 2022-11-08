@@ -12,9 +12,9 @@ import pytest
         "an arbitrary string",
     ],
 )
-def test_encrypt_decrypt(app_key: str, msg: str):
+def test_encrypt_decrypt_with_app_key(app_key: str, msg: str) -> None:
     with Web3CliTest() as app:
         app.run()
-        cypher = crypto.encrypt_with_app_key(app, msg)
-        decode = crypto.decrypt_with_app_key(app, cypher)
+        cypher = crypto.encrypt_string_with_app_key(app, msg)
+        decode = crypto.decrypt_string_with_app_key(app, cypher)
         assert msg == decode

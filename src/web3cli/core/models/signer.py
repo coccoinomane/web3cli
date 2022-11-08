@@ -1,4 +1,4 @@
-from peewee import TextField
+from peewee import TextField, BlobField
 from web3cli.core.models.base_model import BaseModel
 from web3cli.core.exceptions import SignerNotFound
 
@@ -7,9 +7,9 @@ class Signer(BaseModel):
     class Meta:
         table_name = "signers"
 
-    label = TextField(null=True)
+    label = TextField(unique=True)
     address = TextField()
-    key = TextField(unique=True)
+    key = BlobField()
 
     @classmethod
     def get_by_label(cls, label: str) -> BaseModel:

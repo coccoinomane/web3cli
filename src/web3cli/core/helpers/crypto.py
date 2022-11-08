@@ -15,3 +15,13 @@ def decrypt(ciphertext: bytes, key: bytes) -> bytes:
     using wrong key or corrupted ciphertext
     Source: https://stackoverflow.com/a/59835994/2972183"""
     return AESGCM(key).decrypt(ciphertext[:12], ciphertext[12:], b"")
+
+
+def encrypt_string(message: str, key: bytes) -> bytes:
+    """Encrypt a utf-8 string using the given key"""
+    return encrypt(message.encode("utf-8"), key)
+
+
+def decrypt_string(cyphertext: bytes, key: bytes) -> str:
+    """Decrypt an encrypted utf-8 string using the given key"""
+    return decrypt(cyphertext, key).decode("utf-8")
