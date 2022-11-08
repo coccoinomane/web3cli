@@ -1,7 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.signer import Signer as Model
-from web3cli.core.exceptions import KeyIsInvalid
+from web3cli.core.exceptions import KeyIsInvalid, SignerNotFound
 from web3cli.helpers.crypto import encrypt_string_with_app_key
 from eth_account import Account
 import getpass
@@ -24,14 +24,24 @@ class Signer(Controller):
             handler="tabulate",
         )
 
-    # @ex(
-    #     help="show a by its label",
-    #     arguments=[
-    #         (["label"], {"help": "label of the signer to show", "action": "store"}),
-    #     ],
-    # )
-    # def get(self) -> None:
-    #     self.app.print(Model.get_address(self.app.pargs.label))
+    @ex(
+        help="show the address of a signer by its label; without arguments, show the label of the signer that will be used by web3cli",
+        arguments=[
+            (
+                ["label"],
+                {
+                    "help": "label of the signer to show",
+                    "nargs": "?",
+                    "action": "store",
+                },
+            ),
+        ],
+    )
+    def get(self) -> None:
+        if self.app.pargs.label:
+            self.app.print(Model.get_address(self.app.pargs.label))
+        else:
+            self.app.print(self.app.signer)
 
     @ex(
         help="add a new signer",
@@ -54,21 +64,17 @@ class Signer(Controller):
         )
         self.app.log.info(f"Signer '{self.app.pargs.label}' added correctly")
 
-    # @ex(
-    #     help="delete an address",
-    #     arguments=[
-    #         (["label"], {"help": "label of the address to delete", "action": "store"}),
-    #     ],
-    # )
-    # def delete(self) -> None:
-    #     address = Model.get_by_label(self.app.pargs.label)
-    #     if not address:
-    #         raise AddressNotFound(
-    #             f"Address '{self.app.pargs.label}' does not exist, can't delete it"
-    #         )
-    #     address.delete_instance()
-    #     self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")
-
-    @ex(help="get current signer")
-    def get(self) -> None:
-        self.app.print(self.app.signer)
+    @ex(
+        help="delete a signer",
+        arguments=[
+            (["label"], {"help": "label of the signer to delete", "action": "store"}),
+        ],
+    )
+    def delete(self) -> None:
+        signer = Model.get_by_label(self.app.pargs.label)
+        if not signer:
+            raise SignerNotFound(
+                f"Signer '{self.app.pargs.label}' does not exist, can't delete it"
+            )
+        signer.delete_instance()
+        self.app.log.info(f"Signer '{self.app.pargs.label}' deleted correctly")
