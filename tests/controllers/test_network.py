@@ -9,17 +9,17 @@ def test_network_list() -> None:
         assert "ethereum" in output
 
 
-def test_network_get() -> None:
-    # Without any argument
+def test_network_get(default_network: str) -> None:
+    # Without any argument > return the default network
     argv = ["network", "get"]
     with Web3CliTest(argv=argv) as app:
         app.run()
         data, output = app.last_rendered
-        # TODO: include network config in web3cli_test.yml, crrenty it's empty!
-        assert data["out"] is app.config.get("web3cli", "default_network")
-    # With explicit argument
+        assert data["out"] == default_network
+
+    # With explicit argument > return argument value
     argv = ["--network", "binance", "network", "get"]
     with Web3CliTest(argv=argv) as app:
         app.run()
         data, output = app.last_rendered
-        assert data["out"] is "binance"
+        assert data["out"] == "binance"

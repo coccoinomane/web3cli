@@ -70,7 +70,7 @@ def app_key() -> str:
 
 @pytest.fixture()
 def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Set a default_signer int the test config file and return the test signer"""
+    """Set a default_signer in the test config file and return the test signer"""
     yaml.set(
         filepath=Web3CliTest.Meta.config_files[0],
         setting="default_signer",
@@ -81,12 +81,24 @@ def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
     return signers[0]
 
 
+@pytest.fixture()
+def default_network() -> str:
+    """Set a default_network in the test config file and return it"""
+    network = "avalanche"
+    yaml.set(
+        filepath=Web3CliTest.Meta.config_files[0],
+        setting="default_network",
+        value=network,
+        logger=None,
+        section="web3cli",
+    )
+    return network
+
+
 @pytest.fixture(scope="function")
 def tmp(request: FixtureRequest) -> Any:
-    """
-    Create a `tmp` object that geneates a unique temporary directory, and file
-    for each test function that requires it.
-    """
+    """Create a `tmp` object that geneates a unique temporary directory, and
+    file for each test function that requires it."""
     t = fs.Tmp()
     yield t
     t.remove()
