@@ -124,6 +124,7 @@ Pull requests are welcome!
    ```
 
 # TODO
+- Readme: describe interactive mode
 - Signer: Wallet authentication
 - Windows: test on a Windows machine
 - Key: test controller

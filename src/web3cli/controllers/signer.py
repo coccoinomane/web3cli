@@ -1,7 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.signer import Signer as Model
-from web3cli.core.exceptions import KeyIsInvalid, SignerNotFound
+from web3cli.core.exceptions import KeyIsInvalid, SignerNotFound, Web3CliError
 from web3cli.helpers.crypto import encrypt_string_with_app_key
 from eth_account import Account
 import getpass
@@ -44,25 +44,41 @@ class Signer(Controller):
             self.app.print(self.app.signer)
 
     @ex(
-        help="add a new signer",
+        help="add a new signer; you will be asked for the private key",
         arguments=[
             (["label"], {"help": "label identifying the signer", "action": "store"}),
+            (
+                ["-p", "--private-key"],
+                {
+                    "help": "private key of the signer (NOT SAFE, use only at your risk)",
+                    "action": "store",
+                },
+            ),
         ],
     )
     def add(self) -> None:
-        key = getpass.getpass("Private key: ")
+        # Validate label
+        if Model.get_by_label(self.app.pargs.label):
+            raise Web3CliError(
+                f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `web3 signer delete {self.app.pargs.label}`"
+            )
+        # Parse and validate key
+        key = self.app.pargs.private_key or getpass.getpass("Private key: ")
         try:
             address = Account.from_key(key).address
         except:
             raise KeyIsInvalid(
                 "Invalid private key. Please note that private key is different from mnemonic password."
             )
+        # Create signer
         Model.create(
             label=self.app.pargs.label,
             key=encrypt_string_with_app_key(self.app, key),
             address=address,
         )
-        self.app.log.info(f"Signer '{self.app.pargs.label}' added correctly")
+        self.app.log.info(
+            f"Signer '{self.app.pargs.label}' added correctly (address={address})"
+        )
 
     @ex(
         help="delete a signer",

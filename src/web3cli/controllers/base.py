@@ -5,7 +5,6 @@ from web3cli.helpers.factory import make_client
 from web3cli.core.helpers.networks import get_coin
 from web3cli.helpers import args
 from web3cli import resolve_address
-from web3cli.core.models.signer import Signer
 
 
 class Base(Controller):
