@@ -1,9 +1,9 @@
 from typing import Any, List, Dict
-from web3cli.main import Web3CliTest
+from ..main import Web3CliTest
 from web3cli.core.models.signer import Signer
 from eth_account import Account
 from web3cli.helpers.crypto import decrypt_string_with_app_key
-import pytest
+from ..helper import set_config
 
 
 def test_signer_list(signers: List[Dict[str, Any]]) -> None:
@@ -54,7 +54,9 @@ def test_signer_get(
             assert data["out"] == s["label"]
 
     # Test without arguments > returns whatever is written in config file
+    set_config("default_signer", default_signer["label"])
     s = default_signer
+    print(">>>>>" + default_signer["label"])
     argv = [
         "signer",
         "get",

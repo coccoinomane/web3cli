@@ -8,8 +8,7 @@ import pytest
 from cement import fs
 from web3cli.helpers.config import update_setting
 import secrets
-from web3cli.core.helpers import yaml
-from web3cli.main import Web3CliTest
+from .helper import set_config
 
 
 @pytest.fixture()
@@ -58,26 +57,14 @@ def signers() -> List[Dict[str, Any]]:
 def app_key() -> str:
     """Set a new app_key in the test config file and return it"""
     key = secrets.token_bytes(32)
-    yaml.set(
-        filepath=Web3CliTest.Meta.config_files[0],
-        setting="app_key",
-        value=str(key),
-        logger=None,
-        section="web3cli",
-    )
+    set_config("app_key", str(key))
     return str(key)
 
 
 @pytest.fixture()
 def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Set a default_signer in the test config file and return the test signer"""
-    yaml.set(
-        filepath=Web3CliTest.Meta.config_files[0],
-        setting="default_signer",
-        value=signers[0]["label"],
-        logger=None,
-        section="web3cli",
-    )
+    set_config("default_signer", signers[0]["label"])
     return signers[0]
 
 
@@ -85,13 +72,7 @@ def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
 def default_network() -> str:
     """Set a default_network in the test config file and return it"""
     network = "avalanche"
-    yaml.set(
-        filepath=Web3CliTest.Meta.config_files[0],
-        setting="default_network",
-        value=network,
-        logger=None,
-        section="web3cli",
-    )
+    set_config("default_network", network)
     return network
 
 

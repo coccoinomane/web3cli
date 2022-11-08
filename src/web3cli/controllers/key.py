@@ -10,18 +10,31 @@ class Key(Controller):
 
     class Meta:
         label = "key"
-        help = "handle password and application keys"
+        help = "handle passwords and application keys"
         stacked_type = "nested"
         stacked_on = "base"
 
     @ex(
-        help="generate a new random password and use it as the app key",
+        help="generate a new random password and set it as the app key",
+        arguments=[
+            (
+                ["-f", "--force"],
+                {
+                    "help": "if an app key already exists, replace it without asking (all signers created with the old app key will need to be recreated)",
+                    "action": "store_true",
+                },
+            )
+        ],
     )
     def create(self) -> None:
         # If the app key already exists, warn the user before replacing it
         if self.get_option("web3cli.app_key"):
-            proceed = input(
-                "An app key already exists, do you want to replace it?\nIf you do, you will need to recreate all signers that\nwere created without a custom password.\nType 'yes' to replace it: "
+            proceed = (
+                "yes"
+                if self.app.pargs.force
+                else input(
+                    "An app key already exists, do you want to replace it?\nIf you do, you will need to recreate all signers that\nwere created with the old app key.\nType 'yes' to replace it: "
+                )
             )
             if proceed not in ("y", "yes"):
                 self.app.log.info("Exiting...")
@@ -40,7 +53,7 @@ class Key(Controller):
         self.app.log.info("Created new app key")
 
     @ex(
-        help="generate a new random password, suitable to encrypt a private key; the password will not be stored anywhere, so take note of it if you use it!",
+        help="generate and show a new random password, suitable to encrypt a private key; the password will not be stored anywhere, so take note of it if you want to use it!",
     )
     def generate(self) -> None:
         key = secrets.token_bytes(32)

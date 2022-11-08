@@ -1,7 +1,6 @@
 from typing import Any, List, Dict
-from web3cli.main import Web3CliTest
+from ..main import Web3CliTest
 from web3cli.core.models.address import Address
-import pytest
 
 
 def test_address_list(addresses: List[Dict[str, Any]]) -> None:

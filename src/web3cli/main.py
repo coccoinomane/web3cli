@@ -1,4 +1,4 @@
-from cement import App, TestApp, init_defaults
+from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.network import Network
 from web3cli.controllers.address import Address
@@ -68,27 +68,6 @@ class Web3Cli(App):
         hooks = [
             ("post_setup", database.attach_production_db),
         ]
-
-
-class Web3CliTest(TestApp, Web3Cli):
-    """A sub-class of Web3Cli that is better suited for testing."""
-
-    class Meta:
-        label = "web3cli"
-
-        config_files = [
-            os.path.join(
-                os.path.expanduser("~"), ".web3cli", "config", "web3cli_test.yml"
-            ),
-        ]
-
-        hooks = [
-            # TODO: make sure to delete web3cli_test.yml
-            ("post_setup", database.attach_testing_db),
-        ]
-
-        # if True, delete test db before any run
-        reset_db = True
 
 
 def main() -> None:

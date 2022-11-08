@@ -1,4 +1,4 @@
-from web3cli.main import Web3CliTest
+from ..main import Web3CliTest
 
 
 def test_balance() -> None:
