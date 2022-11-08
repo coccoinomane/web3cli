@@ -6,6 +6,10 @@ from typing import Any, List, Dict
 from pytest import FixtureRequest
 import pytest
 from cement import fs
+from web3cli.helpers.config import update_setting
+import secrets
+from web3cli.core.helpers import yaml
+from web3cli.main import Web3CliTest
 
 
 @pytest.fixture()
@@ -20,6 +24,20 @@ def addresses() -> List[Dict[str, Any]]:
             "address": "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",
         },
     ]
+
+
+@pytest.fixture()
+def app_key() -> Dict[str, Any]:
+    """Store a random app_key to the test config file and return it"""
+    key = secrets.token_bytes(32)
+    yaml.set(
+        filepath=Web3CliTest.Meta.config_files[0],
+        setting="app_key",
+        value=str(key),
+        logger=None,
+        section="web3cli",
+    )
+    return str(key)
 
 
 @pytest.fixture(scope="function")

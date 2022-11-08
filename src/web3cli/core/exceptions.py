@@ -32,3 +32,9 @@ class SignerNotFound(Web3CliError):
     """When a signer does not exist in the DB"""
 
     pass
+
+
+class InvalidConfig(Web3CliError):
+    """When any configuration value cannot be found"""
+
+    pass

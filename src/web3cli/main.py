@@ -76,7 +76,14 @@ class Web3CliTest(TestApp, Web3Cli):
     class Meta:
         label = "web3cli"
 
+        config_files = [
+            os.path.join(
+                os.path.expanduser("~"), ".web3cli", "config", "web3cli_test.yml"
+            ),
+        ]
+
         hooks = [
+            # TODO: make sure to delete web3cli_test.yml
             ("post_setup", database.attach_testing_db),
         ]
 

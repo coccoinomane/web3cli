@@ -125,6 +125,7 @@ Pull requests are welcome!
 
 # TODO
 - Signer: Wallet authentication
+- Signer: store key in DB as blob
 - Windows: test on a Windows machine
 - Key: test controller
 - Config: test controller (requires web3cli_test.yml)
