@@ -18,10 +18,17 @@ def addresses() -> List[Dict[str, Any]]:
         {
             "label": "Ethereum foundation",
             "address": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+            "description": "Test wallet EF",
         },
         {
             "label": "Binance hot wallet",
             "address": "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",
+            "description": "Test wallet BHW",
+        },
+        {
+            "label": "Alameda research",
+            "address": "0xbefe4f86f189c1c817446b71eb6ac90e3cb68e60",
+            "description": "Test wallet AR",
         },
     ]
 

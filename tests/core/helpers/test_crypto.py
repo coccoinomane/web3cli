@@ -12,6 +12,6 @@ import pytest
         b"an arbitrary binary",
     ],
 )
-def test_encrypt_decrypt(msg: bytes):
+def test_encrypt_decrypt(msg: bytes) -> None:
     key = secrets.token_bytes(32)
     assert msg == crypto.decrypt(crypto.encrypt(msg, key), key)
