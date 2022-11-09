@@ -23,11 +23,6 @@ web3cli:
   ### Location of the database - will be created if it does not exist.
   db_file: "~/.web3cli/database/web3cli.sqlite"
 
-web3cli_test:
-  ### Database to be used for tests - it will be deleted before
-  ### each test run
-  db_file: "~/.web3cli/database/web3cli_test.sqlite"
-
 log.colorlog:
   ### Where the log file lives (no log file by default)
   file: null

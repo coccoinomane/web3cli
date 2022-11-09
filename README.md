@@ -124,21 +124,17 @@ Pull requests are welcome!
    ```
 
 # TODO
-- Readme: describe interactive mode
-- Signer: Wallet authentication
-- Windows: test on a Windows machine
-- Key: test controller
-- Config: test controller (requires web3cli_test.yml)
-- Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
 - Signer: resolve signers
+- Signer: factory for sigining client
 - Signer: readme documentation
-- Transfer ETH command
+- Command: Send ETH
+- Windows: test on a Windows machine
+- Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
 - Autocomplete
 - Command structure
 - Config: non-string support in `config set`
-- Interactive vs non-interactive mode
 - Allow to add custom networks?
 - Use chains and tokens from ethereum-lists
 - Model methods should return class instance, not BaseModel (python 3.11?)

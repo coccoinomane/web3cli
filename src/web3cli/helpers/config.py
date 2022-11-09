@@ -3,9 +3,9 @@ from typing import Any
 from web3cli.core.helpers import yaml
 
 
-def update_setting(
-    app: App, setting: str, value: Any, do_log: False, is_global: bool = True
-):
+def update_setting_in_config_file(
+    app: App, setting: str, value: Any, do_log: bool = False, is_global: bool = True
+) -> None:
     """Update the value of a setting in the configuration file.
     If is_global is True, update the global configuration file,
     otherwise update the one in the directory from where the script
@@ -13,7 +13,11 @@ def update_setting(
 
     If the file does not exist, it will be created."""
 
-    filepath = app.Meta.config_files[0] if is_global else app.Meta.config_files[-1]
+    filepath = (
+        get_global_configuration_file(app)
+        if is_global
+        else get_local_configuration_file(app)
+    )
 
     yaml.set(
         filepath=filepath,
@@ -25,12 +29,10 @@ def update_setting(
 
 
 def get_local_configuration_file(app: App) -> str:
-    """Return the path of the local configuration file. Please
-    note that the local configuration file might not exist
-    even if it does"""
-    return app.Meta.config_files[-1]
-
-
-def get_local_configuration_file(app: App) -> str:
     """Return the path of the local configuration file"""
     return app.Meta.config_files[-1]
+
+
+def get_global_configuration_file(app: App) -> str:
+    """Return the path of the global configuration file"""
+    return app.Meta.config_files[0]

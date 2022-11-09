@@ -11,13 +11,14 @@ from web3cli.helpers import database
 import os
 
 # configuration defaults
-CONFIG = init_defaults("web3cli", "web3cli_test")
+CONFIG = init_defaults("web3cli")
 CONFIG["web3cli"]["app_key"] = None
 CONFIG["web3cli"]["debug"] = False
 CONFIG["web3cli"]["default_network"] = "ethereum"
 CONFIG["web3cli"]["default_signer"] = None
-CONFIG["web3cli"]["db_file"] = "~/.web3cli/database/web3cli.sqlite"
-CONFIG["web3cli_test"]["db_file"] = "~/.web3cli/database/web3cli_test.sqlite"
+CONFIG["web3cli"]["db_file"] = os.path.join(
+    os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
+)
 
 
 class Web3Cli(App):
@@ -66,7 +67,7 @@ class Web3Cli(App):
 
         # extend the app with cement hook system
         hooks = [
-            ("post_setup", database.attach_production_db),
+            ("post_setup", database.attach_db),
         ]
 
 

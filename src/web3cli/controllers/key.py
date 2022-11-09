@@ -1,6 +1,6 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.helpers.config import update_setting
+from web3cli.helpers.config import update_setting_in_config_file
 import secrets
 import sys
 
@@ -20,7 +20,7 @@ class Key(Controller):
             (
                 ["-f", "--force"],
                 {
-                    "help": "if an app key already exists, replace it without asking (all signers created with the old app key will need to be recreated)",
+                    "help": "if an app key already exists, replace it without asking (all signers added with the old app key will need to be recreated)",
                     "action": "store_true",
                 },
             )
@@ -28,29 +28,29 @@ class Key(Controller):
     )
     def create(self) -> None:
         # If the app key already exists, warn the user before replacing it
-        if self.get_option("web3cli.app_key"):
-            proceed = (
-                "yes"
-                if self.app.pargs.force
-                else input(
-                    "An app key already exists, do you want to replace it?\nIf you do, you will need to recreate all signers that\nwere created with the old app key.\nType 'yes' to replace it: "
-                )
+        key_exists = True if self.get_option("web3cli.app_key") else False
+        if key_exists and not self.app.pargs.force:
+            self.app.log.error(
+                "App key already exists, run `web3 key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."
             )
-            if proceed not in ("y", "yes"):
-                self.app.log.info("Exiting...")
-                self.app.exit_code = 0
-                sys.exit()
+            self.app.exit_code = 0
+            sys.exit()
 
         # Generate new app key and store it
         key = secrets.token_bytes(32)
-        update_setting(
+        update_setting_in_config_file(
             self.app,
             setting="app_key",
             value=str(key),
             do_log=False,
             is_global=True,
         )
-        self.app.log.info("Created new app key")
+        self.app.log.info("Created app key")
+        # Warn about old signers being useless now
+        if key_exists:
+            self.app.log.warning(
+                "The old key was deleted: make sure to replace signers added with it"
+            )
 
     @ex(
         help="generate and show a new random password, suitable to encrypt a private key; the password will not be stored anywhere, so take note of it if you want to use it!",

@@ -6,9 +6,7 @@ from typing import Any, List, Dict
 from pytest import FixtureRequest
 import pytest
 from cement import fs
-from web3cli.helpers.config import update_setting
 import secrets
-from .helper import set_config
 
 
 @pytest.fixture()
@@ -54,26 +52,14 @@ def signers() -> List[Dict[str, Any]]:
 
 
 @pytest.fixture()
-def app_key() -> str:
-    """Set a new app_key in the test config file and return it"""
-    key = secrets.token_bytes(32)
-    set_config("app_key", str(key))
-    return str(key)
+def networks() -> List[str]:
+    return ["ethereum", "binance", "avalanche", "swimmer"]
 
 
 @pytest.fixture()
-def default_signer(signers: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Set a default_signer in the test config file and return the test signer"""
-    set_config("default_signer", signers[0]["label"])
-    return signers[0]
-
-
-@pytest.fixture()
-def default_network() -> str:
-    """Set a default_network in the test config file and return it"""
-    network = "avalanche"
-    set_config("default_network", network)
-    return network
+def app_key() -> bytes:
+    """A randomly-generated key suitable to be used as application key"""
+    return secrets.token_bytes(32)
 
 
 @pytest.fixture(scope="function")

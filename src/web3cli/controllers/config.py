@@ -1,6 +1,6 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.helpers.config import update_setting
+from web3cli.helpers.config import update_setting_in_config_file
 import argparse
 
 
@@ -33,7 +33,7 @@ class Config(Controller):
         else:
             output = {}
             all_config = self.app.config.get_dict()
-            for section in ["web3cli", "web3cli_test"]:
+            for section in ["web3cli"]:
                 output[section] = all_config[section]
             self.app.render(output, handler="yaml")
 
@@ -66,7 +66,7 @@ class Config(Controller):
         ],
     )
     def set(self) -> None:
-        update_setting(
+        update_setting_in_config_file(
             self.app,
             setting=self.app.pargs.setting,
             value=self.app.pargs.value,

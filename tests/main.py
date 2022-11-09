@@ -1,7 +1,12 @@
 from cement import TestApp
-from web3cli.main import Web3Cli
+from web3cli.main import Web3Cli, CONFIG
 from web3cli.helpers import database
-from .helper import get_config_filepath, delete_configuration_file
+from tests import helper
+import os
+
+# Each time you run the test app, a brand new database
+# will be created
+CONFIG["web3cli"]["db_file"] = helper.get_test_config_file()
 
 
 class Web3CliTest(TestApp, Web3Cli):
@@ -10,15 +15,14 @@ class Web3CliTest(TestApp, Web3Cli):
     class Meta:
         label = "web3cli"
 
+        config_defaults = CONFIG
+
         config_files = [
-            get_config_filepath(),
+            helper.get_test_config_file(),
         ]
 
         hooks = [
-            # Delete the configuration file every single run of the CLI
-            ("post_setup", delete_configuration_file),
-            ("post_setup", database.attach_testing_db),
+            ("pre_setup", helper.delete_test_config_file),
+            ("post_setup", database.delete_db_file),
+            ("post_setup", database.attach_db),
         ]
-
-        # if True, delete test db before any run
-        reset_db = True
