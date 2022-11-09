@@ -1,5 +1,5 @@
 import pytest
-from web3cli.main import Web3CliTest
+from ..main import Web3CliTest
 from web3cli.core.models.address import Address
 from web3cli.core.exceptions import AddressNotResolved
 from web3cli import resolve_address

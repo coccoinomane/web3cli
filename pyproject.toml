@@ -16,6 +16,8 @@ dependencies = [
     "cement[tabulate]>=3.0.8",
     "web3client>=0.3.4",
     "peewee>=3.15.3",
+    "cryptography>=38.0.3",
+    "ruamel.yaml>=0.17.21",
 ]
 
 [tool.pdm.dev-dependencies]

@@ -112,5 +112,5 @@ pypi-*/
 # other
 .vscode/settings.json
 .DS_Store
-config/web3cli.yml
+web3cli.yml
 *.sqlite

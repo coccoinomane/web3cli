@@ -36,6 +36,14 @@ class Base(Controller):
                     "help": "network (blockchain) to use",
                 },
             ),
+            (
+                ["-s", "--signer"],
+                {
+                    "action": "store",
+                    "dest": "signer",
+                    "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
+                },
+            ),
         ]
 
     def _default(self) -> None:
@@ -63,3 +71,6 @@ class Base(Controller):
         # Save the network provided by the user
         self.app.extend("network", args.parse_network(self.app))  # ethereum binance etc
         self.app.extend("coin", get_coin(self.app.network))  # ETH BNB etc
+
+        # Save the signer provided by the user
+        self.app.extend("signer", args.parse_signer(self.app))

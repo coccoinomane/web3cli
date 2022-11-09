@@ -20,3 +20,21 @@ class AddressNotResolved(Web3CliError):
     """When a string cannot be resolved to a valid address"""
 
     pass
+
+
+class KeyIsInvalid(Web3CliError):
+    """When a non-valid private key is provided"""
+
+    pass
+
+
+class SignerNotFound(Web3CliError):
+    """When a signer does not exist in the DB"""
+
+    pass
+
+
+class InvalidConfig(Web3CliError):
+    """When any configuration value cannot be found"""
+
+    pass

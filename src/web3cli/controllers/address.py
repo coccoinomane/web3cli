@@ -5,6 +5,8 @@ from web3cli.core.exceptions import Web3CliError, AddressNotFound, AddressIsInva
 
 
 class Address(Controller):
+    """Handler of the `web3 address` commands"""
+
     class Meta:
         label = "address"
         help = "add, list or delete addresses"

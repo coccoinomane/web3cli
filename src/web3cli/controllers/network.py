@@ -4,7 +4,7 @@ from web3cli.core.helpers.networks import get_supported_networks
 
 
 class Network(Controller):
-    """Controller for the `web3 network` commands"""
+    """Handler of the `web3 network` commands"""
 
     class Meta:
         label = "network"
