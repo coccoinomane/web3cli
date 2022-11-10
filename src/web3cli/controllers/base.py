@@ -2,7 +2,6 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.version import get_version_message
 from web3cli.helpers.factory import make_client
-from web3cli.core.helpers.networks import get_coin
 from web3cli.helpers import args
 from web3cli import resolve_address
 
@@ -50,6 +49,10 @@ class Base(Controller):
         """Default action if no sub-command is passed."""
         self.app.args.print_help()
 
+    @ex(help="Show the version of web3")
+    def version(self) -> None:
+        self.app.print(get_version_message())
+
     @ex(
         help="Get the balance of the given address in the blockchain coin (ETH, BNB, AVAX, etc)",
         arguments=[(["address"], {"action": "store"})],
@@ -61,16 +64,11 @@ class Base(Controller):
         self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
 
     def _post_argument_parsing(self) -> None:
-        """Parse and handle global arguments"""
+        """Parse global arguments"""
 
         # Do nothing if no command is invoked (for example
         # if one simply runs `web3` or `web3 network`)
         if not args.get_command(self.app):
             return
 
-        # Save the network provided by the user
-        self.app.extend("network", args.parse_network(self.app))  # ethereum binance etc
-        self.app.extend("coin", get_coin(self.app.network))  # ETH BNB etc
-
-        # Save the signer provided by the user
-        self.app.extend("signer", args.parse_signer(self.app))
+        args.parse_global_args(self.app)

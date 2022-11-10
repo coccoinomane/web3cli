@@ -1,4 +1,4 @@
-from ..main import Web3CliTest
+from tests.main import Web3CliTest
 from web3cli.helpers import crypto
 import pytest
 

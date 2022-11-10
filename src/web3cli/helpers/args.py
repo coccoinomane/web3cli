@@ -2,6 +2,19 @@ from cement import App
 from web3cli.core.helpers.networks import is_network_supported
 from web3cli.core.exceptions import Web3CliError, SignerNotFound
 from web3cli.core.models.signer import Signer
+from web3cli.core.helpers.networks import get_coin
+
+
+def parse_global_args(app: App) -> None:
+    """Extend the app object with global arguments. Must be
+    run post argument parsing"""
+
+    # Save the network provided by the user
+    app.extend("network", parse_network(app))  # ethereum binance etc
+    app.extend("coin", get_coin(app.network))  # ETH BNB etc
+
+    # Save the signer provided by the user
+    app.extend("signer", parse_signer(app))
 
 
 def get_command(app: App) -> str:
