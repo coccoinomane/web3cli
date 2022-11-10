@@ -2,7 +2,10 @@ from typing import Any, List, Dict
 from ..main import Web3CliTest
 from web3cli.core.models.signer import Signer
 from eth_account import Account
-from web3cli.helpers.crypto import decrypt_string_with_app_key
+from web3cli.helpers.crypto import (
+    decrypt_string_with_app_key,
+    encrypt_string_with_app_key,
+)
 
 
 def test_signer_list(signers: List[Dict[str, Any]]) -> None:
@@ -20,7 +23,7 @@ def test_signer_list(signers: List[Dict[str, Any]]) -> None:
             assert data[i][0] == signers[i]["label"]
 
 
-def test_signer_get(signers: List[Dict[str, Any]]) -> None:
+def test_signer_get(signers: List[Dict[str, Any]], app_key: bytes) -> None:
     # Test with label argument > returns address of signer with label
     for s in signers:
         argv = [
@@ -29,8 +32,13 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
             s["label"],
         ]
         with Web3CliTest(argv=argv) as app:
+            app.config.set("web3cli", "app_key", str(app_key))
             address = Account.from_key(s["private_key"]).address
-            Signer.create(label=s["label"], address=address, key=s["private_key"])
+            Signer.create(
+                label=s["label"],
+                address=address,
+                key=encrypt_string_with_app_key(app, s["private_key"]),
+            )
             app.run()
             data, output = app.last_rendered
             assert data["out"] == s["address"]
@@ -44,8 +52,13 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
             "get",
         ]
         with Web3CliTest(argv=argv) as app:
+            app.config.set("web3cli", "app_key", str(app_key))
             address = Account.from_key(s["private_key"]).address
-            Signer.create(label=s["label"], address=address, key=s["private_key"])
+            Signer.create(
+                label=s["label"],
+                address=address,
+                key=encrypt_string_with_app_key(app, s["private_key"]),
+            )
             app.run()
             data, output = app.last_rendered
             assert data["out"] == s["label"]
@@ -57,15 +70,20 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
         "get",
     ]
     with Web3CliTest(argv=argv) as app:
+        app.config.set("web3cli", "app_key", str(app_key))
         app.config.set("web3cli", "default_signer", s["label"])
         address = Account.from_key(s["private_key"]).address
-        Signer.create(label=s["label"], address=address, key=s["private_key"])
+        Signer.create(
+            label=s["label"],
+            address=address,
+            key=encrypt_string_with_app_key(app, s["private_key"]),
+        )
         app.run()
         data, output = app.last_rendered
         assert data["out"] == s["label"]
 
 
-def test_signer_add(signers: List[Dict[str, Any]], app_key: str) -> None:
+def test_signer_add(signers: List[Dict[str, Any]], app_key: bytes) -> None:
     for s in signers:
         argv = [
             "signer",
@@ -83,7 +101,7 @@ def test_signer_add(signers: List[Dict[str, Any]], app_key: str) -> None:
             assert decrypt_string_with_app_key(app, signer.key) == s["private_key"]
 
 
-def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
+def test_signer_delete(signers: List[Dict[str, Any]], app_key: bytes) -> None:
     for s in signers:
         argv = [
             "signer",
@@ -91,7 +109,12 @@ def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
             s["label"],
         ]
         with Web3CliTest(argv=argv) as app:
+            app.config.set("web3cli", "app_key", str(app_key))
             address = Account.from_key(s["private_key"]).address
-            Signer.create(label=s["label"], address=address, key=s["private_key"])
+            Signer.create(
+                label=s["label"],
+                address=address,
+                key=encrypt_string_with_app_key(app, s["private_key"]),
+            )
             app.run()
             assert Signer.select().count() == 0

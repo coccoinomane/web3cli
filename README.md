@@ -125,11 +125,10 @@ Pull requests are welcome!
 
 # TODO
 - Signer: resolve signers
-- Signer: factory for sigining client
-- Signer: readme documentation
 - Command: Send ETH
-- Windows: test on a Windows machine
 - Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
+- Signer: readme documentation
+- Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
 - Autocomplete

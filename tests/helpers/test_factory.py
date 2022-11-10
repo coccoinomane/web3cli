@@ -1,7 +1,10 @@
-from typing import List
+from typing import Any, Dict, List
 from tests.main import Web3CliTest
+from web3 import Account
+from web3cli.core.models.signer import Signer
 from web3cli.helpers.args import parse_global_args
-from web3cli.helpers.factory import make_client
+from web3cli.helpers.crypto import encrypt_string_with_app_key
+from web3cli.helpers.factory import make_client, make_wallet
 from web3client.helpers.debug import pprintAttributeDict
 
 
@@ -19,3 +22,31 @@ def test_make_client(networks: List[str]) -> None:
             assert type(block.get("difficulty")) is int
             assert block.get("difficulty") >= 0
             assert type(block.get("transactions")) is list
+
+
+def test_make_wallet(
+    networks: List[str], signers: List[Dict[str, Any]], app_key: bytes
+) -> None:
+    """Sign a message with a wallet created by make_wallet"""
+    msg = "Hello world"
+    s = signers[0]
+    for network in networks:
+        argv = [
+            "--network",
+            network,
+            "--signer",
+            s["label"],
+            "version",  # simplest possible command
+        ]
+        with Web3CliTest(argv=argv) as app:
+            app.config.set("web3cli", "app_key", str(app_key))
+            address = Account.from_key(s["private_key"]).address
+            Signer.create(
+                label=s["label"],
+                address=address,
+                key=encrypt_string_with_app_key(app, s["private_key"]),
+            )
+            app.run()
+            client = make_wallet(app)
+            signed_message = client.signMessage(msg)
+            assert client.isMessageSignedByMe(msg, signed_message) == True
