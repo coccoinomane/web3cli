@@ -2,8 +2,8 @@ from cement import App
 from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
 from web3client.base_client import BaseClient
-import web3factory.factory
 from web3cli.helpers import args
+import web3factory.factory
 
 
 def make_client(app: App, log: bool = False) -> BaseClient:
