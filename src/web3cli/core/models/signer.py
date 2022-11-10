@@ -18,10 +18,17 @@ class Signer(BaseModel):
         return cls.get_or_none(cls.label == label)
 
     @classmethod
+    def get_by_label_or_raise(cls, label: str) -> BaseModel:
+        """Return the signer object with the given label; raise
+        error if it does not exist"""
+        try:
+            return cls.get(cls.label == label)
+        except:
+            raise SignerNotFound(f"Signer '{label}' does not exist")
+
+    @classmethod
     def get_address(cls, label: str) -> str:
         """Return the address of the signer with the given label; raise
-        error if no such address is found"""
-        signer = Signer.get_by_label(label)
-        if not signer:
-            raise SignerNotFound(f"Signer '{label}' does not exist")
+        error if the signer does not exist"""
+        signer = Signer.get_by_label_or_raise(label)
         return signer.address

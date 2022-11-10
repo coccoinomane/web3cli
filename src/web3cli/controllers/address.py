@@ -74,10 +74,6 @@ class Address(Controller):
         ],
     )
     def delete(self) -> None:
-        address = Model.get_by_label(self.app.pargs.label)
-        if not address:
-            raise AddressNotFound(
-                f"Address '{self.app.pargs.label}' does not exist, can't delete it"
-            )
+        address = Model.get_by_label_or_raise(self.app.pargs.label)
         address.delete_instance()
         self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")

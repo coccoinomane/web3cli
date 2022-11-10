@@ -44,9 +44,3 @@ def parse_signer(app: App) -> str:
     if not signer:
         signer = None
     return signer
-
-
-def validate_signer(signer: str) -> None:
-    """Throw error if the given signer does not exist"""
-    if not Signer.get_by_label(signer):
-        raise SignerNotFound(f"Signer '{signer}' not found")
