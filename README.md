@@ -1,6 +1,15 @@
 Interact with blockchains and smart contracts using the command line.
 
-Built on [web3client](https://github.com/coccoinomane/web3client), the Swiss-army knife of the blockchain.
+# Features
+
+- Easily interact with EVM-compatible chains using your terminal
+- Works with the most popular chains: Ethereum, Binance, Avalanche and more to come!
+- Save addresses you use often and access them with their tag
+- Send transactions from multiple signers
+- Concatenate commands to build powerful scripts
+- [To be implemented]: Support for ERC20 operations, using the token name (e.g. USDC) instead of its address.
+- [To be implemented]: DeFi support, e.g. sell Curve's yield on Uniswap, setup a DCA plan on TraderJoe, etc.
+
 
 # Install
 
@@ -8,7 +17,7 @@ Built on [web3client](https://github.com/coccoinomane/web3client), the Swiss-arm
 pip3 install -U web3cli
 ```
 
-# Examples
+# Simple examples
 
 - Get the ETH balance of the Ethereum foundation:
    ```bash
@@ -18,6 +27,16 @@ pip3 install -U web3cli
 - Get the BNB balance of the Binance hot wallet on BNB chain:
    ```bash
    web3 -n binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   ```
+
+- Send money around (To be implement yet):
+   ```
+   web3 send <address> 0.001 ETH
+   ```
+
+- Sign any message:
+   ```bash
+   web3 sign "Hello world!"
    ```
 
 - List all supported networks (blockchains):
@@ -58,7 +77,7 @@ which will produce the following output:
 
 To see all the actions that can be done with addresses, run `web3 address`.
 
-# Signers
+# Sign & send
 
 You can use `web3` to send transactions to the blockchain or to sign messages. To do so, you first need to define a signer:
 
@@ -68,11 +87,11 @@ web3 add my_signer
 
 You will be prompted to insert a private key, which will be encrypted and stored in the database. Feel free to do so with this test private key: `d94e4166f0b3c85ffebed3e0eaa7f7680ae296cf8a7229d637472b7452c8602c`.
 
-You can add **multiple signers** and switch between them using the `web3 --signer my_signer` flag, or choose a default signer with the command `web3 config set default_signer my_signer`.
+### Examples
 
 Once you have added a signer, you can use any of the commands that need a private key, as shown in the following examples.
 
-### Sign a message
+**Sign a message**:
 
 ```bash
 web3 sign "Hello world!"
@@ -88,7 +107,7 @@ Output:
  'v': 28}
 ```
 
-### Send ETH, BNB, AVAX, etc
+**Send ETH, BNB, AVAX, etc**:
 
 This is to be implemented yet, but the idea is to send funds with the following command:
 
@@ -97,6 +116,22 @@ web3 send <address> 0.001 ETH
 ```
 
 where `address` is either an address from the address book, or a `0x..` hex string.
+
+### Multiple signers
+
+Add more signers with `web3 add` and select which one to use with the `--signer` flag:
+
+```bash
+web3 --signer my_signer <command>
+web3 -s my_signer <command> # short version
+```
+
+If you plan to use the same signer for a while, make it the **default signer** with the command:
+
+```
+web3 config set default_signer my_signer
+```
+
 
 # Settings
 
@@ -117,8 +152,8 @@ output> avalanche
 ### Folder-specific settings
 
 To have settings that apply only to the current folder, create a `web3cli.yaml` file in that folder and execute `web3` from that folder.
-Settings specified in `web3cli.yaml` will override those in your home folder.
-Environment variables will still get the precedence.
+
+Settings specified in `web3cli.yaml` will override those in your home folder. Environment variables will still get the precedence.
 
 ### Edit configuration via the CLI
 
@@ -132,13 +167,13 @@ You can edit the configuration files using `web3 config`. For example:
    ```bash
    pdm web3 config get
    ```
-- Edit a setting value at the local leval (`web3cli.yml`):
+- Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
    ```bash
    pdm web3 config set default_network avalanche
    ```
-- Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
+- Edit a setting value at the local level (`web3cli.yml`):
    ```bash
-   pdm web3 config set default_network avalanche --global
+   pdm web3 config set default_network avalanche --no-global
    ```
 
 # Contribute ❤️
@@ -155,12 +190,14 @@ Pull requests are welcome!
    ```
 3. To run the CLI against your changes: 
    ```bash
-   pdm web3 ...
+   pdm web3 <command>
    ```
 4. To run tests:
    ```bash
    pdm test
    ```
+
+Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
 - Command: Send ETH
