@@ -1,7 +1,8 @@
+from pprint import pformat
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.version import get_version_message
-from web3cli.helpers.client_factory import make_client
+from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers import args
 from web3cli import resolve_address
 
@@ -62,6 +63,14 @@ class Base(Controller):
             resolve_address(self.app.pargs.address)
         )
         self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
+
+    @ex(
+        help="Sign the given message and show the signed message, as returned by web3.py",
+        arguments=[(["msg"], {"action": "store"})],
+    )
+    def sign(self) -> None:
+        signed_message = make_wallet(self.app).signMessage(self.app.pargs.msg)
+        self.app.print(pformat(signed_message._asdict()))
 
     def _post_argument_parsing(self) -> None:
         """Parse global arguments"""

@@ -25,7 +25,7 @@ class Signer(Controller):
         )
 
     @ex(
-        help="show the address of a signer by its label; without arguments, show the label of the signer that will be used by web3cli",
+        help="show the address of a signer by its label; without arguments, show the label of the active signer",
         arguments=[
             (
                 ["label"],
@@ -40,8 +40,12 @@ class Signer(Controller):
     def get(self) -> None:
         if self.app.pargs.label:
             self.app.print(Model.get_address(self.app.pargs.label))
-        else:
+        elif self.app.signer:
             self.app.print(self.app.signer)
+        else:
+            raise SignerNotFound(
+                "Signer not set. Add one with `web3 signer add <label>`"
+            )
 
     @ex(
         help="add a new signer; you will be asked for the private key",

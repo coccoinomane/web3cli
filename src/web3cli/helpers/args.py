@@ -1,6 +1,6 @@
 from cement import App
 from web3cli.core.helpers.networks import is_network_supported
-from web3cli.core.exceptions import Web3CliError, SignerNotFound
+from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.signer import Signer
 from web3cli.core.helpers.networks import get_coin
 
@@ -48,12 +48,26 @@ def validate_network(network: str) -> None:
 
 
 def parse_signer(app: App) -> str:
-    """If the signer argument was passed to the CLI, return it; otherwise,
-    return its default value from the config file"""
+    """Try to infer which signer the user wants to use.
+
+    The following is the order in which the signer is
+    discovered and loaded:
+
+    - Signer argument passed to the CLI
+    - Default signer from the config file
+    - If there's only one signer in the DB, use it
+
+    Otherwise, return None, and leave to the app the
+    responsibility to raise an error. We do not raise
+    it here because we don't know yet whether the command
+    invoked by the user really needs a signer.
+    """
     if app.pargs.signer:
         signer = app.pargs.signer
-    else:
+    elif app.config.get("web3cli", "default_signer"):
         signer = app.config.get("web3cli", "default_signer")
-    if not signer:
+    elif Signer.select().count() == 1:
+        signer = Signer.select().get().label
+    else:
         signer = None
     return signer
