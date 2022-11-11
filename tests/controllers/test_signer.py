@@ -1,5 +1,8 @@
+import ast
 from typing import Any, List, Dict
-from ..main import Web3CliTest
+
+from tests.seeder import seed_signers
+from tests.main import Web3CliTest
 from web3cli.core.models.signer import Signer
 from eth_account import Account
 from web3cli.helpers.crypto import (
@@ -12,34 +15,26 @@ def test_signer_list(signers: List[Dict[str, Any]]) -> None:
     """Add signers and check that they are listed alphabetically"""
 
     signers = sorted(signers, key=lambda s: s["label"])
-    argv = ["signer", "list"]
-    with Web3CliTest(argv=argv) as app:
-        for s in signers:
-            address = Account.from_key(s["private_key"]).address
-            Signer.create(label=s["label"], address=address, key=s["private_key"])
-        app.run()
+    with Web3CliTest() as app:
+        seed_signers(app, signers)
+        app.set_args(["signer", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(signers)):
             assert data[i][0] == signers[i]["label"]
 
 
-def test_signer_get(signers: List[Dict[str, Any]], app_key: bytes) -> None:
+def test_signer_get(signers: List[Dict[str, Any]]) -> None:
     # Test with label argument > returns address of signer with label
     for s in signers:
-        argv = [
-            "signer",
-            "get",
-            s["label"],
-        ]
-        with Web3CliTest(argv=argv) as app:
-            app.config.set("web3cli", "app_key", str(app_key))
-            address = Account.from_key(s["private_key"]).address
-            Signer.create(
-                label=s["label"],
-                address=address,
-                key=encrypt_string_with_app_key(app, s["private_key"]),
-            )
-            app.run()
+        with Web3CliTest() as app:
+            seed_signers(app, signers)
+            app.set_args(
+                [
+                    "signer",
+                    "get",
+                    s["label"],
+                ]
+            ).run()
             data, output = app.last_rendered
             assert data["out"] == s["address"]
 
@@ -52,13 +47,7 @@ def test_signer_get(signers: List[Dict[str, Any]], app_key: bytes) -> None:
             "get",
         ]
         with Web3CliTest(argv=argv) as app:
-            app.config.set("web3cli", "app_key", str(app_key))
-            address = Account.from_key(s["private_key"]).address
-            Signer.create(
-                label=s["label"],
-                address=address,
-                key=encrypt_string_with_app_key(app, s["private_key"]),
-            )
+            seed_signers(app, signers)
             app.run()
             data, output = app.last_rendered
             assert data["out"] == s["label"]
@@ -70,14 +59,8 @@ def test_signer_get(signers: List[Dict[str, Any]], app_key: bytes) -> None:
         "get",
     ]
     with Web3CliTest(argv=argv) as app:
-        app.config.set("web3cli", "app_key", str(app_key))
+        seed_signers(app, signers)
         app.config.set("web3cli", "default_signer", s["label"])
-        address = Account.from_key(s["private_key"]).address
-        Signer.create(
-            label=s["label"],
-            address=address,
-            key=encrypt_string_with_app_key(app, s["private_key"]),
-        )
         app.run()
         data, output = app.last_rendered
         assert data["out"] == s["label"]
@@ -93,7 +76,6 @@ def test_signer_add(signers: List[Dict[str, Any]], app_key: bytes) -> None:
             s["private_key"],
         ]
         with Web3CliTest(argv=argv) as app:
-            app.config.set("web3cli", "app_key", str(app_key))
             app.run()
             signer = Signer.get_by_label(s["label"])
             assert Signer.select().count() == 1
@@ -109,12 +91,6 @@ def test_signer_delete(signers: List[Dict[str, Any]], app_key: bytes) -> None:
             s["label"],
         ]
         with Web3CliTest(argv=argv) as app:
-            app.config.set("web3cli", "app_key", str(app_key))
-            address = Account.from_key(s["private_key"]).address
-            Signer.create(
-                label=s["label"],
-                address=address,
-                key=encrypt_string_with_app_key(app, s["private_key"]),
-            )
+            seed_signers(app, signers)
             app.run()
-            assert Signer.select().count() == 0
+            assert Signer.select().count() == len(signers) - 1

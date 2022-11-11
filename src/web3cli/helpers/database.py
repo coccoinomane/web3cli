@@ -1,13 +1,12 @@
 from cement import App
-from web3cli.core.helpers.database import init_db
+from web3cli.core.exceptions import Web3CliError
 import os
 
 
-def attach_db(app: App) -> None:
-    """Attach the production database to the app object, so that the
-    controllers can access it"""
-    db_path = get_db_file(app)
-    app.extend("db", init_db(db_path))
+def db_ready_or_raise(app: App) -> None:
+    """Check whether the DB is attached to the app and connected"""
+    if not app.db.is_connection_usable():
+        raise Web3CliError("Could not establish database connection")
 
 
 def get_db_file(app: App) -> str:

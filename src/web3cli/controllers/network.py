@@ -14,7 +14,6 @@ class Network(Controller):
 
     @ex(help="list available networks")
     def list(self) -> None:
-        # self.app.render({"networks": get_supported_networks()}, "network/list.jinja2")
         self.app.render(
             [[n["name"], n["chainId"], n["coin"]] for n in get_supported_networks()],
             headers=["NAME", "CHAIN ID", "COIN"],

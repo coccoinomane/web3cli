@@ -1,6 +1,8 @@
 from cement import App
 from typing import Any
 from web3cli.core.helpers import yaml
+from web3cli.core.helpers.os import create_folder
+import os
 
 
 def update_setting_in_config_file(
@@ -11,13 +13,17 @@ def update_setting_in_config_file(
     otherwise update the one in the directory from where the script
     was launched.
 
-    If the file does not exist, it will be created."""
+    If the file does not exist, it will be created, along with its
+    parent folders"""
 
     filepath = (
         get_global_configuration_file(app)
         if is_global
         else get_local_configuration_file(app)
     )
+
+    if is_global:
+        create_folder(os.path.dirname(filepath), 0o744)
 
     yaml.set(
         filepath=filepath,

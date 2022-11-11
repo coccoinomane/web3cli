@@ -9,7 +9,7 @@
             "request": "launch",
             "module": "pytest",
             "justMyCode": true,
-            "args": ["tests"]
+            "args": ["tests", "-k", "signer_list"]
         },
         {
             "name": "web3 network get",

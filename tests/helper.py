@@ -1,9 +1,9 @@
 """Please note this file DOES NOT contain tests, but
 helper functions to better run tests"""
 
-from web3cli.main import Web3Cli
 from web3cli.core.helpers import yaml
-from typing import Any, Dict
+from typing import Any
+from web3cli.main import Web3Cli
 import os
 
 

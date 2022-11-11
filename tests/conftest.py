@@ -7,6 +7,8 @@ from pytest import FixtureRequest
 import pytest
 from cement import fs
 import secrets
+from tests.main import Web3CliTest
+from web3cli.main import Web3Cli
 
 
 @pytest.fixture()
@@ -69,3 +71,14 @@ def tmp(request: FixtureRequest) -> Any:
     t = fs.Tmp()
     yield t
     t.remove()
+
+
+@pytest.fixture()
+def app(app_key: bytes) -> Any:
+    """A CLI instance that can be used for tests. Add arguments as a list
+    of strings with app.set_argv(), and run the CLI with app.run()"""
+    app = Web3CliTest()
+    app.setup()
+    app.config.set("web3cli", "app_key", app_key)
+    yield app
+    app.close()

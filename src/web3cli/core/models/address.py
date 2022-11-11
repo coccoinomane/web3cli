@@ -1,3 +1,4 @@
+from __future__ import annotations
 from peewee import TextField
 from web3cli.core.models.base_model import BaseModel
 from web3cli.core.exceptions import AddressNotFound, AddressNotResolved
@@ -13,13 +14,13 @@ class Address(BaseModel):
     description = TextField(null=True)
 
     @classmethod
-    def get_by_label(cls, label: str) -> BaseModel:
+    def get_by_label(cls, label: str) -> Address:
         """Return the address object with the given label, or None if
         it does not exist"""
         return cls.get_or_none(cls.label == label)
 
     @classmethod
-    def get_by_label_or_raise(cls, label: str) -> BaseModel:
+    def get_by_label_or_raise(cls, label: str) -> Address:
         """Return the address object with the given label; raise
         error if it does not exist"""
         try:

@@ -1,27 +1,36 @@
+from typing import Any, Dict, List
 import pytest
-from ..main import Web3CliTest
-from web3cli.core.models.address import Address
+from tests.seeder import seed_addresses
+from tests.main import Web3CliTest
 from web3cli.core.exceptions import AddressNotResolved
 from web3cli import resolve_address
 
 
-def test_balance() -> None:
-    argv = ["balance", "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"]
-    with Web3CliTest(argv=argv) as app:
-        Address.create(
-            label="Ethereum foundation",
-            address="0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-        )
-        # Existing label
-        address = resolve_address("Ethereum foundation")
+def test_resolve_existing_address(addresses: List[Dict[str, Any]]) -> None:
+    """Resolve an existing address by its label"""
+    for a in addresses:
+        with Web3CliTest() as app:
+            seed_addresses(app, addresses)
+            address = resolve_address(a["address"])
+            assert type(address) is str
+            assert address == a["address"]
+
+
+def test_resolve_valid_address(addresses: List[Dict[str, Any]]) -> None:
+    """Resolve a valid address which is not in the DB by its value"""
+    with Web3CliTest() as app:
+        seed_addresses(app, addresses)
+        address = resolve_address("0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A")
         assert type(address) is str
-        assert address == "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
-        # Valid address
-        address = resolve_address("0x8894e0a0c962cb723c1976a4421c95949be2d4e3")
-        assert type(address) is str
-        assert address == "0x8894e0a0c962cb723c1976a4421c95949be2d4e3"
-        # Invalid address + non-existing label
+        assert address == "0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A"
+
+
+def test_resolve_invalid_address_or_label(addresses: List[Dict[str, Any]]) -> None:
+    """Resolve either an invalid address by its value, or a label that
+    does not exist in the DB"""
+    with Web3CliTest() as app:
+        seed_addresses(app, addresses)
         with pytest.raises(AddressNotResolved):
-            address = resolve_address("0x123")
+            resolve_address("0x123")
         with pytest.raises(AddressNotResolved):
-            address = resolve_address("non existing label")
+            resolve_address("non existing label")

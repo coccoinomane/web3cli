@@ -1,6 +1,7 @@
 from typing import Any, List, Dict
-from ..main import Web3CliTest
+from tests.main import Web3CliTest
 from web3cli.core.models.address import Address
+from tests.seeder import seed_addresses
 
 
 def test_address_list(addresses: List[Dict[str, Any]]) -> None:
@@ -8,17 +9,11 @@ def test_address_list(addresses: List[Dict[str, Any]]) -> None:
 
     # Sort test address alphabetically by label
     addresses = sorted(addresses, key=lambda a: a["label"])
-    # Init the CLI app (without launching the command yet)
-    argv = ["address", "list"]
-    with Web3CliTest(argv=argv) as app:
+    with Web3CliTest() as app:
         # Add the addresses
-        for a in addresses:
-            Address.create(
-                label=a["label"],
-                address=a["address"],
-            )
+        seed_addresses(app, addresses)
         # Run `web3 address list`
-        app.run()
+        app.set_args(["address", "list"]).run()
         # Catpure output
         data, output = app.last_rendered
         # Test
@@ -29,33 +24,32 @@ def test_address_list(addresses: List[Dict[str, Any]]) -> None:
 
 def test_address_get(addresses: List[Dict[str, Any]]) -> None:
     for a in addresses:
-        argv = [
-            "address",
-            "get",
-            a["label"],
-        ]
-        with Web3CliTest(argv=argv) as app:
-            Address.create(
-                label=a["label"],
-                address=a["address"],
-            )
-            app.run()
+        with Web3CliTest() as app:
+            seed_addresses(app, addresses)
+            app.set_args(
+                [
+                    "address",
+                    "get",
+                    a["label"],
+                ]
+            ).run()
             data, output = app.last_rendered
             assert data["out"] == a["address"]
 
 
 def test_address_add(addresses: List[Dict[str, Any]]) -> None:
     for a in addresses:
-        argv = [
-            "address",
-            "add",
-            a["label"],
-            a["address"],
-            "--description",
-            a["description"],
-        ]
-        with Web3CliTest(argv=argv) as app:
-            app.run()
+        with Web3CliTest() as app:
+            app.set_args(
+                [
+                    "address",
+                    "add",
+                    a["label"],
+                    a["address"],
+                    "--description",
+                    a["description"],
+                ]
+            ).run()
             address = Address.get_by_label(a["label"])
             assert Address.select().count() == 1
             assert address.address == a["address"]
@@ -65,22 +59,19 @@ def test_address_add(addresses: List[Dict[str, Any]]) -> None:
 def test_address_update(addresses: List[Dict[str, Any]]) -> None:
     """Create address 0, then update it with the data of address 1,
     while keeping the same label"""
-    argv = [
-        "address",
-        "add",
-        addresses[0]["label"],
-        addresses[1]["address"],
-        "--description",
-        addresses[1]["description"],
-        "--update",
-    ]
-    with Web3CliTest(argv=argv) as app:
-        Address.create(
-            label=addresses[0]["label"],
-            address=addresses[0]["address"],
-            description=addresses[0]["description"],
-        )
-        app.run()
+    with Web3CliTest() as app:
+        seed_addresses(app, [addresses[0]])
+        app.set_args(
+            argv=[
+                "address",
+                "add",
+                addresses[0]["label"],
+                addresses[1]["address"],
+                "--description",
+                addresses[1]["description"],
+                "--update",
+            ]
+        ).run()
         address = Address.get_by_label(addresses[0]["label"])
         assert address.address == addresses[1]["address"]
         assert address.description == addresses[1]["description"]
@@ -88,15 +79,13 @@ def test_address_update(addresses: List[Dict[str, Any]]) -> None:
 
 def test_address_delete(addresses: List[Dict[str, Any]]) -> None:
     for a in addresses:
-        argv = [
-            "address",
-            "delete",
-            a["label"],
-        ]
-        with Web3CliTest(argv=argv) as app:
-            Address.create(
-                label=a["label"],
-                address=a["address"],
-            )
-            app.run()
-            assert Address.select().count() == 0
+        with Web3CliTest() as app:
+            seed_addresses(app, addresses)
+            app.set_args(
+                [
+                    "address",
+                    "delete",
+                    a["label"],
+                ]
+            ).run()
+            assert Address.select().count() == len(addresses) - 1

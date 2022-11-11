@@ -29,16 +29,15 @@ dev = [
 [tool.pdm.scripts]
 web3.help = "Run the CLI in development mode"
 web3.cmd = "web3"
+
 test = "pytest tests"
 test_verbose = "pytest tests -s"
-publish_test.help = """\
-Publish package to the test PyPI repository. Store credentials
-in PDM_PUBLISH_TEST_USERNAME and PDM_PUBLISH_TEST_PASSWORD"""
-publish_test.cmd = "pdm publish -r testpypi -u ${PDM_PUBLISH_TEST_USERNAME} -P ${PDM_PUBLISH_TEST_PASSWORD}"
-clean = "find . -name '*.py[co]' -delete"
-docker = "pdm run clean && docker build -t web3cli:latest ."
+test_fast = "pytest tests -m 'not slow'"
+
 db_open = "open -a TablePlus $HOME/.web3cli/database/web3cli.sqlite"
 db_clean = "rm -rf $HOME/.web3cli/database"
+
+docker = "pdm run clean && docker build -t web3cli:latest ."
 
 [project.scripts]
 web3 = "web3cli.main:main"
@@ -78,3 +77,6 @@ exclude = [
 
 [tool.pytest.ini_options]
 filterwarnings = "ignore::DeprecationWarning"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

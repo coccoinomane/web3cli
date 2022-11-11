@@ -1,13 +1,11 @@
 from typing import Any, Dict, List
 from tests.main import Web3CliTest
-from web3 import Account
-from web3cli.core.models.signer import Signer
-from web3cli.helpers.args import parse_global_args
-from web3cli.helpers.crypto import encrypt_string_with_app_key
-from web3cli.helpers.factory import make_client, make_wallet
-from web3client.helpers.debug import pprintAttributeDict
+from tests.seeder import seed_signers
+from web3cli.helpers.client_factory import make_client, make_wallet
+import pytest
 
 
+@pytest.mark.slow
 def test_make_client(networks: List[str]) -> None:
     for network in networks:
         argv = ["--network", network, "version"]  # simplest possible command
@@ -24,6 +22,7 @@ def test_make_client(networks: List[str]) -> None:
             assert type(block.get("transactions")) is list
 
 
+@pytest.mark.slow
 def test_make_wallet(
     networks: List[str], signers: List[Dict[str, Any]], app_key: bytes
 ) -> None:
@@ -39,13 +38,7 @@ def test_make_wallet(
             "version",  # simplest possible command
         ]
         with Web3CliTest(argv=argv) as app:
-            app.config.set("web3cli", "app_key", str(app_key))
-            address = Account.from_key(s["private_key"]).address
-            Signer.create(
-                label=s["label"],
-                address=address,
-                key=encrypt_string_with_app_key(app, s["private_key"]),
-            )
+            seed_signers(app, [s])
             app.run()
             client = make_wallet(app)
             signed_message = client.signMessage(msg)

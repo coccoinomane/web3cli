@@ -7,7 +7,7 @@ from web3cli.controllers.config import Config
 from web3cli.controllers.key import Key
 from web3cli.core.exceptions import Web3CliError
 from web3cli.controllers.base import Base
-from web3cli.helpers import database
+from web3cli import hooks
 import os
 
 # configuration defaults
@@ -67,7 +67,8 @@ class Web3Cli(App):
 
         # extend the app with cement hook system
         hooks = [
-            ("post_setup", database.attach_db),
+            ("post_setup", hooks.post_setup),
+            ("post_argument_parsing", hooks.post_argument_parsing),
         ]
 
 
