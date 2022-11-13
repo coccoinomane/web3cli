@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import Any, List
 from cement import TestApp
 from web3cli import hooks
 from web3cli.main import Web3Cli, CONFIG
@@ -16,6 +16,10 @@ CONFIG["web3cli"]["db_file"] = os.path.join(
 class Web3CliTest(TestApp, Web3Cli):
     """A sub-class of Web3Cli that is better suited for testing."""
 
+    def __init__(self, label: str = None, delete_db: bool = True, **kw: Any) -> None:
+        super().__init__(label, **kw)
+        self.delete_db = delete_db == True
+
     class Meta:
         label = "web3cli"
 
@@ -27,7 +31,7 @@ class Web3CliTest(TestApp, Web3Cli):
 
         hooks = [
             ("pre_setup", helper.delete_test_config_file),
-            ("post_setup", database.delete_db_file),
+            ("post_setup", database.maybe_delete_db_file),
             ("post_setup", hooks.post_setup),
             ("post_argument_parsing", hooks.post_argument_parsing),
         ]

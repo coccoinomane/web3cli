@@ -52,10 +52,16 @@ class Signer(Controller):
         arguments=[
             (["label"], {"help": "label identifying the signer", "action": "store"}),
             (
+                ["-c", "--create"],
+                {
+                    "help": "generate a new private key instead, and use it to create the signer",
+                    "action": "store_true",
+                },
+            ),
+            (
                 ["-p", "--private-key"],
                 {
-                    "help": "private key of the signer (NOT SAFE, use only at your risk)",
-                    "action": "store",
+                    "help": "optionally, provide the private key directly; if you do so, make sure you clean your command history afterwards",
                 },
             ),
         ],
@@ -66,8 +72,21 @@ class Signer(Controller):
             raise Web3CliError(
                 f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `web3 signer delete {self.app.pargs.label}`"
             )
-        # Parse and validate key
-        key = self.app.pargs.private_key or getpass.getpass("Private key: ")
+        # Validate optional args
+        if self.app.pargs.create and self.app.pargs.private_key:
+            raise Web3CliError(
+                "Arguments --create and --private-key are mutually exclusive"
+            )
+        # Case 1: private key passed via argument
+        if self.app.pargs.private_key:
+            key = self.app.pargs.private_key
+        # Case 2: generate private key from scratch
+        elif self.app.pargs.create:
+            key = Account.create(self.app.app_key).key.hex()
+        # Case 3: let the user input the key (default)
+        else:
+            key = getpass.getpass("Private key: ")
+        # Verify key
         try:
             address = Account.from_key(key).address
         except:

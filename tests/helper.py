@@ -1,6 +1,8 @@
 """Please note this file DOES NOT contain tests, but
 helper functions to better run tests"""
 
+import secrets
+import string
 from web3cli.core.helpers import yaml
 from typing import Any
 from web3cli.main import Web3Cli
@@ -30,3 +32,11 @@ def update_setting_in_test_config_file(setting: str, value: Any) -> None:
         logger=None,
         section="web3cli",
     )
+
+
+def get_random_string(
+    n: int = 6, set: str = string.ascii_lowercase + string.digits
+) -> str:
+    """Return a random string of length 'n', picking characters from
+    the given set"""
+    return "".join(secrets.choice(set) for _ in range(n))

@@ -1,10 +1,13 @@
+import random
 from typing import Any, List, Dict
+from tests.helper import get_random_string
 from tests.seeder import seed_signers
 from tests.main import Web3CliTest
 from web3cli.core.exceptions import SignerNotFound
 from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
 import pytest
+from web3cli.helpers.database import delete_db_file, truncate_tables
 
 
 def test_signer_list(signers: List[Dict[str, Any]]) -> None:
@@ -114,6 +117,23 @@ def test_signer_add(signers: List[Dict[str, Any]], app_key: bytes) -> None:
             assert Signer.select().count() == 1
             assert signer.address == s["address"]
             assert decrypt_string_with_app_key(app, signer.key) == s["private_key"]
+
+
+def test_signer_add_create(signers: List[Dict[str, Any]], app_key: bytes) -> None:
+    """Test `web3 signer add <label> --create`"""
+    labels = ["label_1", "label_2", "label_3"]
+    for i, s_label in enumerate(labels):
+        with Web3CliTest(delete_db=False) as app:
+            i == 0 and truncate_tables(app)
+            app.set_args(
+                [
+                    "signer",
+                    "add",
+                    s_label,
+                    "--create",
+                ]
+            ).run()
+            assert Signer.select().count() == i + 1
 
 
 def test_signer_delete(signers: List[Dict[str, Any]], app_key: bytes) -> None:
