@@ -1,13 +1,12 @@
 from pprint import pformat
 from cement import ex
-from web3 import Web3
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.input import yes_or_exit
 from web3cli.core.models.address import Address
+from web3cli.helpers.send import send
 from web3cli.helpers.version import get_version_message
 from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers import args
-from web3cli import resolve_address
 
 
 class Base(Controller):
@@ -70,27 +69,30 @@ class Base(Controller):
     )
     def balance(self) -> None:
         balance = make_client(self.app).getBalanceInEth(
-            resolve_address(self.app.pargs.address)
+            Address.resolve_address(self.app.pargs.address)
         )
         self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
 
     @ex(
-        help="Transfer funds to the given address, denominated in the blockchain native coin (ETH, BNB, AVAX, etc)",
+        help="Transfer funds to the given address",
         arguments=[
             (
                 ["to"],
                 {
                     "help": "receiver of the funds; can be an actual address or an address tag",
-                    "action": "store",
                 },
             ),
-            (["amount"], {"help": "how much to send", "action": "store"}),
+            (["amount"], {"help": "how much to send", "type": float}),
+            (
+                ["ticker"],
+                {"help": "ticker of the coin or token to send"},
+            ),
             (
                 ["unit"],
                 {
                     "help": "optionally specify the unit to use (wei, gwei, etc)",
+                    "nargs": "?",
                     "default": "ether",
-                    "action": "store",
                 },
             ),
             (
@@ -103,19 +105,21 @@ class Base(Controller):
         ],
     )
     def send(self) -> None:
-        address = Address.resolve_address(self.app.pargs.to)
+        to_address = Address.resolve_address(self.app.pargs.to)
         if not self.app.pargs.force:
-            ticker = (
-                self.app.coin if self.app.pargs.unit == "ether" else self.app.pargs.unit
-            )
+            what = f"{self.app.pargs.amount} {self.app.pargs.ticker}"
+            if self.app.pargs.unit != "ether":
+                what = f"{self.app.pargs.amount} {self.app.pargs.unit} units of {self.app.pargs.ticker}"
             print(
-                f"You are about to send {self.app.pargs.amount} {ticker} on the {self.app.network} chain from {self.app.signer} to {address}."
+                f"You are about to send {what} on the {self.app.network} chain from signer {self.app.signer} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
-        tx_hash = make_wallet(self.app).sendEthInWei(
-            to=address,
-            valueInWei=Web3.toWei(self.app.pargs.amount, self.app.pargs.unit),
-            maxPriorityFeePerGasInGwei=self.app.priority_fee,
+        tx_hash = send(
+            self.app,
+            ticker=self.app.pargs.ticker,
+            to=to_address,
+            amount=self.app.pargs.amount,
+            unit=self.app.pargs.unit,
         )
         self.app.print(tx_hash)
 

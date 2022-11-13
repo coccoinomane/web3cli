@@ -201,6 +201,7 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 
 # TODO
 - Command: Send ETH: by default, wait for receipt
+- Retry transactions until gas fee goes below x gwei
 - Command: `web3 init` to import networks + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
