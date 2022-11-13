@@ -368,7 +368,7 @@ dependencies = [
 
 [[package]]
 name = "peewee"
-version = "3.15.3"
+version = "3.15.4"
 summary = "a little orm"
 
 [[package]]
@@ -534,7 +534,7 @@ dependencies = [
 
 [[package]]
 name = "web3client"
-version = "0.4.0"
+version = "0.4.2"
 requires_python = ">=3.10,<4"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
@@ -1267,8 +1267,8 @@ content_hash = "sha256:f1b6824809cdc7e6bd3a3fd5033d2dd9cf98c5520e96a4b5697354032
 "parsimonious 0.8.1" = [
     {url = "https://files.pythonhosted.org/packages/02/fc/067a3f89869a41009e1a7cdfb14725f8ddd246f30f63c645e8ef8a1c56f4/parsimonious-0.8.1.tar.gz", hash = "sha256:3add338892d580e0cb3b1a39e4a1b427ff9f687858fdd61097053742391a9f6b"},
 ]
-"peewee 3.15.3" = [
-    {url = "https://files.pythonhosted.org/packages/b7/4a/ba48c5a99a86cad44f89766dfa9937efe18f8d61d8fb55d0cd9073d2b40c/peewee-3.15.3.tar.gz", hash = "sha256:cc934286d0c0842203abe66a3c6583d1463371e633b03d6da054d0f74e70706f"},
+"peewee 3.15.4" = [
+    {url = "https://files.pythonhosted.org/packages/17/c8/8035f2155832580d786c35cb1ce0a89d80a67be522f620878fc294742905/peewee-3.15.4.tar.gz", hash = "sha256:2581520c8dfbacd9d580c2719ae259f0637a9e46eda47dfc0ce01864c6366205"},
 ]
 "pluggy 1.0.0" = [
     {url = "https://files.pythonhosted.org/packages/9e/01/f38e2ff29715251cf25532b9082a1589ab7e4f571ced434f98d0139336dc/pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
@@ -1505,9 +1505,9 @@ content_hash = "sha256:f1b6824809cdc7e6bd3a3fd5033d2dd9cf98c5520e96a4b5697354032
     {url = "https://files.pythonhosted.org/packages/77/30/86687404ff01743e623fa5b15c8612dd7cbf3b42072ca6c1ddf329993335/web3-5.31.1-py3-none-any.whl", hash = "sha256:9c2e72688a5b35881062ef4f9da01c4a1e922afeb3134cfc92f6b4b95bb7df06"},
     {url = "https://files.pythonhosted.org/packages/93/5c/38795c8556bcbdc3cae319241b58f630572f130fa5f5819a5c83f75cd48c/web3-5.31.1.tar.gz", hash = "sha256:74732fbd4b2e2baff9d0ac61f268b3e7b25b09ca6572d619390a9d782c2289f2"},
 ]
-"web3client 0.4.0" = [
-    {url = "https://files.pythonhosted.org/packages/96/7b/ad16a07d8af912c7e30090334046784673fafd0d3fe68e8a374d14394b98/web3client-0.4.0.tar.gz", hash = "sha256:a0f22195dde876108f9933ea8d2f650d93abf6df0e77f9a610daa3e8642e46b1"},
-    {url = "https://files.pythonhosted.org/packages/b0/19/a41ea504217cee41702845c55c599cce1afacbaaacdc6cde2f7e3ea5ecde/web3client-0.4.0-py3-none-any.whl", hash = "sha256:4fdf5bc6dc26c4ff9d6f719fd52d1444860c30bba4fbd2bb0c1ccf2d04a672f8"},
+"web3client 0.4.2" = [
+    {url = "https://files.pythonhosted.org/packages/eb/6b/dc228a8a2268730d80af7e4ee8f6779b6ed5b9538542b79d2208aab21044/web3client-0.4.2.tar.gz", hash = "sha256:7227cfa10743c427c63bd1d06df3ce65411dfa6ab65a754e9cbefa12c1aaa734"},
+    {url = "https://files.pythonhosted.org/packages/fb/0e/b8de19afaba9dfaa072700b5fd3cc9b0c4d2c754140b39af7d6ca1e474f7/web3client-0.4.2-py3-none-any.whl", hash = "sha256:a6adbc765f3f0cdd4d65a0737fb3e0d8284fcf82c4892510dab72b9086eaabe4"},
 ]
 "websockets 9.1" = [
     {url = "https://files.pythonhosted.org/packages/0c/08/1b50891a5101d71e7b739085b425aefcafd06ec37116d8fff2381776d0e8/websockets-9.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:0dd4eb8e0bbf365d6f652711ce21b8fd2b596f873d32aabb0fbb53ec604418cc"},

@@ -200,13 +200,18 @@ Pull requests are welcome!
 Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
-- Command: Send ETH
-- Signer: Make app_key non-overridable (https://docs.builtoncement.com/core-foundation/configuration-settings#configuration-settings-vs.-meta-options)
+- Command: Send ETH: by default, wait for receipt
+- Command: `web3 init` to import networks + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
 - Autocomplete commands
 - Autocomplete addresses and signers
 - Config: non-string support in `config set`
-- Allow to add custom networks (they should be a db model too)
+- Network: Allow to add custom networks
+- Network: Preload networks from https://chainid.network/chains.json
+- Gas: Upper limit on basefee via global argument/setting
+- Dry-run: Print tx instead of sending it, via global argument/setting
 - Use chains and tokens from other sources (e.g. ethereum-lists)
+- ethPM registry / etherscan to pull smart contract interfaces? E.g. https://eth-brownie.readthedocs.io/en/latest/core-contracts.html#fetching-from-a-remote-source
+- Record transaction in Txs table

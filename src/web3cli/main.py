@@ -16,6 +16,7 @@ CONFIG["web3cli"]["app_key"] = None
 CONFIG["web3cli"]["debug"] = False
 CONFIG["web3cli"]["default_network"] = "ethereum"
 CONFIG["web3cli"]["default_signer"] = None
+CONFIG["web3cli"]["default_priority_fee"] = 1
 CONFIG["web3cli"]["db_file"] = os.path.join(
     os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
 )
