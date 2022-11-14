@@ -3,7 +3,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.input import yes_or_exit
 from web3cli.core.models.address import Address
-from web3cli.helpers.send import send
+from web3cli.helpers.send import send_coin_or_token
 from web3cli.helpers.version import get_version_message
 from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers import args
@@ -74,7 +74,7 @@ class Base(Controller):
         self.app.render({"amount": balance, "ticker": self.app.coin}, "balance.jinja2")
 
     @ex(
-        help="Transfer funds to the given address",
+        help="Send a coin or token to the given address and show the transaction hash",
         arguments=[
             (
                 ["to"],
@@ -105,6 +105,7 @@ class Base(Controller):
         ],
     )
     def send(self) -> None:
+        # Parse arguments
         to_address = Address.resolve_address(self.app.pargs.to)
         if not self.app.pargs.force:
             what = f"{self.app.pargs.amount} {self.app.pargs.ticker}"
@@ -114,7 +115,8 @@ class Base(Controller):
                 f"You are about to send {what} on the {self.app.network} chain from signer {self.app.signer} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
-        tx_hash = send(
+        # Send
+        tx_hash = send_coin_or_token(
             self.app,
             ticker=self.app.pargs.ticker,
             to=to_address,
