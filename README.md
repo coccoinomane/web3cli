@@ -3,12 +3,12 @@ Interact with blockchains and smart contracts using the command line.
 # Features
 
 - Easily interact with EVM-compatible chains using your terminal
-- Works with the most popular chains: Ethereum, Binance, Avalanche and more to come!
+- Works with the most popular chains: Ethereum, Binance, Avalanche and more to come
 - Save addresses you use often and access them with their tag
 - Send transactions from multiple signers
 - Concatenate commands to build powerful scripts
-- [To be implemented]: Support for ERC20 operations, using the token name (e.g. USDC) instead of its address.
-- [To be implemented]: DeFi support, e.g. sell Curve's yield on Uniswap, setup a DCA plan on TraderJoe, etc.
+- [To be implemented]: Transfer tokens, using the token name (USDC, UNI, WETH, etc) instead of its address.
+- [To be implemented]: DeFi support: sell Curve's rewards on Uniswap, setup a DCA plan on TraderJoe, etc.
 
 
 # Install
@@ -29,9 +29,9 @@ pip3 install -U web3cli
    web3 -n binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
-- Send money around (To be implement yet):
+- Send 1 gwei to the Ethereum foundation:
    ```
-   web3 send <address> 0.001 ETH
+   web3 send 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae 1 eth gwei
    ```
 
 - Sign any message:
