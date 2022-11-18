@@ -12,20 +12,20 @@
             "args": ["tests", "-k", "signer_list"]
         },
         {
-            "name": "web3 network get",
+            "name": "web3 chain get",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["network", "get"]
+            "args": ["chain", "get"]
         },
         {
-            "name": "web3 network list",
+            "name": "web3 chain list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["network", "list"]
+            "args": ["chain", "list"]
         },
         {
             "name": "web3 signer list",

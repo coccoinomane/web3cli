@@ -12,7 +12,7 @@ from web3cli.helpers import args
 class Base(Controller):
     """Base controller. It:
     1. Defines top-level commands, such as `web3 balance`.
-    2. Handles global arguments, such as --network
+    2. Handles global arguments, such as --chain
     3. Controls what happens when web3cli is invoked without arguments."""
 
     class Meta:
@@ -31,10 +31,10 @@ class Base(Controller):
                 {"action": "version", "version": get_version_message()},
             ),
             (
-                ["-n", "--network"],
+                ["-c", "--chain"],
                 {
                     "action": "store",
-                    "help": "network (blockchain) to use",
+                    "help": "blockchain to use",
                 },
             ),
             (
@@ -112,7 +112,7 @@ class Base(Controller):
             if self.app.pargs.unit != "ether":
                 what = f"{self.app.pargs.amount} {self.app.pargs.unit} units of {self.app.pargs.ticker}"
             print(
-                f"You are about to send {what} on the {self.app.network} chain from signer {self.app.signer} to {to_address}."
+                f"You are about to send {what} on the {self.app.chain} chain from signer {self.app.signer} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
         # Send
@@ -137,7 +137,7 @@ class Base(Controller):
         """Parse global arguments"""
 
         # Do nothing if no command is invoked (for example
-        # if one simply runs `web3` or `web3 network`)
+        # if one simply runs `web3` or `web3 chain`)
         if not args.get_command(self.app):
             return
 

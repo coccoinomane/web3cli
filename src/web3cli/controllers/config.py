@@ -19,7 +19,7 @@ class Config(Controller):
             (
                 ["setting"],
                 {
-                    "help": "setting to inspect, for example 'default_network'",
+                    "help": "setting to inspect, for example 'default_chain'",
                     "nargs": "?",
                     "action": "store",
                 },
@@ -43,7 +43,7 @@ class Config(Controller):
             (
                 ["setting"],
                 {
-                    "help": "setting to set, for example 'default_network'",
+                    "help": "setting to set, for example 'default_chain'",
                     "action": "store",
                 },
             ),

@@ -1,7 +1,7 @@
 ### Web3 Cli Configuration Settings
 ###
 ### All settings can be overriden using snake case environment
-### variables, for example 'export WEB3CLI_DEFAULT_NETWORK=ethereum'
+### variables, for example 'export WEB3CLI_DEFAULT_CHAIN=ethereum'
 ###
 ### Copy this file to ~/.web3cli/conf/web3cli.yml if you need
 ### to change a settings in a more permanent way.
@@ -16,8 +16,8 @@ web3cli:
   app_key: null
   ### Toggle application level debug
   debug: false
-  ### Use this network unless otherwise specified
-  default_network: "ethereum"
+  ### Use this chain unless otherwise specified
+  default_chain: "ethereum"
   ### Use this signer unless otherwise specified
   default_signer: null
   ### Default value for the maximum priority fee to tip the validator

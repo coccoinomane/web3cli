@@ -6,9 +6,9 @@ import pytest
 
 
 @pytest.mark.slow
-def test_make_client(networks: List[str]) -> None:
-    for network in networks:
-        argv = ["--network", network, "version"]  # simplest possible command
+def test_make_client(chains: List[str]) -> None:
+    for chain in chains:
+        argv = ["--chain", chain, "version"]  # simplest possible command
         with Web3CliTest(argv=argv) as app:
             app.run()
             client = make_client(app)
@@ -24,15 +24,15 @@ def test_make_client(networks: List[str]) -> None:
 
 @pytest.mark.slow
 def test_make_wallet(
-    networks: List[str], signers: List[Dict[str, Any]], app_key: bytes
+    chains: List[str], signers: List[Dict[str, Any]], app_key: bytes
 ) -> None:
     """Sign a message with a wallet created by make_wallet"""
     msg = "Hello world"
     s = signers[0]
-    for network in networks:
+    for chain in chains:
         argv = [
-            "--network",
-            network,
+            "--chain",
+            chain,
             "--signer",
             s["label"],
             "version",  # simplest possible command

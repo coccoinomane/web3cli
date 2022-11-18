@@ -1,6 +1,6 @@
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
-from web3cli.controllers.network import Network
+from web3cli.controllers.chain import Chain
 from web3cli.controllers.address import Address
 from web3cli.controllers.signer import Signer
 from web3cli.controllers.config import Config
@@ -14,7 +14,7 @@ import os
 CONFIG = init_defaults("web3cli")
 CONFIG["web3cli"]["app_key"] = None
 CONFIG["web3cli"]["debug"] = False
-CONFIG["web3cli"]["default_network"] = "ethereum"
+CONFIG["web3cli"]["default_chain"] = "ethereum"
 CONFIG["web3cli"]["default_signer"] = None
 CONFIG["web3cli"]["default_priority_fee"] = 1
 CONFIG["web3cli"]["db_file"] = os.path.join(
@@ -64,7 +64,7 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Network, Signer, Address, Config, Key]
+        handlers = [Base, Chain, Signer, Address, Config, Key]
 
         # extend the app with cement hook system
         hooks = [

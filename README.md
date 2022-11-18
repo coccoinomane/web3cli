@@ -26,7 +26,7 @@ pip3 install -U web3cli
 
 - Get the BNB balance of the Binance hot wallet on BNB chain:
    ```bash
-   web3 -n binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   web3 -c binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
 - Send 1 gwei to the Ethereum foundation:
@@ -39,9 +39,9 @@ pip3 install -U web3cli
    web3 sign "Hello world!"
    ```
 
-- List all supported networks (blockchains):
+- List all supported chains:
    ```bash
-   web3 network list
+   web3 chain list
    ```
 
 # Address book
@@ -57,7 +57,7 @@ You can use these tags instead of the actual addresses:
 
 ```bash
 web3 balance "Ethereum foundation"
-web3 -n binance balance "Binance hot wallet"
+web3 -c binance balance "Binance hot wallet"
 ```
 
 To see the list of saved addresses, run:
@@ -141,10 +141,10 @@ See the [example configuration file](./web3cli.example.yml) for a list of availa
 ### Environment variables
 
 All settings can be overridden via environment variables.
-For example, the settings `web3cli.default_network` can be overridden by setting the env variable `WEB3CLI_DEFAULT_NETWORK`:
+For example, the settings `web3cli.default_chain` can be overridden by setting the env variable `WEB3CLI_DEFAULT_CHAIN`:
 
 ```bash
-WEB3CLI_DEFAULT_NETWORK=avalanche web3 network get
+WEB3CLI_DEFAULT_CHAIN=avalanche web3 network get
 
 output> avalanche
 ```
@@ -161,7 +161,7 @@ You can edit the configuration files using `web3 config`. For example:
 
 - Show the value of a single setting:
    ```bash
-   pdm web3 config get default_network
+   pdm web3 config get default_chain
    ```
 - Show all settings:
    ```bash
@@ -169,11 +169,11 @@ You can edit the configuration files using `web3 config`. For example:
    ```
 - Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
    ```bash
-   pdm web3 config set default_network avalanche
+   pdm web3 config set default_chain avalanche
    ```
 - Edit a setting value at the local level (`web3cli.yml`):
    ```bash
-   pdm web3 config set default_network avalanche --no-global
+   pdm web3 config set default_chain avalanche --no-global
    ```
 
 # Contribute ❤️
@@ -202,15 +202,15 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 # TODO
 - Command: Send ETH: by default, wait for receipt
 - Retry transactions until gas fee goes below x gwei
-- Command: `web3 init` to import networks + add signer
+- Command: `web3 init` to import chain + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
 - Autocomplete commands
 - Autocomplete addresses and signers
 - Config: non-string support in `config set`
-- Network: Allow to add custom networks
-- Network: Preload networks from https://chainid.network/chains.json
+- Chain: Allow to add custom chains
+- Chain: Preload chains from https://chainid.network/chains.json
 - Gas: Upper limit on basefee via global argument/setting
 - Dry-run: Print tx instead of sending it, via global argument/setting
 - Use chains and tokens from other sources (e.g. ethereum-lists)

@@ -9,10 +9,10 @@ import web3factory.factory
 
 def make_client(app: App, log: bool = False) -> BaseClient:
     """Client suitable to read the blockchain"""
-    args.validate_network(app.network)
+    args.validate_chain(app.chain)
     if log:
-        app.log.info(f"Using network '{app.network}'")
-    return web3factory.factory.make_client(app.network)
+        app.log.info(f"Using chain '{app.chain}'")
+    return web3factory.factory.make_client(app.chain)
 
 
 def make_wallet(app: App, log: bool = False) -> BaseClient:

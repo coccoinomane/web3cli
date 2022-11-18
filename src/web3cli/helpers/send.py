@@ -28,7 +28,7 @@ def send_coin_or_token(
             tx_hash = send_native_coin(app, to, amount, unit)
         else:
             raise Web3CliError(
-                f"Please change network: on {app.network} network you can only send {app.coin}"
+                f"Please change chain: on {app.chain} chain you can only send {app.coin}"
             )
     else:
         tx_hash = send_erc20_token(app, ticker, to, amount, unit)

@@ -54,7 +54,7 @@ def signers() -> List[Dict[str, Any]]:
 
 
 @pytest.fixture()
-def networks() -> List[str]:
+def chains() -> List[str]:
     return ["ethereum", "binance", "avalanche", "swimmer"]
 
 
