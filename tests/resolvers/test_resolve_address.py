@@ -2,8 +2,8 @@ from typing import Any, Dict, List
 import pytest
 from tests.seeder import seed_addresses
 from tests.main import Web3CliTest
+from web3cli.core.models.address import Address
 from web3cli.core.exceptions import AddressNotResolved
-from web3cli import resolve_address
 
 
 def test_resolve_existing_address(addresses: List[Dict[str, Any]]) -> None:
@@ -11,7 +11,7 @@ def test_resolve_existing_address(addresses: List[Dict[str, Any]]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
             seed_addresses(app, addresses)
-            address = resolve_address(a["address"])
+            address = Address.resolve_address(a["address"])
             assert type(address) is str
             assert address == a["address"]
 
@@ -20,7 +20,7 @@ def test_resolve_valid_address(addresses: List[Dict[str, Any]]) -> None:
     """Resolve a valid address which is not in the DB by its value"""
     with Web3CliTest() as app:
         seed_addresses(app, addresses)
-        address = resolve_address("0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A")
+        address = Address.resolve_address("0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A")
         assert type(address) is str
         assert address == "0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A"
 
@@ -31,6 +31,6 @@ def test_resolve_invalid_address_or_label(addresses: List[Dict[str, Any]]) -> No
     with Web3CliTest() as app:
         seed_addresses(app, addresses)
         with pytest.raises(AddressNotResolved):
-            resolve_address("0x123")
+            Address.resolve_address("0x123")
         with pytest.raises(AddressNotResolved):
-            resolve_address("non existing label")
+            Address.resolve_address("non existing label")

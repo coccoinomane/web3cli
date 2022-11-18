@@ -1,6 +1,7 @@
 from typing import List
 from web3factory import networks
 from web3factory.types import NetworkConfig
+from web3cli.core.models.chain import Chain
 
 
 def get_supported_networks() -> List[NetworkConfig]:

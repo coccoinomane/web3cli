@@ -1,6 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.helpers.networks import get_supported_networks
+from web3cli.core.models.chain import Chain
+from web3cli.core.seeds.chains import seed_chains
 
 
 class ChainController(Controller):
@@ -8,18 +9,28 @@ class ChainController(Controller):
 
     class Meta:
         label = "chain"
-        help = "show the chains available in web3cli"
+        help = "add, list or delete chains"
         stacked_type = "nested"
         stacked_on = "base"
 
     @ex(help="list available chains")
     def list(self) -> None:
         self.app.render(
-            [[n["name"], n["chainId"], n["coin"]] for n in get_supported_networks()],
-            headers=["NAME", "CHAIN ID", "COIN"],
+            [
+                [c["name"], c["chain_id"], c["coin"], c["tx_type"]]
+                for c in Chain.get_all(Chain.name)
+            ],
+            headers=["NAME", "CHAIN ID", "COIN", "TX TYPE"],
             handler="tabulate",
         )
 
     @ex(help="get current chain")
     def get(self) -> None:
         self.app.print(self.app.chain)
+
+    @ex(help="preload a few chains", label="import")
+    def import_(self) -> None:
+        chains = Chain.seed(seed_chains)
+        self.app.log.info(
+            f"Imported {len(chains)} chains, run `web3 chain list` to show them"
+        )

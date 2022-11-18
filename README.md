@@ -200,7 +200,11 @@ Pull requests are welcome!
 Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
-- Command: Send ETH: by default, wait for receipt
+- Chain: Get rid of legacy web3factory.network helper
+- Chain: Allow to add custom chains
+- Chains: Test new chain commands
+- Chain: Preload chains from https://chainid.network/chains.json
+- Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
 - Command: `web3 init` to import chain + add signer
 - Windows: test on a Windows machine
@@ -209,10 +213,9 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 - Autocomplete commands
 - Autocomplete addresses and signers
 - Config: non-string support in `config set`
-- Chain: Allow to add custom chains
-- Chain: Preload chains from https://chainid.network/chains.json
 - Gas: Upper limit on basefee via global argument/setting
 - Dry-run: Print tx instead of sending it, via global argument/setting
 - Use chains and tokens from other sources (e.g. ethereum-lists)
 - ethPM registry / etherscan to pull smart contract interfaces? E.g. https://eth-brownie.readthedocs.io/en/latest/core-contracts.html#fetching-from-a-remote-source
 - Record transaction in Txs table
+- Fix usage message (still refers to `web3cli`)
