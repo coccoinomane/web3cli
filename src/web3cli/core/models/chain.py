@@ -1,5 +1,5 @@
 from __future__ import annotations
-from peewee import TextField, IntegerField
+from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import ChainNotFound
 from web3cli.core.models.base_model import BaseModel
 import web3
@@ -11,9 +11,7 @@ class Chain(BaseModel):
 
     name = TextField(unique=True)
     chain_id = IntegerField()
-    tx_type = IntegerField(default=1)
     coin = TextField()
-    rpcs = TextField()
     middlewares = TextField(null=True)
 
     @classmethod
@@ -30,3 +28,18 @@ class Chain(BaseModel):
             return cls.get(cls.name == name)
         except:
             raise ChainNotFound(f"Chain '{name}' does not exist")
+
+
+class Rpc(BaseModel):
+    class Meta:
+        table_name = "rpcs"
+
+    url = TextField()
+
+
+class ChainRpc(BaseModel):
+    class Meta:
+        table_name = "chain_rpc"
+
+    chain = ForeignKeyField(Chain)
+    rpc = ForeignKeyField(Rpc)

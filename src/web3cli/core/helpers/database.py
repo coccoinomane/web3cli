@@ -2,12 +2,12 @@ from typing import List, Type
 from peewee import SqliteDatabase
 from web3cli.core.models.base_model import BaseModel, db
 from web3cli.core.models.address import Address
-from web3cli.core.models.chain import Chain
+from web3cli.core.models.chain import Chain, ChainRpc, Rpc
 from web3cli.core.models.signer import Signer
 from web3cli.core.helpers.os import create_folder
 import os
 
-tables: List[Type[BaseModel]] = [Signer, Address, Chain]
+tables: List[Type[BaseModel]] = [Signer, Address, Chain, Rpc, ChainRpc]
 
 
 def init_db(db_path: str) -> SqliteDatabase:
