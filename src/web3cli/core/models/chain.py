@@ -12,6 +12,7 @@ class Chain(BaseModel):
     name = TextField(unique=True)
     chain_id = IntegerField()
     coin = TextField()
+    tx_type = IntegerField(default=2)
     middlewares = TextField(null=True)
 
     @classmethod

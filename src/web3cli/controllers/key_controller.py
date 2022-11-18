@@ -5,7 +5,7 @@ import secrets
 import sys
 
 
-class Key(Controller):
+class KeyController(Controller):
     """Handler of the `web3 key` commands"""
 
     class Meta:

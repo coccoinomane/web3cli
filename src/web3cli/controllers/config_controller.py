@@ -4,7 +4,7 @@ from web3cli.helpers.config import update_setting_in_config_file
 import argparse
 
 
-class Config(Controller):
+class ConfigController(Controller):
     """Handler of the `web3 config` commands"""
 
     class Meta:

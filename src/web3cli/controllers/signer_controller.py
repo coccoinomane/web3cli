@@ -1,13 +1,13 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.models.signer import Signer as Model
+from web3cli.core.models.signer import Signer
 from web3cli.core.exceptions import KeyIsInvalid, SignerNotFound, Web3CliError
 from web3cli.helpers.crypto import encrypt_string_with_app_key
 from eth_account import Account
 import getpass
 
 
-class Signer(Controller):
+class SignerController(Controller):
     """Handler of the `web3 signer` commands"""
 
     class Meta:
@@ -19,7 +19,7 @@ class Signer(Controller):
     @ex(help="list signers")
     def list(self) -> None:
         self.app.render(
-            [[u["label"], u["address"]] for u in Model.get_all(Model.label)],
+            [[u["label"], u["address"]] for u in Signer.get_all(Signer.label)],
             headers=["LABEL", "ADDRESS"],
             handler="tabulate",
         )
@@ -39,7 +39,7 @@ class Signer(Controller):
     )
     def get(self) -> None:
         if self.app.pargs.label:
-            self.app.print(Model.get_address(self.app.pargs.label))
+            self.app.print(Signer.get_address(self.app.pargs.label))
         elif self.app.signer:
             self.app.print(self.app.signer)
         else:
@@ -68,7 +68,7 @@ class Signer(Controller):
     )
     def add(self) -> None:
         # Validate label
-        if Model.get_by_label(self.app.pargs.label):
+        if Signer.get_by_label(self.app.pargs.label):
             raise Web3CliError(
                 f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `web3 signer delete {self.app.pargs.label}`"
             )
@@ -94,7 +94,7 @@ class Signer(Controller):
                 "Invalid private key. Please note that private key is different from mnemonic password."
             )
         # Create signer
-        Model.create(
+        Signer.create(
             label=self.app.pargs.label,
             key=encrypt_string_with_app_key(self.app, key),
             address=address,
@@ -110,7 +110,7 @@ class Signer(Controller):
         ],
     )
     def delete(self) -> None:
-        signer = Model.get_by_label(self.app.pargs.label)
+        signer = Signer.get_by_label(self.app.pargs.label)
         if not signer:
             raise SignerNotFound(
                 f"Signer '{self.app.pargs.label}' does not exist, can't delete it"

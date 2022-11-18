@@ -1,12 +1,12 @@
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
-from web3cli.controllers.chain import Chain
-from web3cli.controllers.address import Address
-from web3cli.controllers.signer import Signer
-from web3cli.controllers.config import Config
-from web3cli.controllers.key import Key
+from web3cli.controllers.base_controller import BaseController
+from web3cli.controllers.chain_controller import ChainController
+from web3cli.controllers.address_controller import AddressController
+from web3cli.controllers.signer_controller import SignerController
+from web3cli.controllers.config_controller import ConfigController
+from web3cli.controllers.key_controller import KeyController
 from web3cli.core.exceptions import Web3CliError
-from web3cli.controllers.base import Base
 from web3cli import hooks
 import os
 
@@ -64,7 +64,14 @@ class Web3Cli(App):
         output_handler = "jinja2"
 
         # register handlers
-        handlers = [Base, Chain, Signer, Address, Config, Key]
+        handlers = [
+            BaseController,
+            ChainController,
+            SignerController,
+            AddressController,
+            ConfigController,
+            KeyController,
+        ]
 
         # extend the app with cement hook system
         hooks = [

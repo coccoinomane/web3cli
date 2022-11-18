@@ -9,7 +9,7 @@ from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers import args
 
 
-class Base(Controller):
+class BaseController(Controller):
     """Base controller. It:
     1. Defines top-level commands, such as `web3 balance`.
     2. Handles global arguments, such as --chain

@@ -1,10 +1,10 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.models.address import Address as Model
-from web3cli.core.exceptions import Web3CliError, AddressNotFound, AddressIsInvalid
+from web3cli.core.models.address import Address
+from web3cli.core.exceptions import Web3CliError, AddressIsInvalid
 
 
-class Address(Controller):
+class AddressController(Controller):
     """Handler of the `web3 address` commands"""
 
     class Meta:
@@ -16,7 +16,7 @@ class Address(Controller):
     @ex(help="list address")
     def list(self) -> None:
         self.app.render(
-            [[a["label"], a["address"]] for a in Model.get_all(Model.label)],
+            [[a["label"], a["address"]] for a in Address.get_all(Address.label)],
             headers=["LABEL", "ADDRESS"],
             handler="tabulate",
         )
@@ -28,7 +28,7 @@ class Address(Controller):
         ],
     )
     def get(self) -> None:
-        self.app.print(Model.get_address(self.app.pargs.label))
+        self.app.print(Address.get_address(self.app.pargs.label))
 
     @ex(
         help="add a new address",
@@ -47,11 +47,11 @@ class Address(Controller):
         ],
     )
     def add(self) -> None:
-        if not Model.is_valid_address(self.app.pargs.address):
+        if not Address.is_valid_address(self.app.pargs.address):
             raise AddressIsInvalid(f"Invalid address given: {self.app.pargs.address}")
-        address = Model.get_by_label(self.app.pargs.label)
+        address = Address.get_by_label(self.app.pargs.label)
         if not address:
-            Model.create(
+            Address.create(
                 label=self.app.pargs.label,
                 address=self.app.pargs.address,
                 description=self.app.pargs.description,
@@ -74,6 +74,6 @@ class Address(Controller):
         ],
     )
     def delete(self) -> None:
-        address = Model.get_by_label_or_raise(self.app.pargs.label)
+        address = Address.get_by_label_or_raise(self.app.pargs.label)
         address.delete_instance()
         self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")

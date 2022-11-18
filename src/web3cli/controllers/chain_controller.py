@@ -3,7 +3,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.networks import get_supported_networks
 
 
-class Chain(Controller):
+class ChainController(Controller):
     """Handler of the `web3 chain` commands"""
 
     class Meta:
