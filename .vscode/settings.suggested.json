@@ -14,5 +14,8 @@
   "python.analysis.extraPaths": ["__pypackages__/3.10/lib"],
   "python.analysis.exclude": ["__pypackages__"],
   "python.linting.mypyEnabled": true,
-  "python.linting.mypyPath": "__pypackages__/3.10/bin/mypy"
+  "python.linting.mypyPath": "__pypackages__/3.10/bin/mypy",
+  "python.languageServer": "Pylance",
+  "python.analysis.autoImportCompletions": true,
+  "python.linting.enabled": true
 }
