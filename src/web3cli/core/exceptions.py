@@ -4,6 +4,12 @@ class Web3CliError(Exception):
     pass
 
 
+class ChainNotFound(Web3CliError):
+    """When a chain name is not found in the database"""
+
+    pass
+
+
 class AddressNotFound(Web3CliError):
     """When an address label is not found in the database"""
 
