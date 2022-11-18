@@ -19,7 +19,7 @@ class Signer(BaseModel):
         """Create a signer and encrypt its key in one go;
         requires a 32-byte password to use for encrypting the key"""
         address = Account.from_key(key).address
-        Signer.create(label=label, address=address, key=encrypt_string(key, pwd))
+        return Signer.create(label=label, address=address, key=encrypt_string(key, pwd))
 
     @classmethod
     def get_by_label(cls, label: str) -> Signer:
