@@ -8,7 +8,8 @@ import pytest
 from cement import fs
 import secrets
 from tests.main import Web3CliTest
-from web3cli.main import Web3Cli
+import brownie
+from brownie.network.account import Account
 
 
 @pytest.fixture()
@@ -82,3 +83,13 @@ def app(app_key: bytes) -> Any:
     app.config.set("web3cli", "app_key", app_key)
     yield app
     app.close()
+
+
+@pytest.fixture()
+def alice() -> Account:
+    yield brownie.accounts[0]
+
+
+@pytest.fixture()
+def bob() -> Account:
+    yield brownie.accounts[1]

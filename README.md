@@ -192,12 +192,16 @@ Pull requests are welcome!
    ```bash
    pdm web3 <command>
    ```
-4. To run tests:
-   ```bash
-   pdm test
-   ```
 
-Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
+### Tests
+
+To run tests, you need to install both [`brownie`](https://github.com/eth-brownie/brownie) and [`ganache`](https://www.npmjs.com/package/ganache).
+
+Then, just run:
+
+```bash
+pdm test
+```
 
 # TODO
 - Command: Send ETH: by default, wait for receipt
