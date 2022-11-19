@@ -1,3 +1,4 @@
+from __future__ import annotations
 from peewee import SqliteDatabase, Model
 from typing import List, Dict, Any
 

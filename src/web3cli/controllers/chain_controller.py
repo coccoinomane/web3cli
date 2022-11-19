@@ -28,8 +28,8 @@ class ChainController(Controller):
     def get(self) -> None:
         self.app.print(self.app.chain)
 
-    @ex(help="preload a few chains", label="import")
-    def import_(self) -> None:
+    @ex(help="preload a few chains")
+    def seed(self) -> None:
         chains = Chain.seed(seed_chains)
         self.app.log.info(
             f"Imported {len(chains)} chains, run `web3 chain list` to show them"

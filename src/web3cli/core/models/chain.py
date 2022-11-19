@@ -34,41 +34,52 @@ class Chain(BaseModel):
             raise ChainNotFound(f"Chain '{name}' does not exist")
 
     @classmethod
+    def seed_one(cls, seed_chain: ChainSeed) -> Chain:
+        """Create a chain and its RPCs in the db.
+
+        If a chain with the same already exists, it will be
+        replaced and any new RPC added."""
+
+        # Create or update chain
+        chain_params = {
+            "name": seed_chain["name"],
+            "chain_id": seed_chain["chain_id"],
+            "coin": seed_chain["coin"],
+            "tx_type": seed_chain["tx_type"],
+            "middlewares": ",".join(seed_chain["middlewares"]) or None,
+        }
+        chain: Chain = Chain.get_or_none(name=seed_chain["name"])
+        if chain:
+            Chain.update(**chain_params).where(Chain.id == chain.id).execute()
+            chain = Chain.get(id=chain.id)
+        else:
+            chain = Chain.create(**chain_params)
+
+        print(chain.name)
+
+        # Create the rpcs
+        for seed_rpc in seed_chain["rpcs"]:
+            rpc_params = {"url": seed_rpc}
+            rpc: Rpc = Rpc.get_or_none(url=seed_rpc)
+            if not rpc:
+                rpc = Rpc.create(**rpc_params)
+
+            # Create the chain-rpc relation
+            chain_rpc_params = {"chain": chain, "rpc": rpc}
+            chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
+            if not chain_rpc:
+                chain_rpc = ChainRpc.create(**chain_rpc_params)
+
+        return chain
+
+    @classmethod
     def seed(cls, seed_chains: List[ChainSeed]) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances.
 
-        For any given chain, if a chain with the same
-        already exists, it will be overwritten."""
-        output = []
-        for c in seed_chains:
-            # Delete chain if it already exists in the db
-            try:
-                Chain.get_or_none(name=c["name"]).delete_instance(recursive=True)
-            except:
-                pass
-            # Create chain in the db
-            chain = Chain.create(
-                name=c["name"],
-                chain_id=c["chain_id"],
-                coin=c["coin"],
-                tx_type=c["tx_type"],
-                middlewares=",".join(c["middlewares"]) or None,
-            )
-            output.append(chain)
-
-            for seed_rpc in c["rpcs"]:
-                # Delete RPC if it already exists in the db
-                try:
-                    Rpc.get_or_none(url=seed_rpc).delete_instance()
-                except:
-                    pass
-                # Create RPC in the database
-                rpc = Rpc.create(url=seed_rpc)
-
-                # Create chain-rpc relation
-                ChainRpc.create(chain=chain, rpc=rpc)
-        return output
+        For any given chain, if a chain with the same already exists,
+        it will be replaced and any new RPC added."""
+        return [Chain.seed_one(seed_chain) for seed_chain in seed_chains]
 
     @classmethod
     def parse_middleware(cls, middleware: str) -> Middleware:

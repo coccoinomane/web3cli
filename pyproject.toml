@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.4.1"
+version = "0.4.2"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -10,6 +10,7 @@ keywords = ["web3", "cli", "blockchain", "ethereum", "evm"]
 license = {text = "MIT"}
 requires-python = ">=3.10,<4"
 dependencies = [
+    "cement>=3.0.8",
     "cement[colorlog]>=3.0.8",
     "cement[jinja2]>=3.0.8",
     "cement[yaml]>=3.0.8",
