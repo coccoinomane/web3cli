@@ -24,7 +24,7 @@ class AddressController(Controller):
     @ex(
         help="show an address by its label",
         arguments=[
-            (["label"], {"help": "label of the address to show", "action": "store"}),
+            (["label"], {"help": "label of the address to show"}),
         ],
     )
     def get(self) -> None:
@@ -33,15 +33,14 @@ class AddressController(Controller):
     @ex(
         help="add a new address",
         arguments=[
-            (["label"], {"help": "label identifying the address", "action": "store"}),
-            (["address"], {"help": "blockchain address (0x...)", "action": "store"}),
+            (["label"], {"help": "label identifying the address"}),
+            (["address"], {"help": "blockchain address (0x...)"}),
             (["-d", "--description"], {"action": "store"}),
             (
                 ["-u", "--update"],
                 {
                     "help": "if an address with the same label is present, overwrite it",
-                    "action": "store_const",
-                    "const": True,
+                    "action": "store_true",
                 },
             ),
         ],
@@ -70,7 +69,7 @@ class AddressController(Controller):
     @ex(
         help="delete an address",
         arguments=[
-            (["label"], {"help": "label of the address to delete", "action": "store"}),
+            (["label"], {"help": "label of the address to delete"}),
         ],
     )
     def delete(self) -> None:
