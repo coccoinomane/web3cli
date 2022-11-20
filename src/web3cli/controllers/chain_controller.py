@@ -1,7 +1,8 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.exceptions import Web3CliError
-from web3cli.core.models.chain import Chain
+from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
+from web3cli.core.helpers.chains import is_rpc_uri_valid
+from web3cli.core.models.chain import Chain, ChainRpc, Rpc
 from web3cli.core.seeds.chains import seed_chains
 
 
@@ -63,6 +64,7 @@ class ChainController(Controller):
             "tx_type": self.app.pargs.tx_type,
             "middlewares": None if self.app.pargs.poa else "geth_poa_middleware",
         }
+        # Create or update chain
         chain = Chain.get_by_name(self.app.pargs.name)
         if not chain:
             Chain.create(**atts)
@@ -74,6 +76,24 @@ class ChainController(Controller):
             raise Web3CliError(
                 f"Chain '{self.app.pargs.name}' already exists. Use `--update` or `-u` to update it."
             )
+        # Validate RPCs
+        for rpc_url in self.app.pargs.rpc:
+            if not is_rpc_uri_valid(rpc_url):
+                raise RpcIsInvalid(f"RPC not valid or not supported: {rpc_url}")
+
+        # Create or update RPCs
+        rpc_params = {"url": rpc_url}
+        rpc: Rpc = Rpc.get_or_none(url=rpc_url)
+        if not rpc:
+            rpc = Rpc.create(**rpc_params)
+            self.app.log.info(f"Rpc {rpc.url} created")
+
+        # Create the chain-rpc relation
+        chain_rpc_params = {"chain": chain, "rpc": rpc}
+        chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
+        if not chain_rpc:
+            chain_rpc = ChainRpc.create(**chain_rpc_params)
+            self.app.log.info(f"Rpc {rpc.url} connected to chain {chain.name}")
 
     @ex(help="list available chains")
     def list(self) -> None:
@@ -92,7 +112,7 @@ class ChainController(Controller):
 
     @ex(help="preload a few chains")
     def seed(self) -> None:
-        chains = Chain.seed(seed_chains)
+        chains = Chain.seed(seed_chains, self.app.log.info)
         self.app.log.info(
             f"Imported {len(chains)} chains, run `web3 chain list` to show them"
         )

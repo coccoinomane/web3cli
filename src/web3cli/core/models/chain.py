@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import Any, List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.base_model import BaseModel
@@ -34,7 +34,7 @@ class Chain(BaseModel):
             raise ChainNotFound(f"Chain '{name}' does not exist")
 
     @classmethod
-    def seed_one(cls, seed_chain: ChainSeed) -> Chain:
+    def seed_one(cls, seed_chain: ChainSeed, logger: Any = lambda msg: None) -> Chain:
         """Create a chain and its RPCs in the db.
 
         If a chain with the same already exists, it will be
@@ -52,10 +52,10 @@ class Chain(BaseModel):
         if chain:
             Chain.update(**chain_params).where(Chain.id == chain.id).execute()
             chain = Chain.get(id=chain.id)
+            logger(f"Chain {chain.name} updated")
         else:
             chain = Chain.create(**chain_params)
-
-        print(chain.name)
+            logger(f"Chain {chain.name} created")
 
         # Create the rpcs
         for seed_rpc in seed_chain["rpcs"]:
@@ -63,23 +63,27 @@ class Chain(BaseModel):
             rpc: Rpc = Rpc.get_or_none(url=seed_rpc)
             if not rpc:
                 rpc = Rpc.create(**rpc_params)
+                logger(f"Rpc {rpc.url} created")
 
             # Create the chain-rpc relation
             chain_rpc_params = {"chain": chain, "rpc": rpc}
             chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
             if not chain_rpc:
                 chain_rpc = ChainRpc.create(**chain_rpc_params)
+                logger(f"Rpc {rpc.url} connected to chain {chain.name}")
 
         return chain
 
     @classmethod
-    def seed(cls, seed_chains: List[ChainSeed]) -> List[Chain]:
+    def seed(
+        cls, seed_chains: List[ChainSeed], logger: Any = lambda msg: None
+    ) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances.
 
         For any given chain, if a chain with the same already exists,
         it will be replaced and any new RPC added."""
-        return [Chain.seed_one(seed_chain) for seed_chain in seed_chains]
+        return [Chain.seed_one(seed_chain, logger) for seed_chain in seed_chains]
 
     @classmethod
     def parse_middleware(cls, middleware: str) -> Middleware:

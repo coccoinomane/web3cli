@@ -34,6 +34,12 @@ class KeyIsInvalid(Web3CliError):
     pass
 
 
+class RpcIsInvalid(Web3CliError):
+    """When a non-valid RPC is used"""
+
+    pass
+
+
 class SignerNotFound(Web3CliError):
     """When a signer does not exist in the DB"""
 
