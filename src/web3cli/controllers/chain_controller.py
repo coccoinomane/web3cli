@@ -1,8 +1,8 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
-from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
-from web3cli.core.helpers.chains import is_rpc_uri_valid
+from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.chain import Chain, ChainRpc, Rpc
+from web3cli.core.models.types import ChainFields
 from web3cli.core.seeds.chains import seed_chains
 
 
@@ -27,8 +27,8 @@ class ChainController(Controller):
             (
                 ["--tx-type"],
                 {
-                    "help": "set to 2 if the chain supports priority tip for gas (that is, EIP-1559 transactions)",
-                    "default": 1,
+                    "help": "set to 1 if the chain does not implement EIP-1559 transactions (e.g. Binance and Avalanche); default is 2",
+                    "default": 2,
                     "type": int,
                 },
             ),
@@ -42,7 +42,7 @@ class ChainController(Controller):
             (
                 ["--rpc"],
                 {
-                    "help": "URL of the chain RPC, you can add as many as you wish",
+                    "help": "URL of the chain RPC; you can add as many URLs as you wish",
                     "nargs": "+",
                     "default": [],
                 },
@@ -57,43 +57,29 @@ class ChainController(Controller):
         ],
     )
     def add(self) -> None:
-        atts = {
+        # Create or update chain
+        fields: ChainFields = {
             "name": self.app.pargs.name,
             "chain_id": self.app.pargs.chain_id,
             "coin": self.app.pargs.coin.upper(),
             "tx_type": self.app.pargs.tx_type,
             "middlewares": None if self.app.pargs.poa else "geth_poa_middleware",
         }
-        # Create or update chain
         chain = Chain.get_by_name(self.app.pargs.name)
         if not chain:
-            Chain.create(**atts)
+            chain = Chain.create(**fields)
             self.app.log.info(f"Chain '{self.app.pargs.name}' added correctly")
         elif self.app.pargs.update:
-            Chain.update(**atts).where(Chain.id == chain.id).execute()
+            Chain.update(**fields).where(Chain.id == chain.id).execute()
             self.app.log.info(f"Chain '{self.app.pargs.name}' updated correctly")
         else:
             raise Web3CliError(
                 f"Chain '{self.app.pargs.name}' already exists. Use `--update` or `-u` to update it."
             )
-        # Validate RPCs
-        for rpc_url in self.app.pargs.rpc:
-            if not is_rpc_uri_valid(rpc_url):
-                raise RpcIsInvalid(f"RPC not valid or not supported: {rpc_url}")
 
         # Create or update RPCs
-        rpc_params = {"url": rpc_url}
-        rpc: Rpc = Rpc.get_or_none(url=rpc_url)
-        if not rpc:
-            rpc = Rpc.create(**rpc_params)
-            self.app.log.info(f"Rpc {rpc.url} created")
-
-        # Create the chain-rpc relation
-        chain_rpc_params = {"chain": chain, "rpc": rpc}
-        chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
-        if not chain_rpc:
-            chain_rpc = ChainRpc.create(**chain_rpc_params)
-            self.app.log.info(f"Rpc {rpc.url} connected to chain {chain.name}")
+        for rpc_url in self.app.pargs.rpc:
+            chain.add_rpc(rpc_url, self.app.log.info)
 
     @ex(help="list available chains")
     def list(self) -> None:
@@ -109,6 +95,21 @@ class ChainController(Controller):
     @ex(help="get current chain")
     def get(self) -> None:
         self.app.print(self.app.chain)
+
+    @ex(
+        help="delete a chain",
+        arguments=[
+            (["name"], {"help": "name of the chain to delete"}),
+        ],
+    )
+    def delete(self) -> None:
+        chain = Chain.get_by_name(self.app.pargs.name)
+        if not chain:
+            raise ChainNotFound(
+                f"Chain '{self.app.pargs.name}' does not exist, can't delete it"
+            )
+        chain.delete_instance()
+        self.app.log.info(f"Chain '{self.app.pargs.name}' deleted correctly")
 
     @ex(help="preload a few chains")
     def seed(self) -> None:

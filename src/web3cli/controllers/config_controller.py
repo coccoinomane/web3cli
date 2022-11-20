@@ -21,7 +21,6 @@ class ConfigController(Controller):
                 {
                     "help": "setting to inspect, for example 'default_chain'",
                     "nargs": "?",
-                    "action": "store",
                 },
             ),
         ],
@@ -44,14 +43,12 @@ class ConfigController(Controller):
                 ["setting"],
                 {
                     "help": "setting to set, for example 'default_chain'",
-                    "action": "store",
                 },
             ),
             (
                 ["value"],
                 {
                     "help": "value for the setting, for example 'ethereum'",
-                    "action": "store",
                 },
             ),
             (

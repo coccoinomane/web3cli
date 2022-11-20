@@ -201,7 +201,7 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 
 # TODO
 - Chain: Get rid of legacy web3factory.network helper
-- Chain: Allow to add custom chains
+- Chain: delete chain_rpc in `web3 chain delete`
 - Chains: Test new chain commands
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt

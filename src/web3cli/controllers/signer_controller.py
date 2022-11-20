@@ -32,7 +32,6 @@ class SignerController(Controller):
                 {
                     "help": "label of the signer to show",
                     "nargs": "?",
-                    "action": "store",
                 },
             ),
         ],
@@ -50,7 +49,7 @@ class SignerController(Controller):
     @ex(
         help="add a new signer; you will be asked for the private key",
         arguments=[
-            (["label"], {"help": "label identifying the signer", "action": "store"}),
+            (["label"], {"help": "label identifying the signer"}),
             (
                 ["--create"],
                 {
@@ -106,7 +105,7 @@ class SignerController(Controller):
     @ex(
         help="delete a signer",
         arguments=[
-            (["label"], {"help": "label of the signer to delete", "action": "store"}),
+            (["label"], {"help": "label of the signer to delete"}),
         ],
     )
     def delete(self) -> None:

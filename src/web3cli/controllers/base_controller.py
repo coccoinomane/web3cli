@@ -33,21 +33,18 @@ class BaseController(Controller):
             (
                 ["-c", "--chain"],
                 {
-                    "action": "store",
                     "help": "blockchain to use",
                 },
             ),
             (
                 ["-s", "--signer"],
                 {
-                    "action": "store",
                     "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
                 },
             ),
             (
                 ["--priority-fee"],
                 {
-                    "action": "store",
                     "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
                     "type": int,
                     "default": 1,

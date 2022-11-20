@@ -1,11 +1,14 @@
 from __future__ import annotations
 from typing import Any, List
 from peewee import TextField, IntegerField, ForeignKeyField
-from web3cli.core.exceptions import ChainNotFound, Web3CliError
+from web3cli.core.exceptions import ChainNotFound, RpcIsInvalid, Web3CliError
+from web3cli.core.helpers.chains import is_rpc_uri_valid
 from web3cli.core.models.base_model import BaseModel
 from web3.types import Middleware
 from web3.middleware import geth_poa_middleware
+from web3cli.core.models.types import ChainFields
 from web3cli.core.seeds.types import ChainSeed
+from web3cli.core.types import Logger
 
 
 class Chain(BaseModel):
@@ -34,43 +37,43 @@ class Chain(BaseModel):
             raise ChainNotFound(f"Chain '{name}' does not exist")
 
     @classmethod
-    def seed_one(cls, seed_chain: ChainSeed, logger: Any = lambda msg: None) -> Chain:
+    def upsert(cls, fields: ChainFields, logger: Any = lambda msg: None) -> Chain:
+        """Create a chain, or replace it if a chain with the same
+        name already exists, maintaining its ID and relations."""
+
+        # Create or update chain
+        chain: Chain = Chain.get_or_none(name=fields["name"])
+        if chain:
+            Chain.update(**fields).where(Chain.id == chain.id).execute()
+            chain = Chain.get(id=chain.id)
+            logger(f"Chain {chain.name} updated")
+        else:
+            chain = Chain.create(**fields)
+            logger(f"Chain {chain.name} created")
+        return chain
+
+    @classmethod
+    def seed_one(
+        cls, seed_chain: ChainSeed, logger: Logger = lambda msg: None
+    ) -> Chain:
         """Create a chain and its RPCs in the db.
 
         If a chain with the same already exists, it will be
         replaced and any new RPC added."""
 
         # Create or update chain
-        chain_params = {
+        chain_fields: ChainFields = {
             "name": seed_chain["name"],
             "chain_id": seed_chain["chain_id"],
             "coin": seed_chain["coin"],
             "tx_type": seed_chain["tx_type"],
             "middlewares": ",".join(seed_chain["middlewares"]) or None,
         }
-        chain: Chain = Chain.get_or_none(name=seed_chain["name"])
-        if chain:
-            Chain.update(**chain_params).where(Chain.id == chain.id).execute()
-            chain = Chain.get(id=chain.id)
-            logger(f"Chain {chain.name} updated")
-        else:
-            chain = Chain.create(**chain_params)
-            logger(f"Chain {chain.name} created")
+        chain = Chain.upsert(chain_fields, logger)
 
         # Create the rpcs
         for seed_rpc in seed_chain["rpcs"]:
-            rpc_params = {"url": seed_rpc}
-            rpc: Rpc = Rpc.get_or_none(url=seed_rpc)
-            if not rpc:
-                rpc = Rpc.create(**rpc_params)
-                logger(f"Rpc {rpc.url} created")
-
-            # Create the chain-rpc relation
-            chain_rpc_params = {"chain": chain, "rpc": rpc}
-            chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
-            if not chain_rpc:
-                chain_rpc = ChainRpc.create(**chain_rpc_params)
-                logger(f"Rpc {rpc.url} connected to chain {chain.name}")
+            chain.add_rpc(seed_rpc, logger)
 
         return chain
 
@@ -93,6 +96,31 @@ class Chain(BaseModel):
             }[middleware]
         except:
             raise Web3CliError(f"Middleware {middleware} not supported")
+
+    def add_rpc(self, rpc_url: str, logger: Logger = lambda msg: None) -> Rpc:
+        """Add an RPC to a chain.
+
+        The RPC will be created in its own table, if it does not exist
+        yet, and linked to the chain via the pivot table chain_rpc"""
+        # Validate RPC
+        if not is_rpc_uri_valid(rpc_url):
+            raise RpcIsInvalid(f"RPC not valid or not supported: {rpc_url}")
+
+        # Create the rpcs
+        rpc_params = {"url": rpc_url}
+        rpc: Rpc = Rpc.get_or_none(url=rpc_url)
+        if not rpc:
+            rpc = Rpc.create(**rpc_params)
+            logger(f"Rpc {rpc.url} created")
+
+        # Create the chain-rpc relation
+        chain_rpc_params = {"chain": self, "rpc": rpc}
+        chain_rpc: ChainRpc = ChainRpc.get_or_none(**chain_rpc_params)
+        if not chain_rpc:
+            chain_rpc = ChainRpc.create(**chain_rpc_params)
+            logger(f"Rpc {rpc.url} connected to chain {self.name}")
+
+        return rpc
 
 
 class Rpc(BaseModel):
