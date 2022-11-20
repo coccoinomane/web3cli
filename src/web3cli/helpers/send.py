@@ -3,8 +3,8 @@ to an arbitrary address"""
 
 from cement import App
 from eth_typing.encoding import HexStr
-from web3cli.core.helpers.networks import get_supported_networks
 from web3cli.core.models.address import Address
+from web3cli.core.models.chain import Chain
 from web3cli.helpers.client_factory import make_wallet
 from web3cli.core.exceptions import Web3CliError
 from web3 import Web3
@@ -22,7 +22,7 @@ def send_coin_or_token(
     based on the `ticker` argument. The recipient address can be either an
     actual hex address or an address tag."""
     tx_hash = None
-    supported_native_coins = [n["coin"].lower() for n in get_supported_networks()]
+    supported_native_coins = [c.coin.lower() for c in Chain.get_all()]
     if ticker.lower() in supported_native_coins:
         if ticker.lower() == app.coin.lower():
             tx_hash = send_native_coin(app, to, amount, unit)

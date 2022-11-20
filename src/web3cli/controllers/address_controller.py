@@ -16,7 +16,10 @@ class AddressController(Controller):
     @ex(help="list address")
     def list(self) -> None:
         self.app.render(
-            [[a["label"], a["address"]] for a in Address.get_all(Address.label)],
+            [
+                [a["label"], a["address"]]
+                for a in Address.get_all_as_dicts(Address.label)
+            ],
             headers=["LABEL", "ADDRESS"],
             handler="tabulate",
         )

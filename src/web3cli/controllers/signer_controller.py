@@ -19,7 +19,7 @@ class SignerController(Controller):
     @ex(help="list signers")
     def list(self) -> None:
         self.app.render(
-            [[u["label"], u["address"]] for u in Signer.get_all(Signer.label)],
+            [[u["label"], u["address"]] for u in Signer.get_all_as_dicts(Signer.label)],
             headers=["LABEL", "ADDRESS"],
             handler="tabulate",
         )
@@ -52,7 +52,7 @@ class SignerController(Controller):
         arguments=[
             (["label"], {"help": "label identifying the signer", "action": "store"}),
             (
-                ["-c", "--create"],
+                ["--create"],
                 {
                     "help": "generate a new private key instead, and use it to create the signer",
                     "action": "store_true",
