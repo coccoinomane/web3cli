@@ -2,6 +2,7 @@ from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.chain_controller import ChainController
+from web3cli.controllers.rpc_controller import RpcController
 from web3cli.controllers.address_controller import AddressController
 from web3cli.controllers.signer_controller import SignerController
 from web3cli.controllers.config_controller import ConfigController
@@ -67,6 +68,7 @@ class Web3Cli(App):
         handlers = [
             BaseController,
             ChainController,
+            RpcController,
             SignerController,
             AddressController,
             ConfigController,

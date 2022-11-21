@@ -1,3 +1,4 @@
+from typing import Any, Type
 from cement import App
 from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
@@ -5,6 +6,7 @@ from web3client.base_client import BaseClient
 from web3cli.helpers import args
 from web3cli.core.exceptions import SignerNotFound
 import web3factory.factory
+from web3cli.core.models.chain import Chain
 
 
 def make_client(app: App, log: bool = False) -> BaseClient:
@@ -27,3 +29,23 @@ def make_wallet(app: App, log: bool = False) -> BaseClient:
         app.log.info(f"Using signer '{app.signer}'")
     client.setAccount(decrypt_string_with_app_key(app, signer.key))
     return client
+
+
+# def make_base_client(
+#     chain_name: str,
+#     node_uri: str = None,
+#     base: Type[BaseClient] = BaseClient,
+#     **clientArgs: Any,
+# ) -> BaseClient:
+#     """
+#     Return a brand new client configured for the given blockchain
+#     """
+#     chain = Chain.get_by_name_or_raise(chain_name)
+#     if nodeUri is None:
+#         nodeUri = pick_rpc(networkName)
+#     client = base(nodeUri=nodeUri, **clientArgs)
+#     client.chainId = networkConfig["chainId"]
+#     client.txType = networkConfig["txType"]
+#     client.setMiddlewares(networkConfig.get("middlewares", []))
+
+#     return client

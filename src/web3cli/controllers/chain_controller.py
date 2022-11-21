@@ -1,7 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
-from web3cli.core.models.chain import Chain, ChainRpc, Rpc
+from web3cli.core.models.chain import Chain
 from web3cli.core.models.types import ChainFields
 from web3cli.core.seeds.chains import seed_chains
 

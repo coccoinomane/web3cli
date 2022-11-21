@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Any, List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import ChainNotFound, RpcIsInvalid, Web3CliError
-from web3cli.core.helpers.chains import is_rpc_uri_valid
+from web3cli.core.helpers.rpc import is_rpc_uri_valid
 from web3cli.core.models.base_model import BaseModel
 from web3.types import Middleware
 from web3.middleware import geth_poa_middleware
@@ -124,7 +124,7 @@ class Chain(BaseModel):
 
     def get_rpcs(self) -> List[Rpc]:
         """Return the rpcs associated to the chain instance"""
-        query = Rpc.select().join(ChainRpc).join(Chain).where(Chain.name == self.name)
+        query = Rpc.select().join(ChainRpc).join(Chain).where(Chain.id == self.id)
         return [r for r in query]
 
 
@@ -133,6 +133,11 @@ class Rpc(BaseModel):
         table_name = "rpcs"
 
     url = TextField()
+
+    def get_chains(self) -> List[Chain]:
+        """Return the chains associated to the rpc instance"""
+        query = Chain.select().join(ChainRpc).join(Rpc).where(Rpc.id == self.id)
+        return [c for c in query]
 
 
 class ChainRpc(BaseModel):

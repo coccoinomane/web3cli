@@ -3,7 +3,7 @@ from peewee import SqliteDatabase, Model
 from typing import List, Dict, Any, Type
 
 ### Database, will be initialized during post_setup hook
-db = SqliteDatabase(None)
+db = SqliteDatabase(None, pragmas={"foreign_keys": 1})
 
 
 class BaseModel(Model):

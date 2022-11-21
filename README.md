@@ -201,8 +201,8 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 
 # TODO
 - Chain: Get rid of legacy web3factory.network helper
-- Chain: delete chain_rpc in `web3 chain delete`
 - Chains: Test new chain commands
+- Rpcs: Test new rpc commands
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
