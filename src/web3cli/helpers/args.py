@@ -1,5 +1,4 @@
 from cement import App
-from web3cli.core.helpers.networks import is_network_supported, get_coin
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.signer import Signer
 
@@ -9,7 +8,6 @@ def parse_global_args(app: App) -> None:
     run post argument parsing"""
 
     app.extend("chain", parse_chain(app))  # ethereum binance etc
-    app.extend("coin", get_coin(app.chain))  # ETH BNB etc
     app.extend("signer", parse_signer(app))
     app.extend("priority_fee", parse_priority_fee(app))
 
@@ -36,12 +34,6 @@ def parse_chain(app: App) -> str:
     if not chain:
         raise Web3CliError("Chain not defined, should not be here")
     return chain
-
-
-def validate_chain(chain: str) -> None:
-    """Throw error if the given chain is not supported"""
-    if not is_network_supported(chain):
-        raise Web3CliError(f"Chain '{chain}' not supported")
 
 
 def parse_signer(app: App) -> str:

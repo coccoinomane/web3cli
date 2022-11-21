@@ -102,7 +102,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
             ).run()
 
 
-def test_signer_add(signers: List[Dict[str, Any]], app_key: bytes) -> None:
+def test_signer_add(signers: List[Dict[str, Any]]) -> None:
     for s in signers:
         argv = [
             "signer",
@@ -119,7 +119,7 @@ def test_signer_add(signers: List[Dict[str, Any]], app_key: bytes) -> None:
             assert decrypt_string_with_app_key(app, signer.key) == s["private_key"]
 
 
-def test_signer_add_create(signers: List[Dict[str, Any]], app_key: bytes) -> None:
+def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
     """Test `web3 signer add <label> --create`"""
     labels = ["label_1", "label_2", "label_3"]
     for i, s_label in enumerate(labels):
@@ -136,7 +136,7 @@ def test_signer_add_create(signers: List[Dict[str, Any]], app_key: bytes) -> Non
             assert Signer.select().count() == i + 1
 
 
-def test_signer_delete(signers: List[Dict[str, Any]], app_key: bytes) -> None:
+def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
     for s in signers:
         argv = [
             "signer",

@@ -8,6 +8,7 @@ from web3cli.core.models.chain import Chain
 from web3cli.helpers.client_factory import make_wallet
 from web3cli.core.exceptions import Web3CliError
 from web3 import Web3
+from web3cli.helpers.misc import get_coin
 
 
 def send_coin_or_token(
@@ -24,11 +25,11 @@ def send_coin_or_token(
     tx_hash = None
     supported_native_coins = [c.coin.lower() for c in Chain.get_all()]
     if ticker.lower() in supported_native_coins:
-        if ticker.lower() == app.coin.lower():
+        if ticker.lower() == get_coin(app).lower():
             tx_hash = send_native_coin(app, to, amount, unit)
         else:
             raise Web3CliError(
-                f"Please change chain: on {app.chain} chain you can only send {app.coin}"
+                f"Please change chain: on {app.chain} chain you can only send {get_coin(app)}"
             )
     else:
         tx_hash = send_erc20_token(app, ticker, to, amount, unit)

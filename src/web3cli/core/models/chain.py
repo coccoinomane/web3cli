@@ -1,4 +1,5 @@
 from __future__ import annotations
+from random import choice
 from typing import Any, List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import ChainNotFound, RpcIsInvalid, Web3CliError
@@ -79,17 +80,19 @@ class Chain(BaseModel):
 
     @classmethod
     def seed(
-        cls, seed_chains: List[ChainSeed], logger: Any = lambda msg: None
+        cls, chain_seeds: List[ChainSeed], logger: Any = lambda msg: None
     ) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances.
 
         For any given chain, if a chain with the same already exists,
         it will be replaced and any new RPC added."""
-        return [Chain.seed_one(seed_chain, logger) for seed_chain in seed_chains]
+        return [Chain.seed_one(chain_seed, logger) for chain_seed in chain_seeds]
 
     @classmethod
     def parse_middleware(cls, middleware: str) -> Middleware:
+        """Given the name of a Web3 middleware (e.g. geth_poa_middleware)
+        return the corresponding Middleware function"""
         try:
             return {
                 "geth_poa_middleware": geth_poa_middleware,
@@ -126,6 +129,12 @@ class Chain(BaseModel):
         """Return the rpcs associated to the chain instance"""
         query = Rpc.select().join(ChainRpc).join(Chain).where(Chain.id == self.id)
         return [r for r in query]
+
+    def pick_rpc(self) -> str:
+        """Return a random RPC from the chain instance or None,
+        if it has no RPC"""
+        rpcs = self.get_rpcs()
+        return choice(rpcs).url if rpcs else None
 
 
 class Rpc(BaseModel):

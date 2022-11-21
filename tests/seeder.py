@@ -2,10 +2,18 @@
 helper functions to better run tests"""
 
 from typing import Any, Dict, List
+from web3cli.core.models.chain import Chain
+from web3cli.core.seeds.types import ChainSeed
 from web3cli.helpers.database import db_ready_or_raise
 from web3cli.main import Web3Cli
 from web3cli.core.models.address import Address
 from web3cli.core.models.signer import Signer
+
+
+def seed_chains(app: Web3Cli, chains: List[ChainSeed]) -> List[Chain]:
+    """Add the given seed chains to the database"""
+    db_ready_or_raise(app)
+    return Chain.seed(chains)
 
 
 def seed_addresses(

@@ -3,7 +3,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.chain import Chain
 from web3cli.core.models.types import ChainFields
-from web3cli.core.seeds.chains import seed_chains
+from web3cli.core.seeds.chain_seeds import chain_seeds
 
 
 class ChainController(Controller):
@@ -113,7 +113,7 @@ class ChainController(Controller):
 
     @ex(help="preload a few chains")
     def seed(self) -> None:
-        chains = Chain.seed(seed_chains, self.app.log.info)
+        chains = Chain.seed(chain_seeds, self.app.log.info)
         self.app.log.info(
             f"Imported {len(chains)} chains, run `web3 chain list` to show them"
         )

@@ -8,7 +8,8 @@ import pytest
 from cement import fs
 import secrets
 from tests.main import Web3CliTest
-from web3cli.main import Web3Cli
+from web3cli.core.seeds.chain_seeds import chain_seeds
+from web3cli.core.seeds.types import ChainSeed
 
 
 @pytest.fixture()
@@ -54,8 +55,8 @@ def signers() -> List[Dict[str, Any]]:
 
 
 @pytest.fixture()
-def chains() -> List[str]:
-    return ["ethereum", "binance", "avalanche", "swimmer"]
+def chains() -> List[ChainSeed]:
+    return chain_seeds
 
 
 @pytest.fixture()
@@ -76,7 +77,10 @@ def tmp(request: FixtureRequest) -> Any:
 @pytest.fixture()
 def app(app_key: bytes) -> Any:
     """A CLI instance that can be used for tests. Add arguments as a list
-    of strings with app.set_argv(), and run the CLI with app.run()"""
+    of strings with app.set_argv(), and run the CLI with app.run().
+
+    This is an alternative approach to run `with Web3CliTest() as app:`
+    in the test."""
     app = Web3CliTest()
     app.setup()
     app.config.set("web3cli", "app_key", app_key)

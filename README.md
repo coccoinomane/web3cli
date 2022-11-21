@@ -200,9 +200,9 @@ Pull requests are welcome!
 Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
-- Chain: Get rid of legacy web3factory.network helper
-- Chains: Test new chain commands
+- Chain: Test new chain commands
 - Rpcs: Test new rpc commands
+- Sign: No need of chains to sign...
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei

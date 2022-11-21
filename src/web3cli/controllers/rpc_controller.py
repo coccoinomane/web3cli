@@ -68,19 +68,20 @@ class RpcController(Controller):
         self.app.print(rpc.url)
 
     @ex(
-        help="delete an rpc",
+        help="delete one or more rpcs",
         arguments=[
             (
-                ["id"],
+                ["ids"],
                 {
-                    "help": "ID of the rpc; run `web3 rpc list` to list the IDs",
+                    "help": "IDs of the rpc to delete; run `web3 rpc list` to list the IDs",
+                    "nargs": "+",
                     "type": int,
                 },
             ),
         ],
     )
     def delete(self) -> None:
-        rpc = Rpc.get(self.app.pargs.id)
-        url = rpc.url
-        rpc.delete_instance()
-        self.app.log.info(f"Rpc {self.app.pargs.id} deleted correctly [url => {url}]")
+        for id in self.app.pargs.ids:
+            rpc = Rpc.get(id)
+            rpc.delete_instance()
+            self.app.log.info(f"Rpc {id} deleted correctly [url => {rpc.url}]")

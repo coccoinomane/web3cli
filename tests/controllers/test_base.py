@@ -1,18 +1,20 @@
 from typing import Any, Dict, List
 from tests.main import Web3CliTest
 import pytest
-from tests.seeder import seed_signers
-import ast
+from web3cli.core.seeds.types import ChainSeed
+from tests.seeder import seed_chains, seed_signers
+from web3cli.helpers.misc import get_coin
 
 
 @pytest.mark.slow
-def test_balance() -> None:
+def test_balance(chains: List[ChainSeed]) -> None:
     with Web3CliTest() as app:
+        seed_chains(app, chains)
         app.set_args(["balance", "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"]).run()
         data, output = app.last_rendered
         assert type(data["amount"]) is float
         assert data["amount"] >= 0
-        assert data["ticker"] is app.coin
+        assert data["ticker"] == get_coin(app)
 
 
 @pytest.mark.parametrize(
@@ -23,8 +25,9 @@ def test_balance() -> None:
         "I will copiously donate to coccoinomane ❤️",
     ],
 )
-def test_sign(msg: str, signers: List[Dict[str, Any]]) -> None:
+def test_sign(msg: str, signers: List[Dict[str, Any]], chains: List[ChainSeed]) -> None:
     with Web3CliTest() as app:
+        seed_chains(app, chains)
         seed_signers(app, [signers[0]])
         app.set_args(["sign", msg]).run()
         data, output = app.last_rendered
