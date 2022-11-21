@@ -98,7 +98,7 @@ class Chain(BaseModel):
             raise Web3CliError(f"Middleware {middleware} not supported")
 
     def add_rpc(self, rpc_url: str, logger: Logger = lambda msg: None) -> Rpc:
-        """Add an RPC to a chain.
+        """Add an RPC to the chain instance.
 
         The RPC will be created in its own table, if it does not exist
         yet, and linked to the chain via the pivot table chain_rpc"""
@@ -121,6 +121,11 @@ class Chain(BaseModel):
             logger(f"Rpc {rpc.url} connected to chain {self.name}")
 
         return rpc
+
+    def get_rpcs(self) -> List[Rpc]:
+        """Return the rpcs associated to the chain instance"""
+        query = Rpc.select().join(ChainRpc).join(Chain).where(Chain.name == self.name)
+        return [r for r in query]
 
 
 class Rpc(BaseModel):

@@ -85,10 +85,10 @@ class ChainController(Controller):
     def list(self) -> None:
         self.app.render(
             [
-                [c["name"], c["chain_id"], c["coin"], c["tx_type"]]
-                for c in Chain.get_all_as_dicts(Chain.name)
+                [c.name, c.chain_id, c.coin, c.tx_type, len(c.get_rpcs())]
+                for c in Chain.get_all(Chain.name)
             ],
-            headers=["NAME", "CHAIN ID", "COIN", "TX TYPE"],
+            headers=["NAME", "CHAIN ID", "COIN", "TX TYPE", "RPCS"],
             handler="tabulate",
         )
 
