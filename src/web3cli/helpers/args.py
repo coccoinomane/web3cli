@@ -1,5 +1,6 @@
 from cement import App
-from web3cli.core.exceptions import Web3CliError
+from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
+from web3cli.core.helpers.rpc import is_rpc_uri_valid
 from web3cli.core.models.signer import Signer
 
 
@@ -10,6 +11,7 @@ def parse_global_args(app: App) -> None:
     app.extend("chain", parse_chain(app))  # ethereum binance etc
     app.extend("signer", parse_signer(app))
     app.extend("priority_fee", parse_priority_fee(app))
+    app.extend("rpc", parse_rpc(app))
 
 
 def get_command(app: App) -> str:
@@ -25,8 +27,8 @@ def get_command(app: App) -> str:
 
 
 def parse_chain(app: App) -> str:
-    """If the chain argument was passed to the CLI, return it; otherwise,
-    return its default value from the config file"""
+    """If the argument --chain or -c was passed to the CLI, return it;
+    otherwise, return its default value from the config file"""
     if app.pargs.chain:
         chain = app.pargs.chain
     else:
@@ -36,13 +38,24 @@ def parse_chain(app: App) -> str:
     return chain
 
 
+def parse_rpc(app: App) -> str:
+    """If the argument --rpc was passed to the CLI, return it; otherwise,
+    return None, in which case the app will automatically determine the
+    best RPC to use based on the selected chain"""
+    if not app.pargs.rpc:
+        return None
+    if not is_rpc_uri_valid(app.pargs.rpc):
+        raise RpcIsInvalid(f"Given RPC is not valid: {app.pargs.rpc}")
+    return app.pargs.rpc
+
+
 def parse_signer(app: App) -> str:
     """Try to infer which signer the user wants to use.
 
     The following is the order in which the signer is
     discovered and loaded:
 
-    - Signer argument passed to the CLI
+    - Argument --signer or -s passed to the CLI
     - Default signer from the config file
     - If there's only one signer in the DB, use it
 
@@ -63,7 +76,7 @@ def parse_signer(app: App) -> str:
 
 
 def parse_priority_fee(app: App) -> int:
-    """If the priority_fee argument was passed to the CLI, return it; otherwise,
+    """If the --priority-fee argument was passed to the CLI, return it; otherwise,
     return its default value from the config file"""
     if app.pargs.priority_fee:
         priority_fee = app.pargs.priority_fee

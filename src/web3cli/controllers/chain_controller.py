@@ -40,9 +40,9 @@ class ChainController(Controller):
                 },
             ),
             (
-                ["--rpc"],
+                ["--rpcs"],
                 {
-                    "help": "URL of the chain RPC; you can add as many URLs as you wish",
+                    "help": "one or more RPCs for the chain",
                     "nargs": "+",
                     "default": [],
                 },
@@ -78,7 +78,7 @@ class ChainController(Controller):
             )
 
         # Create or update RPCs
-        for rpc_url in self.app.pargs.rpc:
+        for rpc_url in self.app.pargs.rpcs:
             chain.add_rpc(rpc_url, self.app.log.info)
 
     @ex(help="list available chains")

@@ -201,7 +201,8 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 
 # TODO
 - Chain: Test new chain commands
-- Rpcs: Test new rpc commands
+- Rpcs: Test new rpc commands + --rpc global option
+- Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Sign: No need of chains to sign...
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt

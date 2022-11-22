@@ -11,6 +11,7 @@ chain_seeds: List[ChainSeed] = [
         "tx_type": 2,
         "middlewares": [""],
         "rpcs": [
+            "https://cloudflare-eth.com",
             "https://mainnet.infura.io/v3/98c23dcc2c3947cbacc2a0c7e1b1757a",
         ],
     },

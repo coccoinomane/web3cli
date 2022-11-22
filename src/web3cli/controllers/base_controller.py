@@ -51,6 +51,12 @@ class BaseController(Controller):
                     "default": 1,
                 },
             ),
+            (
+                ["--rpc"],
+                {
+                    "help": "use this RPC url no matter what, ignoring whatever values were added previously"
+                },
+            ),
         ]
 
     def _default(self) -> None:

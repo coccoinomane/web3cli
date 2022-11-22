@@ -1,8 +1,12 @@
 from __future__ import annotations
-from random import choice
 from typing import Any, List
 from peewee import TextField, IntegerField, ForeignKeyField
-from web3cli.core.exceptions import ChainNotFound, RpcIsInvalid, Web3CliError
+from web3cli.core.exceptions import (
+    ChainNotFound,
+    RpcIsInvalid,
+    RpcNotFound,
+    Web3CliError,
+)
 from web3cli.core.helpers.rpc import is_rpc_uri_valid
 from web3cli.core.models.base_model import BaseModel
 from web3.types import Middleware
@@ -130,11 +134,14 @@ class Chain(BaseModel):
         query = Rpc.select().join(ChainRpc).join(Chain).where(Chain.id == self.id)
         return [r for r in query]
 
-    def pick_rpc(self) -> str:
-        """Return a random RPC from the chain instance or None,
-        if it has no RPC"""
+    def pick_rpc(self) -> Rpc:
+        """Return an RPC compatible with the chain instance. For now, just return
+        the first RPC compatible with the chain, at some point, will implement some
+        form of strategy here."""
         rpcs = self.get_rpcs()
-        return choice(rpcs).url if rpcs else None
+        if not rpcs:
+            raise RpcNotFound(f"Could not find a suitable RPC for chain {self.name}")
+        return rpcs[0]
 
 
 class Rpc(BaseModel):

@@ -40,6 +40,12 @@ class RpcIsInvalid(Web3CliError):
     pass
 
 
+class RpcNotFound(Web3CliError):
+    """When an RPC cannot be found in the DB"""
+
+    pass
+
+
 class SignerNotFound(Web3CliError):
     """When a signer does not exist in the DB"""
 
