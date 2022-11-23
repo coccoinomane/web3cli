@@ -200,7 +200,6 @@ Pull requests are welcome!
 Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
-- Chain: Test new chain commands
 - Rpcs: Test new rpc commands + --rpc global option
 - Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Sign: No need of chains to sign...

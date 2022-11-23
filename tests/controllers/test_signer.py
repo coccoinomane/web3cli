@@ -138,12 +138,13 @@ def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
 
 def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
     for s in signers:
-        argv = [
-            "signer",
-            "delete",
-            s["label"],
-        ]
-        with Web3CliTest(argv=argv) as app:
+        with Web3CliTest() as app:
             seed_signers(app, signers)
-            app.run()
+            app.set_args(
+                [
+                    "signer",
+                    "delete",
+                    s["label"],
+                ]
+            ).run()
             assert Signer.select().count() == len(signers) - 1

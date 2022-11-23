@@ -38,5 +38,8 @@ class Web3CliTest(TestApp, Web3Cli):
 
     def set_args(self: Web3Cli, argv: List[str]) -> Web3Cli:
         """Allow to set CLI arguments as app.set_args()"""
+        for arg in argv:
+            if type(arg) is not str:
+                raise Exception("All CLI arguments in tests must be strings")
         self._meta.argv = argv
         return self
