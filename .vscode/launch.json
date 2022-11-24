@@ -12,7 +12,7 @@
             "args": ["tests"]
         },
         {
-            "name": "web3 chain get",
+            "name": "w3 chain get",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
@@ -20,7 +20,7 @@
             "args": ["chain", "get"]
         },
         {
-            "name": "web3 chain list",
+            "name": "w3 chain list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
@@ -28,7 +28,7 @@
             "args": ["chain", "list"]
         },
         {
-            "name": "web3 signer list",
+            "name": "w3 signer list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",

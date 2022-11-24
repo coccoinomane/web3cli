@@ -12,7 +12,7 @@ def test_address_list(addresses: List[Dict[str, Any]]) -> None:
     with Web3CliTest() as app:
         # Add the addresses
         seed_addresses(app, addresses)
-        # Run `web3 address list`
+        # Run `w3 address list`
         app.set_args(["address", "list"]).run()
         # Catpure output
         data, output = app.last_rendered

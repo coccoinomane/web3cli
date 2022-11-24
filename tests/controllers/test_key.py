@@ -10,7 +10,7 @@ def test_key_create() -> None:
         # Delete config file and unset app_key
         helper.delete_test_config_file(app)
         app.config.set("web3cli", "app_key", None)
-        # Run the command `web3 key create`
+        # Run the command `w3 key create`
         app.set_args(
             [
                 "key",
@@ -33,7 +33,7 @@ def test_key_update() -> None:
     with Web3CliTest() as app:
         # Take note of the app_key before it is updated
         old_key = app.config.get("web3cli", "app_key")
-        # Run the command `web3 key create --force`
+        # Run the command `w3 key create --force`
         app.set_args(
             [
                 "key",

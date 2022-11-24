@@ -5,7 +5,7 @@ from web3cli.core.exceptions import Web3CliError, AddressIsInvalid
 
 
 class AddressController(Controller):
-    """Handler of the `web3 address` commands"""
+    """Handler of the `w3 address` commands"""
 
     class Meta:
         label = "address"

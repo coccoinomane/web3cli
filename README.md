@@ -21,49 +21,49 @@ pip3 install -U web3cli
 
 - Get the ETH balance of the Ethereum foundation:
    ```bash
-   web3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
 
 - Get the BNB balance of the Binance hot wallet on BNB chain:
    ```bash
-   web3 -c binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   w3 -c binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
 - Send 1 gwei to the Ethereum foundation:
    ```
-   web3 send 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae 1 eth gwei
+   w3 send 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae 1 eth gwei
    ```
 
 - Sign any message:
    ```bash
-   web3 sign "Hello world!"
+   w3 sign "Hello world!"
    ```
 
 - List all supported chains:
    ```bash
-   web3 chain list
+   w3 chain list
    ```
 
 # Address book
 
-`web3` can store tags just like you would do on etherscan.io or bscscan.com:
+`w3` can store tags just like you would do on etherscan.io or bscscan.com:
 
 ```bash
-web3 address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
-web3 address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+w3 address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
 ```
 
 You can use these tags instead of the actual addresses:
 
 ```bash
-web3 balance "Ethereum foundation"
-web3 -c binance balance "Binance hot wallet"
+w3 balance "Ethereum foundation"
+w3 -c binance balance "Binance hot wallet"
 ```
 
 To see the list of saved addresses, run:
 
 ```bash
-web3 address list
+w3 address list
 ```
 
 which will produce the following output:
@@ -75,14 +75,14 @@ which will produce the following output:
 | Ethereum foundation | 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae |
 ```
 
-To see all the actions that can be done with addresses, run `web3 address`.
+To see all the actions that can be done with addresses, run `w3 address`.
 
 # Sign & send
 
-You can use `web3` to send transactions to the blockchain or to sign messages. To do so, you first need to define a signer:
+You can use `web3cli` to send transactions to the blockchain or to sign messages. To do so, you first need to define a signer:
 
 ```bash
-web3 add my_signer
+w3 add my_signer
 ```
 
 You will be prompted to insert a private key, which will be encrypted and stored in the database. Feel free to do so with this test private key: `d94e4166f0b3c85ffebed3e0eaa7f7680ae296cf8a7229d637472b7452c8602c`.
@@ -94,7 +94,7 @@ Once you have added a signer, you can use any of the commands that need a privat
 **Sign a message**:
 
 ```bash
-web3 sign "Hello world!"
+w3 sign "Hello world!"
 ```
 
 Output:
@@ -112,24 +112,24 @@ Output:
 This is to be implemented yet, but the idea is to send funds with the following command:
 
 ```bash
-web3 send <address> 0.001 ETH
+w3 send <address> 0.001 ETH
 ```
 
 where `address` is either an address from the address book, or a `0x..` hex string.
 
 ### Multiple signers
 
-Add more signers with `web3 add` and select which one to use with the `--signer` flag:
+Add more signers with `w3 add` and select which one to use with the `--signer` flag:
 
 ```bash
-web3 --signer my_signer <command>
-web3 -s my_signer <command> # short version
+w3 --signer my_signer <command>
+w3 -s my_signer <command> # short version
 ```
 
 If you plan to use the same signer for a while, make it the **default signer** with the command:
 
 ```
-web3 config set default_signer my_signer
+w3 config set default_signer my_signer
 ```
 
 
@@ -144,36 +144,36 @@ All settings can be overridden via environment variables.
 For example, the settings `web3cli.default_chain` can be overridden by setting the env variable `WEB3CLI_DEFAULT_CHAIN`:
 
 ```bash
-WEB3CLI_DEFAULT_CHAIN=avalanche web3 network get
+WEB3CLI_DEFAULT_CHAIN=avalanche w3 network get
 
 output> avalanche
 ```
 
 ### Folder-specific settings
 
-To have settings that apply only to the current folder, create a `web3cli.yaml` file in that folder and execute `web3` from that folder.
+To have settings that apply only to the current folder, create a `web3cli.yaml` file in that folder and execute `w3` from that folder.
 
 Settings specified in `web3cli.yaml` will override those in your home folder. Environment variables will still get the precedence.
 
 ### Edit configuration via the CLI
 
-You can edit the configuration files using `web3 config`. For example:
+You can edit the configuration files using `w3 config`. For example:
 
 - Show the value of a single setting:
    ```bash
-   pdm web3 config get default_chain
+   pdm w3 config get default_chain
    ```
 - Show all settings:
    ```bash
-   pdm web3 config get
+   pdm w3 config get
    ```
 - Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
    ```bash
-   pdm web3 config set default_chain avalanche
+   pdm w3 config set default_chain avalanche
    ```
 - Edit a setting value at the local level (`web3cli.yml`):
    ```bash
-   pdm web3 config set default_chain avalanche --no-global
+   pdm w3 config set default_chain avalanche --no-global
    ```
 
 # Contribute ❤️
@@ -190,7 +190,7 @@ Pull requests are welcome!
    ```
 3. To run the CLI against your changes: 
    ```bash
-   pdm web3 <command>
+   pdm w3 <command>
    ```
 4. To run tests:
    ```bash
@@ -206,7 +206,7 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
-- Command: `web3 init` to import chain + add signer
+- Command: `w3 init` to import chain + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command

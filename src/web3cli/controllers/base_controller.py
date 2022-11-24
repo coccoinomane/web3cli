@@ -12,7 +12,7 @@ from web3cli.helpers import args
 
 class BaseController(Controller):
     """Base controller. It:
-    1. Defines top-level commands, such as `web3 balance`.
+    1. Defines top-level commands, such as `w3 balance`.
     2. Handles global arguments, such as --chain
     3. Controls what happens when web3cli is invoked without arguments."""
 
@@ -143,7 +143,7 @@ class BaseController(Controller):
         """Parse global arguments"""
 
         # Do nothing if no command is invoked (for example
-        # if one simply runs `web3` or `web3 chain`)
+        # if one simply runs `w3` or `w3 chain`)
         if not args.get_command(self.app):
             return
 

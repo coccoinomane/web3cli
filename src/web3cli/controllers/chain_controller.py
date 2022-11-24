@@ -7,7 +7,7 @@ from web3cli.core.seeds.chain_seeds import chain_seeds
 
 
 class ChainController(Controller):
-    """Handler of the `web3 chain` commands"""
+    """Handler of the `w3 chain` commands"""
 
     class Meta:
         label = "chain"
@@ -115,5 +115,5 @@ class ChainController(Controller):
     def seed(self) -> None:
         chains = Chain.seed(chain_seeds, self.app.log.info)
         self.app.log.info(
-            f"Imported {len(chains)} chains, run `web3 chain list` to show them"
+            f"Imported {len(chains)} chains, run `w3 chain list` to show them"
         )

@@ -16,7 +16,7 @@ def parse_global_args(app: App) -> None:
 
 def get_command(app: App) -> str:
     """Return the command passed to the CLI, using dot notation.
-    For example, if the CLI is invoked as `web3 chain list` the
+    For example, if the CLI is invoked as `w3 chain list` the
     function will return the string `chain.list`.
 
     Return None if the CLI was invoked without a command"""

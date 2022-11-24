@@ -5,7 +5,7 @@ import argparse
 
 
 class ConfigController(Controller):
-    """Handler of the `web3 config` commands"""
+    """Handler of the `w3 config` commands"""
 
     class Meta:
         label = "config"

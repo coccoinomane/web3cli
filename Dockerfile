@@ -7,4 +7,4 @@ COPY . /src
 RUN pip install pdm
 RUN pdm install
 WORKDIR /
-ENTRYPOINT ["web3cli"]
+ENTRYPOINT ["w3"]

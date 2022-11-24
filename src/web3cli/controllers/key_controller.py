@@ -6,7 +6,7 @@ import sys
 
 
 class KeyController(Controller):
-    """Handler of the `web3 key` commands"""
+    """Handler of the `w3 key` commands"""
 
     class Meta:
         label = "key"
@@ -31,7 +31,7 @@ class KeyController(Controller):
         key_exists = True if self.get_option("web3cli.app_key") else False
         if key_exists and not self.app.pargs.force:
             self.app.log.error(
-                "App key already exists, run `web3 key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."
+                "App key already exists, run `w3 key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."
             )
             self.app.exit_code = 0
             sys.exit()

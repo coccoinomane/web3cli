@@ -8,7 +8,7 @@ import getpass
 
 
 class SignerController(Controller):
-    """Handler of the `web3 signer` commands"""
+    """Handler of the `w3 signer` commands"""
 
     class Meta:
         label = "signer"
@@ -42,9 +42,7 @@ class SignerController(Controller):
         elif self.app.signer:
             self.app.print(self.app.signer)
         else:
-            raise SignerNotFound(
-                "Signer not set. Add one with `web3 signer add <label>`"
-            )
+            raise SignerNotFound("Signer not set. Add one with `w3 signer add <label>`")
 
     @ex(
         help="add a new signer; you will be asked for the private key",
@@ -69,7 +67,7 @@ class SignerController(Controller):
         # Validate label
         if Signer.get_by_label(self.app.pargs.label):
             raise Web3CliError(
-                f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `web3 signer delete {self.app.pargs.label}`"
+                f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `w3 signer delete {self.app.pargs.label}`"
             )
         # Validate optional args
         if self.app.pargs.create and self.app.pargs.private_key:

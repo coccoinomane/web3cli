@@ -120,7 +120,7 @@ def test_signer_add(signers: List[Dict[str, Any]]) -> None:
 
 
 def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
-    """Test `web3 signer add <label> --create`"""
+    """Test `w3 signer add <label> --create`"""
     labels = ["label_1", "label_2", "label_3"]
     for i, s_label in enumerate(labels):
         with Web3CliTest(delete_db=False) as app:
