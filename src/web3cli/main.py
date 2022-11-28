@@ -11,16 +11,20 @@ from web3cli.core.exceptions import Web3CliError
 from web3cli import hooks
 import os
 
-# configuration defaults
+# Configuration defaults
 CONFIG = init_defaults("web3cli")
-CONFIG["web3cli"]["app_key"] = None
-CONFIG["web3cli"]["debug"] = False
-CONFIG["web3cli"]["default_chain"] = "ethereum"
-CONFIG["web3cli"]["default_signer"] = None
-CONFIG["web3cli"]["default_priority_fee"] = 1
-CONFIG["web3cli"]["db_file"] = os.path.join(
-    os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
-)
+CONFIG["web3cli"] = {
+    "app_key": None,
+    "debug": False,
+    "default_chain": "ethereum",
+    "default_signer": None,
+    "default_priority_fee": 1,
+    "db_file": os.path.join(
+        os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
+    ),
+    "output_table_format": "fancy_grid",
+    "output_table_wrap": 33,
+}
 
 
 class Web3Cli(App):

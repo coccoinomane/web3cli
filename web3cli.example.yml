@@ -17,14 +17,19 @@ web3cli:
   ### Toggle application level debug
   debug: false
   ### Use this chain unless otherwise specified
-  default_chain: "ethereum"
+  default_chain: ethereum
   ### Use this signer unless otherwise specified
   default_signer: null
   ### Default value for the maximum priority fee to tip the validator
   default_priority_fee: 1
   ### Location of the database - will be created if it does not exist.
-  db_file: "~/.web3cli/database/web3cli.sqlite"
-
+  db_file: ~/.web3cli/database/web3cli.sqlite
+  ### Output format for tables; see https://pypi.org/project/tabulate/
+  ### to see all available formats
+  output_table_format: fancy_grid
+  ### Wrap values in tables at this length
+  output_table_wrap: 40
+  
 log.colorlog:
   ### Where the log file lives (no log file by default)
   file: null

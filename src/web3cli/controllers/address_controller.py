@@ -2,6 +2,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address
 from web3cli.core.exceptions import Web3CliError, AddressIsInvalid
+from web3cli.helpers.render import render_table
 
 
 class AddressController(Controller):
@@ -15,13 +16,14 @@ class AddressController(Controller):
 
     @ex(help="list address")
     def list(self) -> None:
-        self.app.render(
-            [
+        render_table(
+            self.app,
+            data=[
                 [a["label"], a["address"]]
                 for a in Address.get_all_as_dicts(Address.label)
             ],
             headers=["LABEL", "ADDRESS"],
-            handler="tabulate",
+            wrap=42,
         )
 
     @ex(

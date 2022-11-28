@@ -4,6 +4,7 @@ from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.chain import Chain
 from web3cli.core.models.types import ChainFields
 from web3cli.core.seeds.chain_seeds import chain_seeds
+from web3cli.helpers.render import render_table
 
 
 class ChainController(Controller):
@@ -83,13 +84,13 @@ class ChainController(Controller):
 
     @ex(help="list available chains")
     def list(self) -> None:
-        self.app.render(
-            [
+        render_table(
+            self.app,
+            headers=["NAME", "CHAIN ID", "COIN", "TX TYPE", "RPCS"],
+            data=[
                 [c.name, c.chain_id, c.coin, c.tx_type, len(c.get_rpcs())]
                 for c in Chain.get_all(Chain.name)
             ],
-            headers=["NAME", "CHAIN ID", "COIN", "TX TYPE", "RPCS"],
-            handler="tabulate",
         )
 
     @ex(help="get current chain")

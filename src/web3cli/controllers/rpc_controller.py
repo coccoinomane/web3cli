@@ -2,8 +2,8 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.chain import Chain, Rpc, ChainRpc
-from web3cli.core.helpers.format import cut
-import argparse
+
+from web3cli.helpers.render import render_table
 
 
 class RpcController(Controller):
@@ -42,13 +42,13 @@ class RpcController(Controller):
         help="list available rpcs and their chains",
     )
     def list(self) -> None:
-        self.app.render(
-            [
-                [r.id, cut(r.url, 50), ",".join([c.name for c in r.get_chains()])]
+        render_table(
+            self.app,
+            headers=["ID", "RPC", "CHAIN"],
+            data=[
+                [r.id, r.url, ",".join([c.name for c in r.get_chains()])]
                 for r in Rpc.get_all()
             ],
-            headers=["ID", "RPC", "CHAIN"],
-            handler="tabulate",
         )
 
     @ex(

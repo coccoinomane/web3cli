@@ -6,6 +6,8 @@ from web3cli.helpers.crypto import encrypt_string_with_app_key
 from eth_account import Account
 import getpass
 
+from web3cli.helpers.render import render_table
+
 
 class SignerController(Controller):
     """Handler of the `w3 signer` commands"""
@@ -18,10 +20,14 @@ class SignerController(Controller):
 
     @ex(help="list signers")
     def list(self) -> None:
-        self.app.render(
-            [[u["label"], u["address"]] for u in Signer.get_all_as_dicts(Signer.label)],
+        render_table(
+            self.app,
+            data=[
+                [u["label"], u["address"]]
+                for u in Signer.get_all_as_dicts(Signer.label)
+            ],
             headers=["LABEL", "ADDRESS"],
-            handler="tabulate",
+            wrap=42,
         )
 
     @ex(

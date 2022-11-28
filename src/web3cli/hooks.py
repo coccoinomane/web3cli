@@ -1,6 +1,7 @@
 """Functions called at specific points of the app lifecylce"""
 
 import secrets
+import cement
 from web3cli.core.helpers.database import init_db
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_file
@@ -17,8 +18,9 @@ def post_setup(app: App) -> None:
     of app.setup(), as soon as the app has finished parsing the
     configuration files, and before app.run(), where the CLI command
     will be run"""
-    attach_db(app)
+    customize_extensions(app)
     maybe_create_app_key(app)
+    attach_db(app)
 
 
 def post_argument_parsing(app: App) -> None:
@@ -57,3 +59,12 @@ def maybe_create_app_key(app: App) -> None:
     # Create the shortcut app.app_key
     key = app.config.get("web3cli", "app_key")
     app.extend("app_key", ast.literal_eval(key))
+
+
+def customize_extensions(app: App) -> None:
+    """Customize the behaviour of cement extensions
+    (https://docs.builtoncement.com/core-foundation/extensions-1)"""
+    # Set the output format for tables
+    cement.ext.ext_tabulate.TabulateOutputHandler.Meta.format = app.config.get(
+        "web3cli", "output_table_format"
+    )
