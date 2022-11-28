@@ -204,7 +204,6 @@ Please note that `web3cli` interacts with the blockchain via [`web3client`](http
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
-- Rpc: Test new rpc get and rpc delete
 - Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Command: `w3 init` to import chain + add signer
 - Windows: test on a Windows machine

@@ -2,7 +2,7 @@ from tests.main import Web3CliTest
 from typing import List
 from tests.seeder import seed_chains
 from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
-from web3cli.core.models.chain import Chain
+from web3cli.core.models.chain import Chain, Rpc
 from web3cli.core.seeds.types import ChainSeed
 import pytest
 from web3cli.core.helpers.format import cut
@@ -41,3 +41,55 @@ def test_rpc_add(chains: List[ChainSeed]) -> None:
         chain = Chain.create(name=c["name"], chain_id=c["chain_id"], coin=c["coin"])
         with pytest.raises(RpcIsInvalid):
             app.set_args(["rpc", "add", chain.name, "not a URI"]).run()
+
+
+def test_rpc_get_with_id_argument(chains: List[ChainSeed]) -> None:
+    """With ID argument > it should return the url of the RPC with given ID"""
+    with Web3CliTest() as app:
+        seed_chains(app, chains)
+        rpcs = Rpc.get_all()
+    for rpc in rpcs:
+        with Web3CliTest(delete_db=False) as app:
+            app.set_args(["rpc", "get", str(rpc.id)]).run()
+            data, output = app.last_rendered
+            assert data["out"] == rpc.url
+
+
+def test_rpc_get_with_rpc_argument(chains: List[ChainSeed]) -> None:
+    """With RPC argument > it should return the argument"""
+    test_rpcs = ["https://www.example-1.com", "https://www.example-2.com"]
+    for rpc_url in test_rpcs:
+        with Web3CliTest() as app:
+            app.set_args(["--rpc", rpc_url, "rpc", "get"]).run()
+            data, output = app.last_rendered
+            assert data["out"] == rpc_url
+
+
+def test_rpc_get_with_no_args(chains: List[ChainSeed]) -> None:
+    """Without arguments > should return an RPC of the user-provided chain"""
+    for c in chains:
+        with Web3CliTest() as app:
+            seed_chains(app, chains)
+            app.set_args(["--chain", c["name"], "rpc", "get"]).run()
+            data, output = app.last_rendered
+            chain: Chain = Chain.select().where(Chain.name == c["name"]).get()
+            assert data["out"] in [r.url for r in chain.get_rpcs()]
+
+
+def test_rpc_delete(chains: List[ChainSeed]) -> None:
+    with Web3CliTest() as app:
+        seed_chains(app, chains)
+        rpcs = Rpc.get_all()
+    n_rpcs = len(rpcs)
+    for i, rpc in enumerate(rpcs):
+        with Web3CliTest(delete_db=False) as app:
+            app.set_args(
+                [
+                    "rpc",
+                    "delete",
+                    str(rpc.id),
+                ]
+            ).run()
+            with pytest.raises(Exception):
+                Rpc.get(rpc.id)
+            assert Rpc.select().count() == n_rpcs - i - 1
