@@ -200,12 +200,12 @@ Pull requests are welcome!
 Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
 
 # TODO
-- Rpcs: Test new rpc commands + --rpc global option
-- Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Sign: No need of chains to sign...
 - Chain: Preload chains from https://chainid.network/chains.json
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
+- Rpc: Test new rpc get and rpc delete
+- Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Command: `w3 init` to import chain + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
