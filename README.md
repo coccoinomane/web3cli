@@ -19,29 +19,57 @@ pip3 install -U web3cli
 
 # Simple examples
 
+- Add chains before using them:
+   ```
+   w3 chain add ethereum 1 ETH --tx-type 2 --rpc https://cloudflare-eth.com 
+   w3 chain add binance 56 BNB --rpc https://bsc-dataseed.binance.org/
+   w3 chain add avalanche 43114 --rpc https://api.avax.network/ext/bc/C/rpc
+   ```
+   ... or import them in one go:
+   ```
+   w3 chain seed
+   ```
+
 - Get the ETH balance of the Ethereum foundation:
-   ```bash
+   ```
+   w3 --chain ethereum balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   ```
+   ... or the BNB balance of a Binance hot wallet on BNB chain:
+   ```
+   w3 --chain binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   ```
+
+- Tired of using the `--chain` argument? Set a default chain:
+   ```
+   w3 config set default_chain ethereum
    w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
 
-- Get the BNB balance of the Binance hot wallet on BNB chain:
+- Tired of pasting addresses around? Save them with labels:
+   ```
+   w3 address add ethereum-foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 balance ethereum-foundation
+   ```
+
+- Want to send transactions? Add a signer:
+   ```
+   w3 signer add my-wallet
+   ```
+   You will be asked for a private key, which will be saved on disk in encrypted form.
+
+
+- Once you have a signer, you can send 1 ETH to the Ethereum foundation:
    ```bash
-   w3 -c binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   w3 send ethereum-foundation 1 ETH
+   ```
+   or maybe it's better to send just 1 gwei:
+   ```
+   w3 send ethereum-foundation 1 ETH gwei
    ```
 
-- Send 1 gwei to the Ethereum foundation:
-   ```
-   w3 send 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae 1 eth gwei
-   ```
-
-- Sign any message:
+- Need to sign a message? This will print the whole signed message:
    ```bash
    w3 sign "Hello world!"
-   ```
-
-- List all supported chains:
-   ```bash
-   w3 chain list
    ```
 
 # Address book
@@ -86,6 +114,12 @@ w3 add my_signer
 ```
 
 You will be prompted to insert a private key, which will be encrypted and stored in the database. Feel free to do so with this test private key: `d94e4166f0b3c85ffebed3e0eaa7f7680ae296cf8a7229d637472b7452c8602c`.
+
+You can also create a brand new wallet on the go, without the need to provide a key:
+
+```
+w3 signer add my-wallet --create
+```
 
 ### Examples
 
