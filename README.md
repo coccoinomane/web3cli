@@ -226,24 +226,35 @@ Pull requests are welcome!
    ```bash
    pdm w3 <command>
    ```
-4. To run tests:
-   ```bash
-   pdm test
-   ```
 
-Please note that `web3cli` interacts with the blockchain via [`web3client`](https://github.com/coccoinomane/web3client) which in turn uses `web3.py` as a backend.
+
+### Tests
+
+To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) then run:
+
+```bash
+pdm test
+```
+
+# Acknowledgements
+
+Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`brownie`](https://github.com/eth-brownie/brownie) teams: `web3` would not exist without your efforts!
+
 
 # TODO
-- Sign: No need of chains to sign...
-- Chain: Preload chains from https://chainid.network/chains.json
+- Tests: use london hardfork instead of istanbul?
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
+- README badges: web3.py, brownie, PDM, cement
+- Resolve address should look also in signature labels (make signer & address labels unique?)
 - Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
+- Chain: Preload chains from https://chainid.network/chains.json
 - Command: `w3 init` to import chain + add signer
 - Windows: test on a Windows machine
 - Do not mess with DB unless needed by the command
 - Do not mess with signers unless needed by the command
 - Autocomplete commands
+- Tests: should we change evm_version in ganache for non-ethereum chains? (see CLI_FLAGS brownie/network/rpc/ganache.py)
 - Autocomplete addresses and signers
 - Config: non-string support in `config set`
 - Gas: Upper limit on basefee via global argument/setting

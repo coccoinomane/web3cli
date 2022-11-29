@@ -109,6 +109,13 @@ venv.bak/
 __pypackages__/
 pypi-*/
 
+# Brownie folder created during tests
+build
+contracts
+interfaces
+reports
+scripts
+
 # other
 .vscode/settings.json
 .DS_Store
