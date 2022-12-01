@@ -2,8 +2,16 @@ from typing import List, TypedDict
 from typing_extensions import NotRequired
 
 
+class AddressFields(TypedDict):
+    """Typing for Address model creation and update"""
+
+    address: str
+    name: str
+    description: str
+
+
 class ChainFields(TypedDict):
-    """Typing for chains.create and chains.update"""
+    """Typing for Chain model creation and update"""
 
     name: str
     chain_id: int
@@ -13,7 +21,7 @@ class ChainFields(TypedDict):
 
 
 class TxFields(TypedDict):
-    """Typing for tx.create and tx.update"""
+    """Typing for Tx model creation and update"""
 
     hash: str
     chain: str

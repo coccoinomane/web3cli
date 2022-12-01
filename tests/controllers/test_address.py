@@ -1,7 +1,9 @@
 from typing import Any, List, Dict
 from tests.main import Web3CliTest
+from web3cli.core.exceptions import AddressIsInvalid
 from web3cli.core.models.address import Address
 from tests.seeder import seed_addresses
+import pytest
 
 
 def test_address_list(addresses: List[Dict[str, Any]]) -> None:
@@ -54,6 +56,27 @@ def test_address_add(addresses: List[Dict[str, Any]]) -> None:
             assert Address.select().count() == 1
             assert address.address == a["address"]
             assert address.description == a["description"]
+
+
+@pytest.mark.parametrize(
+    "invalid_address",
+    [
+        "0x135A9431374bF1A5Ac05Ac2051a7B1a6e0b26D67",
+        "0x135A94q1374bF1A5Ac05Ac2051a7B1a6e0b26D67",
+        "a normal string",
+    ],
+)
+def test_address_add_validation(invalid_address: str) -> None:
+    with Web3CliTest() as app:
+        with pytest.raises(AddressIsInvalid):
+            app.set_args(
+                [
+                    "address",
+                    "add",
+                    "foo",
+                    invalid_address,
+                ]
+            ).run()
 
 
 def test_address_update(addresses: List[Dict[str, Any]]) -> None:

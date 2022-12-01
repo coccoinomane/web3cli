@@ -1,7 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address
-from web3cli.core.exceptions import Web3CliError, AddressIsInvalid
+from web3cli.core.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
 
 
@@ -51,21 +51,16 @@ class AddressController(Controller):
         ],
     )
     def add(self) -> None:
-        if not Address.is_valid_address(self.app.pargs.address):
-            raise AddressIsInvalid(f"Invalid address given: {self.app.pargs.address}")
         address = Address.get_by_name(self.app.pargs.name)
-        if not address:
-            Address.create(
-                name=self.app.pargs.name,
-                address=self.app.pargs.address,
-                description=self.app.pargs.description,
+        if not address or self.app.pargs.update:
+            Address.upsert(
+                {
+                    "name": self.app.pargs.name,
+                    "address": self.app.pargs.address,
+                    "description": self.app.pargs.description,
+                },
+                logger=self.app.log.info,
             )
-            self.app.log.info(f"Address '{self.app.pargs.name}' added correctly")
-        elif self.app.pargs.update:
-            address.address = self.app.pargs.address
-            address.description = self.app.pargs.description
-            address.save()
-            self.app.log.info(f"Address '{self.app.pargs.name}' updated correctly")
         else:
             raise Web3CliError(
                 f"Address '{self.app.pargs.name}' already exists with value {address.address}. Use `--update` or `-u` to update the address."

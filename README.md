@@ -242,7 +242,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
-- Tx: tests
+- Tx: tests `w3 tx`
 - Tests: use london hardfork instead of istanbul?
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
