@@ -14,6 +14,7 @@ from web3.middleware import geth_poa_middleware
 from web3cli.core.models.types import ChainFields
 from web3cli.core.seeds.types import ChainSeed
 from web3cli.core.types import Logger
+from playhouse.shortcuts import update_model_from_dict
 
 
 class Chain(BaseModel):
@@ -47,14 +48,14 @@ class Chain(BaseModel):
         name already exists, maintaining its ID and relations."""
         chain: Chain = Chain.get_or_none(name=fields["name"])
         if chain:
-            Chain.update(**fields).where(Chain.id == chain.id).execute()
-            chain = Chain.get(id=chain.id)
+            chain = update_model_from_dict(chain, fields)
             if logger:
                 logger(f"Chain {chain.name} updated")
         else:
-            chain = Chain.create(**fields)
+            chain = Chain(**fields)
             if logger:
                 logger(f"Chain {chain.name} created")
+        chain.save()
         return chain
 
     @classmethod
