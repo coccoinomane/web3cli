@@ -4,6 +4,7 @@ helper functions to better run tests"""
 from typing import Any, Dict, List
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
+from web3cli.core.models.types import AddressFields
 from web3cli.core.seeds.types import ChainSeed
 from web3cli.core.seeds.chain_seeds import local_chain
 from web3cli.helpers.database import db_ready_or_raise
@@ -35,9 +36,7 @@ def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
     return seed_chain(app, local_chain, make_default)
 
 
-def seed_addresses(
-    app: Web3Cli, addresses: List[Dict[str, Any]]
-) -> List[Dict[str, Any]]:
+def seed_addresses(app: Web3Cli, addresses: List[AddressFields]) -> List[AddressFields]:
     """Add the given fixture addresses to the database"""
     db_ready_or_raise(app)
     for a in addresses:

@@ -9,6 +9,7 @@ from cement import fs
 import secrets
 from tests.main import Web3CliTest
 from tests.seeder import seed_accounts, seed_local_chain
+from web3cli.core.models.types import AddressFields
 from web3cli.core.seeds.chain_seeds import chain_seeds
 from web3cli.core.seeds.types import ChainSeed
 import brownie
@@ -16,7 +17,7 @@ from brownie.network.account import Account
 
 
 @pytest.fixture()
-def addresses() -> List[Dict[str, Any]]:
+def addresses() -> List[AddressFields]:
     return [
         {
             "name": "Ethereum foundation",

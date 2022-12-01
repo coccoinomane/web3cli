@@ -4,9 +4,10 @@ from web3cli.core.exceptions import AddressIsInvalid
 from web3cli.core.models.address import Address
 from tests.seeder import seed_addresses
 import pytest
+from web3cli.core.models.types import AddressFields
 
 
-def test_address_list(addresses: List[Dict[str, Any]]) -> None:
+def test_address_list(addresses: List[AddressFields]) -> None:
     """Add addresses and check that they are listed alphabetically"""
 
     # Sort test address alphabetically by name
@@ -24,7 +25,7 @@ def test_address_list(addresses: List[Dict[str, Any]]) -> None:
             assert data[i][1] == addresses[i]["address"]
 
 
-def test_address_get(addresses: List[Dict[str, Any]]) -> None:
+def test_address_get(addresses: List[AddressFields]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
             seed_addresses(app, addresses)
@@ -39,7 +40,7 @@ def test_address_get(addresses: List[Dict[str, Any]]) -> None:
             assert data["out"] == a["address"]
 
 
-def test_address_add(addresses: List[Dict[str, Any]]) -> None:
+def test_address_add(addresses: List[AddressFields]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
             app.set_args(
@@ -79,7 +80,7 @@ def test_address_add_validation(invalid_address: str) -> None:
             ).run()
 
 
-def test_address_update(addresses: List[Dict[str, Any]]) -> None:
+def test_address_update(addresses: List[AddressFields]) -> None:
     """Create address 0, then update it with the data of address 1,
     while keeping the same name"""
     with Web3CliTest() as app:
@@ -100,7 +101,7 @@ def test_address_update(addresses: List[Dict[str, Any]]) -> None:
         assert address.description == addresses[1]["description"]
 
 
-def test_address_delete(addresses: List[Dict[str, Any]]) -> None:
+def test_address_delete(addresses: List[AddressFields]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
             seed_addresses(app, addresses)
