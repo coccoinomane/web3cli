@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, List
+from typing import List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import (
     ChainNotFound,
@@ -42,19 +42,19 @@ class Chain(BaseModel):
             raise ChainNotFound(f"Chain '{name}' does not exist")
 
     @classmethod
-    def upsert(cls, fields: ChainFields, logger: Any = lambda msg: None) -> Chain:
+    def upsert(cls, fields: ChainFields, logger: Logger = None) -> Chain:
         """Create a chain, or replace it if a chain with the same
         name already exists, maintaining its ID and relations."""
-
-        # Create or update chain
         chain: Chain = Chain.get_or_none(name=fields["name"])
         if chain:
             Chain.update(**fields).where(Chain.id == chain.id).execute()
             chain = Chain.get(id=chain.id)
-            logger(f"Chain {chain.name} updated")
+            if logger:
+                logger(f"Chain {chain.name} updated")
         else:
             chain = Chain.create(**fields)
-            logger(f"Chain {chain.name} created")
+            if logger:
+                logger(f"Chain {chain.name} created")
         return chain
 
     @classmethod
@@ -67,14 +67,16 @@ class Chain(BaseModel):
         replaced and any new RPC added."""
 
         # Create or update chain
-        chain_fields: ChainFields = {
-            "name": seed_chain["name"],
-            "chain_id": seed_chain["chain_id"],
-            "coin": seed_chain["coin"],
-            "tx_type": seed_chain["tx_type"],
-            "middlewares": ",".join(seed_chain["middlewares"]) or None,
-        }
-        chain = Chain.upsert(chain_fields, logger)
+        chain = Chain.upsert(
+            {
+                "name": seed_chain["name"],
+                "chain_id": seed_chain["chain_id"],
+                "coin": seed_chain["coin"],
+                "tx_type": seed_chain["tx_type"],
+                "middlewares": ",".join(seed_chain["middlewares"]) or None,
+            },
+            logger,
+        )
 
         # Create the rpcs
         for seed_rpc in seed_chain["rpcs"]:
@@ -84,7 +86,7 @@ class Chain(BaseModel):
 
     @classmethod
     def seed(
-        cls, chain_seeds: List[ChainSeed], logger: Any = lambda msg: None
+        cls, chain_seeds: List[ChainSeed], logger: Logger = lambda msg: None
     ) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances.
