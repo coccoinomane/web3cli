@@ -4,10 +4,11 @@ from web3cli.core.models.base_model import BaseModel, db
 from web3cli.core.models.address import Address
 from web3cli.core.models.chain import Chain, ChainRpc, Rpc
 from web3cli.core.models.signer import Signer
+from web3cli.core.models.tx import Tx
 from web3cli.core.helpers.os import create_folder
 import os
 
-tables: List[Type[BaseModel]] = [Signer, Address, Chain, Rpc, ChainRpc]
+tables: List[Type[BaseModel]] = [Signer, Address, Chain, Rpc, ChainRpc, Tx]
 
 
 def init_db(db_path: str) -> SqliteDatabase:

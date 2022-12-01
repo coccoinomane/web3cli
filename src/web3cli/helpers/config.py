@@ -29,7 +29,7 @@ def update_setting_in_config_file(
         filepath=filepath,
         setting=setting,
         value=value,
-        logger=app.log if do_log else None,
+        logger=app.log.info if do_log else None,
         section="web3cli",
     )
 

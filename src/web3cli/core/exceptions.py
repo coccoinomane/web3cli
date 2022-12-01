@@ -56,3 +56,15 @@ class InvalidConfig(Web3CliError):
     """When any configuration value cannot be found"""
 
     pass
+
+
+class TxNotFound(Web3CliError):
+    """When a transaction hash is not found in the database"""
+
+    pass
+
+
+class TxIsInvalid(Web3CliError):
+    """When a transatction hash is not in a valid EVM format"""
+
+    pass

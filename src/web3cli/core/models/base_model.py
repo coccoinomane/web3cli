@@ -1,5 +1,6 @@
 from __future__ import annotations
-from peewee import SqliteDatabase, Model
+from peewee import SqliteDatabase
+from playhouse.signals import Model
 from typing import List, Dict, Any, Type
 
 ### Database, will be initialized during post_setup hook

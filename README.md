@@ -243,10 +243,12 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 # TODO
 - Tests: use london hardfork instead of istanbul?
+- Models: change label in name when it needs to be unique
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
 - README badges: web3.py, brownie, PDM, cement
 - Resolve address should look also in signature labels (make signer & address labels unique?)
+- Address book: helper method to un-resolve address (from 0x to label, if it exists), useful for `w3 tx list`
 - Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Chain: Preload chains from https://chainid.network/chains.json
 - Command: `w3 init` to import chain + add signer
