@@ -58,21 +58,20 @@ class ChainController(Controller):
         ],
     )
     def add(self) -> None:
-        # Create or update chain
-        fields: ChainFields = {
-            "name": self.app.pargs.name,
-            "chain_id": self.app.pargs.chain_id,
-            "coin": self.app.pargs.coin.upper(),
-            "tx_type": self.app.pargs.tx_type,
-            "middlewares": None if self.app.pargs.poa else "geth_poa_middleware",
-        }
         chain = Chain.get_by_name(self.app.pargs.name)
-        if not chain:
-            chain = Chain.create(**fields)
-            self.app.log.info(f"Chain '{self.app.pargs.name}' added correctly")
-        elif self.app.pargs.update:
-            Chain.update(**fields).where(Chain.id == chain.id).execute()
-            self.app.log.info(f"Chain '{self.app.pargs.name}' updated correctly")
+        if not chain or self.app.pargs.update:
+            chain = Chain.upsert(
+                {
+                    "name": self.app.pargs.name,
+                    "chain_id": self.app.pargs.chain_id,
+                    "coin": self.app.pargs.coin.upper(),
+                    "tx_type": self.app.pargs.tx_type,
+                    "middlewares": None
+                    if self.app.pargs.poa
+                    else "geth_poa_middleware",
+                },
+                logger=self.app.log.info,
+            )
         else:
             raise Web3CliError(
                 f"Chain '{self.app.pargs.name}' already exists. Use `--update` or `-u` to update it."
