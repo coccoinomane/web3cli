@@ -45,7 +45,7 @@ pip3 install -U web3cli
    w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
 
-- Tired of pasting addresses around? Save them with labels:
+- Tired of pasting addresses around? Save them with an easy to remember name:
    ```
    w3 address add ethereum-foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    w3 balance ethereum-foundation
@@ -242,13 +242,13 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Tx: tests
 - Tests: use london hardfork instead of istanbul?
-- Models: change label in name when it needs to be unique
 - Send command: option to wait for receipt
 - Retry transactions until gas fee goes below x gwei
 - README badges: web3.py, brownie, PDM, cement
-- Resolve address should look also in signature labels (make signer & address labels unique?)
-- Address book: helper method to un-resolve address (from 0x to label, if it exists), useful for `w3 tx list`
+- Resolve address should look also in signature names (make signer & address names unique?)
+- Address book: helper method to un-resolve address (from 0x to name, if it exists), useful for `w3 tx list`
 - Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
 - Chain: Preload chains from https://chainid.network/chains.json
 - Command: `w3 init` to import chain + add signer

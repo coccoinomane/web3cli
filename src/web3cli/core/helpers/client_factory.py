@@ -37,11 +37,11 @@ def make_base_wallet(
     **clientArgs: Any,
 ) -> BaseClient:
     """Return a brand new client configured for the given blockchain,
-    with signing support. You need to provide the label of the signer
+    with signing support. You need to provide the name of the signer
     from the DB, and a password to decrypt the signer's key."""
     client = make_base_client(chain_name, node_uri, base, **clientArgs)
     if logger:
         logger(f"Using signer {signer_name}")
-    signer = Signer.get_by_label_or_raise(signer_name)
+    signer = Signer.get_by_name_or_raise(signer_name)
     client.setAccount(decrypt_string(signer.key, password))
     return client

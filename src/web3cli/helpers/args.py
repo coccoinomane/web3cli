@@ -69,7 +69,7 @@ def parse_signer(app: App) -> str:
     elif app.config.get("web3cli", "default_signer"):
         signer = app.config.get("web3cli", "default_signer")
     elif Signer.select().count() == 1:
-        signer = Signer.select().get().label
+        signer = Signer.select().get().name
     else:
         signer = None
     return signer

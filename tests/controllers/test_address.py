@@ -7,8 +7,8 @@ from tests.seeder import seed_addresses
 def test_address_list(addresses: List[Dict[str, Any]]) -> None:
     """Add addresses and check that they are listed alphabetically"""
 
-    # Sort test address alphabetically by label
-    addresses = sorted(addresses, key=lambda a: a["label"])
+    # Sort test address alphabetically by name
+    addresses = sorted(addresses, key=lambda a: a["name"])
     with Web3CliTest() as app:
         # Add the addresses
         seed_addresses(app, addresses)
@@ -18,7 +18,7 @@ def test_address_list(addresses: List[Dict[str, Any]]) -> None:
         data, output = app.last_rendered
         # Test
         for i in range(0, len(addresses)):
-            assert data[i][0] == addresses[i]["label"]
+            assert data[i][0] == addresses[i]["name"]
             assert data[i][1] == addresses[i]["address"]
 
 
@@ -30,7 +30,7 @@ def test_address_get(addresses: List[Dict[str, Any]]) -> None:
                 [
                     "address",
                     "get",
-                    a["label"],
+                    a["name"],
                 ]
             ).run()
             data, output = app.last_rendered
@@ -44,13 +44,13 @@ def test_address_add(addresses: List[Dict[str, Any]]) -> None:
                 [
                     "address",
                     "add",
-                    a["label"],
+                    a["name"],
                     a["address"],
                     "--description",
                     a["description"],
                 ]
             ).run()
-            address = Address.get_by_label(a["label"])
+            address = Address.get_by_name(a["name"])
             assert Address.select().count() == 1
             assert address.address == a["address"]
             assert address.description == a["description"]
@@ -58,21 +58,21 @@ def test_address_add(addresses: List[Dict[str, Any]]) -> None:
 
 def test_address_update(addresses: List[Dict[str, Any]]) -> None:
     """Create address 0, then update it with the data of address 1,
-    while keeping the same label"""
+    while keeping the same name"""
     with Web3CliTest() as app:
         seed_addresses(app, [addresses[0]])
         app.set_args(
             argv=[
                 "address",
                 "add",
-                addresses[0]["label"],
+                addresses[0]["name"],
                 addresses[1]["address"],
                 "--description",
                 addresses[1]["description"],
                 "--update",
             ]
         ).run()
-        address = Address.get_by_label(addresses[0]["label"])
+        address = Address.get_by_name(addresses[0]["name"])
         assert address.address == addresses[1]["address"]
         assert address.description == addresses[1]["description"]
 
@@ -85,7 +85,7 @@ def test_address_delete(addresses: List[Dict[str, Any]]) -> None:
                 [
                     "address",
                     "delete",
-                    a["label"],
+                    a["name"],
                 ]
             ).run()
             assert Address.select().count() == len(addresses) - 1

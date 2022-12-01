@@ -33,7 +33,7 @@ def test_make_wallet(chains: List[ChainSeed], signers: List[Dict[str, Any]]) -> 
             "--chain",
             chain["name"],
             "--signer",
-            s["label"],
+            s["name"],
             "version",  # simplest possible command
         ]
         with Web3CliTest(argv=argv) as app:

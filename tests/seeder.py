@@ -30,7 +30,7 @@ def seed_chains(app: Web3Cli, chains: List[ChainSeed]) -> List[Chain]:
 
 
 def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
-    """Add the local network as a chain, with label local_chain, and
+    """Add the local network as a chain, with name local_chain, and
     make it the default network"""
     return seed_chain(app, local_chain, make_default)
 
@@ -42,7 +42,7 @@ def seed_addresses(
     db_ready_or_raise(app)
     for a in addresses:
         Address.create(
-            label=a["label"],
+            name=a["name"],
             address=a["address"],
             description=a.get("description"),
         )
@@ -53,7 +53,7 @@ def seed_signers(app: Web3Cli, signers: List[Dict[str, Any]]) -> List[Dict[str, 
     """Add the given fixture signers to the database"""
     db_ready_or_raise(app)
     for s in signers:
-        Signer.create_encrypt(label=s["label"], key=s["private_key"], pwd=app.app_key)
+        Signer.create_encrypt(name=s["name"], key=s["private_key"], pwd=app.app_key)
     return signers
 
 
@@ -64,20 +64,20 @@ def seed_accounts(
     default_signer: str = None,
 ) -> List[Account]:
     """Create a signer for each of the given brownie accounts,
-    with numeric labels: s0, s1, s2, etc.
+    with numeric names: s0, s1, s2, etc.
 
-    Accounts 0 and 1 will be added a second time with labels 'alice'
+    Accounts 0 and 1 will be added a second time with names 'alice'
     and 'bob', respectively.
 
     Optionally, set one of the accounts to be the default signer."""
     db_ready_or_raise(app)
     # Create alice and bob signers
-    Signer.create_encrypt(label="alice", key=accounts_keys[0], pwd=app.app_key)
-    Signer.create_encrypt(label="bob", key=accounts_keys[1], pwd=app.app_key)
-    # Create signers with labels s0, s1, s2, ...
+    Signer.create_encrypt(name="alice", key=accounts_keys[0], pwd=app.app_key)
+    Signer.create_encrypt(name="bob", key=accounts_keys[1], pwd=app.app_key)
+    # Create signers with names s0, s1, s2, ...
     for i, account in enumerate(accounts):
         signer = Signer.create_encrypt(
-            label=f"s{i}", key=accounts_keys[i], pwd=app.app_key
+            name=f"s{i}", key=accounts_keys[i], pwd=app.app_key
         )
         # Verify signer addresses
         if signer.address != account.address:

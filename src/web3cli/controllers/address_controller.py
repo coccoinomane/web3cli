@@ -19,32 +19,32 @@ class AddressController(Controller):
         render_table(
             self.app,
             data=[
-                [a["label"], a["address"]]
-                for a in Address.get_all_as_dicts(Address.label)
+                [a["name"], a["address"]]
+                for a in Address.get_all_as_dicts(Address.name)
             ],
-            headers=["LABEL", "ADDRESS"],
+            headers=["NAME", "ADDRESS"],
             wrap=42,
         )
 
     @ex(
-        help="show an address by its label",
+        help="show an address by its name",
         arguments=[
-            (["label"], {"help": "label of the address to show"}),
+            (["name"], {"help": "name of the address to show"}),
         ],
     )
     def get(self) -> None:
-        self.app.print(Address.get_address(self.app.pargs.label))
+        self.app.print(Address.get_address(self.app.pargs.name))
 
     @ex(
         help="add a new address",
         arguments=[
-            (["label"], {"help": "label identifying the address"}),
+            (["name"], {"help": "name of the address"}),
             (["address"], {"help": "blockchain address (0x...)"}),
             (["-d", "--description"], {"action": "store"}),
             (
                 ["-u", "--update"],
                 {
-                    "help": "if an address with the same label is present, overwrite it",
+                    "help": "if an address with the same name is present, overwrite it",
                     "action": "store_true",
                 },
             ),
@@ -53,31 +53,31 @@ class AddressController(Controller):
     def add(self) -> None:
         if not Address.is_valid_address(self.app.pargs.address):
             raise AddressIsInvalid(f"Invalid address given: {self.app.pargs.address}")
-        address = Address.get_by_label(self.app.pargs.label)
+        address = Address.get_by_name(self.app.pargs.name)
         if not address:
             Address.create(
-                label=self.app.pargs.label,
+                name=self.app.pargs.name,
                 address=self.app.pargs.address,
                 description=self.app.pargs.description,
             )
-            self.app.log.info(f"Address '{self.app.pargs.label}' added correctly")
+            self.app.log.info(f"Address '{self.app.pargs.name}' added correctly")
         elif self.app.pargs.update:
             address.address = self.app.pargs.address
             address.description = self.app.pargs.description
             address.save()
-            self.app.log.info(f"Address '{self.app.pargs.label}' updated correctly")
+            self.app.log.info(f"Address '{self.app.pargs.name}' updated correctly")
         else:
             raise Web3CliError(
-                f"Address '{self.app.pargs.label}' already exists with value {address.address}. Use `--update` or `-u` to update the address."
+                f"Address '{self.app.pargs.name}' already exists with value {address.address}. Use `--update` or `-u` to update the address."
             )
 
     @ex(
         help="delete an address",
         arguments=[
-            (["label"], {"help": "label of the address to delete"}),
+            (["name"], {"help": "name of the address to delete"}),
         ],
     )
     def delete(self) -> None:
-        address = Address.get_by_label_or_raise(self.app.pargs.label)
+        address = Address.get_by_name_or_raise(self.app.pargs.name)
         address.delete_instance()
-        self.app.log.info(f"Address '{self.app.pargs.label}' deleted correctly")
+        self.app.log.info(f"Address '{self.app.pargs.name}' deleted correctly")

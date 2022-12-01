@@ -23,37 +23,36 @@ class SignerController(Controller):
         render_table(
             self.app,
             data=[
-                [u["label"], u["address"]]
-                for u in Signer.get_all_as_dicts(Signer.label)
+                [s["name"], s["address"]] for s in Signer.get_all_as_dicts(Signer.name)
             ],
-            headers=["LABEL", "ADDRESS"],
+            headers=["NAME", "ADDRESS"],
             wrap=42,
         )
 
     @ex(
-        help="show the address of a signer by its label; without arguments, show the label of the active signer",
+        help="show the address of a signer by its name; without arguments, show the name of the active signer",
         arguments=[
             (
-                ["label"],
+                ["name"],
                 {
-                    "help": "label of the signer to show",
+                    "help": "name of the signer to show",
                     "nargs": "?",
                 },
             ),
         ],
     )
     def get(self) -> None:
-        if self.app.pargs.label:
-            self.app.print(Signer.get_address(self.app.pargs.label))
+        if self.app.pargs.name:
+            self.app.print(Signer.get_address(self.app.pargs.name))
         elif self.app.signer:
             self.app.print(self.app.signer)
         else:
-            raise SignerNotFound("Signer not set. Add one with `w3 signer add <label>`")
+            raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
 
     @ex(
         help="add a new signer; you will be asked for the private key",
         arguments=[
-            (["label"], {"help": "label identifying the signer"}),
+            (["name"], {"help": "name identifying the signer"}),
             (
                 ["--create"],
                 {
@@ -70,10 +69,10 @@ class SignerController(Controller):
         ],
     )
     def add(self) -> None:
-        # Validate label
-        if Signer.get_by_label(self.app.pargs.label):
+        # Validate name
+        if Signer.get_by_name(self.app.pargs.name):
             raise Web3CliError(
-                f"Signer with label '{self.app.pargs.label}' already exists; to delete it, use `w3 signer delete {self.app.pargs.label}`"
+                f"Signer with name '{self.app.pargs.name}' already exists; to delete it, use `w3 signer delete {self.app.pargs.name}`"
             )
         # Validate optional args
         if self.app.pargs.create and self.app.pargs.private_key:
@@ -98,25 +97,25 @@ class SignerController(Controller):
             )
         # Create signer
         Signer.create(
-            label=self.app.pargs.label,
+            name=self.app.pargs.name,
             key=encrypt_string_with_app_key(self.app, key),
             address=address,
         )
         self.app.log.info(
-            f"Signer '{self.app.pargs.label}' added correctly (address={address})"
+            f"Signer '{self.app.pargs.name}' added correctly (address={address})"
         )
 
     @ex(
         help="delete a signer",
         arguments=[
-            (["label"], {"help": "label of the signer to delete"}),
+            (["name"], {"help": "name of the signer to delete"}),
         ],
     )
     def delete(self) -> None:
-        signer = Signer.get_by_label(self.app.pargs.label)
+        signer = Signer.get_by_name(self.app.pargs.name)
         if not signer:
             raise SignerNotFound(
-                f"Signer '{self.app.pargs.label}' does not exist, can't delete it"
+                f"Signer '{self.app.pargs.name}' does not exist, can't delete it"
             )
         signer.delete_instance()
-        self.app.log.info(f"Signer '{self.app.pargs.label}' deleted correctly")
+        self.app.log.info(f"Signer '{self.app.pargs.name}' deleted correctly")
