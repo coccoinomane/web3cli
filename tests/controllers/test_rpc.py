@@ -3,24 +3,24 @@ from typing import List
 from tests.seeder import seed_chains
 from web3cli.core.exceptions import RpcIsInvalid
 from web3cli.core.models.chain import Chain, Rpc
-from web3cli.core.seeds.types import ChainSeed
 import pytest
+from web3cli.core.models.types import ChainFields
 
 
-def test_rpc_list(chains: List[ChainSeed]) -> None:
+def test_rpc_list(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(app, chains)
         app.set_args(["rpc", "list"]).run()
         data, output = app.last_rendered
         for c in chains:
-            for rpc_url in c["rpcs"]:
+            for r in c["rpcs"]:
                 assert (
-                    rpc_url[0 : app.config.get("web3cli", "output_table_wrap")]
+                    r["url"][0 : app.config.get("web3cli", "output_table_wrap")]
                     in output
                 )
 
 
-def test_rpc_add(chains: List[ChainSeed]) -> None:
+def test_rpc_add(chains: List[ChainFields]) -> None:
     c = chains[0]
     # Add two different RPCs > they should be in the DB
     test_rpcs = ["https://www.example-1.com", "https://www.example-2.com"]
@@ -42,7 +42,7 @@ def test_rpc_add(chains: List[ChainSeed]) -> None:
             app.set_args(["rpc", "add", chain.name, "not a URI"]).run()
 
 
-def test_rpc_get_with_id_argument(chains: List[ChainSeed]) -> None:
+def test_rpc_get_with_id_argument(chains: List[ChainFields]) -> None:
     """With ID argument > it should return the url of the RPC with given ID"""
     with Web3CliTest() as app:
         seed_chains(app, chains)
@@ -54,7 +54,7 @@ def test_rpc_get_with_id_argument(chains: List[ChainSeed]) -> None:
             assert data["out"] == rpc.url
 
 
-def test_rpc_get_with_rpc_argument(chains: List[ChainSeed]) -> None:
+def test_rpc_get_with_rpc_argument(chains: List[ChainFields]) -> None:
     """With RPC argument > it should return the argument"""
     test_rpcs = ["https://www.example-1.com", "https://www.example-2.com"]
     for rpc_url in test_rpcs:
@@ -64,7 +64,7 @@ def test_rpc_get_with_rpc_argument(chains: List[ChainSeed]) -> None:
             assert data["out"] == rpc_url
 
 
-def test_rpc_get_with_no_args(chains: List[ChainSeed]) -> None:
+def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
     """Without arguments > should return an RPC of the user-provided chain"""
     for c in chains:
         with Web3CliTest() as app:
@@ -75,7 +75,7 @@ def test_rpc_get_with_no_args(chains: List[ChainSeed]) -> None:
             assert data["out"] in [r.url for r in chain.get_rpcs()]
 
 
-def test_rpc_delete(chains: List[ChainSeed]) -> None:
+def test_rpc_delete(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(app, chains)
         rpcs = Rpc.get_all()

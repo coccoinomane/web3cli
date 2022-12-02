@@ -4,8 +4,7 @@ helper functions to better run tests"""
 from typing import Any, Dict, List
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
-from web3cli.core.models.types import AddressFields
-from web3cli.core.seeds.types import ChainSeed
+from web3cli.core.models.types import AddressFields, ChainFields
 from web3cli.core.seeds.chain_seeds import local_chain
 from web3cli.helpers.database import db_ready_or_raise
 from web3cli.main import Web3Cli
@@ -15,7 +14,7 @@ from brownie.network.account import Account
 import brownie
 
 
-def seed_chain(app: Web3Cli, chain: ChainSeed, make_default: bool = True) -> Chain:
+def seed_chain(app: Web3Cli, chain: ChainFields, make_default: bool = True) -> Chain:
     """Add the given seed chain to the database, and optionally
     make it the default network"""
     db_ready_or_raise(app)
@@ -24,7 +23,7 @@ def seed_chain(app: Web3Cli, chain: ChainSeed, make_default: bool = True) -> Cha
     return Chain.seed_one(local_chain)
 
 
-def seed_chains(app: Web3Cli, chains: List[ChainSeed]) -> List[Chain]:
+def seed_chains(app: Web3Cli, chains: List[ChainFields]) -> List[Chain]:
     """Add the given seed chains to the database"""
     db_ready_or_raise(app)
     return Chain.seed(chains)

@@ -2,12 +2,10 @@ from typing import List, TypedDict
 from typing_extensions import NotRequired
 
 
-class AddressFields(TypedDict):
-    """Typing for Address model creation and update"""
+class RpcFields(TypedDict):
+    """Typing for Rpc model creation and update"""
 
-    address: str
-    name: str
-    description: str
+    url: str
 
 
 class ChainFields(TypedDict):
@@ -17,7 +15,24 @@ class ChainFields(TypedDict):
     chain_id: int
     coin: str
     tx_type: int
-    middlewares: NotRequired[str]
+    middlewares: str
+    rpcs: NotRequired[List[RpcFields]]
+
+
+class AddressFields(TypedDict):
+    """Typing for Address model creation and update"""
+
+    address: str
+    name: str
+    description: str
+
+
+class SignerFields(TypedDict):
+    """Typing for Signer model creation and update"""
+
+    name: str
+    address: str
+    key: bytes
 
 
 class TxFields(TypedDict):

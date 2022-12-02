@@ -1,13 +1,13 @@
 from typing import Any, Dict, List
 from tests.main import Web3CliTest
 from tests.seeder import seed_signers, seed_chains
-from web3cli.core.seeds.types import ChainSeed
+from web3cli.core.models.types import ChainFields
 from web3cli.helpers.client_factory import make_client, make_wallet
 import pytest
 
 
 @pytest.mark.slow
-def test_make_client(chains: List[ChainSeed]) -> None:
+def test_make_client(chains: List[ChainFields]) -> None:
     for chain in chains:
         argv = ["--chain", chain["name"], "version"]  # simplest possible command
         with Web3CliTest(argv=argv) as app:
@@ -24,7 +24,7 @@ def test_make_client(chains: List[ChainSeed]) -> None:
             assert type(block.get("transactions")) is list
 
 
-def test_make_wallet(chains: List[ChainSeed], signers: List[Dict[str, Any]]) -> None:
+def test_make_wallet(chains: List[ChainFields], signers: List[Dict[str, Any]]) -> None:
     """Sign a message with a wallet created by make_wallet"""
     msg = "Hello world"
     s = signers[0]

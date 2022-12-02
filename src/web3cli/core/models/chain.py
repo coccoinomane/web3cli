@@ -12,7 +12,6 @@ from web3cli.core.models.base_model import BaseModel
 from web3.types import Middleware
 from web3.middleware import geth_poa_middleware
 from web3cli.core.models.types import ChainFields
-from web3cli.core.seeds.types import ChainSeed
 from web3cli.core.types import Logger
 from playhouse.shortcuts import update_model_from_dict
 
@@ -60,7 +59,7 @@ class Chain(BaseModel):
 
     @classmethod
     def seed_one(
-        cls, seed_chain: ChainSeed, logger: Logger = lambda msg: None
+        cls, seed_chain: ChainFields, logger: Logger = lambda msg: None
     ) -> Chain:
         """Create a chain and its RPCs in the db.
 
@@ -74,20 +73,20 @@ class Chain(BaseModel):
                 "chain_id": seed_chain["chain_id"],
                 "coin": seed_chain["coin"],
                 "tx_type": seed_chain["tx_type"],
-                "middlewares": ",".join(seed_chain["middlewares"]) or None,
+                "middlewares": seed_chain["middlewares"] or None,
             },
             logger,
         )
 
         # Create the rpcs
         for seed_rpc in seed_chain["rpcs"]:
-            chain.add_rpc(seed_rpc, logger)
+            chain.add_rpc(seed_rpc["url"], logger)
 
         return chain
 
     @classmethod
     def seed(
-        cls, chain_seeds: List[ChainSeed], logger: Logger = lambda msg: None
+        cls, chain_seeds: List[ChainFields], logger: Logger = lambda msg: None
     ) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances.

@@ -3,11 +3,11 @@ from typing import List
 from tests.seeder import seed_chains
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
-from web3cli.core.seeds.types import ChainSeed
 import pytest
+from web3cli.core.models.types import ChainFields
 
 
-def test_chain_list(chains: List[ChainSeed]) -> None:
+def test_chain_list(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(app, chains)
         app.set_args(["chain", "list"]).run()
@@ -17,7 +17,7 @@ def test_chain_list(chains: List[ChainSeed]) -> None:
             assert c["coin"] in output
 
 
-def test_chain_add(chains: List[ChainSeed]) -> None:
+def test_chain_add(chains: List[ChainFields]) -> None:
     for c in chains:
         # Add the chain > ok!
         argv = [
@@ -53,7 +53,7 @@ def test_chain_add(chains: List[ChainSeed]) -> None:
             assert updated_chain.coin == updated_argv[4]
 
 
-def test_chain_get(chains: List[ChainSeed]) -> None:
+def test_chain_get(chains: List[ChainFields]) -> None:
     """With explicit argument > return argument value"""
     for chain in chains:
         with Web3CliTest() as app:
@@ -63,7 +63,7 @@ def test_chain_get(chains: List[ChainSeed]) -> None:
             assert data["out"] == chain["name"]
 
 
-def test_chain_get_no_args(chains: List[ChainSeed]) -> None:
+def test_chain_get_no_args(chains: List[ChainFields]) -> None:
     """Without any argument > return the default chain"""
     for chain in chains:
         with Web3CliTest() as app:
@@ -74,7 +74,7 @@ def test_chain_get_no_args(chains: List[ChainSeed]) -> None:
             assert data["out"] == chain["name"]
 
 
-def test_chain_delete(chains: List[ChainSeed]) -> None:
+def test_chain_delete(chains: List[ChainFields]) -> None:
     for c in chains:
         with Web3CliTest() as app:
             seed_chains(app, chains)

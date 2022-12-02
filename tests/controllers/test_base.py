@@ -1,16 +1,15 @@
 from typing import Any, Dict, List
 from tests.main import Web3CliTest
 import pytest
-from web3cli.core.seeds.types import ChainSeed
 from tests.seeder import seed_chains, seed_signers
+from web3cli.core.models.types import ChainFields
 from web3cli.helpers.misc import get_coin
 from brownie.network.account import Account
 from brownie.network.state import TxHistory
-import brownie
 
 
 @pytest.mark.slow
-def test_balance(chains: List[ChainSeed]) -> None:
+def test_balance(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(app, chains)
         app.set_args(["balance", "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"]).run()
@@ -57,7 +56,9 @@ def test_send_eth_wei(app: Web3CliTest, alice: Account, bob: Account) -> None:
         "I will copiously donate to coccoinomane ❤️",
     ],
 )
-def test_sign(msg: str, signers: List[Dict[str, Any]], chains: List[ChainSeed]) -> None:
+def test_sign(
+    msg: str, signers: List[Dict[str, Any]], chains: List[ChainFields]
+) -> None:
     with Web3CliTest() as app:
         seed_chains(app, chains)
         seed_signers(app, [signers[0]])
