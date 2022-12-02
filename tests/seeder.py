@@ -2,9 +2,12 @@
 helper functions to better run tests"""
 
 from typing import Any, Dict, List
+
+from web3 import Web3
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
-from web3cli.core.models.types import AddressFields, ChainFields
+from web3cli.core.models.tx import Tx
+from web3cli.core.models.types import AddressFields, ChainFields, TxFields
 from web3cli.core.seeds.chain_seeds import local_chain
 from web3cli.helpers.database import db_ready_or_raise
 from web3cli.main import Web3Cli
@@ -15,7 +18,7 @@ import brownie
 
 
 def seed_chain(app: Web3Cli, chain: ChainFields, make_default: bool = True) -> Chain:
-    """Add the given seed chain to the database, and optionally
+    """Add the given chain to the database, and optionally
     make it the default network"""
     db_ready_or_raise(app)
     if make_default:
@@ -24,9 +27,30 @@ def seed_chain(app: Web3Cli, chain: ChainFields, make_default: bool = True) -> C
 
 
 def seed_chains(app: Web3Cli, chains: List[ChainFields]) -> List[Chain]:
-    """Add the given seed chains to the database"""
+    """Add the given chains to the database"""
     db_ready_or_raise(app)
     return Chain.seed(chains)
+
+
+def seed_addresses(app: Web3Cli, addresses: List[AddressFields]) -> List[Address]:
+    """Add the given addresses to the database"""
+    db_ready_or_raise(app)
+    return [Address.create(**a) for a in addresses]
+
+
+def seed_signers(app: Web3Cli, signers: List[Dict[str, Any]]) -> List[Signer]:
+    """Add the given signers to the database"""
+    db_ready_or_raise(app)
+    return [
+        Signer.create_encrypt(name=s["name"], key=s["private_key"], pwd=app.app_key)
+        for s in signers
+    ]
+
+
+def seed_txs(app: Web3Cli, txs: List[TxFields]) -> List[Tx]:
+    """Add the given transactions to the database"""
+    db_ready_or_raise(app)
+    return [Tx.create(**t) for t in txs]
 
 
 def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
@@ -35,27 +59,7 @@ def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
     return seed_chain(app, local_chain, make_default)
 
 
-def seed_addresses(app: Web3Cli, addresses: List[AddressFields]) -> List[AddressFields]:
-    """Add the given fixture addresses to the database"""
-    db_ready_or_raise(app)
-    for a in addresses:
-        Address.create(
-            name=a["name"],
-            address=a["address"],
-            description=a.get("description"),
-        )
-    return addresses
-
-
-def seed_signers(app: Web3Cli, signers: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Add the given fixture signers to the database"""
-    db_ready_or_raise(app)
-    for s in signers:
-        Signer.create_encrypt(name=s["name"], key=s["private_key"], pwd=app.app_key)
-    return signers
-
-
-def seed_accounts(
+def seed_local_accounts(
     app: Web3Cli,
     accounts: List[Account],
     accounts_keys: List[str],

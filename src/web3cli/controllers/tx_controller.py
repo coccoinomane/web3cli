@@ -22,10 +22,10 @@ class TxController(Controller):
         render_table(
             self.app,
             data=[
-                [tx.hash[2:], tx.chain, tx.created_at_short(), cut(tx.from_, 10)]
+                [tx.hash, tx.chain, tx.created_at_short(), cut(tx.from_, 10)]
                 for tx in Tx.get_all(Tx.created_at.desc())
             ],
-            headers=["HASH (without 0x)", "CHAIN", "DATE", "FROM"],
+            headers=["HASH", "CHAIN", "CREATED AT", "FROM"],
             wrap=66,
         )
 

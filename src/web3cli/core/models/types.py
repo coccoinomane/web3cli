@@ -42,6 +42,9 @@ class TxFields(TypedDict):
     chain: str
     to: str
     from_: str
+    value: NotRequired[str]
+    gas: NotRequired[int]
+    gas_price: NotRequired[str]
     description: NotRequired[str]
     data: NotRequired[str]
     receipt: NotRequired[str]

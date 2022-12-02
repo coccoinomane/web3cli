@@ -61,27 +61,11 @@ class Chain(BaseModel):
     def seed_one(
         cls, seed_chain: ChainFields, logger: Logger = lambda msg: None
     ) -> Chain:
-        """Create a chain and its RPCs in the db.
-
-        If a chain with the same already exists, it will be
-        replaced and any new RPC added."""
-
-        # Create or update chain
-        chain = Chain.upsert(
-            {
-                "name": seed_chain["name"],
-                "chain_id": seed_chain["chain_id"],
-                "coin": seed_chain["coin"],
-                "tx_type": seed_chain["tx_type"],
-                "middlewares": seed_chain["middlewares"] or None,
-            },
-            logger,
-        )
-
-        # Create the rpcs
+        """Create a chain and its RPCs in the db; if a chain with the
+        same already exists, it will be replaced and new RPCs added."""
+        chain = Chain.upsert(seed_chain, logger)
         for seed_rpc in seed_chain["rpcs"]:
             chain.add_rpc(seed_rpc["url"], logger)
-
         return chain
 
     @classmethod
@@ -89,10 +73,7 @@ class Chain(BaseModel):
         cls, chain_seeds: List[ChainFields], logger: Logger = lambda msg: None
     ) -> List[Chain]:
         """Populate the table with the given list of chains
-        and RPCs, and return the list of created instances.
-
-        For any given chain, if a chain with the same already exists,
-        it will be replaced and any new RPC added."""
+        and RPCs, and return the list of created instances."""
         return [Chain.seed_one(chain_seed, logger) for chain_seed in chain_seeds]
 
     @classmethod

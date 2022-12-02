@@ -27,6 +27,6 @@ def timezone_now() -> dt.datetime:
 def add_timestamps(
     model_class: TimestampsModel, instance: Type[TimestampsModel], created: bool
 ) -> None:
-    if created == True:
+    if created == True and not instance.created_at:
         instance.created_at = timezone_now()
     instance.updated_at = timezone_now()

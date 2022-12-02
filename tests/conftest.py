@@ -63,26 +63,30 @@ def txs() -> List[TxFields]:
         {
             "hash": "0xbe62871b8c0545dd9034bcb8e802b0c024d2983ba1de663c5cbb1b02c9173609",
             "chain": "ethereum",
-            "to": "0xd2b06119b51626f175375c8fb5baa0c0e54819f2",
-            "from_": "0xfdee07396b59aee88555bfb6c683ca8ff3ffd35c",
+            "to": "0xd2b06119B51626F175375C8Fb5Baa0c0e54819f2",
+            "from_": "0xFdEE07396b59aEE88555bfb6C683Ca8FF3Ffd35c",
             "value": "9461431800000000000",
             "gas": 21000,
             "gas_price": "19000000000",
             "description": "A regular value transaction",
             "data": "",
             "receipt": "",
+            "created_at": "2022-12-02 19:45:57.100147+01:00",
+            "updated_at": "2022-12-02 19:45:57.100172+01:00",
         },
         {
             "hash": "0xdf92dbca5a2788c4c57ee76408d1ea35c3753b6ababb468a1d949af56e786338",
             "chain": "ethereum",
-            "to": "0xdac17f958d2ee523a2206206994597c13d831e7",
-            "from_": "0x13e464a06df694893f6b07e49b6d84d4bece04c9",
+            "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+            "from_": "0x13E464A06df694893f6B07E49b6d84D4bece04c9",
             "value": None,
             "gas": 63209,
             "gas_price": "12250771391",
             "description": "An ERC-20 transfer (USDT)",
             "data": "0xa9059cbb0000000000000000000000002fe5dbe5b4cdf1a032ab230f258d129b38faf79f00000000000000000000000000000000000000000000000000000009f7142c00",
             "receipt": "",
+            "created_at": "2021-12-01 19:45:57.100147+01:00",
+            "updated_at": "2021-12-01 19:45:57.100172+01:00",
         },
     ]
 
@@ -126,7 +130,7 @@ def app(
     network. It depends on the accounts fixture of brownie, which in
     turn depends on devnetwork fixture, which activates ganache"""
     seed_local_chain(base_app)
-    seed_accounts(base_app, accounts, accounts_keys)
+    seed_local_accounts(base_app, accounts, accounts_keys)
     return base_app
 
 
