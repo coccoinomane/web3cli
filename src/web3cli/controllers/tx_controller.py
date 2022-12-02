@@ -4,6 +4,8 @@ from web3cli.controllers.controller import Controller
 from web3cli.core.models.tx import Tx
 from web3cli.core.exceptions import TxIsInvalid, Web3CliError
 from web3cli.helpers.render import render_table
+from web3cli.core.helpers.format import cut
+from playhouse.shortcuts import model_to_dict
 
 
 class TxController(Controller):
@@ -19,8 +21,11 @@ class TxController(Controller):
     def list(self) -> None:
         render_table(
             self.app,
-            data=[[tx.hash, tx.from_, tx.to] for tx in Tx.get_all(Tx.created_at)],
-            headers=["HASH", "FROM", "TO"],
+            data=[
+                [tx.hash[2:], tx.chain, tx.created_at_short(), cut(tx.from_, 10)]
+                for tx in Tx.get_all(Tx.created_at.desc())
+            ],
+            headers=["HASH (without 0x)", "CHAIN", "DATE", "FROM"],
             wrap=66,
         )
 
@@ -32,7 +37,7 @@ class TxController(Controller):
     )
     def get(self) -> None:
         tx = Tx.get_by_hash_or_raise(self.app.pargs.hash)
-        self.app.print(pformat(tx))
+        self.app.print(pformat(model_to_dict(tx)))
 
     @ex(
         help="add a new transaction to the database",

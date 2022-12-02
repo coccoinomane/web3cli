@@ -8,8 +8,8 @@ import pytest
 from cement import fs
 import secrets
 from tests.main import Web3CliTest
-from tests.seeder import seed_accounts, seed_local_chain
-from web3cli.core.models.types import AddressFields, ChainFields
+from tests.seeder import seed_local_accounts, seed_local_chain
+from web3cli.core.models.types import AddressFields, ChainFields, TxFields
 from web3cli.core.seeds.chain_seeds import chain_seeds
 import brownie
 from brownie.network.account import Account
@@ -53,6 +53,36 @@ def signers() -> List[Dict[str, Any]]:
             "name": "vanity_3",
             "address": "0x9fF0c40eDe4585a5E9f0F00009ce79b6344cB663",
             "private_key": "f76c67c2dd62222a5ec747116a66c573f3795c53276c0cdeafbcb5f597e2f8d4",
+        },
+    ]
+
+
+@pytest.fixture()
+def txs() -> List[TxFields]:
+    return [
+        {
+            "hash": "0xbe62871b8c0545dd9034bcb8e802b0c024d2983ba1de663c5cbb1b02c9173609",
+            "chain": "ethereum",
+            "to": "0xd2b06119b51626f175375c8fb5baa0c0e54819f2",
+            "from_": "0xfdee07396b59aee88555bfb6c683ca8ff3ffd35c",
+            "value": "9461431800000000000",
+            "gas": 21000,
+            "gas_price": "19000000000",
+            "description": "A regular value transaction",
+            "data": "",
+            "receipt": "",
+        },
+        {
+            "hash": "0xdf92dbca5a2788c4c57ee76408d1ea35c3753b6ababb468a1d949af56e786338",
+            "chain": "ethereum",
+            "to": "0xdac17f958d2ee523a2206206994597c13d831e7",
+            "from_": "0x13e464a06df694893f6b07e49b6d84d4bece04c9",
+            "value": None,
+            "gas": 63209,
+            "gas_price": "12250771391",
+            "description": "An ERC-20 transfer (USDT)",
+            "data": "0xa9059cbb0000000000000000000000002fe5dbe5b4cdf1a032ab230f258d129b38faf79f00000000000000000000000000000000000000000000000000000009f7142c00",
+            "receipt": "",
         },
     ]
 

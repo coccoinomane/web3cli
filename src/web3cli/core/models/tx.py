@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Type
-from peewee import TextField, DateTimeField
+from peewee import TextField, DateTimeField, BigIntegerField
 from web3cli.core.exceptions import AddressIsInvalid, TxIsInvalid, TxNotFound
 from web3cli.core.models.address import Address
 from web3cli.core.models.timestamps_model import TimestampsModel
@@ -19,6 +19,9 @@ class Tx(TimestampsModel):
     chain = TextField()
     to = TextField()
     from_ = TextField(column_name="from")
+    value = TextField(null=True)
+    gas = BigIntegerField(null=True)
+    gas_price = TextField(null=True)
     description = TextField(null=True)
     data = TextField(null=True)
     receipt = TextField(null=True)

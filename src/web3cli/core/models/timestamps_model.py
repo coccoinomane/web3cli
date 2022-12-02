@@ -11,11 +11,11 @@ class TimestampsModel(BaseModel):
 
     def created_at_short(self) -> str:
         """Creation timestamp in short form"""
-        return self.created_at.strftime("%Y%b%d_%H:%M:%S")
+        return self.created_at[0:19] if self.created_at else None
 
     def updated_at_short(self) -> str:
         """Update timestamp in short form"""
-        return self.updated_at.strftime("%Y%b%d_%H:%M:%S")
+        return self.updated_at[0:19] if self.updated_at else None
 
 
 def timezone_now() -> dt.datetime:
