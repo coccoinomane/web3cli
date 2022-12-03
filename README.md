@@ -19,7 +19,7 @@ pip3 install -U web3cli
 
 # Simple examples
 
-- Add chains before using them:
+- Add chains before using them:
    ```
    w3 chain add ethereum 1 ETH --tx-type 2 --rpc https://cloudflare-eth.com 
    w3 chain add binance 56 BNB --rpc https://bsc-dataseed.binance.org/
@@ -242,6 +242,8 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Implement `w3 block`
+- Implement `w3 tx fetch`
 - Move tests/seeder to core (in models?)
 - Tests: use london hardfork instead of istanbul?
 - Send command: option to wait for receipt

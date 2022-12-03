@@ -1,4 +1,3 @@
-from pprint import pformat
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.tx import Tx
@@ -37,7 +36,7 @@ class TxController(Controller):
     )
     def get(self) -> None:
         tx = Tx.get_by_hash_or_raise(self.app.pargs.hash)
-        self.app.print(pformat(model_to_dict(tx)))
+        self.app.render(model_to_dict(tx))
 
     @ex(
         help="add a new transaction to the database",

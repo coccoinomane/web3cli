@@ -27,6 +27,10 @@ CONFIG["web3cli"] = {
     "output_table_wrap": 33,
 }
 
+# Allow to use `w3 -o json` for json output
+META = init_defaults("output.json")
+META["output.json"]["overridable"] = True
+
 
 class Web3Cli(App):
     """Web3 Cli primary application."""
@@ -43,6 +47,7 @@ class Web3Cli(App):
         # load additional framework extensions
         extensions = [
             "yaml",
+            "json",
             "colorlog",
             "jinja2",
             "print",
@@ -67,7 +72,10 @@ class Web3Cli(App):
         log_handler = "colorlog"
 
         # set the output handler
-        output_handler = "jinja2"
+        output_handler = "yaml"
+
+        ### override default handler meta options
+        meta_defaults = META
 
         # register handlers
         handlers = [

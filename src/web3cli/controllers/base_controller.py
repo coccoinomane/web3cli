@@ -76,7 +76,9 @@ class BaseController(Controller):
             Address.resolve_address(self.app.pargs.address)
         )
         self.app.render(
-            {"amount": balance, "ticker": get_coin(self.app)}, "balance.jinja2"
+            {"amount": balance, "ticker": get_coin(self.app)},
+            "balance.jinja2",
+            handler="jinja2",
         )
 
     @ex(
