@@ -50,8 +50,8 @@ avalanche: ChainFields = {
 
 # Local chain (e.g. ganache or hardhat network)
 local_chain: ChainFields = {
-    "name": "local_chain",
-    "chain_id": 1,
+    "name": "local",
+    "chain_id": 1337,
     "coin": "ETH",
     "tx_type": 1,
     "middlewares": "",

@@ -3,7 +3,6 @@ helper functions to better run tests"""
 
 from typing import Any, Dict, List
 
-from web3 import Web3
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
 from web3cli.core.models.tx import Tx
@@ -54,7 +53,7 @@ def seed_txs(app: Web3Cli, txs: List[TxFields]) -> List[Tx]:
 
 
 def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
-    """Add the local network as a chain, with name local_chain, and
+    """Add the local network as a chain, with name 'local' and
     make it the default network"""
     return seed_chain(app, local_chain, make_default)
 

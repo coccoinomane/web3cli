@@ -230,7 +230,7 @@ Pull requests are welcome!
 
 ### Tests
 
-To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) then run:
+To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache), then run:
 
 ```bash
 pdm test
@@ -242,6 +242,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Use different db file for dev environment
 - Implement `w3 block`
 - Implement `w3 tx fetch`
 - Move tests/seeder to core (in models?)
