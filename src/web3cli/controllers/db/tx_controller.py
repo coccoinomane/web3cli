@@ -8,13 +8,13 @@ from playhouse.shortcuts import model_to_dict
 
 
 class TxController(Controller):
-    """Handler of the `w3 tx` commands"""
+    """Handler of the `w3 db tx` commands"""
 
     class Meta:
         label = "tx"
         help = "add, list or delete transactions"
         stacked_type = "nested"
-        stacked_on = "base"
+        stacked_on = "db"
 
     @ex(help="list transactions")
     def list(self) -> None:

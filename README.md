@@ -21,13 +21,13 @@ pip3 install -U web3cli
 
 - Add chains before using them:
    ```
-   w3 chain add ethereum 1 ETH --tx-type 2 --rpc https://cloudflare-eth.com 
-   w3 chain add binance 56 BNB --rpc https://bsc-dataseed.binance.org/
-   w3 chain add avalanche 43114 --rpc https://api.avax.network/ext/bc/C/rpc
+   w3 db chain add ethereum 1 ETH --tx-type 2 --rpc https://cloudflare-eth.com 
+   w3 db chain add binance 56 BNB --rpc https://bsc-dataseed.binance.org/
+   w3 db chain add avalanche 43114 --rpc https://api.avax.network/ext/bc/C/rpc
    ```
    ... or import them in one go:
    ```
-   w3 chain seed
+   w3 db chain seed
    ```
 
 - Get the ETH balance of the Ethereum foundation:
@@ -47,13 +47,13 @@ pip3 install -U web3cli
 
 - Tired of pasting addresses around? Save them with an easy to remember name:
    ```
-   w3 address add ethereum-foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 db address add ethereum-foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    w3 balance ethereum-foundation
    ```
 
 - Want to send transactions? Add a signer:
    ```
-   w3 signer add my-wallet
+   w3 db signer add my-wallet
    ```
    You will be asked for a private key, which will be saved on disk in encrypted form.
 
@@ -77,21 +77,21 @@ pip3 install -U web3cli
 `w3` can store tags just like you would do on etherscan.io or bscscan.com:
 
 ```bash
-w3 address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
-w3 address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 db address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+w3 db address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
 ```
 
 You can use these tags instead of the actual addresses:
 
 ```bash
 w3 balance "Ethereum foundation"
-w3 -c binance balance "Binance hot wallet"
+w3 --chain binance balance "Binance hot wallet"
 ```
 
 To see the list of saved addresses, run:
 
 ```bash
-w3 address list
+w3 db address list
 ```
 
 which will produce the following output:
@@ -103,14 +103,14 @@ which will produce the following output:
 | Ethereum foundation | 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae |
 ```
 
-To see all the actions that can be done with addresses, run `w3 address`.
+To see all the actions that can be done with addresses, run `w3 db address`.
 
 # Sign & send
 
 You can use `web3cli` to send transactions to the blockchain or to sign messages. To do so, you first need to define a signer:
 
 ```bash
-w3 add my_signer
+w3 db signer add my_signer
 ```
 
 You will be prompted to insert a private key, which will be encrypted and stored in the database. Feel free to do so with this test private key: `d94e4166f0b3c85ffebed3e0eaa7f7680ae296cf8a7229d637472b7452c8602c`.
@@ -118,7 +118,7 @@ You will be prompted to insert a private key, which will be encrypted and stored
 You can also create a brand new wallet on the go, without the need to provide a key:
 
 ```
-w3 signer add my-wallet --create
+w3 db signer add my-wallet --create
 ```
 
 ### Examples
@@ -153,7 +153,7 @@ where `address` is either an address from the address book, or a `0x..` hex stri
 
 ### Multiple signers
 
-Add more signers with `w3 add` and select which one to use with the `--signer` flag:
+Add more signers with `w3 db signer add` and select which one to use with the `--signer` flag:
 
 ```bash
 w3 --signer my_signer <command>
@@ -178,7 +178,7 @@ All settings can be overridden via environment variables.
 For example, the settings `web3cli.default_chain` can be overridden by setting the env variable `WEB3CLI_DEFAULT_CHAIN`:
 
 ```bash
-WEB3CLI_DEFAULT_CHAIN=avalanche w3 network get
+WEB3CLI_DEFAULT_CHAIN=avalanche w3 db chain get
 
 output> avalanche
 ```

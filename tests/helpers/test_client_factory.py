@@ -9,10 +9,9 @@ import pytest
 @pytest.mark.slow
 def test_make_client(chains: List[ChainFields]) -> None:
     for chain in chains:
-        argv = ["--chain", chain["name"], "version"]  # simplest possible command
-        with Web3CliTest(argv=argv) as app:
+        with Web3CliTest() as app:
             seed_chains(app, chains)
-            app.run()
+            app.set_args(argv=["--chain", chain["name"], "version"]).run()
             client = make_client(app)
             block = client.getLatestBlock()
             assert type(block.get("number")) is int
@@ -29,17 +28,18 @@ def test_make_wallet(chains: List[ChainFields], signers: List[Dict[str, Any]]) -
     msg = "Hello world"
     s = signers[0]
     for chain in chains:
-        argv = [
-            "--chain",
-            chain["name"],
-            "--signer",
-            s["name"],
-            "version",  # simplest possible command
-        ]
-        with Web3CliTest(argv=argv) as app:
+        with Web3CliTest() as app:
             seed_chains(app, chains)
             seed_signers(app, [s])
-            app.run()
+            app.set_args(
+                [
+                    "--chain",
+                    chain["name"],
+                    "--signer",
+                    s["name"],
+                    "version",
+                ]
+            ).run()
             # client = make_wallet(app)
             # signed_message = client.signMessage(msg)
             # assert client.isMessageSignedByMe(msg, signed_message) == True

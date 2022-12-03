@@ -10,13 +10,13 @@ from web3cli.helpers.render import render_table
 
 
 class SignerController(Controller):
-    """Handler of the `w3 signer` commands"""
+    """Handler of the `w3 db signer` commands"""
 
     class Meta:
         label = "signer"
         help = "add, list or delete signers"
         stacked_type = "nested"
-        stacked_on = "base"
+        stacked_on = "db"
 
     @ex(help="list signers")
     def list(self) -> None:
@@ -47,7 +47,9 @@ class SignerController(Controller):
         elif self.app.signer:
             self.app.print(self.app.signer)
         else:
-            raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
+            raise SignerNotFound(
+                "Signer not set. Add one with `w3 db signer add <name>`"
+            )
 
     @ex(
         help="add a new signer; you will be asked for the private key",
@@ -72,7 +74,7 @@ class SignerController(Controller):
         # Validate name
         if Signer.get_by_name(self.app.pargs.name):
             raise Web3CliError(
-                f"Signer with name '{self.app.pargs.name}' already exists; to delete it, use `w3 signer delete {self.app.pargs.name}`"
+                f"Signer with name '{self.app.pargs.name}' already exists; to delete it, use `w3 db signer delete {self.app.pargs.name}`"
             )
         # Validate optional args
         if self.app.pargs.create and self.app.pargs.private_key:

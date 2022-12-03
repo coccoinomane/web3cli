@@ -6,13 +6,13 @@ from web3cli.helpers.render import render_table
 
 
 class AddressController(Controller):
-    """Handler of the `w3 address` commands"""
+    """Handler of the `w3 db address` commands"""
 
     class Meta:
         label = "address"
         help = "add, list or delete addresses"
         stacked_type = "nested"
-        stacked_on = "base"
+        stacked_on = "db"
 
     @ex(help="list address")
     def list(self) -> None:
@@ -37,6 +37,7 @@ class AddressController(Controller):
 
     @ex(
         help="add a new address",
+        aliases=["pippo pippa"],
         arguments=[
             (["name"], {"help": "name of the address"}),
             (["address"], {"help": "blockchain address (0x...)"}),

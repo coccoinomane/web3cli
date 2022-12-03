@@ -8,13 +8,13 @@ from web3cli.helpers.render import render_table
 
 
 class ChainController(Controller):
-    """Handler of the `w3 chain` commands"""
+    """Handler of the `w3 db chain` commands"""
 
     class Meta:
         label = "chain"
         help = "add, list or delete chains"
         stacked_type = "nested"
-        stacked_on = "base"
+        stacked_on = "db"
 
     @ex(
         help="add a new chain",
@@ -115,5 +115,5 @@ class ChainController(Controller):
     def seed(self) -> None:
         chains = Chain.seed(chain_seeds, self.app.log.info)
         self.app.log.info(
-            f"Imported {len(chains)} chains, run `w3 chain list` to show them"
+            f"Imported {len(chains)} chains, run `w3 db chain list` to show them"
         )

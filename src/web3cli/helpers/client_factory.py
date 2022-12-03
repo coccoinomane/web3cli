@@ -14,7 +14,9 @@ def make_client(app: App, log: bool = False) -> BaseClient:
 def make_wallet(app: App, log: bool = False) -> BaseClient:
     """Client suitable to read from and write to the blockchain"""
     if not app.signer:
-        raise SignerNotFound("Could not find a signer: create one with `w3 signer add`")
+        raise SignerNotFound(
+            "Could not find a signer: create one with `w3 db signer add`"
+        )
     return make_base_wallet(
         chain_name=app.chain,
         signer_name=app.signer,

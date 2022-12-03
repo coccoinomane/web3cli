@@ -59,11 +59,7 @@ class BaseController(Controller):
             ),
         ]
 
-    def _default(self) -> None:
-        """Default action if no sub-command is passed."""
-        self.app.args.print_help()
-
-    @ex(help="Show the version of web3")
+    @ex(help="Show the version of web3cli")
     def version(self) -> None:
         self.app.print(get_version_message())
 
@@ -145,7 +141,7 @@ class BaseController(Controller):
         """Parse global arguments"""
 
         # Do nothing if no command is invoked (for example
-        # if one simply runs `w3` or `w3 chain`)
+        # if one simply runs `w3` or `w3 db`)
         if not args.get_command(self.app):
             return
 

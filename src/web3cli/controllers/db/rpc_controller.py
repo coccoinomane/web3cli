@@ -7,13 +7,13 @@ from web3cli.helpers.render import render_table
 
 
 class RpcController(Controller):
-    """Handler of the `w3 rpc` commands"""
+    """Handler of the `w3 db rpc` commands"""
 
     class Meta:
         label = "rpc"
         help = "add, list or delete rpcs"
         stacked_type = "nested"
-        stacked_on = "base"
+        stacked_on = "db"
 
     @ex(
         help="add a new rpc to the given chain",
@@ -32,7 +32,7 @@ class RpcController(Controller):
         chain = Chain.get_by_name(self.app.pargs.chain_name)
         if not chain:
             raise ChainNotFound(
-                f"Chain '{self.app.pargs.chain_name}' does not exist, add it with `w3 chain add`"
+                f"Chain '{self.app.pargs.chain_name}' does not exist, add it with `w3 db chain add`"
             )
 
         for rpc_url in self.app.pargs.rpcs:
@@ -57,7 +57,7 @@ class RpcController(Controller):
             (
                 ["id"],
                 {
-                    "help": "ID of the rpc; run `w3 rpc list` to list the IDs",
+                    "help": "ID of the rpc; run `w3 db rpc list` to list the IDs",
                     "type": int,
                 },
             ),
@@ -73,7 +73,7 @@ class RpcController(Controller):
             (
                 ["id"],
                 {
-                    "help": "ID of the RPC to show; run `w3 rpc list` to list the IDs",
+                    "help": "ID of the RPC to show; run `w3 db rpc list` to list the IDs",
                     "nargs": "?",
                     "type": int,
                 },
@@ -102,7 +102,7 @@ class RpcController(Controller):
             (
                 ["ids"],
                 {
-                    "help": "IDs of the rpc to delete; run `w3 rpc list` to list the IDs",
+                    "help": "IDs of the rpc to delete; run `w3 db rpc list` to list the IDs",
                     "nargs": "+",
                     "type": int,
                 },
