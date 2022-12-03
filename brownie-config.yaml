@@ -1,0 +1,7 @@
+project_structure:
+    build: tests/brownie/build
+    contracts: tests/brownie/contracts
+    interfaces: tests/brownie/interfaces
+    reports: tests/brownie/reports
+    scripts: tests/brownie/scripts
+    tests: tests

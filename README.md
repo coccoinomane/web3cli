@@ -230,7 +230,7 @@ Pull requests are welcome!
 
 ### Tests
 
-To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache), then run:
+To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) on at least node 18, then run:
 
 ```bash
 pdm test
