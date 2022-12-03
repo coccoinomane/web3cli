@@ -57,7 +57,7 @@ class Tx(TimestampsModel):
         hash already exists, maintaining its ID and relations."""
         tx: Tx = Tx.get_or_none(hash=fields["hash"])
         if tx:
-            tx = update_model_from_dict(tx, fields)
+            tx = update_model_from_dict(tx, fields, ignore_unknown=True)
             if logger:
                 logger(f"Tx {tx.hash} updated")
         else:

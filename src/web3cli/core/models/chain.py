@@ -47,7 +47,7 @@ class Chain(BaseModel):
         name already exists, maintaining its ID and relations."""
         chain: Chain = Chain.get_or_none(name=fields["name"])
         if chain:
-            chain = update_model_from_dict(chain, fields)
+            chain = update_model_from_dict(chain, fields, ignore_unknown=True)
             if logger:
                 logger(f"Chain {chain.name} updated")
         else:

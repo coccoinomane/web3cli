@@ -43,7 +43,7 @@ class Address(BaseModel):
         name already exists, maintaining its ID and relations."""
         address: Address = Address.get_or_none(name=fields["name"])
         if address:
-            address = update_model_from_dict(address, fields)
+            address = update_model_from_dict(address, fields, ignore_unknown=True)
             if logger:
                 logger(f"Address {address.name} updated")
         else:

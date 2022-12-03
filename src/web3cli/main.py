@@ -31,8 +31,11 @@ CONFIG["web3cli"] = {
 }
 
 # Allow to use `w3 -o json` for json output
-META = init_defaults("output.json")
-META["output.json"]["overridable"] = True
+# and `w3 -o yaml` for yaml output
+META = {
+    "output.json": {"overridable": True},
+    "output.yaml": {"overridable": True},
+}
 
 
 class Web3Cli(App):

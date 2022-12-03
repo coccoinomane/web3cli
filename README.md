@@ -242,6 +242,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
 - Use different db file for dev environment
 - Implement `w3 block`
 - Implement `w3 tx fetch`

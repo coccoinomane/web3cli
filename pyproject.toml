@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.9.4"
+version = "0.9.5"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
