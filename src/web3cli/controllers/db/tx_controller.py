@@ -36,7 +36,7 @@ class TxController(Controller):
     )
     def get(self) -> None:
         tx = Tx.get_by_hash_or_raise(self.app.pargs.hash)
-        self.app.render(model_to_dict(tx))
+        self.app.render(model_to_dict(tx), indent=4, handler="json")
 
     @ex(
         help="add a new transaction to the database",
