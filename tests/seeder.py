@@ -13,7 +13,6 @@ from web3cli.main import Web3Cli
 from web3cli.core.models.address import Address
 from web3cli.core.models.signer import Signer
 from brownie.network.account import Account
-import brownie
 
 
 def seed_chain(app: Web3Cli, chain: ChainFields, make_default: bool = True) -> Chain:
@@ -22,7 +21,7 @@ def seed_chain(app: Web3Cli, chain: ChainFields, make_default: bool = True) -> C
     db_ready_or_raise(app)
     if make_default:
         app.config.set("web3cli", "default_chain", local_chain["name"])
-    return Chain.seed_one(local_chain)
+    return Chain.seed_one(chain)
 
 
 def seed_chains(app: Web3Cli, chains: List[ChainFields]) -> List[Chain]:
