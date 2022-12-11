@@ -42,6 +42,8 @@ db_clean = "rm -rf $HOME/.web3cli/database"
 
 docker = "pdm run clean && docker build -t web3cli:latest ."
 
+release = "gh release create v{args} dist/web3cli-{args}.tar.gz dist/web3cli-{args}-py3-none-any.whl --generate-notes"
+
 [project.scripts]
 w3 = "web3cli.main:main"
 
