@@ -92,8 +92,7 @@ class RpcController(Controller):
             self.app.print(self.app.rpc)
         # Case 3: show RPC inferred by the app
         else:
-            chain = Chain.get_by_name_or_raise(self.app.chain)
-            rpc = chain.pick_rpc()
+            rpc = self.app.chain.pick_rpc()
             self.app.print(rpc.url)
 
     @ex(

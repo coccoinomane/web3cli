@@ -10,6 +10,12 @@ class ChainNotFound(Web3CliError):
     pass
 
 
+class ChainNotResolved(Web3CliError):
+    """When a string cannot be resolved to a chain"""
+
+    pass
+
+
 class AddressNotFound(Web3CliError):
     """When an address name is not found in the database"""
 

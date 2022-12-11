@@ -53,7 +53,7 @@ class SendController(Controller):
             if self.app.pargs.unit != "ether":
                 what = f"{self.app.pargs.amount} {self.app.pargs.unit} units of {self.app.pargs.ticker}"
             print(
-                f"You are about to send {what} on the {self.app.chain} chain from signer {self.app.signer} to {to_address}."
+                f"You are about to send {what} on the {self.app.chain.name} chain from signer {self.app.signer} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
         # Send

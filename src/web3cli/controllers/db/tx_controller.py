@@ -67,7 +67,7 @@ class TxController(Controller):
             Tx.upsert(
                 {
                     "hash": self.app.pargs.hash,
-                    "chain": self.app.chain,
+                    "chain": self.app.chain.name,
                     "from_": getattr(self.app.pargs, "from"),
                     "to": self.app.pargs.to,
                     "description": self.app.pargs.description,

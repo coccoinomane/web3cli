@@ -7,18 +7,17 @@ from web3cli.core.helpers.crypto import decrypt_string
 
 
 def make_base_client(
-    chain_name: str,
+    chain: Chain,
     node_uri: str = None,
     base: Type[BaseClient] = BaseClient,
     logger: Logger = lambda msg: None,
     **clientArgs: Any,
 ) -> BaseClient:
     """Return a brand new client configured for the given blockchain"""
-    chain: Chain = Chain.get_by_name_or_raise(chain_name)
     if node_uri is None:
         node_uri = chain.pick_rpc().url
     if logger:
-        logger(f"Using chain {chain_name} with RPC {node_uri}")
+        logger(f"Using chain {chain.name} with RPC {node_uri}")
     client = base(nodeUri=node_uri, **clientArgs)
     client.chainId = chain.chain_id
     client.txType = chain.tx_type
@@ -28,7 +27,7 @@ def make_base_client(
 
 
 def make_base_wallet(
-    chain_name: str,
+    chain: Chain,
     signer_name: str,
     password: bytes,
     node_uri: str = None,
@@ -39,7 +38,7 @@ def make_base_wallet(
     """Return a brand new client configured for the given blockchain,
     with signing support. You need to provide the name of the signer
     from the DB, and a password to decrypt the signer's key."""
-    client = make_base_client(chain_name, node_uri, base, **clientArgs)
+    client = make_base_client(chain, node_uri, base, **clientArgs)
     if logger:
         logger(f"Using signer {signer_name}")
     signer = Signer.get_by_name_or_raise(signer_name)

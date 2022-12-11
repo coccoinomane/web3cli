@@ -7,7 +7,7 @@ from web3cli.core.exceptions import SignerNotFound
 def make_client(app: App, log: bool = False) -> BaseClient:
     """Client suitable to read from the blockchain"""
     return make_base_client(
-        chain_name=app.chain, node_uri=app.rpc, logger=app.log.info if log else None
+        chain=app.chain, node_uri=app.rpc, logger=app.log.info if log else None
     )
 
 
@@ -18,7 +18,7 @@ def make_wallet(app: App, log: bool = False) -> BaseClient:
             "Could not find a signer: create one with `w3 db signer add`"
         )
     return make_base_wallet(
-        chain_name=app.chain,
+        chain=app.chain,
         signer_name=app.signer,
         password=app.app_key,
         node_uri=app.rpc,

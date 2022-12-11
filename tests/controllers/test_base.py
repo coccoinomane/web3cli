@@ -3,7 +3,6 @@ from tests.main import Web3CliTest
 import pytest
 from tests.seeder import seed_chains, seed_signers
 from web3cli.core.models.types import ChainFields
-from web3cli.helpers.misc import get_coin
 from brownie.network.account import Account
 from brownie.network.state import TxHistory
 
@@ -16,7 +15,7 @@ def test_balance(chains: List[ChainFields]) -> None:
         data, output = app.last_rendered
         assert type(data["amount"]) is float
         assert data["amount"] >= 0
-        assert data["ticker"] == get_coin(app)
+        assert data["ticker"] == app.chain.coin
 
 
 @pytest.mark.local

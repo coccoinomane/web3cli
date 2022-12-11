@@ -3,6 +3,7 @@ from typing import List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import (
     ChainNotFound,
+    ChainNotResolved,
     RpcIsInvalid,
     RpcNotFound,
     Web3CliError,
@@ -13,7 +14,8 @@ from web3.types import Middleware
 from web3.middleware import geth_poa_middleware
 from web3cli.core.models.types import ChainFields
 from web3cli.core.types import Logger
-from playhouse.shortcuts import update_model_from_dict
+from playhouse.shortcuts import update_model_from_dict, dict_to_model
+from web3cli.core.seeds.chain_seeds import chain_seeds
 
 
 class Chain(BaseModel):
@@ -58,23 +60,21 @@ class Chain(BaseModel):
         return chain
 
     @classmethod
-    def seed_one(
-        cls, seed_chain: ChainFields, logger: Logger = lambda msg: None
-    ) -> Chain:
+    def seed_one(cls, seed: ChainFields, logger: Logger = lambda msg: None) -> Chain:
         """Create a chain and its RPCs in the db; if a chain with the
         same already exists, it will be replaced and new RPCs added."""
-        chain = Chain.upsert(seed_chain, logger)
-        for seed_rpc in seed_chain["rpcs"]:
+        chain = Chain.upsert(seed, logger)
+        for seed_rpc in seed["rpcs"]:
             chain.add_rpc(seed_rpc["url"], logger)
         return chain
 
     @classmethod
     def seed(
-        cls, chain_seeds: List[ChainFields], logger: Logger = lambda msg: None
+        cls, seeds: List[ChainFields], logger: Logger = lambda msg: None
     ) -> List[Chain]:
         """Populate the table with the given list of chains
         and RPCs, and return the list of created instances."""
-        return [Chain.seed_one(chain_seed, logger) for chain_seed in chain_seeds]
+        return [Chain.seed_one(seed, logger) for seed in seeds]
 
     @classmethod
     def parse_middleware(cls, middleware: str) -> Middleware:
@@ -86,6 +86,25 @@ class Chain(BaseModel):
             }[middleware]
         except:
             raise Web3CliError(f"Middleware {middleware} not supported")
+
+    @classmethod
+    def resolve_chain(cls, name: str) -> Chain:
+        """Return the chain with the given name, looking first in
+        the database and then in the seed chains. If not found, raise
+        ChainNotResolved."""
+        # Look in the DB
+        chain = Chain.get_by_name(name)
+        if chain:
+            return chain
+
+        # Look in the seeds
+        for c in chain_seeds:
+            if c["name"] == name:
+                return dict_to_model(Chain, c, True)
+
+        raise ChainNotResolved(
+            f"Could not find chain '{name}', add it with `w3 db chain add`"
+        )
 
     def add_rpc(self, rpc_url: str, logger: Logger = lambda msg: None) -> Rpc:
         """Add an RPC to the chain instance.

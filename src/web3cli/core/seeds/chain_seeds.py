@@ -1,5 +1,4 @@
 from typing import List
-
 from web3cli.core.models.types import ChainFields
 
 

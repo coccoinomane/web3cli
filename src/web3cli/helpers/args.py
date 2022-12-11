@@ -1,6 +1,7 @@
 from cement import App
 from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
 from web3cli.core.helpers.rpc import is_rpc_uri_valid
+from web3cli.core.models.chain import Chain
 from web3cli.core.models.signer import Signer
 
 
@@ -8,10 +9,10 @@ def parse_global_args(app: App) -> None:
     """Extend the app object with global arguments. Must be
     run post argument parsing"""
 
-    app.extend("chain", parse_chain(app))  # ethereum binance etc
     app.extend("signer", parse_signer(app))
     app.extend("priority_fee", parse_priority_fee(app))
     app.extend("rpc", parse_rpc(app))
+    app.extend("chain", Chain.resolve_chain(parse_chain(app)))
 
 
 def get_command(app: App) -> str:

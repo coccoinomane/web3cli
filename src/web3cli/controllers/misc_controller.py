@@ -2,7 +2,6 @@ from pprint import pformat
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address
-from web3cli.helpers.misc import get_coin
 from web3cli.helpers.client_factory import make_client, make_wallet
 
 
@@ -24,7 +23,7 @@ class MiscController(Controller):
             Address.resolve_address(self.app.pargs.address)
         )
         self.app.render(
-            {"amount": balance, "ticker": get_coin(self.app)},
+            {"amount": balance, "ticker": self.app.chain.coin},
             "balance.jinja2",
             handler="jinja2",
         )

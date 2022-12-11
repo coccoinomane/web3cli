@@ -94,7 +94,7 @@ class ChainController(Controller):
 
     @ex(help="get current chain")
     def get(self) -> None:
-        self.app.print(self.app.chain)
+        self.app.print(self.app.chain.name)
 
     @ex(
         help="delete a chain",
