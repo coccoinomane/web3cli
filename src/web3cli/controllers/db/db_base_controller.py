@@ -1,13 +1,7 @@
-from pprint import pformat
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.input import yes_or_exit
-from web3cli.core.models.address import Address
-from web3cli.helpers.misc import get_coin
-from web3cli.helpers.send import send_coin_or_token
-from web3cli.helpers.version import get_version_message
-from web3cli.helpers.client_factory import make_client, make_wallet
-from web3cli.helpers import args
+from web3cli.helpers.database import delete_db_file, get_db_file
 
 
 class DbBaseController(Controller):
@@ -18,3 +12,26 @@ class DbBaseController(Controller):
         help = "Interact with the local database of web3cli"
         stacked_type = "nested"
         stacked_on = "base"
+
+    @ex(
+        help="delete the entire db: signers, addresses, chains, etc",
+        arguments=[
+            (
+                ["--force"],
+                {
+                    "help": "Delete without asking",
+                    "action": "store_true",
+                },
+            ),
+        ],
+    )
+    def delete(self) -> None:
+        if not self.app.pargs.force:
+            yes_or_exit(
+                intro="WARNING: This will delete all stored info, such as signers, addresses, transactions and chains.\n",
+                logger=self.app.log.info,
+            )
+        if delete_db_file(self.app):
+            self.app.log.info(f"Database file deleted ({get_db_file(self.app)})")
+        else:
+            self.app.log.info(f"Database not found at {get_db_file(self.app)}")

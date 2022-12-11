@@ -22,11 +22,14 @@ def maybe_delete_db_file(app: App) -> None:
         delete_db_file(app)
 
 
-def delete_db_file(app: App) -> None:
-    """Delete the database file"""
+def delete_db_file(app: App) -> bool:
+    """Delete the database file; return True if the file was
+    deleted, false if it was not found"""
     file = get_db_file(app)
     if os.path.isfile(file):
         os.remove(file)
+        return True
+    return False
 
 
 def truncate_tables(app: App) -> None:
