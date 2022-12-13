@@ -3,8 +3,9 @@ from web3cli.core.models.types import ChainFields
 
 
 # Ethereum
-ethereum: ChainFields = {
-    "name": "ethereum",
+eth: ChainFields = {
+    "name": "eth",
+    "desc": "Ethereum",
     "chain_id": 1,
     "coin": "ETH",
     "tx_type": 2,
@@ -20,8 +21,9 @@ ethereum: ChainFields = {
 }
 
 # BNB Chain
-binance: ChainFields = {
-    "name": "binance",
+bnb: ChainFields = {
+    "name": "bnb",
+    "desc": "BNB Chain",
     "chain_id": 56,
     "coin": "BNB",
     "tx_type": 1,
@@ -34,8 +36,9 @@ binance: ChainFields = {
 }
 
 # Avalanche C Chian
-avalanche: ChainFields = {
-    "name": "avalanche",
+avax: ChainFields = {
+    "name": "avax",
+    "desc": "Avalanche",
     "chain_id": 43114,
     "coin": "AVAX",
     "tx_type": 2,
@@ -48,8 +51,9 @@ avalanche: ChainFields = {
 }
 
 # Local chain (e.g. ganache or hardhat network)
-local_chain: ChainFields = {
+local: ChainFields = {
     "name": "local",
+    "desc": "Local chain",
     "chain_id": 1337,
     "coin": "ETH",
     "tx_type": 1,
@@ -61,4 +65,4 @@ local_chain: ChainFields = {
     ],
 }
 
-chain_seeds: List[ChainFields] = [ethereum, binance, avalanche, local_chain]
+all: List[ChainFields] = [eth, bnb, avax, local]

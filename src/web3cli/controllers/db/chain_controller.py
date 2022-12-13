@@ -2,8 +2,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
 from web3cli.core.models.chain import Chain
-from web3cli.core.models.types import ChainFields
-from web3cli.core.seeds.chain_seeds import chain_seeds
+from web3cli.core.seeds import chain_seeds
 from web3cli.helpers.render import render_table
 
 
@@ -55,6 +54,7 @@ class ChainController(Controller):
                     "action": "store_true",
                 },
             ),
+            (["-d", "--desc"], {"action": "store"}),
         ],
     )
     def add(self) -> None:
@@ -63,6 +63,7 @@ class ChainController(Controller):
             chain = Chain.upsert(
                 {
                     "name": self.app.pargs.name,
+                    "desc": self.app.pargs.desc,
                     "chain_id": self.app.pargs.chain_id,
                     "coin": self.app.pargs.coin.upper(),
                     "tx_type": self.app.pargs.tx_type,
@@ -113,7 +114,7 @@ class ChainController(Controller):
 
     @ex(help="preload a few chains")
     def seed(self) -> None:
-        chains = Chain.seed(chain_seeds, self.app.log.info)
+        chains = Chain.seed(chain_seeds.all, self.app.log.info)
         self.app.log.info(
             f"Imported {len(chains)} chains, run `w3 db chain list` to show them"
         )

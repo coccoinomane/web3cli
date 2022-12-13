@@ -2,6 +2,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.input import yes_or_exit
 from web3cli.core.models.address import Address
+from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.send import send_coin_or_token
 
 
@@ -46,6 +47,7 @@ class SendController(Controller):
         ],
     )
     def send(self) -> None:
+        chain_ready_or_raise(self.app)
         # Parse arguments
         to_address = Address.resolve_address(self.app.pargs.to)
         if not self.app.pargs.force:

@@ -12,7 +12,8 @@ def parse_global_args(app: App) -> None:
     app.extend("signer", parse_signer(app))
     app.extend("priority_fee", parse_priority_fee(app))
     app.extend("rpc", parse_rpc(app))
-    app.extend("chain", Chain.resolve_chain(parse_chain(app)))
+    app.extend("chain_name", parse_chain(app))
+    app.extend("chain", Chain.get_by_name(app.chain_name))
 
 
 def get_command(app: App) -> str:

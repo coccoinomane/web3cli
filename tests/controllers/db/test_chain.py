@@ -1,6 +1,6 @@
 from tests.main import Web3CliTest
 from typing import List
-from tests.seeder import seed_chains
+from web3cli.helpers.seed import seed_chains
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
 import pytest
@@ -29,6 +29,8 @@ def test_chain_add(chains: List[ChainFields]) -> None:
             c["coin"],
             "--tx-type",
             str(c["tx_type"]),
+            "--desc",
+            str(c["desc"]),
         ]
         if "geth_poa_middleware" in c["middlewares"]:
             argv.append("--poa")
@@ -38,6 +40,7 @@ def test_chain_add(chains: List[ChainFields]) -> None:
             chain: Chain = Chain.get_by_name(c["name"])
             assert chain.chain_id == c["chain_id"]
             assert chain.coin == c["coin"]
+            assert chain.desc == c["desc"]
         # Add the chain again > exception!
         with Web3CliTest(delete_db=False) as app:
             with pytest.raises(Web3CliError, match=r"already exists"):

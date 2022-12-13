@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 from tests.main import Web3CliTest
-from tests.seeder import seed_signers, seed_chains
+from web3cli.helpers.seed import seed_signers, seed_chains
 from web3cli.core.models.types import ChainFields
 from web3cli.helpers.client_factory import make_client, make_wallet
 import pytest

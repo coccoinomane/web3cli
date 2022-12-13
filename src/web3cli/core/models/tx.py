@@ -24,7 +24,7 @@ class Tx(TimestampsModel):
     gas_price = TextField(null=True)
     # timestamp = BigIntegerField(null=True)
     # block = BigIntegerField(null=True)
-    description = TextField(null=True)
+    desc = TextField(null=True)
     data = TextField(null=True)
     receipt = TextField(null=True)
     created_at = DateTimeField(null=True)

@@ -49,7 +49,7 @@ class TxController(Controller):
                 },
             ),
             (["to"], {"help": "address to which the tx was sent (0x...)"}),
-            (["-d", "--description"], {"action": "store"}),
+            (["-d", "--desc"], {"action": "store"}),
             (
                 ["-u", "--update"],
                 {
@@ -67,10 +67,10 @@ class TxController(Controller):
             Tx.upsert(
                 {
                     "hash": self.app.pargs.hash,
-                    "chain": self.app.chain.name,
+                    "chain": self.app.chain_name,
                     "from_": getattr(self.app.pargs, "from"),
                     "to": self.app.pargs.to,
-                    "description": self.app.pargs.description,
+                    "desc": self.app.pargs.desc,
                 },
                 logger=self.app.log.info,
             )

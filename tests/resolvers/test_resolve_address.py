@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 import pytest
-from tests.seeder import seed_addresses
+from web3cli.helpers.seed import seed_addresses
 from tests.main import Web3CliTest
 from web3cli.core.models.address import Address
 from web3cli.core.exceptions import AddressNotResolved

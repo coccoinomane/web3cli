@@ -41,7 +41,7 @@ class AddressController(Controller):
         arguments=[
             (["name"], {"help": "name of the address"}),
             (["address"], {"help": "blockchain address (0x...)"}),
-            (["-d", "--description"], {"action": "store"}),
+            (["-d", "--desc"], {"action": "store"}),
             (
                 ["-u", "--update"],
                 {
@@ -58,7 +58,7 @@ class AddressController(Controller):
                 {
                     "name": self.app.pargs.name,
                     "address": self.app.pargs.address,
-                    "description": self.app.pargs.description,
+                    "desc": self.app.pargs.desc,
                 },
                 logger=self.app.log.info,
             )

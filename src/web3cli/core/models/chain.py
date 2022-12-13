@@ -15,7 +15,7 @@ from web3.middleware import geth_poa_middleware
 from web3cli.core.models.types import ChainFields
 from web3cli.core.types import Logger
 from playhouse.shortcuts import update_model_from_dict, dict_to_model
-from web3cli.core.seeds.chain_seeds import chain_seeds
+from web3cli.core.seeds import chain_seeds
 
 
 class Chain(BaseModel):
@@ -23,6 +23,7 @@ class Chain(BaseModel):
         table_name = "chains"
 
     name = TextField(unique=True)
+    desc = TextField(null=True)
     chain_id = IntegerField()
     coin = TextField()
     tx_type = IntegerField(default=2)
@@ -98,7 +99,7 @@ class Chain(BaseModel):
             return chain
 
         # Look in the seeds
-        for c in chain_seeds:
+        for c in chain_seeds.all:
             if c["name"] == name:
                 return dict_to_model(Chain, c, True)
 

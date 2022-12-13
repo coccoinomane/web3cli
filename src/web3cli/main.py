@@ -20,7 +20,7 @@ CONFIG = init_defaults("web3cli")
 CONFIG["web3cli"] = {
     "app_key": None,
     "debug": False,
-    "default_chain": "ethereum",
+    "default_chain": "eth",
     "default_signer": None,
     "default_priority_fee": 1,
     "db_file": os.path.join(
@@ -28,6 +28,7 @@ CONFIG["web3cli"] = {
     ),
     "output_table_format": "fancy_grid",
     "output_table_wrap": 33,
+    "populate_db": True,
 }
 
 # Allow to use `w3 -o json` for json output

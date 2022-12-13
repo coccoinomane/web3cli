@@ -1,7 +1,7 @@
 import random
 from typing import Any, List, Dict
 from tests.helper import get_random_string
-from tests.seeder import seed_signers
+from web3cli.helpers.seed import seed_signers
 from tests.main import Web3CliTest
 from web3cli.core.exceptions import SignerNotFound
 from web3cli.core.models.signer import Signer

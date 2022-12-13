@@ -2,7 +2,7 @@ from typing import Any, List, Dict
 from tests.main import Web3CliTest
 from web3cli.core.exceptions import AddressIsInvalid
 from web3cli.core.models.address import Address
-from tests.seeder import seed_addresses
+from web3cli.helpers.seed import seed_addresses
 import pytest
 from web3cli.core.models.types import AddressFields
 
@@ -51,14 +51,14 @@ def test_address_add(addresses: List[AddressFields]) -> None:
                     "add",
                     a["name"],
                     a["address"],
-                    "--description",
-                    a["description"],
+                    "--desc",
+                    a["desc"],
                 ]
             ).run()
             address = Address.get_by_name(a["name"])
             assert Address.select().count() == 1
             assert address.address == a["address"]
-            assert address.description == a["description"]
+            assert address.desc == a["desc"]
 
 
 @pytest.mark.parametrize(
@@ -95,14 +95,14 @@ def test_address_update(addresses: List[AddressFields]) -> None:
                 "add",
                 addresses[0]["name"],
                 addresses[1]["address"],
-                "--description",
-                addresses[1]["description"],
+                "--desc",
+                addresses[1]["desc"],
                 "--update",
             ]
         ).run()
         address = Address.get_by_name(addresses[0]["name"])
         assert address.address == addresses[1]["address"]
-        assert address.description == addresses[1]["description"]
+        assert address.desc == addresses[1]["desc"]
 
 
 def test_address_delete(addresses: List[AddressFields]) -> None:

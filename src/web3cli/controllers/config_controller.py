@@ -48,7 +48,7 @@ class ConfigController(Controller):
             (
                 ["value"],
                 {
-                    "help": "value for the setting, for example 'ethereum'",
+                    "help": "value for the setting, for example 'eth'",
                 },
             ),
             (

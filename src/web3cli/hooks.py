@@ -1,12 +1,15 @@
 """Functions called at specific points of the app lifecylce"""
 
+from genericpath import isfile
 import secrets
 import cement
 from web3cli.core.helpers.database import init_db
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_file
+from web3cli.helpers.seed import populate_db
 from cement import App
 import ast
+from os.path import isfile
 
 ####################
 # Register hooks
@@ -20,7 +23,7 @@ def post_setup(app: App) -> None:
     will be run"""
     customize_extensions(app)
     maybe_create_app_key(app)
-    attach_db(app)
+    init_and_attach_db(app)
 
 
 def post_argument_parsing(app: App) -> None:
@@ -35,26 +38,34 @@ def post_argument_parsing(app: App) -> None:
 ####################
 
 
-def attach_db(app: App) -> None:
+def init_and_attach_db(app: App) -> None:
     """Attach the production database to the app object, so that the
-    controllers can access it"""
+    controllers can access it. If the database file does not exist,
+    create it and seed it"""
     db_path = get_db_file(app)
+    do_populate = (
+        not isfile(db_path) and app.config.get("web3cli", "populate_db") == True
+    )
+    if not isfile(db_path):
+        app.log.debug("Creating database...")
     app.extend("db", init_db(db_path))
+    if do_populate:
+        populate_db(app)
 
 
 def maybe_create_app_key(app: App) -> None:
     """Create an app key if it does not exist already;
     extend the app object with the app key"""
     if not app.config.get("web3cli", "app_key"):
-        key = secrets.token_bytes(32)
+        new_key = secrets.token_bytes(32)
         update_setting_in_config_file(
             app,
             setting="app_key",
-            value=str(key),
+            value=str(new_key),
             do_log=False,
             is_global=True,
         )
-        app.config.set("web3cli", "app_key", str(key))
+        app.config.set("web3cli", "app_key", str(new_key))
 
     # Create the shortcut app.app_key
     key = app.config.get("web3cli", "app_key")

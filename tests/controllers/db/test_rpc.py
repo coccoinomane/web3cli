@@ -1,6 +1,6 @@
 from tests.main import Web3CliTest
 from typing import List
-from tests.seeder import seed_chains
+from web3cli.helpers.seed import seed_chains
 from web3cli.core.exceptions import RpcIsInvalid
 from web3cli.core.models.chain import Chain, Rpc
 import pytest

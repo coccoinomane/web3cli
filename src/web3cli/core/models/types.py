@@ -12,6 +12,7 @@ class ChainFields(TypedDict):
     """Typing for Chain model creation and update"""
 
     name: str
+    desc: str
     chain_id: int
     coin: str
     tx_type: int
@@ -24,7 +25,7 @@ class AddressFields(TypedDict):
 
     address: str
     name: str
-    description: str
+    desc: str
 
 
 class SignerFields(TypedDict):
@@ -45,7 +46,7 @@ class TxFields(TypedDict):
     value: NotRequired[str]
     gas: NotRequired[int]
     gas_price: NotRequired[str]
-    description: NotRequired[str]
+    desc: NotRequired[str]
     data: NotRequired[str]
     receipt: NotRequired[str]
     created_at: NotRequired[str]

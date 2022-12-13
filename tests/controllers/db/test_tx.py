@@ -1,7 +1,7 @@
 from typing import List
 from tests.main import Web3CliTest
 from web3cli.core.models.tx import Tx
-from tests.seeder import seed_txs
+from web3cli.helpers.seed import seed_txs
 from web3cli.core.models.types import TxFields
 
 

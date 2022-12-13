@@ -19,29 +19,18 @@ pip3 install -U web3cli
 
 # Simple examples
 
-- Add chains before using them:
-   ```
-   w3 db chain add ethereum 1 ETH --tx-type 2 --rpc https://cloudflare-eth.com 
-   w3 db chain add binance 56 BNB --rpc https://bsc-dataseed.binance.org/
-   w3 db chain add avalanche 43114 --rpc https://api.avax.network/ext/bc/C/rpc
-   ```
-   ... or import them in one go:
-   ```
-   w3 db chain seed
-   ```
-
 - Get the ETH balance of the Ethereum foundation:
    ```
-   w3 --chain ethereum balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 eth balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
    ... or the BNB balance of a Binance hot wallet on BNB chain:
    ```
-   w3 --chain binance balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
 - Tired of using the `--chain` argument? Set a default chain:
    ```
-   w3 config set default_chain ethereum
+   w3 config set default_chain eth
    w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
 
@@ -72,6 +61,19 @@ pip3 install -U web3cli
    w3 sign "Hello world!"
    ```
 
+# Custom RPCs and chains
+
+- Add RPCs to any existing chain:
+   ```
+   w3 db rpc add eth https://mainnet.infura.io/v3/{YOUR API KEY}
+   w3 db rpc add bnb https://bsc-dataseed.binance.org/
+   ```
+- Add new chains:
+   ```
+   w3 db chain add cronos 25 CRO --tx-type 1 --rpc https://evm.cronos.org
+   ```
+
+
 # Address book
 
 `w3` can store tags just like you would do on etherscan.io or bscscan.com:
@@ -85,7 +87,7 @@ You can use these tags instead of the actual addresses:
 
 ```bash
 w3 balance "Ethereum foundation"
-w3 --chain binance balance "Binance hot wallet"
+w3 --chain bnb balance "Binance hot wallet"
 ```
 
 To see the list of saved addresses, run:
@@ -178,9 +180,9 @@ All settings can be overridden via environment variables.
 For example, the settings `web3cli.default_chain` can be overridden by setting the env variable `WEB3CLI_DEFAULT_CHAIN`:
 
 ```bash
-WEB3CLI_DEFAULT_CHAIN=avalanche w3 db chain get
+WEB3CLI_DEFAULT_CHAIN=avax w3 db chain get
 
-output> avalanche
+output> avax
 ```
 
 ### Folder-specific settings
@@ -203,11 +205,11 @@ You can edit the configuration files using `w3 config`. For example:
    ```
 - Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
    ```bash
-   pdm w3 config set default_chain avalanche
+   pdm w3 config set default_chain avax
    ```
 - Edit a setting value at the local level (`web3cli.yml`):
    ```bash
-   pdm w3 config set default_chain avalanche --no-global
+   pdm w3 config set default_chain avax --no-global
    ```
 
 # Contribute ❤️
@@ -242,6 +244,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
 - Use different db file for dev environment
 - README: Explain json output + trick `| python3 -mjson.tool`

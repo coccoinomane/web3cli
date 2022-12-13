@@ -2,6 +2,7 @@ from pprint import pformat
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address
+from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
 
 
@@ -19,6 +20,7 @@ class MiscController(Controller):
         arguments=[(["address"], {"action": "store"})],
     )
     def balance(self) -> None:
+        chain_ready_or_raise(self.app)
         balance = make_client(self.app).getBalanceInEth(
             Address.resolve_address(self.app.pargs.address)
         )

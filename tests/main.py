@@ -7,10 +7,11 @@ from web3cli.helpers import database
 from tests import helper
 
 # Each time you run the test app, a brand new database
-# will be created
+# will be created, with no seeding
 CONFIG["web3cli"]["db_file"] = os.path.join(
     os.path.expanduser("~"), ".web3cli", "database", "web3cli_test.sqlite"
 )
+CONFIG["web3cli"]["populate_db"] = False
 
 
 class Web3CliTest(TestApp, Web3Cli):

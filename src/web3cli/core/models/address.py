@@ -20,7 +20,7 @@ class Address(BaseModel):
 
     address = TextField()
     name = TextField(unique=True)
-    description = TextField(null=True)
+    desc = TextField(null=True)
 
     @classmethod
     def get_by_name(cls, name: str) -> Address:

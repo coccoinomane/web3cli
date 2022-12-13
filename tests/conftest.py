@@ -8,9 +8,9 @@ import pytest
 from cement import fs
 import secrets
 from tests.main import Web3CliTest
-from tests.seeder import seed_local_accounts, seed_local_chain
+from tests.seed import seed_local_accounts, seed_local_chain
 from web3cli.core.models.types import AddressFields, ChainFields, TxFields
-from web3cli.core.seeds.chain_seeds import chain_seeds
+from web3cli.core.seeds import chain_seeds
 import brownie
 from brownie.network.account import Account
 
@@ -21,17 +21,17 @@ def addresses() -> List[AddressFields]:
         {
             "name": "Ethereum foundation",
             "address": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-            "description": "Test wallet EF",
+            "desc": "Test wallet EF",
         },
         {
             "name": "Binance hot wallet",
             "address": "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",
-            "description": "Test wallet BHW",
+            "desc": "Test wallet BHW",
         },
         {
             "name": "Alameda research",
             "address": "0xbefe4f86f189c1c817446b71eb6ac90e3cb68e60",
-            "description": "Test wallet AR",
+            "desc": "Test wallet AR",
         },
     ]
 
@@ -62,13 +62,13 @@ def txs() -> List[TxFields]:
     return [
         {
             "hash": "0xbe62871b8c0545dd9034bcb8e802b0c024d2983ba1de663c5cbb1b02c9173609",
-            "chain": "ethereum",
+            "chain": "eth",
             "to": "0xd2b06119B51626F175375C8Fb5Baa0c0e54819f2",
             "from_": "0xFdEE07396b59aEE88555bfb6C683Ca8FF3Ffd35c",
             "value": "9461431800000000000",
             "gas": 21000,
             "gas_price": "19000000000",
-            "description": "A regular value transaction",
+            "desc": "A regular value transaction",
             "data": "",
             "receipt": "",
             "created_at": "2022-12-02 19:45:57.100147+01:00",
@@ -76,13 +76,13 @@ def txs() -> List[TxFields]:
         },
         {
             "hash": "0xdf92dbca5a2788c4c57ee76408d1ea35c3753b6ababb468a1d949af56e786338",
-            "chain": "ethereum",
+            "chain": "eth",
             "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
             "from_": "0x13E464A06df694893f6B07E49b6d84D4bece04c9",
             "value": None,
             "gas": 63209,
             "gas_price": "12250771391",
-            "description": "An ERC-20 transfer (USDT)",
+            "desc": "An ERC-20 transfer (USDT)",
             "data": "0xa9059cbb0000000000000000000000002fe5dbe5b4cdf1a032ab230f258d129b38faf79f00000000000000000000000000000000000000000000000000000009f7142c00",
             "receipt": "",
             "created_at": "2021-12-01 19:45:57.100147+01:00",
@@ -93,7 +93,7 @@ def txs() -> List[TxFields]:
 
 @pytest.fixture()
 def chains() -> List[ChainFields]:
-    return chain_seeds
+    return chain_seeds.all
 
 
 @pytest.fixture()
