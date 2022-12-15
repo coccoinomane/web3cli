@@ -30,35 +30,9 @@ class Chain(BaseModel):
     middlewares = TextField(null=True)
 
     @classmethod
-    def get_by_name(cls, name: str) -> Chain:
-        """Return the chain object with the given name, or None if
-        it does not exist"""
-        return cls.get_or_none(cls.name == name)
-
-    @classmethod
-    def get_by_name_or_raise(cls, name: str) -> Chain:
-        """Return the chain object with the given name; raise
-        error if it does not exist"""
-        try:
-            return cls.get(cls.name == name)
-        except:
-            raise ChainNotFound(f"Chain '{name}' does not exist")
-
-    @classmethod
     def upsert(cls, fields: ChainFields, logger: Logger = None) -> Chain:
-        """Create a chain, or replace it if a chain with the same
-        name already exists, maintaining its ID and relations."""
-        chain: Chain = Chain.get_or_none(name=fields["name"])
-        if chain:
-            chain = update_model_from_dict(chain, fields, ignore_unknown=True)
-            if logger:
-                logger(f"Chain {chain.name} updated")
-        else:
-            chain = Chain(**fields)
-            if logger:
-                logger(f"Chain {chain.name} created")
-        chain.save()
-        return chain
+        """Create chain or update it if one with the same name already exists"""
+        return cls.upsert_by_field(cls.name, fields["name"], fields, logger, True)
 
     @classmethod
     def seed_one(cls, seed: ChainFields, logger: Logger = lambda msg: None) -> Chain:

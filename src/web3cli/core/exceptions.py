@@ -16,8 +16,8 @@ class ChainNotResolved(Web3CliError):
     pass
 
 
-class AddressNotFound(Web3CliError):
-    """When an address name is not found in the database"""
+class RecordNotFound(Web3CliError):
+    """When a record from the database is not found"""
 
     pass
 
@@ -72,5 +72,18 @@ class TxNotFound(Web3CliError):
 
 class TxIsInvalid(Web3CliError):
     """When a transatction hash is not in a valid EVM format"""
+
+    pass
+
+
+class ContractNotFound(Web3CliError):
+    """When a contract name is not found in the database"""
+
+    pass
+
+
+class ContractIsInvalid(Web3CliError):
+    """When a contract address or other field is not valid
+    EVM format"""
 
     pass

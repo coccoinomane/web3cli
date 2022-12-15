@@ -4,7 +4,7 @@ from peewee import TextField
 from web3cli.core.models.base_model import BaseModel
 from web3cli.core.exceptions import (
     AddressIsInvalid,
-    AddressNotFound,
+    RecordNotFound,
     AddressNotResolved,
 )
 import web3
@@ -23,35 +23,9 @@ class Address(BaseModel):
     desc = TextField(null=True)
 
     @classmethod
-    def get_by_name(cls, name: str) -> Address:
-        """Return the address object with the given name, or None if
-        it does not exist"""
-        return cls.get_or_none(cls.name == name)
-
-    @classmethod
-    def get_by_name_or_raise(cls, name: str) -> Address:
-        """Return the address object with the given name; raise
-        error if it does not exist"""
-        try:
-            return cls.get(cls.name == name)
-        except:
-            raise AddressNotFound(f"Address '{name}' does not exist")
-
-    @classmethod
     def upsert(cls, fields: AddressFields, logger: Logger = None) -> Address:
-        """Create an address, or replace it if an address with the same
-        name already exists, maintaining its ID and relations."""
-        address: Address = Address.get_or_none(name=fields["name"])
-        if address:
-            address = update_model_from_dict(address, fields, ignore_unknown=True)
-            if logger:
-                logger(f"Address {address.name} updated")
-        else:
-            address = Address(**fields)
-            if logger:
-                logger(f"Address {address.name} created")
-        address.save()
-        return address
+        """Create address or update it if one with the same name already exists"""
+        return cls.upsert_by_field(cls.name, fields["name"], fields, logger, True)
 
     @classmethod
     def is_valid_address(cls, address: str) -> bool:
@@ -82,7 +56,7 @@ class Address(BaseModel):
                 if cls.is_valid_address(address_or_name)
                 else cls.get_address(address_or_name)
             )
-        except AddressNotFound:
+        except RecordNotFound:
             raise AddressNotResolved(
                 f"Could not resolve '{address_or_name}': neither a valid address nor a name of a stored address"
             )

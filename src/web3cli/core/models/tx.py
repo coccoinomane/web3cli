@@ -53,19 +53,8 @@ class Tx(TimestampsModel):
 
     @classmethod
     def upsert(cls, fields: TxFields, logger: Logger = None) -> Tx:
-        """Create a transaction, or replace it if a tx with the same
-        hash already exists, maintaining its ID and relations."""
-        tx: Tx = Tx.get_or_none(hash=fields["hash"])
-        if tx:
-            tx = update_model_from_dict(tx, fields, ignore_unknown=True)
-            if logger:
-                logger(f"Tx {tx.hash} updated")
-        else:
-            tx = Tx(**fields)
-            if logger:
-                logger(f"Tx {tx.hash} created")
-        tx.save()
-        return tx
+        """Create tx or update it if one with the same hash already exists"""
+        return cls.upsert_by_field(cls.hash, fields["hash"], fields, logger, True)
 
 
 @pre_save(sender=Tx)

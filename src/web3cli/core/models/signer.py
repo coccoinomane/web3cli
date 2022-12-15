@@ -22,21 +22,6 @@ class Signer(BaseModel):
         return Signer.create(name=name, address=address, key=encrypt_string(key, pwd))
 
     @classmethod
-    def get_by_name(cls, name: str) -> Signer:
-        """Return the signer object with the given name, or None if
-        it does not exist"""
-        return cls.get_or_none(cls.name == name)
-
-    @classmethod
-    def get_by_name_or_raise(cls, name: str) -> Signer:
-        """Return the signer object with the given name; raise
-        error if it does not exist"""
-        try:
-            return cls.get(cls.name == name)
-        except:
-            raise SignerNotFound(f"Signer '{name}' does not exist")
-
-    @classmethod
     def get_address(cls, name: str) -> str:
         """Return the address of the signer with the given name; raise
         error if the signer does not exist"""
