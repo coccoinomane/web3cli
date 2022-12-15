@@ -19,19 +19,19 @@ pip3 install -U web3cli
 
 # Simple examples
 
-- Get the ETH balance of the Ethereum foundation:
+- Get the ETH balance of any address:
    ```
-   w3 eth balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
-   ... or the BNB balance of a Binance hot wallet on BNB chain:
+   ... or the BNB balance on Binance chain:
    ```
    w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
 - Tired of using the `--chain` argument? Set a default chain:
    ```
-   w3 config set default_chain eth
-   w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+   w3 config set default_chain bnb
+   w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
    ```
 
 - Tired of pasting addresses around? Save them with an easy to remember name:
