@@ -1,7 +1,7 @@
 from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.core.models.tx import Tx
-from web3cli.core.exceptions import TxIsInvalid, Web3CliError
+from web3cli.core.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
 from web3cli.core.helpers.format import cut
 from playhouse.shortcuts import model_to_dict
@@ -60,8 +60,6 @@ class TxController(Controller):
         ],
     )
     def add(self) -> None:
-        if not Tx.is_valid_hash(self.app.pargs.hash):
-            raise TxIsInvalid(f"Invalid transaction hash given: {self.app.pargs.hash}")
         tx = Tx.get_by_hash(self.app.pargs.hash)
         if not tx or self.app.pargs.update:
             Tx.upsert(
