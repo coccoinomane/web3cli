@@ -5,7 +5,6 @@ from web3cli.core.exceptions import AddressIsInvalid, TxIsInvalid, TxNotFound
 from web3cli.core.models.address import Address
 from web3cli.core.models.timestamps_model import TimestampsModel
 from playhouse.signals import pre_save
-from playhouse.shortcuts import update_model_from_dict
 from web3cli.core.models.types import TxFields
 from web3cli.core.types import Logger
 import re

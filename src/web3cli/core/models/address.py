@@ -9,7 +9,6 @@ from web3cli.core.exceptions import (
 )
 import web3
 from web3cli.core.models.types import AddressFields
-from playhouse.shortcuts import update_model_from_dict
 from playhouse.signals import pre_save
 from web3cli.core.types import Logger
 

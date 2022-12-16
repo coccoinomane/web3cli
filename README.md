@@ -244,6 +244,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- Contract: Controller tests
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
 - Use different db file for dev environment

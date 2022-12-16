@@ -1,5 +1,6 @@
-from typing import List, TypedDict
+from typing import Any, Dict, List, TypedDict
 from typing_extensions import NotRequired
+from web3.types import ABI
 
 
 class RpcFields(TypedDict):
@@ -51,3 +52,13 @@ class TxFields(TypedDict):
     receipt: NotRequired[str]
     created_at: NotRequired[str]
     updated_at: NotRequired[str]
+
+
+class ContractFields(TypedDict):
+    """Typing for Contract model creation and update"""
+
+    name: str
+    desc: str
+    address: str
+    chain: str
+    abi: ABI

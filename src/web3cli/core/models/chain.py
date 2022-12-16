@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import List
 from peewee import TextField, IntegerField, ForeignKeyField
 from web3cli.core.exceptions import (
-    ChainNotFound,
     ChainNotResolved,
     RpcIsInvalid,
     RpcNotFound,
@@ -14,7 +13,7 @@ from web3.types import Middleware
 from web3.middleware import geth_poa_middleware
 from web3cli.core.models.types import ChainFields
 from web3cli.core.types import Logger
-from playhouse.shortcuts import update_model_from_dict, dict_to_model
+from playhouse.shortcuts import dict_to_model
 from web3cli.core.seeds import chain_seeds
 
 

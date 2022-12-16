@@ -11,6 +11,7 @@ from web3cli.controllers.db.rpc_controller import RpcController
 from web3cli.controllers.db.address_controller import AddressController
 from web3cli.controllers.db.signer_controller import SignerController
 from web3cli.controllers.db.tx_controller import TxController
+from web3cli.controllers.db.contract_controller import ContractController
 from web3cli.core.exceptions import Web3CliError
 from web3cli import hooks
 import os
@@ -97,6 +98,7 @@ class Web3Cli(App):
             SignerController,
             AddressController,
             TxController,
+            ContractController,
         ]
 
         # extend the app with cement hook system
