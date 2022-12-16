@@ -1,14 +1,22 @@
-Interact with blockchains and smart contracts using the command line.
+Interact with blockchains and smart contracts using the command line: no coding needed!
 
 # Features
 
-- Easily interact with EVM-compatible chains using your terminal
-- Works with the most popular chains: Ethereum, Binance, Avalanche and more to come
-- Save addresses you use often and access them with their tag
-- Send transactions from multiple signers
+- Interact with Ethereum-compatible chains via your terminal
+- Bypass sluggish and potentially compromised frontends
+- No configuration needed
+- Label addresses, tokens and contracts for ease of use
+- Use as many signers as you wish
 - Concatenate commands to build powerful scripts
-- [To be implemented]: Transfer tokens, using the token name (USDC, UNI, WETH, etc) instead of its address.
-- [To be implemented]: DeFi support: sell Curve's rewards on Uniswap, setup a DCA plan on TraderJoe, etc.
+- Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
+
+Soon:
+
+- Transfer tokens via their ticker
+- Swap with Uniswap, TraderJoe, PancakeSwap, etc
+- Claim and reinvest yield from DeFi protocols
+- Set up scheduled buys and sells (DCA)
+- Analys on-chain data for tax or sleuthing purposes
 
 
 # Install
@@ -65,6 +73,7 @@ pip3 install -U web3cli
 
 - Add RPCs to any existing chain:
    ```
+   w3 db rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
    w3 db rpc add eth https://mainnet.infura.io/v3/{YOUR API KEY}
    w3 db rpc add bnb https://bsc-dataseed.binance.org/
    ```
