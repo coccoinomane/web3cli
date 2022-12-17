@@ -27,6 +27,8 @@ dev = [
     "pytest>=6.2.5",
     "mypy>=0.982",
     "eth-brownie>=1.19.2",
+    "isort>=5.11.3",
+    "pre-commit>=2.20.0",
 ]
 
 [tool.pdm.scripts]
@@ -86,3 +88,7 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "local: tests that require a local blockchain to be run, e.g. ganache or hardhat network (deselect with '-m \"not local\"')",
 ]
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
