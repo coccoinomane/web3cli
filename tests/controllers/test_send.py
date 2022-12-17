@@ -1,10 +1,12 @@
 from typing import Any, Dict, List
-from tests.main import Web3CliTest
+
 import pytest
-from web3cli.helpers.seed import seed_chains, seed_signers
-from web3cli.core.models.types import ChainFields
 from brownie.network.account import Account
 from brownie.network.state import TxHistory
+
+from tests.main import Web3CliTest
+from web3cli.core.models.types import ChainFields
+from web3cli.helpers.seed import seed_chains, seed_signers
 
 
 @pytest.mark.local

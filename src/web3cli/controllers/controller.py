@@ -1,7 +1,8 @@
 from typing import Any
+
+from cement import App
 from cement import Controller as CementController
 from cement.core.config import ConfigInterface
-from cement import App
 
 
 class Controller(CementController):

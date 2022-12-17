@@ -1,5 +1,6 @@
-from typing import Any
 import sys
+from typing import Any
+
 from web3cli.core.types import Logger
 
 

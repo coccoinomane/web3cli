@@ -1,8 +1,10 @@
-from cement import ex
-from web3cli.controllers.controller import Controller
-from web3cli.helpers.config import update_setting_in_config_file
 import secrets
 import sys
+
+from cement import ex
+
+from web3cli.controllers.controller import Controller
+from web3cli.helpers.config import update_setting_in_config_file
 
 
 class KeyController(Controller):

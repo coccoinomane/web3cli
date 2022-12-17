@@ -1,10 +1,12 @@
-from typing import Any, List, Dict
+from typing import Any, Dict, List
+
+import pytest
+
 from tests.main import Web3CliTest
 from web3cli.core.exceptions import AddressIsInvalid
 from web3cli.core.models.address import Address
-from web3cli.helpers.seed import seed_addresses
-import pytest
 from web3cli.core.models.types import AddressFields
+from web3cli.helpers.seed import seed_addresses
 
 
 def test_address_list(addresses: List[AddressFields]) -> None:

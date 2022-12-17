@@ -1,6 +1,8 @@
 import datetime as dt
 from typing import Type
+
 from playhouse.signals import pre_save
+
 from web3cli.core.models.base_model import BaseModel
 
 

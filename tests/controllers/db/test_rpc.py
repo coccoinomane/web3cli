@@ -1,10 +1,12 @@
-from tests.main import Web3CliTest
 from typing import List
-from web3cli.helpers.seed import seed_chains
+
+import pytest
+
+from tests.main import Web3CliTest
 from web3cli.core.exceptions import RpcIsInvalid
 from web3cli.core.models.chain import Chain, Rpc
-import pytest
 from web3cli.core.models.types import ChainFields
+from web3cli.helpers.seed import seed_chains
 
 
 def test_rpc_list(chains: List[ChainFields]) -> None:

@@ -1,9 +1,4 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-    -   id: check-yaml
-
 -   repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1
     hooks:
@@ -20,12 +15,6 @@ repos:
     hooks:
     -   id: mypy
         additional_dependencies: [types-setuptools]
-
--   repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.14
-    hooks:
-    -   id: mdformat
-        additional_dependencies: [mdformat-gfm, mdformat-frontmatter]
 
 default_language_version:
     python: python3

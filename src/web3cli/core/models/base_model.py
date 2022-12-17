@@ -1,9 +1,12 @@
 from __future__ import annotations
-from peewee import SqliteDatabase, Field
-from playhouse.signals import Model
-from typing import List, Dict, Any, Type, TypeVar
-from web3cli.core.exceptions import RecordNotFound
+
+from typing import Any, Dict, List, Type, TypeVar
+
+from peewee import Field, SqliteDatabase
 from playhouse.shortcuts import update_model_from_dict
+from playhouse.signals import Model
+
+from web3cli.core.exceptions import RecordNotFound
 from web3cli.core.types import Logger
 
 db = SqliteDatabase(None, pragmas={"foreign_keys": 1})

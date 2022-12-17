@@ -1,4 +1,5 @@
 from cement import ex
+
 from web3cli.controllers.controller import Controller
 from web3cli.core.helpers.input import yes_or_exit
 from web3cli.core.models.address import Address

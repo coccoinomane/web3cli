@@ -1,6 +1,7 @@
 from typing import Tuple
-from cement.utils.version import get_version_banner
+
 from cement.utils.version import get_version as cement_get_version
+from cement.utils.version import get_version_banner
 
 VERSION = (0, 11, 1, "alpha", 0)
 

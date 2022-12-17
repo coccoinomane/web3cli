@@ -1,9 +1,11 @@
 from __future__ import annotations
-from peewee import TextField, BlobField
+
+from peewee import BlobField, TextField
 from web3 import Account
+
+from web3cli.core.exceptions import SignerNotFound
 from web3cli.core.helpers.crypto import encrypt_string
 from web3cli.core.models.base_model import BaseModel
-from web3cli.core.exceptions import SignerNotFound
 
 
 class Signer(BaseModel):

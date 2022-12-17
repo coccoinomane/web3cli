@@ -1,13 +1,15 @@
 import random
-from typing import Any, List, Dict
+from typing import Any, Dict, List
+
+import pytest
+
 from tests.helper import get_random_string
-from web3cli.helpers.seed import seed_signers
 from tests.main import Web3CliTest
 from web3cli.core.exceptions import SignerNotFound
 from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
-import pytest
 from web3cli.helpers.database import delete_db_file, truncate_tables
+from web3cli.helpers.seed import seed_signers
 
 
 def test_signer_list(signers: List[Dict[str, Any]]) -> None:
@@ -132,7 +134,8 @@ def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
     names = ["name_1", "name_2", "name_3"]
     for i, s_name in enumerate(names):
         with Web3CliTest(delete_db=False) as app:
-            i == 0 and truncate_tables(app)
+            if i == 0:
+                truncate_tables(app)
             app.set_args(
                 [
                     "db",
