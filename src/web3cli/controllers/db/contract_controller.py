@@ -5,7 +5,9 @@ from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.helpers.os import read_json
 from web3cli.core.models.contract import Contract
+from web3cli.core.seeds import contract_seeds
 from web3cli.helpers.render import render_table
+from web3cli.helpers.seed import seed_contracts
 
 
 class ContractController(Controller):
@@ -101,3 +103,10 @@ class ContractController(Controller):
         contract = Contract.get_by_name_or_raise(self.app.pargs.name)
         contract.delete_instance()
         self.app.log.info(f"Contract '{self.app.pargs.name}' deleted correctly")
+
+    @ex(help="preload a few contracts and their chains")
+    def seed(self) -> None:
+        seed_contracts(self.app, contract_seeds.all)
+        self.app.log.info(
+            f"Imported {len(contract_seeds.all)} contracts, run `w3 db contract list` to show them"
+        )
