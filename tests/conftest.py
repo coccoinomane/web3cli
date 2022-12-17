@@ -13,8 +13,18 @@ from pytest import FixtureRequest
 import brownie
 from tests.main import Web3CliTest
 from tests.seed import seed_local_accounts, seed_local_chain
-from web3cli.core.models.types import AddressFields, ChainFields, TxFields
-from web3cli.core.seeds import chain_seeds
+from web3cli.core.models.types import (
+    AddressFields,
+    ChainFields,
+    ContractFields,
+    TxFields,
+)
+from web3cli.core.seeds import (
+    avax_contract_seeds,
+    bnb_contract_seeds,
+    chain_seeds,
+    eth_contract_seeds,
+)
 
 
 @pytest.fixture()
@@ -96,6 +106,18 @@ def txs() -> List[TxFields]:
 @pytest.fixture()
 def chains() -> List[ChainFields]:
     return chain_seeds.all
+
+
+@pytest.fixture()
+def contracts() -> List[ContractFields]:
+    return [
+        eth_contract_seeds.usdc,
+        eth_contract_seeds.uniswap_v2_router,
+        bnb_contract_seeds.busd,
+        bnb_contract_seeds.pancakeswap_router_v2,
+        avax_contract_seeds.usdc,
+        avax_contract_seeds.trader_joe_router,
+    ]
 
 
 @pytest.fixture()

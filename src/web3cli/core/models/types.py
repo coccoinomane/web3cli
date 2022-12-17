@@ -59,7 +59,7 @@ class ContractFields(TypedDict):
     """Typing for Contract model creation and update"""
 
     name: str
-    desc: str
+    desc: NotRequired[str]
     address: str
     chain: str
-    abi: ABI
+    abi: NotRequired[ABI]

@@ -4,9 +4,15 @@ from cement import App
 
 from web3cli.core.models.address import Address
 from web3cli.core.models.chain import Chain
+from web3cli.core.models.contract import Contract
 from web3cli.core.models.signer import Signer
 from web3cli.core.models.tx import Tx
-from web3cli.core.models.types import AddressFields, ChainFields, TxFields
+from web3cli.core.models.types import (
+    AddressFields,
+    ChainFields,
+    ContractFields,
+    TxFields,
+)
 from web3cli.core.seeds import chain_seeds
 from web3cli.helpers.database import db_ready_or_raise
 
@@ -32,6 +38,12 @@ def seed_chains(app: App, chains: List[ChainFields]) -> List[Chain]:
     """Add the given chains to the database"""
     db_ready_or_raise(app)
     return Chain.seed(chains)
+
+
+def seed_contracts(app: App, contracts: List[ContractFields]) -> List[Contract]:
+    """Add the given contracts to the database"""
+    db_ready_or_raise(app)
+    return [Contract.create(**c) for c in contracts]
 
 
 def seed_addresses(app: App, addresses: List[AddressFields]) -> List[Address]:
