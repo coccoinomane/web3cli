@@ -13,7 +13,7 @@ from web3cli.core.models.types import (
     ContractFields,
     TxFields,
 )
-from web3cli.core.seeds import chain_seeds
+from web3cli.core.seeds import chain_seeds, contract_seeds
 from web3cli.helpers.database import db_ready_or_raise
 
 
@@ -23,6 +23,7 @@ def populate_db(app: App) -> None:
     db_ready_or_raise(app)
     app.log.debug("Seeding database...")
     seed_chains(app, chain_seeds.all)
+    seed_contracts(app, contract_seeds.all)
 
 
 def seed_chain(app: App, chain: ChainFields, make_default: bool = True) -> Chain:
@@ -43,13 +44,13 @@ def seed_chains(app: App, chains: List[ChainFields]) -> List[Chain]:
 def seed_contracts(app: App, contracts: List[ContractFields]) -> List[Contract]:
     """Add the given contracts to the database"""
     db_ready_or_raise(app)
-    return [Contract.create(**c) for c in contracts]
+    return [Contract.upsert(c) for c in contracts]
 
 
 def seed_addresses(app: App, addresses: List[AddressFields]) -> List[Address]:
     """Add the given addresses to the database"""
     db_ready_or_raise(app)
-    return [Address.create(**a) for a in addresses]
+    return [Address.upsert(a) for a in addresses]
 
 
 def seed_signers(app: App, signers: List[Dict[str, Any]]) -> List[Signer]:
@@ -64,4 +65,4 @@ def seed_signers(app: App, signers: List[Dict[str, Any]]) -> List[Signer]:
 def seed_txs(app: App, txs: List[TxFields]) -> List[Tx]:
     """Add the given transactions to the database"""
     db_ready_or_raise(app)
-    return [Tx.create(**t) for t in txs]
+    return [Tx.upsert(t) for t in txs]

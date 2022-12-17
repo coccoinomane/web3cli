@@ -19,12 +19,7 @@ from web3cli.core.models.types import (
     ContractFields,
     TxFields,
 )
-from web3cli.core.seeds import (
-    avax_contract_seeds,
-    bnb_contract_seeds,
-    chain_seeds,
-    eth_contract_seeds,
-)
+from web3cli.core.seeds import chain_seeds, contract_seeds
 
 
 @pytest.fixture()
@@ -110,14 +105,7 @@ def chains() -> List[ChainFields]:
 
 @pytest.fixture()
 def contracts() -> List[ContractFields]:
-    return [
-        eth_contract_seeds.usdc,
-        eth_contract_seeds.uniswap_v2_router,
-        bnb_contract_seeds.busd,
-        bnb_contract_seeds.pancakeswap_router_v2,
-        avax_contract_seeds.usdc,
-        avax_contract_seeds.trader_joe_router,
-    ]
+    return contract_seeds.all
 
 
 @pytest.fixture()
