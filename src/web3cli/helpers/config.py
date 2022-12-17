@@ -1,8 +1,10 @@
-from cement import App
+import os
 from typing import Any
+
+from cement import App
+
 from web3cli.core.helpers import yaml
 from web3cli.core.helpers.os import create_folder
-import os
 
 
 def update_setting_in_config_file(

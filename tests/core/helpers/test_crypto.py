@@ -1,6 +1,8 @@
-from web3cli.core.helpers import crypto
 import secrets
+
 import pytest
+
+from web3cli.core.helpers import crypto
 
 
 @pytest.mark.parametrize(

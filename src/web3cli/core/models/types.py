@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, TypedDict
+
 from typing_extensions import NotRequired
 from web3.types import ABI
 

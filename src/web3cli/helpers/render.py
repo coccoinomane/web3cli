@@ -1,7 +1,9 @@
 from math import inf
 from typing import Any, List
-from web3cli.core.helpers.format import wrap as wrap_
+
 from cement import App
+
+from web3cli.core.helpers.format import wrap as wrap_
 
 
 def render_table(
@@ -21,7 +23,7 @@ def prepare_for_table(app: App, value: Any, wrap: int = None) -> str:
     if wrap == None:
         wrap = app.config.get("web3cli", "output_table_wrap")
     elif wrap == 0:
-        wrap = inf
+        wrap = 100000
     # Wrap value
     try:
         return "\n".join(wrap_(s=value, n=wrap))

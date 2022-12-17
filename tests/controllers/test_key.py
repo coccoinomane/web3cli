@@ -1,8 +1,10 @@
-from tests.main import Web3CliTest
 import ast
-from tests import helper
-import ruamel.yaml
 import os
+
+import ruamel.yaml
+
+from tests import helper
+from tests.main import Web3CliTest
 
 
 def test_key_create() -> None:

@@ -1,12 +1,14 @@
-from cement import App
 from typing import Any, Dict, List
+
+from cement import App
+
+from web3cli.core.models.address import Address
 from web3cli.core.models.chain import Chain
+from web3cli.core.models.signer import Signer
 from web3cli.core.models.tx import Tx
 from web3cli.core.models.types import AddressFields, ChainFields, TxFields
-from web3cli.helpers.database import db_ready_or_raise
-from web3cli.core.models.address import Address
-from web3cli.core.models.signer import Signer
 from web3cli.core.seeds import chain_seeds
+from web3cli.helpers.database import db_ready_or_raise
 
 
 def populate_db(app: App) -> None:

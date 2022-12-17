@@ -1,7 +1,9 @@
+import argparse
+
 from cement import ex
+
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.config import update_setting_in_config_file
-import argparse
 
 
 class ConfigController(Controller):

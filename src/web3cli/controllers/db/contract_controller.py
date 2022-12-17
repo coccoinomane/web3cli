@@ -1,10 +1,11 @@
 from cement import ex
+from playhouse.shortcuts import model_to_dict
+
 from web3cli.controllers.controller import Controller
+from web3cli.core.exceptions import Web3CliError
 from web3cli.core.helpers.os import read_json
 from web3cli.core.models.contract import Contract
-from web3cli.core.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
-from playhouse.shortcuts import model_to_dict
 
 
 class ContractController(Controller):

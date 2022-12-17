@@ -1,7 +1,8 @@
 from cement import ex
+
 from web3cli.controllers.controller import Controller
-from web3cli.helpers.version import get_version_message
 from web3cli.helpers import args
+from web3cli.helpers.version import get_version_message
 
 
 class BaseController(Controller):

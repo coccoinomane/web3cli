@@ -1,15 +1,17 @@
 """Functions called at specific points of the app lifecylce"""
 
-from genericpath import isfile
+import ast
 import secrets
+from os.path import isfile
+
 import cement
+from cement import App
+from genericpath import isfile
+
 from web3cli.core.helpers.database import init_db
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_file
 from web3cli.helpers.seed import populate_db
-from cement import App
-import ast
-from os.path import isfile
 
 ####################
 # Register hooks

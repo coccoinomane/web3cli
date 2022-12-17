@@ -1,4 +1,5 @@
 from cement import App
+
 from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
 from web3cli.core.helpers.rpc import is_rpc_uri_valid
 from web3cli.core.models.chain import Chain

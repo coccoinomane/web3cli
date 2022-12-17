@@ -1,6 +1,8 @@
-from typing import Any
-import ruamel.yaml
 import os
+from typing import Any
+
+import ruamel.yaml
+
 from web3cli.core.types import Logger
 
 

@@ -1,7 +1,8 @@
 from cement import ex
+
 from web3cli.controllers.controller import Controller
-from web3cli.core.models.address import Address
 from web3cli.core.exceptions import Web3CliError
+from web3cli.core.models.address import Address
 from web3cli.helpers.render import render_table
 
 

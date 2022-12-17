@@ -2,14 +2,16 @@
 helper functions to better run tests"""
 
 from typing import List
+
+from brownie.network.account import Account
+
 from web3cli.core.exceptions import Web3CliError
 from web3cli.core.models.chain import Chain
+from web3cli.core.models.signer import Signer
+from web3cli.core.seeds import chain_seeds
 from web3cli.helpers.database import db_ready_or_raise
 from web3cli.helpers.seed import seed_chain
-from web3cli.core.seeds import chain_seeds
 from web3cli.main import Web3Cli
-from web3cli.core.models.signer import Signer
-from brownie.network.account import Account
 
 
 def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:

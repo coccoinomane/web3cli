@@ -1,20 +1,22 @@
+import os
+
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
+
+from web3cli import hooks
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.config_controller import ConfigController
+from web3cli.controllers.db.address_controller import AddressController
+from web3cli.controllers.db.chain_controller import ChainController
+from web3cli.controllers.db.contract_controller import ContractController
+from web3cli.controllers.db.db_base_controller import DbBaseController
+from web3cli.controllers.db.rpc_controller import RpcController
+from web3cli.controllers.db.signer_controller import SignerController
+from web3cli.controllers.db.tx_controller import TxController
 from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
-from web3cli.controllers.db.db_base_controller import DbBaseController
-from web3cli.controllers.db.chain_controller import ChainController
-from web3cli.controllers.db.rpc_controller import RpcController
-from web3cli.controllers.db.address_controller import AddressController
-from web3cli.controllers.db.signer_controller import SignerController
-from web3cli.controllers.db.tx_controller import TxController
-from web3cli.controllers.db.contract_controller import ContractController
 from web3cli.core.exceptions import Web3CliError
-from web3cli import hooks
-import os
 
 # Configuration defaults
 CONFIG = init_defaults("web3cli")

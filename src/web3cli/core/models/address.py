@@ -1,15 +1,14 @@
 from __future__ import annotations
+
 from typing import Type
-from peewee import TextField
-from web3cli.core.models.base_model import BaseModel
-from web3cli.core.exceptions import (
-    AddressIsInvalid,
-    RecordNotFound,
-    AddressNotResolved,
-)
+
 import web3
-from web3cli.core.models.types import AddressFields
+from peewee import TextField
 from playhouse.signals import pre_save
+
+from web3cli.core.exceptions import AddressIsInvalid, AddressNotResolved, RecordNotFound
+from web3cli.core.models.base_model import BaseModel
+from web3cli.core.models.types import AddressFields
 from web3cli.core.types import Logger
 
 

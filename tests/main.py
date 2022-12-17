@@ -1,10 +1,12 @@
 import os
 from typing import Any, List
+
 from cement import TestApp
-from web3cli import hooks
-from web3cli.main import Web3Cli, CONFIG
-from web3cli.helpers import database
+
 from tests import helper
+from web3cli import hooks
+from web3cli.helpers import database
+from web3cli.main import CONFIG, Web3Cli
 
 # Each time you run the test app, a brand new database
 # will be created, with no seeding

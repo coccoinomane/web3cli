@@ -2,17 +2,19 @@
 PyTest Fixtures.
 """
 
-from typing import Any, Iterator, List, Dict
-from pytest import FixtureRequest
-import pytest
-from cement import fs
 import secrets
+from typing import Any, Dict, Iterator, List
+
+import pytest
+from brownie.network.account import Account
+from cement import fs
+from pytest import FixtureRequest
+
+import brownie
 from tests.main import Web3CliTest
 from tests.seed import seed_local_accounts, seed_local_chain
 from web3cli.core.models.types import AddressFields, ChainFields, TxFields
 from web3cli.core.seeds import chain_seeds
-import brownie
-from brownie.network.account import Account
 
 
 @pytest.fixture()

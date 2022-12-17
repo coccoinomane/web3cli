@@ -1,6 +1,7 @@
+import pytest
+
 from tests.main import Web3CliTest
 from web3cli.helpers import crypto
-import pytest
 
 
 @pytest.mark.parametrize(

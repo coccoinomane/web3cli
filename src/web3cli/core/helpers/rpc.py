@@ -1,6 +1,5 @@
 from urllib.parse import urlparse
 
-
 HTTP_SCHEMES = {"http", "https"}
 WS_SCHEMES = {"ws", "wss"}
 
