@@ -21,9 +21,10 @@ class ContractController(Controller):
         render_table(
             self.app,
             data=[
-                [c.name, c.chain, c.address] for c in Contract.get_all(Contract.name)
+                [c.name, c.chain, c.address, bool(c.abi)]
+                for c in Contract.get_all(Contract.name)
             ],
-            headers=["NAME", "CHAIN", "ADDRESS"],
+            headers=["NAME", "CHAIN", "ADDRESS", "ABI"],
             wrap=42,
         )
 
