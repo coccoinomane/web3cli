@@ -18,7 +18,7 @@ class ChainFields(TypedDict):
     chain_id: int
     coin: str
     tx_type: int
-    middlewares: str
+    middlewares: NotRequired[str]
     rpcs: NotRequired[List[RpcFields]]
 
 

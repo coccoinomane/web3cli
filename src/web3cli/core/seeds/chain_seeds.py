@@ -5,7 +5,7 @@ from web3cli.core.models.types import ChainFields
 # Ethereum
 eth: ChainFields = {
     "name": "eth",
-    "desc": "Ethereum",
+    "desc": "Ethereum Mainnet",
     "chain_id": 1,
     "coin": "ETH",
     "tx_type": 2,
@@ -23,7 +23,7 @@ eth: ChainFields = {
 # BNB Chain
 bnb: ChainFields = {
     "name": "bnb",
-    "desc": "BNB Chain",
+    "desc": "Binance Smart Chain Mainnet",
     "chain_id": 56,
     "coin": "BNB",
     "tx_type": 1,
@@ -38,7 +38,7 @@ bnb: ChainFields = {
 # Avalanche C Chian
 avax: ChainFields = {
     "name": "avax",
-    "desc": "Avalanche",
+    "desc": "Avalanche C-Chain",
     "chain_id": 43114,
     "coin": "AVAX",
     "tx_type": 2,
@@ -46,6 +46,21 @@ avax: ChainFields = {
     "rpcs": [
         {
             "url": "https://api.avax.network/ext/bc/C/rpc",
+        }
+    ],
+}
+
+# Cronos chain
+cro: ChainFields = {
+    "name": "cro",
+    "desc": "Cronos Mainnet Beta",
+    "chain_id": 25,
+    "coin": "CRO",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://evm.cronos.org",
         }
     ],
 }
@@ -65,4 +80,4 @@ local: ChainFields = {
     ],
 }
 
-all: List[ChainFields] = [eth, bnb, avax, local]
+all: List[ChainFields] = [eth, bnb, avax, cro, local]

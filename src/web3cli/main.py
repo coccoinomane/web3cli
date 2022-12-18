@@ -158,5 +158,10 @@ def w3bnb() -> None:
 
 
 def w3avax() -> None:
-    """Shorthand command w3eth that uses avanx chain"""
+    """Shorthand command w3eth that uses avax chain"""
     main(lambda a: override_arg(a, "chain", "avax"))
+
+
+def w3cro() -> None:
+    """Shorthand command w3eth that uses cro chain"""
+    main(lambda a: override_arg(a, "chain", "cro"))
