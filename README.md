@@ -31,56 +31,80 @@ pip3 install -U web3cli
    ```
    w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
    ```
-   ... or the BNB balance on Binance chain:
+
+- Save addresses with easy-to-rember tags:
    ```
-   w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   w3 db address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
+   ```
+   then use the tag in any command:
+   ```
+   w3 balance unicef
    ```
 
-- Tired of using the `--chain` argument? Set a default chain:
+- Send native coins to any address:
    ```
-   w3 config set default_chain bnb
-   w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+   w3 send unicef 1 ETH
    ```
-
-- Tired of pasting addresses around? Save them with an easy to remember name:
+   and in any unit:
    ```
-   w3 db address add ethereum-foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
-   w3 balance ethereum-foundation
+   w3 send unicef 1 ETH gwei
    ```
 
-- Want to send transactions? Add a signer:
-   ```
-   w3 db signer add my-wallet
-   ```
-   You will be asked for a private key, which will be saved on disk in encrypted form.
-
-
-- Once you have a signer, you can send 1 ETH to the Ethereum foundation:
-   ```bash
-   w3 send ethereum-foundation 1 ETH
-   ```
-   or maybe it's better to send just 1 gwei:
-   ```
-   w3 send ethereum-foundation 1 ETH gwei
-   ```
-
-- Need to sign a message? This will print the whole signed message:
+- Sign messages:
    ```bash
    w3 sign "Hello world!"
    ```
 
-# Custom RPCs and chains
+# Multichain support
 
-- Add RPCs to any existing chain:
-   ```
-   w3 db rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
-   w3 db rpc add eth https://mainnet.infura.io/v3/{YOUR API KEY}
-   w3 db rpc add bnb https://bsc-dataseed.binance.org/
-   ```
-- Add new chains:
-   ```
-   w3 db chain add cronos 25 CRO --tx-type 1 --rpc https://evm.cronos.org
-   ```
+`web3cli` comes with out-of-the-box support for Ethereum, Binance Chain and Avalanche. Select which chain to use with the `--chain` option:
+
+```
+w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+```
+
+Set a default chain to avoid typing `--chain` for every command:
+
+```
+w3 config set default_chain bnb
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
+```
+
+Alternatively, use the aliases `web3eth`, `web3bnb` and `web3avax`:
+
+```
+w3eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
+w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avalanche chain
+```
+
+# Add custom RPCs
+
+Add custom RPCs to any existing chain with `w3 db rpc add`:
+
+```
+w3 db rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
+```
+
+List existing RPCs with `w3 db rpc list`, and delete them with `w3 db rpc delete`.
+
+# Add custom chains
+
+Add new chains with `w3 db chain add`:
+
+```
+w3 db chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
+```
+
+Use the custom chain with `--chain`:
+
+```
+w3 --chain cronos balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7
+```
+
+List existing chains with `w3 db chain list`, and delete them with `w3 db chain delete`.
 
 
 # Address book
@@ -88,43 +112,28 @@ pip3 install -U web3cli
 `w3` can store tags just like you would do on etherscan.io or bscscan.com:
 
 ```bash
-w3 db address add "Ethereum foundation" 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
-w3 db address add "Binance hot wallet" 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 db address add ethereum_foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+w3 db address add binance_hot_wallet 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
 ```
 
 You can use these tags instead of the actual addresses:
 
 ```bash
-w3 balance "Ethereum foundation"
-w3 --chain bnb balance "Binance hot wallet"
+w3 balance ethereum_foundation
+w3 --chain bnb balance binance_hot_wallet
 ```
 
-To see the list of saved addresses, run:
+To see the list of saved addresses, run `w3 db address list`, to delete an address use `w3 db address delete`.
 
-```bash
-w3 db address list
-```
+# Wallet management
 
-which will produce the following output:
-
-```
-| LABEL               | ADDRESS                                    |
-|---------------------+--------------------------------------------|
-| Binance hot wallet  | 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 |
-| Ethereum foundation | 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae |
-```
-
-To see all the actions that can be done with addresses, run `w3 db address`.
-
-# Sign & send
-
-You can use `web3cli` to send transactions to the blockchain or to sign messages. To do so, you first need to define a signer:
+Commands such as `w3 send` and `w3 sign` require that you add a signer first:
 
 ```bash
 w3 db signer add my_signer
 ```
 
-You will be prompted to insert a private key, which will be encrypted and stored in the database. Feel free to do so with this test private key: `d94e4166f0b3c85ffebed3e0eaa7f7680ae296cf8a7229d637472b7452c8602c`.
+You will be prompted to insert a private key, which will be encrypted and stored in the database.
 
 You can also create a brand new wallet on the go, without the need to provide a key:
 
@@ -132,43 +141,12 @@ You can also create a brand new wallet on the go, without the need to provide a 
 w3 db signer add my-wallet --create
 ```
 
-### Examples
-
-Once you have added a signer, you can use any of the commands that need a private key, as shown in the following examples.
-
-**Sign a message**:
-
-```bash
-w3 sign "Hello world!"
-```
-
-Output:
-
-```python
-{'messageHash': HexBytes('0x8144a6fa26be252b86456491fbcd43c1de7e022241845ffea1c3df066f7cfede'),
- 'r': 29064792366355323740950985371105895961858398238980883773193501881276705228481,
- 's': 35017827091540952858431223849020104301448914783999277111090808754042212439431,
- 'signature': HexBytes('0x404216ea232b5289610a7483de746fed3c94b6e6c2b8bf62ce5286850ff346c14d6b63445107a9d9e342720e88e82a3ff794dd6bd255931b552dedf2e243d5871c'),
- 'v': 28}
-```
-
-**Send ETH, BNB, AVAX, etc**:
-
-This is to be implemented yet, but the idea is to send funds with the following command:
-
-```bash
-w3 send <address> 0.001 ETH
-```
-
-where `address` is either an address from the address book, or a `0x..` hex string.
-
 ### Multiple signers
 
 Add more signers with `w3 db signer add` and select which one to use with the `--signer` flag:
 
 ```bash
 w3 --signer my_signer <command>
-w3 -s my_signer <command> # short version
 ```
 
 If you plan to use the same signer for a while, make it the **default signer** with the command:
@@ -176,7 +154,6 @@ If you plan to use the same signer for a while, make it the **default signer** w
 ```
 w3 config set default_signer my_signer
 ```
-
 
 # Settings
 
@@ -241,7 +218,7 @@ Pull requests are welcome!
 
 ### Tests
 
-To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) on at least node 18, then run:
+To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) on at least `node` 18, then run:
 
 ```bash
 pdm test
@@ -253,6 +230,7 @@ Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`
 
 
 # TODO
+- ENS support
 - Contract: Controller tests
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
