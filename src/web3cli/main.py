@@ -1,4 +1,5 @@
 import os
+from typing import Callable
 
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
@@ -17,6 +18,7 @@ from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
 from web3cli.core.exceptions import Web3CliError
+from web3cli.helpers.args import override_arg
 
 # Configuration defaults
 CONFIG = init_defaults("web3cli")
@@ -110,9 +112,11 @@ class Web3Cli(App):
         ]
 
 
-def main() -> None:
+def main(filter_app: Callable[[App], App] = None) -> None:
     with Web3Cli() as app:
         try:
+            if filter_app:
+                app = filter_app(app)
             app.run()
 
         except AssertionError as e:
@@ -141,3 +145,18 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def w3eth() -> None:
+    """Shorthand command w3eth that uses eth chain"""
+    main(lambda a: override_arg(a, "chain", "eth"))
+
+
+def w3bnb() -> None:
+    """Shorthand command that uses bnb chain"""
+    main(lambda a: override_arg(a, "chain", "bnb"))
+
+
+def w3avax() -> None:
+    """Shorthand command w3eth that uses avanx chain"""
+    main(lambda a: override_arg(a, "chain", "avax"))
