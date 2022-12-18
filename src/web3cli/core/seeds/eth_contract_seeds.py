@@ -3,7 +3,7 @@ import json
 from web3cli.core.models.types import ContractFields
 
 eth_usdc: ContractFields = {
-    "name": "ETH - USDC",
+    "name": "USDC",
     "desc": None,
     "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "chain": "eth",
@@ -13,7 +13,7 @@ eth_usdc: ContractFields = {
 }
 
 eth_uniswap_v2_router: ContractFields = {
-    "name": "ETH - Uniswap V2: Router 2",
+    "name": "Uniswap V2: Router 2",
     "desc": None,
     "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "chain": "eth",

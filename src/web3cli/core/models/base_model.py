@@ -59,7 +59,7 @@ class BaseModel(Model):
         ignore_unknown: bool = True,
     ) -> Self:
         """Create a new record, or update it if a record already exists
-        that matches the given query (field=value)."""
+        with the given field value."""
         instance: Self = cls.get_or_none(field == value)
         if instance:
             instance = update_model_from_dict(
@@ -73,4 +73,29 @@ class BaseModel(Model):
             instance.save()
             if logger:
                 logger(f"{cls.__name__} {getattr(instance, field.name)} created")
+        return instance
+
+    @classmethod
+    def upsert_by_query(
+        cls: Type[Self],
+        query: Any,
+        fields: Any,
+        logger: Logger = None,
+        ignore_unknown: bool = True,
+    ) -> Self:
+        """Create a new record, or update it if a record already exists
+        that matches the given query."""
+        instance: Self = cls.get_or_none(query)
+        if instance:
+            instance = update_model_from_dict(
+                instance, fields, ignore_unknown=ignore_unknown
+            )
+            instance.save()
+            if logger:
+                logger(f"{cls.__name__} {getattr(instance, 'id')} updated")
+        else:
+            instance = cls(**fields)
+            instance.save()
+            if logger:
+                logger(f"{cls.__name__} {getattr(instance, 'id')} created")
         return instance

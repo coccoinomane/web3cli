@@ -38,7 +38,9 @@ class ContractController(Controller):
         ],
     )
     def get(self) -> None:
-        contract = Contract.get_by_name_or_raise(self.app.pargs.name)
+        contract = Contract.get_by_name_and_chain_or_raise(
+            self.app.pargs.name, self.app.chain_name
+        )
         self.app.render(model_to_dict(contract), indent=4, handler="json")
 
     @ex(
@@ -76,7 +78,9 @@ class ContractController(Controller):
                 raise Web3CliError(f"Could not read ABI from file {self.app.pargs.abi}")
 
         # Add or update contract
-        contract = Contract.get_by_name(self.app.pargs.name)
+        contract = Contract.get_by_name_and_chain(
+            self.app.pargs.name, self.app.chain_name
+        )
         if not contract or self.app.pargs.update:
             Contract.upsert(
                 {

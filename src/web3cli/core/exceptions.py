@@ -4,7 +4,13 @@ class Web3CliError(Exception):
     pass
 
 
-class ChainNotFound(Web3CliError):
+class RecordNotFound(Web3CliError):
+    """When a record from the database is not found"""
+
+    pass
+
+
+class ChainNotFound(RecordNotFound):
     """When a chain name is not found in the database"""
 
     pass
@@ -12,12 +18,6 @@ class ChainNotFound(Web3CliError):
 
 class ChainNotResolved(Web3CliError):
     """When a string cannot be resolved to a chain"""
-
-    pass
-
-
-class RecordNotFound(Web3CliError):
-    """When a record from the database is not found"""
 
     pass
 
@@ -46,13 +46,13 @@ class RpcIsInvalid(Web3CliError):
     pass
 
 
-class RpcNotFound(Web3CliError):
+class RpcNotFound(RecordNotFound):
     """When an RPC cannot be found in the DB"""
 
     pass
 
 
-class SignerNotFound(Web3CliError):
+class SignerNotFound(RecordNotFound):
     """When a signer does not exist in the DB"""
 
     pass
@@ -76,7 +76,7 @@ class TxIsInvalid(Web3CliError):
     pass
 
 
-class ContractNotFound(Web3CliError):
+class ContractNotFound(RecordNotFound):
     """When a contract name is not found in the database"""
 
     pass

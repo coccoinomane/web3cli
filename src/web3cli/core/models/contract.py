@@ -17,17 +17,40 @@ from web3cli.core.types import Logger
 class Contract(BaseModel):
     class Meta:
         table_name = "contracts"
+        indexes = ((("name", "chain"), True),)  # name and chain must be unique together
 
-    name = TextField(unique=True)
+    name = TextField()
     desc = TextField(null=True)
     address = TextField()
     chain = TextField()
     abi = JSONField(null=True)
 
     @classmethod
+    def get_by_name_and_chain(cls, name: str, chain: str) -> Contract:
+        """Return the contract with the given name on the given chain,
+        or None if it does not exist"""
+        return cls.get_or_none((cls.name == name) & (cls.chain == chain))
+
+    @classmethod
+    def get_by_name_and_chain_or_raise(cls, name: str, chain: str) -> Contract:
+        """Return the contract with the given name on the given chain,
+        or raise if it does not exist"""
+        try:
+            return cls.get((cls.name == name) & (cls.chain == chain))
+        except cls.DoesNotExist:
+            raise ContractNotFound(
+                f"Contract '{name}' on chain '{chain}' does not exist"
+            )
+
+    @classmethod
     def upsert(cls, fields: ContractFields, logger: Logger = None) -> Contract:
         """Create contract or update it if one with the same name already exists"""
-        return cls.upsert_by_field(cls.name, fields["name"], fields, logger, True)
+        return cls.upsert_by_query(
+            (cls.name == fields["name"]) & (cls.chain == fields["chain"]),
+            fields,
+            logger,
+            True,
+        )
 
 
 @pre_save(sender=Contract)
