@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "0.11.1"
+version = "0.11.2"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -32,8 +32,10 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-w3.help = "Run the CLI in development mode"
-w3.cmd = "w3"
+w3 = {cmd = "w3", help = "Run the CLI in dev mode"}
+w3eth = {cmd = "w3eth", help = "Run the CLI in dev mode, on eth chain"}
+w3bnb = {cmd = "w3bnb", help = "Run the CLI in dev mode, on bnb chain"}
+w3avax = {cmd = "w3avax", help = "Run the CLI in dev mode, on avax chain"}
 
 test = "brownie test tests"
 test_verbose = "brownie test tests -s"
@@ -48,6 +50,9 @@ release = "gh release create v{args} dist/web3cli-{args}.tar.gz dist/web3cli-{ar
 
 [project.scripts]
 w3 = "web3cli.main:main"
+w3eth = "web3cli.main:w3eth"
+w3bnb = "web3cli.main:w3bnb"
+w3avax = "web3cli.main:w3avax"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

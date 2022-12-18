@@ -88,3 +88,16 @@ def parse_priority_fee(app: App) -> int:
     if not priority_fee:
         raise Web3CliError("Priority fee not defined, should not be here")
     return priority_fee
+
+
+def override_arg(app: App, arg: str, value: str) -> App:
+    """Set the value passed to the given argument, overriding whatever
+    value was read from the CLI or inferred from the environment.
+
+    Needs to be called before argument parsing."""
+
+    def post_argument_parsing_callback(a: App) -> None:
+        setattr(a.pargs, arg, value)
+
+    app.hook.register("post_argument_parsing", post_argument_parsing_callback)
+    return app
