@@ -7,7 +7,7 @@ from web3cli.core.types import Logger
 def yes_or_exit(
     prompt: str = "Type 'yes' or 'y' to proceed: ",
     exit_msg: str = "Exiting...",
-    intro: str = None,
+    intro: str = "",
     logger: Logger = print,
     exit_code: int = 0,
 ) -> str:
