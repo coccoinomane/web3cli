@@ -41,8 +41,8 @@ def make_base_wallet(
     with signing support. You need to provide the name of the signer
     from the DB, and a password to decrypt the signer's key."""
     client = make_base_client(chain, node_uri, base, **clientArgs)
+    signer = Signer.get_by_name_or_raise(signer_name)
     if logger:
         logger(f"Using signer {signer_name}")
-    signer = Signer.get_by_name_or_raise(signer_name)
     client.setAccount(decrypt_string(signer.key, password))
     return client
