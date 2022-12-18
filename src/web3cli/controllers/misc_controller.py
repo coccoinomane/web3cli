@@ -6,6 +6,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.core.models.address import Address
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
+from web3cli.helpers.signer import signer_ready_or_raise
 
 
 class MiscController(Controller):
@@ -37,5 +38,6 @@ class MiscController(Controller):
         arguments=[(["msg"], {"action": "store"})],
     )
     def sign(self) -> None:
+        signer_ready_or_raise(self.app)
         signed_message = make_wallet(self.app).signMessage(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))
