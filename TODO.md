@@ -1,13 +1,13 @@
 # TODO
 
-### Contracts
+### Top priority
 
 - Controller tests
-- Make alphabetical order case insensitive for `w3 db contract list`
+- `w3 block` test
+- Send tokens
 
 ### Extra commands 
 
-- Implement `w3 block`
 - Implement `w3 tx fetch`
 - Command to import chains from https://chainid.network/chains.json
 - Command to import tokens from ethereum-lists
@@ -37,6 +37,7 @@
 
 ### Misc
 
+- Add trailing newline to json output
 - Use different db file for dev environment
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
@@ -44,3 +45,4 @@
 - Config: non-string support in `config set`
 - Record all transactions in Txs table
 - Fix usage message (still refers to `web3cli`)
+- Make alphabetical order case insensitive for `w3 db contract list`
