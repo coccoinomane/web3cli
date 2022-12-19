@@ -57,27 +57,28 @@ pip3 install -U web3cli
 
 # Multichain support
 
-`web3cli` comes with out-of-the-box support for Ethereum, Binance Chain and Avalanche. Select which chain to use with the `--chain` option:
+`web3cli` comes with out-of-the-box support for [many chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains), including Binance Chain, Avalanche and Cronos.
+
+Pass the chain name as an optional argument:
 
 ```
-w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
-w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
 ```
 
-Set a default chain to avoid typing `--chain` for every command:
+or use one of the provided aliases:
+
+```
+w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
+```
+
+If you are focussing on a specific chain, set it as the default:
 
 ```
 w3 config set default_chain bnb
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
 w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
-```
-
-Alternatively, use the aliases `web3eth`, `web3bnb` and `web3avax`:
-
-```
-w3eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
-w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
-w3avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avalanche chain
 ```
 
 # Add custom RPCs
@@ -160,6 +161,7 @@ w3 config set default_signer my_signer
 Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wiki/). In particular:
 
 - [🫡 List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands)
+- [⛓ Supported chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains)
 - [📝 Configuration](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%9D-Configuration)
 
 
