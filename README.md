@@ -41,13 +41,22 @@ pip3 install -U web3cli
    w3 balance unicef
    ```
 
-- Send native coins to any address:
+- Send native coins to any address and in any unit:
    ```
-   w3 send unicef 1 ETH
+   w3 send unicef 1 ETH # send 1 ETH, ask for confirmation
+   w3 send unicef 1 ETH gwei # sends 1 gwei, ask for confirmation
+   w3 send unicef 1 ETH --force # sends 1 gwei straight away
    ```
    and in any unit:
    ```
-   w3 send unicef 1 ETH gwei
+   ```
+
+- Show any block:
+   ```bash
+   w3 block latest
+   w3 block finalized
+   w3 block 6094305
+   w3 block 0xe737f53528e7ee8e700f87b399251f285fd1ed6a9a1518ce66dc2b4885f9fbb2
    ```
 
 - Sign messages:

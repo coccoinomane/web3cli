@@ -56,7 +56,7 @@ matic: ChainFields = {
     "desc": "Polygon Mainnet",
     "chain_id": 137,
     "coin": "MATIC",
-    "tx_type": 2,
+    "tx_type": 1,
     "middlewares": "geth_poa_middleware",
     "rpcs": [
         {
