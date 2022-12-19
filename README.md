@@ -43,9 +43,9 @@ pip3 install -U web3cli
 
 - Send native coins to any address and in any unit:
    ```
-   w3 send unicef 1 ETH # send 1 ETH, ask for confirmation
-   w3 send unicef 1 ETH gwei # sends 1 gwei, ask for confirmation
-   w3 send unicef 1 ETH --force # sends 1 gwei straight away
+   w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
+   w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
+   w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
    ```
    and in any unit:
    ```
@@ -71,14 +71,14 @@ pip3 install -U web3cli
 Pass the chain name as an optional argument:
 
 ```
-w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
 w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
 ```
 
 or use one of the provided aliases:
 
 ```
-w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
 w3avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
 ```
 
@@ -86,7 +86,7 @@ If you are focussing on a specific chain, set it as the default:
 
 ```
 w3 config set default_chain bnb
-w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # bnb chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3             # bnb chain
 w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
 ```
 
