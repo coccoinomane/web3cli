@@ -1,8 +1,11 @@
+import json
 from pprint import pformat
 
 from cement import ex
+from web3 import Web3
 
 from web3cli.controllers.controller import Controller
+from web3cli.core.helpers.web3 import format_attribute_dict
 from web3cli.core.models.address import Address
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
@@ -32,6 +35,34 @@ class MiscController(Controller):
             "balance.jinja2",
             handler="jinja2",
         )
+
+    @ex(
+        help="Get the latest block, or the block corresponding to the given identifier",
+        arguments=[
+            (
+                ["block_identifier"],
+                {
+                    "help": "Block identifier. Can be a block number, an hash, or one of the following: latest, earliest, pending, safe, finalized",
+                    "nargs": "?",
+                    "default": "latest",
+                },
+            )
+        ],
+    )
+    def block(self) -> None:
+        chain_ready_or_raise(self.app)
+        block = None
+        client = make_client(self.app)
+        # In case a block number was given
+        try:
+            block = client.w3.eth.get_block(int(self.app.pargs.block_identifier))
+        except ValueError:
+            pass
+        # In case a string
+        if not block:
+            block = client.w3.eth.get_block(self.app.pargs.block_identifier)
+        block_as_dict = json.loads(Web3.toJSON(block))
+        self.app.render(block_as_dict, indent=4, handler="json")
 
     @ex(
         help="Sign the given message and show the signed message, as returned by web3.py",
