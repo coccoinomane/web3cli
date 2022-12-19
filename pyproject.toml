@@ -36,6 +36,7 @@ w3 = {cmd = "w3", help = "Run the CLI in dev mode"}
 w3eth = {cmd = "w3eth", help = "Run the CLI in dev mode, on eth chain"}
 w3bnb = {cmd = "w3bnb", help = "Run the CLI in dev mode, on bnb chain"}
 w3avax = {cmd = "w3avax", help = "Run the CLI in dev mode, on avax chain"}
+w3matic = {cmd = "w3matic", help = "Run the CLI in dev mode, on matic chain"}
 w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on cro chain"}
 
 test = "brownie test tests"
@@ -54,6 +55,7 @@ w3 = "web3cli.main:main"
 w3eth = "web3cli.main:w3eth"
 w3bnb = "web3cli.main:w3bnb"
 w3avax = "web3cli.main:w3avax"
+w3matic = "web3cli.main:w3matic"
 w3cro = "web3cli.main:w3cro"
 
 [project.urls]

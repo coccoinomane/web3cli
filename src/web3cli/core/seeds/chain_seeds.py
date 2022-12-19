@@ -50,6 +50,21 @@ avax: ChainFields = {
     ],
 }
 
+# Polygon chain
+matic: ChainFields = {
+    "name": "matic",
+    "desc": "Polygon Mainnet",
+    "chain_id": 137,
+    "coin": "MATIC",
+    "tx_type": 2,
+    "middlewares": "geth_poa_middleware",
+    "rpcs": [
+        {
+            "url": "https://polygon-rpc.com/",
+        }
+    ],
+}
+
 # Cronos chain
 cro: ChainFields = {
     "name": "cro",
@@ -80,4 +95,4 @@ local: ChainFields = {
     ],
 }
 
-all: List[ChainFields] = [eth, bnb, avax, cro, local]
+all: List[ChainFields] = [eth, bnb, avax, matic, cro, local]

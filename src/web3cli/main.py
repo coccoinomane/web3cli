@@ -162,6 +162,11 @@ def w3avax() -> None:
     main(lambda a: override_arg(a, "chain", "avax"))
 
 
+def w3matic() -> None:
+    """Shorthand command w3eth that uses matic chain"""
+    main(lambda a: override_arg(a, "chain", "matic"))
+
+
 def w3cro() -> None:
     """Shorthand command w3eth that uses cro chain"""
     main(lambda a: override_arg(a, "chain", "cro"))

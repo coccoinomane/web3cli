@@ -57,7 +57,7 @@ pip3 install -U web3cli
 
 # Multichain support
 
-`web3cli` comes with out-of-the-box support for [many chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains), including Binance Chain, Avalanche and Cronos.
+`web3cli` comes with out-of-the-box support for [many chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains), including Binance Chain, Avalanche and Polygon.
 
 Pass the chain name as an optional argument:
 
