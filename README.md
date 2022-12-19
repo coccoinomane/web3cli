@@ -155,110 +155,14 @@ If you plan to use the same signer for a while, make it the **default signer** w
 w3 config set default_signer my_signer
 ```
 
-# Settings
+# Documentation
 
-Settings are read from the configuration file `~/.web3cli/config/web3cli.yaml`, or from environment variables. (The symbol `~` refers to the home folder of your user.)
-See the [example configuration file](./web3cli.example.yml) for a list of available settings.
+Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wiki/). In particular:
 
-### Environment variables
+- [🫡 List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands)
+- [📝 Configuration](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%9D-Configuration)
 
-All settings can be overridden via environment variables.
-For example, the settings `web3cli.default_chain` can be overridden by setting the env variable `WEB3CLI_DEFAULT_CHAIN`:
-
-```bash
-WEB3CLI_DEFAULT_CHAIN=avax w3 db chain get
-
-output> avax
-```
-
-### Folder-specific settings
-
-To have settings that apply only to the current folder, create a `web3cli.yaml` file in that folder and execute `w3` from that folder.
-
-Settings specified in `web3cli.yaml` will override those in your home folder. Environment variables will still get the precedence.
-
-### Edit configuration via the CLI
-
-You can edit the configuration files using `w3 config`. For example:
-
-- Show the value of a single setting:
-   ```bash
-   pdm w3 config get default_chain
-   ```
-- Show all settings:
-   ```bash
-   pdm w3 config get
-   ```
-- Edit a setting value at the global level (`~/.web3cli/database/web3cli.sqlite`):
-   ```bash
-   pdm w3 config set default_chain avax
-   ```
-- Edit a setting value at the local level (`web3cli.yml`):
-   ```bash
-   pdm w3 config set default_chain avax --no-global
-   ```
-
-# Contribute ❤️
-
-Pull requests are welcome!
-
-1. Install and configure [PDM](https://github.com/pdm-project/pdm/):
-   ```bash
-   curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
-   ```
-2. Install dependencies: 
-   ```bash
-   pdm install
-   ```
-3. To run the CLI against your changes: 
-   ```bash
-   pdm w3 <command>
-   ```
-
-
-### Tests
-
-To run tests, first install [`ganache`](https://www.npmjs.com/package/ganache) on at least `node` 18, then run:
-
-```bash
-pdm test
-```
 
 # Acknowledgements
 
-Thank you very much to the [web3.py](https://github.com/ethereum/web3.py) and [`brownie`](https://github.com/eth-brownie/brownie) teams: `web3` would not exist without your efforts!
-
-
-# TODO
-- ENS support
-- Contract: Controller tests
-- Contract: Make alphabetical order case insensitive for `w3 db contract list`
-- Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
-- Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
-- Use different db file for dev environment
-- README: Explain json output + trick `| python3 -mjson.tool`
-- Implement `w3 block`
-- Implement `w3 tx fetch`
-- Move tests/seeder to core (in models?)
-- Tests: use london hardfork instead of istanbul?
-- Send command: option to wait for receipt
-- Retry transactions until gas fee goes below x gwei
-- README badges: web3.py, brownie, PDM, cement
-- Resolve address should look also in signature names (make signer & address names unique?)
-- Address book: helper method to un-resolve address (from 0x to name, if it exists), useful for `w3 tx list`
-- Rpc: check that chain's chain_id in DB corresponds to chain_id of RPC
-- Chain: Preload chains from https://chainid.network/chains.json
-- Command: `w3 init` to import chain + add signer
-- Windows: test on a Windows machine
-- Do not mess with DB unless needed by the command
-- Do not mess with signers unless needed by the command
-- Autocomplete commands
-- Tests: should we change evm_version in ganache for non-ethereum chains? (see CLI_FLAGS brownie/network/rpc/ganache.py)
-- Autocomplete addresses and signers
-- Config: non-string support in `config set`
-- Gas: Upper limit on basefee via global argument/setting
-- Dry-run: Print tx instead of sending it, via global argument/setting
-- Use chains and tokens from other sources (e.g. ethereum-lists)
-- ethPM registry / etherscan to pull smart contract interfaces? E.g. https://eth-brownie.readthedocs.io/en/latest/core-contracts.html#fetching-from-a-remote-source
-- Record transaction in Txs table
-- Fix usage message (still refers to `web3cli`)
+Thank you very much to the communities behind [web3.py](https://github.com/ethereum/web3.py) and [`brownie`](https://github.com/eth-brownie/brownie): `web3cli` would not exist without your efforts!
