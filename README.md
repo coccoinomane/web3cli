@@ -1,3 +1,10 @@
+<!-- https://shields.io/ --> 
+<p align="right">
+    <a href="https://www.alchemy.com/dapps/web3cli"><img src="https://img.shields.io/badge/featured%20on-alchemy-005493.svg"/></a>
+    <a href="https://github.com/badges/shields/pulse" alt="Activity"><img src="https://img.shields.io/github/commit-activity/m/badges/shields?color=009051"/></a>
+    <img src="https://img.shields.io/github/last-commit/coccoinomane/web3cli?color=009051"/>
+</p>
+
 Interact with blockchains and smart contracts using the command line: no coding needed!
 
 # Features
