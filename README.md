@@ -47,11 +47,8 @@ pip3 install -U web3cli
    w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
    w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
    ```
-   and in any unit:
-   ```
-   ```
 
-- Show any block:
+- Show details of blocks:
    ```bash
    w3 block latest
    w3 block finalized
