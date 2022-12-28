@@ -7,13 +7,13 @@ from cement.core.exc import CaughtSignal
 from web3cli import hooks
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.config_controller import ConfigController
-from web3cli.controllers.db.address_controller import AddressController
-from web3cli.controllers.db.chain_controller import ChainController
-from web3cli.controllers.db.contract_controller import ContractController
+from web3cli.controllers.db.db_address_controller import DbAddressController
 from web3cli.controllers.db.db_base_controller import DbBaseController
-from web3cli.controllers.db.rpc_controller import RpcController
-from web3cli.controllers.db.signer_controller import SignerController
-from web3cli.controllers.db.tx_controller import TxController
+from web3cli.controllers.db.db_chain_controller import DbChainController
+from web3cli.controllers.db.db_contract_controller import DbContractController
+from web3cli.controllers.db.db_rpc_controller import DbRpcController
+from web3cli.controllers.db.db_signer_controller import DbSignerController
+from web3cli.controllers.db.db_tx_controller import DbTxController
 from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
@@ -97,12 +97,12 @@ class Web3Cli(App):
             MiscController,
             SendController,
             DbBaseController,
-            ChainController,
-            RpcController,
-            SignerController,
-            AddressController,
-            TxController,
-            ContractController,
+            DbChainController,
+            DbRpcController,
+            DbSignerController,
+            DbAddressController,
+            DbTxController,
+            DbContractController,
         ]
 
         # extend the app with cement hook system

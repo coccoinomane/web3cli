@@ -8,7 +8,7 @@ from web3core.helpers.format import cut
 from web3core.models.tx import Tx
 
 
-class TxController(Controller):
+class DbTxController(Controller):
     """Handler of the `w3 db tx` commands"""
 
     class Meta:

@@ -10,7 +10,7 @@ from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
 
 
-class ContractController(Controller):
+class DbContractController(Controller):
     """Handler of the `w3 db contract` commands"""
 
     class Meta:

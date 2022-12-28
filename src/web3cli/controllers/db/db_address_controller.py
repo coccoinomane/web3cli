@@ -6,7 +6,7 @@ from web3cli.helpers.render import render_table
 from web3core.models.address import Address
 
 
-class AddressController(Controller):
+class DbAddressController(Controller):
     """Handler of the `w3 db address` commands"""
 
     class Meta:

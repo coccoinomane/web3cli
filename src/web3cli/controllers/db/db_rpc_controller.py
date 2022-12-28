@@ -8,7 +8,7 @@ from web3core.exceptions import ChainNotFound
 from web3core.models.chain import Chain, Rpc
 
 
-class RpcController(Controller):
+class DbRpcController(Controller):
     """Handler of the `w3 db rpc` commands"""
 
     class Meta:

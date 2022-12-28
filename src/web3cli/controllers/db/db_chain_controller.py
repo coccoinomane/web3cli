@@ -8,7 +8,7 @@ from web3core.models.chain import Chain
 from web3core.seeds import chain_seeds
 
 
-class ChainController(Controller):
+class DbChainController(Controller):
     """Handler of the `w3 db chain` commands"""
 
     class Meta:

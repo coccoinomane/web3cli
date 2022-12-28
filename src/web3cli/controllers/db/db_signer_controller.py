@@ -11,7 +11,7 @@ from web3core.exceptions import KeyIsInvalid, SignerNotFound
 from web3core.models.signer import Signer
 
 
-class SignerController(Controller):
+class DbSignerController(Controller):
     """Handler of the `w3 db signer` commands"""
 
     class Meta:
