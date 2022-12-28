@@ -97,5 +97,5 @@ class BaseModel(Model):
             instance = cls(**fields)
             instance.save()
             if logger:
-                logger(f"{cls.__name__} {getattr(instance, 'id')} created")
+                logger(f"{cls.__name__} created with ID {getattr(instance, 'id')}")
         return instance

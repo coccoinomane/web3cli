@@ -5,7 +5,7 @@ import pytest
 
 from tests.helper import get_random_string
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import SignerNotFound
+from web3cli.core.exceptions import RecordNotFound, SignerNotFound
 from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
 from web3cli.helpers.database import delete_db_file, truncate_tables
@@ -161,3 +161,5 @@ def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
                 ]
             ).run()
             assert Signer.select().count() == len(signers) - 1
+            with pytest.raises(RecordNotFound):
+                Signer.get_by_name_or_raise(s["name"])

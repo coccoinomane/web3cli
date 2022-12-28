@@ -1,6 +1,9 @@
 from typing import List
 
+import pytest
+
 from tests.main import Web3CliTest
+from web3cli.core.exceptions import TxNotFound
 from web3cli.core.models.tx import Tx
 from web3cli.core.models.types import TxFields
 from web3cli.helpers.seed import seed_txs
@@ -89,3 +92,5 @@ def test_tx_delete(txs: List[TxFields]) -> None:
                 ]
             ).run()
             assert Tx.select().count() == len(txs) - 1
+            with pytest.raises(TxNotFound):
+                Tx.get_by_hash_or_raise(t["hash"])

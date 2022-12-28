@@ -25,6 +25,7 @@ class ContractController(Controller):
             self.app,
             data=[
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
+                # TODO: order by name AND chain
                 for c in Contract.get_all(Contract.name)
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
@@ -50,7 +51,7 @@ class ContractController(Controller):
             (["-d", "--desc"], {"action": "store"}),
             (
                 ["-t", "--type"],
-                {"help": "type of the contract, e.g. erc20 or uniswap_v2_router"},
+                {"help": "type of the contract, e.g. erc20 or uniswap_router_v2"},
             ),
             (
                 ["address"],
@@ -109,9 +110,13 @@ class ContractController(Controller):
         ],
     )
     def delete(self) -> None:
-        contract = Contract.get_by_name_or_raise(self.app.pargs.name)
+        contract = Contract.get_by_name_and_chain_or_raise(
+            self.app.pargs.name, self.app.chain_name
+        )
         contract.delete_instance()
-        self.app.log.info(f"Contract '{self.app.pargs.name}' deleted correctly")
+        self.app.log.info(
+            f"Contract '{self.app.pargs.name}' on chain '{self.app.chain_name}' deleted correctly"
+        )
 
     @ex(help="preload a few contracts and their chains")
     def seed(self) -> None:

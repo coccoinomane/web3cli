@@ -1,8 +1,9 @@
+import pytest
 from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.core.exceptions import ChainNotFound, Web3CliError
-from web3cli.core.models.chain import Chain, ChainRpc, Rpc
+from web3cli.core.models.chain import Chain, Rpc
 from web3cli.helpers.render import render_table
 
 
@@ -113,3 +114,5 @@ class RpcController(Controller):
             rpc = Rpc.get(id)
             rpc.delete_instance()
             self.app.log.info(f"Rpc {id} deleted correctly [url => {rpc.url}]")
+            with pytest.raises(Rpc.DoesNotExist):
+                Rpc.get_by_id(id)

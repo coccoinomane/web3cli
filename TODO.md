@@ -2,8 +2,8 @@
 
 ### Top priority
 
-- Controller tests
 - `w3 block` test
+- Make web3cli extensible
 - Send tokens
 
 ### Extra commands 
@@ -22,7 +22,8 @@
 ### Address book
 
 - ENS support
-- Resolve address should look also in signature names (make signer & address names unique?)
+- Resolve address should look also in signer names? Unique constraint on name?
+- Resolve address should look also in contract names? Unique constraint on name?
 - Address book: helper method to un-resolve address (from 0x to name, if it exists), useful for `w3 tx list`
 
 ### UX
@@ -37,6 +38,7 @@
 
 ### Misc
 
+- Enforce lowercase for all model names (at the db level?)
 - Add trailing newline to json output
 - Use different db file for dev environment
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended

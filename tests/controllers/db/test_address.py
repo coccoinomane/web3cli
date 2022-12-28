@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import AddressIsInvalid
+from web3cli.core.exceptions import AddressIsInvalid, RecordNotFound
 from web3cli.core.models.address import Address
 from web3cli.core.models.types import AddressFields
 from web3cli.helpers.seed import seed_addresses
@@ -120,3 +120,5 @@ def test_address_delete(addresses: List[AddressFields]) -> None:
                 ]
             ).run()
             assert Address.select().count() == len(addresses) - 1
+            with pytest.raises(RecordNotFound):
+                Address.get_by_name_or_raise(a["name"])
