@@ -2,7 +2,7 @@
 
 ### Top priority
 
-- Implement `w3 tx fetch`
+- Fix same-label controllers (live_tx)
 - Make web3cli extensible
 - Send tokens
 
@@ -38,6 +38,7 @@
 ### Misc
 
 - Enforce lowercase for all model names (at the db level?)
+- Reset local chain between tests
 - Add trailing newline to json output
 - Use different db file for dev environment
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended

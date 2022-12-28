@@ -44,7 +44,7 @@ def test_sign(
 
 
 @pytest.mark.local
-def test_block(app: Web3CliTest, chain: Any, alice: Account, bob: Account) -> None:
+def test_block(app: Web3CliTest, alice: Account, bob: Account) -> None:
     tx = alice.transfer(bob, 10000)
     app.set_args(["block", "latest"]).run()
     data, output = app.last_rendered
