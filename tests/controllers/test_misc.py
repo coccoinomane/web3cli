@@ -1,6 +1,8 @@
+import json
 from typing import Any, Dict, List
 
 import pytest
+from brownie.network.account import Account
 
 from tests.main import Web3CliTest
 from web3cli.core.models.types import ChainFields
@@ -39,3 +41,14 @@ def test_sign(
         assert "s" in data["out"]
         assert "v" in data["out"]
         assert "signature" in data["out"]
+
+
+@pytest.mark.local
+def test_block(app: Web3CliTest, chain: Any, alice: Account, bob: Account) -> None:
+    tx = alice.transfer(bob, 10000)
+    app.set_args(["block", "latest"]).run()
+    data, output = app.last_rendered
+    block: dict[str, Any] = json.loads(output)
+    assert type(block.get("transactions")) == list
+    assert len(block["transactions"]) == 1
+    assert block["transactions"][0] == tx.txid

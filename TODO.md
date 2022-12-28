@@ -2,13 +2,12 @@
 
 ### Top priority
 
-- `w3 block` test
+- Implement `w3 tx fetch`
 - Make web3cli extensible
 - Send tokens
 
 ### Extra commands 
 
-- Implement `w3 tx fetch`
 - Command to import chains from https://chainid.network/chains.json
 - Command to import tokens from ethereum-lists
 - Command to import contracts from ethPM or etherscan ([like brownie](https://eth-brownie.readthedocs.io/en/latest/core-contracts.html#fetching-from-a-remote-source))
