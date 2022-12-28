@@ -21,6 +21,7 @@ class Contract(BaseModel):
 
     name = TextField()
     desc = TextField(null=True)
+    type = TextField(null=True)
     address = TextField()
     chain = TextField()
     abi = JSONField(null=True)

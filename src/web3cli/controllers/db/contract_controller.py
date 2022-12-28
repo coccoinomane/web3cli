@@ -24,10 +24,10 @@ class ContractController(Controller):
         render_table(
             self.app,
             data=[
-                [c.name, c.chain, c.address, bool(c.abi)]
+                [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
                 for c in Contract.get_all(Contract.name)
             ],
-            headers=["NAME", "CHAIN", "ADDRESS", "ABI"],
+            headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
             wrap=42,
         )
 
@@ -47,11 +47,15 @@ class ContractController(Controller):
         help="add a new contract to the database",
         arguments=[
             (["name"], {"help": "name of the contract, for reference"}),
+            (["-d", "--desc"], {"action": "store"}),
+            (
+                ["-t", "--type"],
+                {"help": "type of the contract, e.g. erc20 or uniswap_v2_router"},
+            ),
             (
                 ["address"],
                 {"help": "address of the contract on the blockchain (0x...)"},
             ),
-            (["-d", "--desc"], {"action": "store"}),
             (
                 ["-u", "--update"],
                 {
@@ -86,6 +90,7 @@ class ContractController(Controller):
                 {
                     "name": self.app.pargs.name,
                     "desc": self.app.pargs.desc,
+                    "type": self.app.pargs.type,
                     "address": self.app.pargs.address,
                     "chain": self.app.chain_name,
                     "abi": abi,

@@ -5,6 +5,7 @@ from web3cli.core.models.types import ContractFields
 bnb_busd: ContractFields = {
     "name": "BUSD",
     "desc": None,
+    "type": "erc20",
     "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
     "chain": "bnb",
     "abi": json.loads(
@@ -15,6 +16,7 @@ bnb_busd: ContractFields = {
 bnb_pancakeswap_router_v2: ContractFields = {
     "name": "PancakeSwap: Router v2",
     "desc": None,
+    "type": "uniswap_v2_router",
     "address": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
     "chain": "bnb",
     "abi": json.loads(

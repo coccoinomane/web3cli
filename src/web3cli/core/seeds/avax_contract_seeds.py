@@ -5,6 +5,7 @@ from web3cli.core.models.types import ContractFields
 avax_usdc: ContractFields = {
     "name": "USDC",
     "desc": None,
+    "type": "erc20",
     "address": "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e",
     "chain": "avax",
     "abi": json.loads(
@@ -15,6 +16,7 @@ avax_usdc: ContractFields = {
 avax_trader_joe_router: ContractFields = {
     "name": "Trader Joe: Router",
     "desc": None,
+    "type": "uniswap_v2_router",
     "address": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
     "chain": "avax",
     "abi": json.loads(

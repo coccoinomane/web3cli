@@ -60,6 +60,7 @@ class ContractFields(TypedDict):
 
     name: str
     desc: NotRequired[str]
+    type: NotRequired[str]
     address: str
     chain: str
     abi: NotRequired[ABI]
