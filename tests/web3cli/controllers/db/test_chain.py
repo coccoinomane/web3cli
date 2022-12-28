@@ -2,7 +2,7 @@ from typing import List
 
 import pytest
 
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.seed import seed_chains
 from web3core.exceptions import RecordNotFound

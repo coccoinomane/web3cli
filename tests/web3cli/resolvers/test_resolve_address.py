@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 from web3cli.helpers.seed import seed_addresses
 from web3core.exceptions import AddressNotResolved
 from web3core.models.address import Address

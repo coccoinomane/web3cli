@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.helper import get_random_string
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 from web3cli.helpers.crypto import decrypt_string_with_app_key
 from web3cli.helpers.database import truncate_tables
 from web3cli.helpers.seed import seed_signers

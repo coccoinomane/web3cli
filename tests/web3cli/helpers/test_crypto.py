@@ -1,6 +1,6 @@
 import pytest
 
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 from web3cli.helpers import crypto
 
 

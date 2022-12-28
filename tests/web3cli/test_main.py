@@ -1,4 +1,4 @@
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 
 
 def test_naked() -> None:

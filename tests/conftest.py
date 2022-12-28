@@ -11,8 +11,8 @@ from cement import fs
 from pytest import FixtureRequest
 
 import brownie
-from tests.main import Web3CliTest
 from tests.seed import seed_local_accounts, seed_local_chain
+from tests.web3cli.main import Web3CliTest
 from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
 from web3core.seeds import chain_seeds, contract_seeds
 

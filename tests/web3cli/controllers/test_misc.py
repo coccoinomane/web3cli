@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import pytest
 from brownie.network.account import Account
 
-from tests.main import Web3CliTest
+from tests.web3cli.main import Web3CliTest
 from web3cli.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
