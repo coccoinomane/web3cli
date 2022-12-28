@@ -6,8 +6,8 @@ import secrets
 import string
 from typing import Any
 
-from web3cli.core.helpers import yaml
 from web3cli.main import Web3Cli
+from web3core.helpers import yaml
 
 
 def get_test_config_file() -> str:

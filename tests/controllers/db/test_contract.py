@@ -3,10 +3,10 @@ from typing import List
 import pytest
 
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import ContractNotFound
-from web3cli.core.models.contract import Contract
-from web3cli.core.models.types import ContractFields
 from web3cli.helpers.seed import seed_contracts
+from web3core.exceptions import ContractNotFound
+from web3core.models.contract import Contract
+from web3core.models.types import ContractFields
 
 
 def test_contract_list(contracts: List[ContractFields]) -> None:

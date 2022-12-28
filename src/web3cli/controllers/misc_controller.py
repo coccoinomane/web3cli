@@ -5,11 +5,10 @@ from cement import ex
 from web3 import Web3
 
 from web3cli.controllers.controller import Controller
-from web3cli.core.helpers.web3 import format_attribute_dict
-from web3cli.core.models.address import Address
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers.signer import signer_ready_or_raise
+from web3core.models.address import Address
 
 
 class MiscController(Controller):

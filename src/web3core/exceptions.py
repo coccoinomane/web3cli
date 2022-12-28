@@ -1,10 +1,10 @@
-class Web3CliError(Exception):
+class Web3CoreError(Exception):
     """Generic errors"""
 
     pass
 
 
-class RecordNotFound(Web3CliError):
+class RecordNotFound(Web3CoreError):
     """When a record from the database is not found"""
 
     pass
@@ -16,31 +16,31 @@ class ChainNotFound(RecordNotFound):
     pass
 
 
-class ChainNotResolved(Web3CliError):
+class ChainNotResolved(Web3CoreError):
     """When a string cannot be resolved to a chain"""
 
     pass
 
 
-class AddressIsInvalid(Web3CliError):
+class AddressIsInvalid(Web3CoreError):
     """When an address 0x... is not in a valid EVM format"""
 
     pass
 
 
-class AddressNotResolved(Web3CliError):
+class AddressNotResolved(Web3CoreError):
     """When a string cannot be resolved to a valid address"""
 
     pass
 
 
-class KeyIsInvalid(Web3CliError):
+class KeyIsInvalid(Web3CoreError):
     """When a non-valid private key is provided"""
 
     pass
 
 
-class RpcIsInvalid(Web3CliError):
+class RpcIsInvalid(Web3CoreError):
     """When a non-valid RPC is used"""
 
     pass
@@ -58,19 +58,13 @@ class SignerNotFound(RecordNotFound):
     pass
 
 
-class InvalidConfig(Web3CliError):
-    """When any configuration value cannot be found"""
-
-    pass
-
-
-class TxNotFound(Web3CliError):
+class TxNotFound(Web3CoreError):
     """When a transaction hash is not found in the database"""
 
     pass
 
 
-class TxIsInvalid(Web3CliError):
+class TxIsInvalid(Web3CoreError):
     """When a transatction hash is not in a valid EVM format"""
 
     pass
@@ -82,7 +76,7 @@ class ContractNotFound(RecordNotFound):
     pass
 
 
-class ContractIsInvalid(Web3CliError):
+class ContractIsInvalid(Web3CoreError):
     """When a contract address or other field is not valid
     EVM format"""
 

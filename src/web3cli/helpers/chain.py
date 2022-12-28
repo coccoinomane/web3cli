@@ -1,7 +1,7 @@
 from cement import App
 
-from web3cli.core.exceptions import ChainNotFound
-from web3cli.core.models.chain import Chain
+from web3core.exceptions import ChainNotFound
+from web3core.models.chain import Chain
 
 
 def chain_ready_or_raise(app: App) -> None:

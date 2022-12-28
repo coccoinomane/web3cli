@@ -6,11 +6,11 @@ from typing import Type
 from peewee import BigIntegerField, DateTimeField, TextField
 from playhouse.signals import pre_save
 
-from web3cli.core.exceptions import AddressIsInvalid, TxIsInvalid, TxNotFound
-from web3cli.core.models.address import Address
-from web3cli.core.models.timestamps_model import TimestampsModel
-from web3cli.core.models.types import TxFields
-from web3cli.core.types import Logger
+from web3core.exceptions import AddressIsInvalid, TxIsInvalid, TxNotFound
+from web3core.models.address import Address
+from web3core.models.timestamps_model import TimestampsModel
+from web3core.models.types import TxFields
+from web3core.types import Logger
 
 
 class Tx(TimestampsModel):

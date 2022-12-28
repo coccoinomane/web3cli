@@ -2,8 +2,8 @@ import ast
 
 from cement import App
 
-from web3cli.core.exceptions import InvalidConfig
-from web3cli.core.helpers.crypto import decrypt_string, encrypt_string
+from web3cli.exceptions import InvalidConfig
+from web3core.helpers.crypto import decrypt_string, encrypt_string
 
 
 def encrypt_string_with_app_key(app: App, message: str) -> bytes:

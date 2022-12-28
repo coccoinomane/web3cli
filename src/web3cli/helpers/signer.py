@@ -1,7 +1,7 @@
 from cement import App
 
-from web3cli.core.exceptions import SignerNotFound, Web3CliError
-from web3cli.core.models.signer import Signer
+from web3cli.exceptions import Web3CliError
+from web3core.models.signer import Signer
 
 
 def signer_ready_or_raise(app: App) -> None:

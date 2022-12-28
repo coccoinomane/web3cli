@@ -1,6 +1,6 @@
 from typing import List
 
-from web3cli.core.models.types import ChainFields
+from web3core.models.types import ChainFields
 
 # Ethereum
 eth: ChainFields = {

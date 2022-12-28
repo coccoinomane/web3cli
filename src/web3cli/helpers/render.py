@@ -3,7 +3,7 @@ from typing import Any, List
 
 from cement import App
 
-from web3cli.core.helpers.format import wrap as wrap_
+from web3core.helpers.format import wrap as wrap_
 
 
 def render_table(

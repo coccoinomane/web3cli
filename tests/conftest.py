@@ -13,13 +13,8 @@ from pytest import FixtureRequest
 import brownie
 from tests.main import Web3CliTest
 from tests.seed import seed_local_accounts, seed_local_chain
-from web3cli.core.models.types import (
-    AddressFields,
-    ChainFields,
-    ContractFields,
-    TxFields,
-)
-from web3cli.core.seeds import chain_seeds, contract_seeds
+from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
+from web3core.seeds import chain_seeds, contract_seeds
 
 
 @pytest.fixture()

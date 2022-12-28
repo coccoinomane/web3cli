@@ -3,8 +3,8 @@ from typing import Any
 
 from cement import App
 
-from web3cli.core.helpers import yaml
-from web3cli.core.helpers.os import create_folder
+from web3core.helpers import yaml
+from web3core.helpers.os import create_folder
 
 
 def update_setting_in_config_file(

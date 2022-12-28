@@ -1,6 +1,6 @@
 import json
 
-from web3cli.core.models.types import ContractFields
+from web3core.models.types import ContractFields
 
 eth_usdc: ContractFields = {
     "name": "usdc",

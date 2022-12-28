@@ -2,10 +2,10 @@ from cement import ex
 from playhouse.shortcuts import model_to_dict
 
 from web3cli.controllers.controller import Controller
-from web3cli.core.exceptions import Web3CliError
-from web3cli.core.helpers.format import cut
-from web3cli.core.models.tx import Tx
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
+from web3core.helpers.format import cut
+from web3core.models.tx import Tx
 
 
 class TxController(Controller):

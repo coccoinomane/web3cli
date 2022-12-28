@@ -1,6 +1,6 @@
 import json
 
-from web3cli.core.models.types import ContractFields
+from web3core.models.types import ContractFields
 
 bnb_busd: ContractFields = {
     "name": "busd",

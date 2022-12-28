@@ -1,9 +1,10 @@
 from cement import App
 
-from web3cli.core.exceptions import RpcIsInvalid, Web3CliError
-from web3cli.core.helpers.rpc import is_rpc_uri_valid
-from web3cli.core.models.chain import Chain
-from web3cli.core.models.signer import Signer
+from web3cli.exceptions import Web3CliError
+from web3core.exceptions import RpcIsInvalid
+from web3core.helpers.rpc import is_rpc_uri_valid
+from web3core.models.chain import Chain
+from web3core.models.signer import Signer
 
 
 def parse_global_args(app: App) -> None:

@@ -3,7 +3,7 @@ from typing import Any
 
 import ruamel.yaml
 
-from web3cli.core.types import Logger
+from web3core.types import Logger
 
 
 def set(

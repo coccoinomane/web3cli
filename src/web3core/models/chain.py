@@ -7,17 +7,17 @@ from playhouse.shortcuts import dict_to_model
 from web3.middleware import geth_poa_middleware
 from web3.types import Middleware
 
-from web3cli.core.exceptions import (
+from web3core.exceptions import (
     ChainNotResolved,
     RpcIsInvalid,
     RpcNotFound,
-    Web3CliError,
+    Web3CoreError,
 )
-from web3cli.core.helpers.rpc import is_rpc_uri_valid
-from web3cli.core.models.base_model import BaseModel
-from web3cli.core.models.types import ChainFields
-from web3cli.core.seeds import chain_seeds
-from web3cli.core.types import Logger
+from web3core.helpers.rpc import is_rpc_uri_valid
+from web3core.models.base_model import BaseModel
+from web3core.models.types import ChainFields
+from web3core.seeds import chain_seeds
+from web3core.types import Logger
 
 
 class Chain(BaseModel):
@@ -62,7 +62,7 @@ class Chain(BaseModel):
                 "geth_poa_middleware": geth_poa_middleware,
             }[middleware]
         except:
-            raise Web3CliError(f"Middleware {middleware} not supported")
+            raise Web3CoreError(f"Middleware {middleware} not supported")
 
     @classmethod
     def resolve_chain(cls, name: str) -> Chain:

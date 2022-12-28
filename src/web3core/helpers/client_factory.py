@@ -2,10 +2,10 @@ from typing import Any, Type
 
 from web3client.base_client import BaseClient
 
-from web3cli.core.helpers.crypto import decrypt_string
-from web3cli.core.models.chain import Chain
-from web3cli.core.models.signer import Signer
-from web3cli.core.types import Logger
+from web3core.helpers.crypto import decrypt_string
+from web3core.models.chain import Chain
+from web3core.models.signer import Signer
+from web3core.types import Logger
 
 
 def make_base_client(

@@ -7,11 +7,11 @@ from playhouse.signals import pre_save
 from playhouse.sqlite_ext import JSONField
 from web3._utils.validation import validate_abi
 
-from web3cli.core.exceptions import ContractIsInvalid, ContractNotFound
-from web3cli.core.models.address import Address
-from web3cli.core.models.base_model import BaseModel
-from web3cli.core.models.types import ContractFields
-from web3cli.core.types import Logger
+from web3core.exceptions import ContractIsInvalid, ContractNotFound
+from web3core.models.address import Address
+from web3core.models.base_model import BaseModel
+from web3core.models.types import ContractFields
+from web3core.types import Logger
 
 
 class Contract(BaseModel):

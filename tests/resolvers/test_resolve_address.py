@@ -3,10 +3,10 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import AddressNotResolved
-from web3cli.core.models.address import Address
-from web3cli.core.models.types import AddressFields
 from web3cli.helpers.seed import seed_addresses
+from web3core.exceptions import AddressNotResolved
+from web3core.models.address import Address
+from web3core.models.types import AddressFields
 
 
 def test_resolve_existing_address(addresses: List[AddressFields]) -> None:

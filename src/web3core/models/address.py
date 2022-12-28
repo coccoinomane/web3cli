@@ -6,10 +6,10 @@ import web3
 from peewee import TextField
 from playhouse.signals import pre_save
 
-from web3cli.core.exceptions import AddressIsInvalid, AddressNotResolved, RecordNotFound
-from web3cli.core.models.base_model import BaseModel
-from web3cli.core.models.types import AddressFields
-from web3cli.core.types import Logger
+from web3core.exceptions import AddressIsInvalid, AddressNotResolved, RecordNotFound
+from web3core.models.base_model import BaseModel
+from web3core.models.types import AddressFields
+from web3core.types import Logger
 
 
 class Address(BaseModel):

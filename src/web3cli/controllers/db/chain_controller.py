@@ -1,10 +1,11 @@
 from cement import ex
 
 from web3cli.controllers.controller import Controller
-from web3cli.core.exceptions import ChainNotFound, Web3CliError
-from web3cli.core.models.chain import Chain
-from web3cli.core.seeds import chain_seeds
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
+from web3core.exceptions import ChainNotFound
+from web3core.models.chain import Chain
+from web3core.seeds import chain_seeds
 
 
 class ChainController(Controller):

@@ -1,7 +1,7 @@
 import sys
 from typing import Any
 
-from web3cli.core.types import Logger
+from web3core.types import Logger
 
 
 def yes_or_exit(

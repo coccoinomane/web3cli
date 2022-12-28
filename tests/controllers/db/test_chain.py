@@ -3,10 +3,11 @@ from typing import List
 import pytest
 
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import RecordNotFound, Web3CliError
-from web3cli.core.models.chain import Chain
-from web3cli.core.models.types import ChainFields
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers.seed import seed_chains
+from web3core.exceptions import RecordNotFound
+from web3core.models.chain import Chain
+from web3core.models.types import ChainFields
 
 
 def test_chain_list(chains: List[ChainFields]) -> None:

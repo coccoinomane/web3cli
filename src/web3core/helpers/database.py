@@ -3,13 +3,13 @@ from typing import List, Type
 
 from playhouse.sqlite_ext import SqliteExtDatabase
 
-from web3cli.core.helpers.os import create_folder
-from web3cli.core.models.address import Address
-from web3cli.core.models.base_model import BaseModel, db
-from web3cli.core.models.chain import Chain, ChainRpc, Rpc
-from web3cli.core.models.contract import Contract
-from web3cli.core.models.signer import Signer
-from web3cli.core.models.tx import Tx
+from web3core.helpers.os import create_folder
+from web3core.models.address import Address
+from web3core.models.base_model import BaseModel, db
+from web3core.models.chain import Chain, ChainRpc, Rpc
+from web3core.models.contract import Contract
+from web3core.models.signer import Signer
+from web3core.models.tx import Tx
 
 tables: List[Type[BaseModel]] = [Signer, Address, Chain, Rpc, ChainRpc, Tx, Contract]
 

@@ -2,8 +2,8 @@ import os
 
 from cement import App
 
-from web3cli.core.exceptions import Web3CliError
-from web3cli.core.helpers.database import tables
+from web3cli.exceptions import Web3CliError
+from web3core.helpers.database import tables
 
 
 def db_ready_or_raise(app: App) -> None:

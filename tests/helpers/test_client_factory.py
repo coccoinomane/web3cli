@@ -3,9 +3,9 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.main import Web3CliTest
-from web3cli.core.models.types import ChainFields
 from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers.seed import seed_chains, seed_signers
+from web3core.models.types import ChainFields
 
 
 @pytest.mark.slow

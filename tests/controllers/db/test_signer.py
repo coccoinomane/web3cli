@@ -5,11 +5,11 @@ import pytest
 
 from tests.helper import get_random_string
 from tests.main import Web3CliTest
-from web3cli.core.exceptions import RecordNotFound, SignerNotFound
-from web3cli.core.models.signer import Signer
 from web3cli.helpers.crypto import decrypt_string_with_app_key
-from web3cli.helpers.database import delete_db_file, truncate_tables
+from web3cli.helpers.database import truncate_tables
 from web3cli.helpers.seed import seed_signers
+from web3core.exceptions import RecordNotFound, SignerNotFound
+from web3core.models.signer import Signer
 
 
 def test_signer_list(signers: List[Dict[str, Any]]) -> None:

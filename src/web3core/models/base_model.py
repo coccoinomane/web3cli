@@ -6,8 +6,8 @@ from peewee import Field, SqliteDatabase
 from playhouse.shortcuts import update_model_from_dict
 from playhouse.signals import Model
 
-from web3cli.core.exceptions import RecordNotFound
-from web3cli.core.types import Logger
+from web3core.exceptions import RecordNotFound
+from web3core.types import Logger
 
 db = SqliteDatabase(None, pragmas={"foreign_keys": 1})
 """Database, initialized during post_setup hook"""
