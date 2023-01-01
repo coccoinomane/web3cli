@@ -12,7 +12,7 @@ class DbTxController(Controller):
     """Handler of the `w3 db tx` commands"""
 
     class Meta:
-        label = "tx"
+        label = "trx"  # trx instead of tx to avoid conflict with TxController
         help = "add, list or delete transactions"
         stacked_type = "nested"
         stacked_on = "db"

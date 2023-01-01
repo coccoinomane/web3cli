@@ -14,7 +14,7 @@ def test_tx_list(txs: List[TxFields]) -> None:
     txs = sorted(txs, key=lambda t: t["created_at"], reverse=True)
     with Web3CliTest() as app:
         seed_txs(app, txs)
-        app.set_args(["db", "tx", "list"]).run()
+        app.set_args(["db", "trx", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(txs)):
             assert data[i][0] == txs[i]["hash"]
@@ -28,7 +28,7 @@ def test_tx_get(txs: List[TxFields]) -> None:
             app.set_args(
                 [
                     "db",
-                    "tx",
+                    "trx",
                     "get",
                     t["hash"],
                 ]
@@ -45,7 +45,7 @@ def test_tx_add(txs: List[TxFields]) -> None:
             app.set_args(
                 [
                     "db",
-                    "tx",
+                    "trx",
                     "add",
                     t["hash"],
                     t["from_"],
@@ -66,7 +66,7 @@ def test_tx_update(txs: List[TxFields]) -> None:
         app.set_args(
             argv=[
                 "db",
-                "tx",
+                "trx",
                 "add",
                 txs[0]["hash"],
                 txs[1]["from_"],
@@ -86,7 +86,7 @@ def test_tx_delete(txs: List[TxFields]) -> None:
             app.set_args(
                 [
                     "db",
-                    "tx",
+                    "trx",
                     "delete",
                     t["hash"],
                 ]

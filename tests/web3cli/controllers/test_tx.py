@@ -13,7 +13,7 @@ from web3core.models.types import ChainFields
 def test_tx_get(app: Web3CliTest, alice: Account, bob: Account) -> None:
     value = 10000
     sent_tx = alice.transfer(bob, value)
-    app.set_args(["live-tx", "get", str(sent_tx.txid)]).run()
+    app.set_args(["tx", "get", str(sent_tx.txid)]).run()
     data, output = app.last_rendered
     tx: dict[str, Any] = json.loads(output)
     assert tx.get("hash") == sent_tx.txid
@@ -28,7 +28,7 @@ def test_tx_get(app: Web3CliTest, alice: Account, bob: Account) -> None:
 @pytest.mark.local
 def test_tx_get_receipt(app: Web3CliTest, alice: Account, bob: Account) -> None:
     sent_tx = alice.transfer(bob, 10000)
-    app.set_args(["live-tx", "get-receipt", str(sent_tx.txid)]).run()
+    app.set_args(["tx", "get-receipt", str(sent_tx.txid)]).run()
     data, output = app.last_rendered
     receipt: dict[str, Any] = json.loads(output)
     assert receipt.get("transactionHash") == sent_tx.txid

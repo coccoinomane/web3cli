@@ -12,7 +12,7 @@ class TxController(Controller):
     """Handler of the `w3 tx` commands"""
 
     class Meta:
-        label = "live_tx"
+        label = "tx"
         help = "fetch transactions from the blockchain"
         stacked_type = "nested"
         stacked_on = "base"
