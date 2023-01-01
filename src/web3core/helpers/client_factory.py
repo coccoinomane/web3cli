@@ -13,14 +13,14 @@ def make_base_client(
     node_uri: str = None,
     base: Type[BaseClient] = BaseClient,
     logger: Logger = lambda msg: None,
-    **clientArgs: Any,
+    **client_args: Any,
 ) -> BaseClient:
     """Return a brand new client configured for the given blockchain"""
     if node_uri is None:
         node_uri = chain.pick_rpc().url
     if logger:
         logger(f"Using chain {chain.name} with RPC {node_uri}")
-    client = base(nodeUri=node_uri, **clientArgs)
+    client = base(nodeUri=node_uri, **client_args)
     client.chainId = chain.chain_id
     client.txType = chain.tx_type
     middlewares = chain.middlewares.split(",") if chain.middlewares else []
@@ -35,12 +35,12 @@ def make_base_wallet(
     node_uri: str = None,
     base: Type[BaseClient] = BaseClient,
     logger: Logger = lambda msg: None,
-    **clientArgs: Any,
+    **client_args: Any,
 ) -> BaseClient:
     """Return a brand new client configured for the given blockchain,
     with signing support. You need to provide the name of the signer
     from the DB, and a password to decrypt the signer's key."""
-    client = make_base_client(chain, node_uri, base, **clientArgs)
+    client = make_base_client(chain, node_uri, base, **client_args)
     signer = Signer.get_by_name_or_raise(signer_name)
     if logger:
         logger(f"Using signer {signer_name}")
