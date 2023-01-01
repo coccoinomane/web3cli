@@ -2,7 +2,6 @@
 
 ### Top priority
 
-- Fix same-label controllers (live_tx)
 - Make web3cli extensible
 - Send tokens
 
@@ -15,7 +14,6 @@
 
 ### Docs
 
-- README: Explain json output + trick `| python3 -mjson.tool`
 - README badges: web3.py, brownie, PDM, cement
 
 ### Address book

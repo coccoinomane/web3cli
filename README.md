@@ -55,12 +55,23 @@ pip3 install -U web3cli
    w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
    ```
 
-- Show details of blocks:
+- Fetch blocks from the blockchain, in easy-to-read JSON format:
    ```bash
    w3 block latest
    w3 block finalized
    w3 block 6094305
    w3 block 0xe737f53528e7ee8e700f87b399251f285fd1ed6a9a1518ce66dc2b4885f9fbb2
+   ```
+
+- Fetch transactions & receipts from the blockchain:
+   ```bash
+   w3 tx get 0x3bbdcc2c7721521f7c767b7873ccb857f0816ac94e9f32c5601f4b15c87d1ef1
+   w3 tx get-receipt 0x3bbdcc2c7721521f7c767b7873ccb857f0816ac94e9f32c5601f4b15c87d1ef1
+   ```
+
+- Extract single fields from blocks or transactions, using `jq` (more details [in the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)):
+   ```bash
+   w3 block latest | jq -r '.baseFeePerGas'
    ```
 
 - Sign messages:
@@ -176,6 +187,7 @@ Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wik
 - [🫡 List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands)
 - [⛓ Supported chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains)
 - [📝 Configuration](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%9D-Configuration)
+- [↪️ Output processing](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)
 
 
 # Acknowledgements
