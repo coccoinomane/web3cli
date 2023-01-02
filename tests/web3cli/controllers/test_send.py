@@ -19,14 +19,6 @@ def test_send_eth(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "--force"]
     ).run()
     assert bob.balance() == bob_balance + 1000000000000000000
-    ## When we will understand how to access tx history:
-    # data, output = app.last_rendered
-    # assert len(history) == 1
-    # assert output == history[0].txid
-    ## When we will be able to get gas fee from history
-    # assert alice.balance() == alice_balance - 1000000000000000000 - history[0].gas_fee
-    ## When we will be using london hardfork in ganache:
-    # assert history[0].priority_fee == app.priority_fee
 
 
 @pytest.mark.local

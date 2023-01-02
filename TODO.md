@@ -2,8 +2,9 @@
 
 ### Top priority
 
-- Make web3cli extensible
 - Send tokens
+- Test send tokens
+- Make web3cli extensible
 
 ### Extra commands 
 
