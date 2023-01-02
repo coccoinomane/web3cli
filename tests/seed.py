@@ -1,5 +1,4 @@
-"""Please note this file DOES NOT contain tests, but
-helper functions to better run tests"""
+"""Helper functions to populate the DB for the tests"""
 
 from typing import List
 

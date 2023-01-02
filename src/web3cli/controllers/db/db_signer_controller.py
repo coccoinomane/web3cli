@@ -60,7 +60,7 @@ class DbSignerController(Controller):
             (
                 ["--create"],
                 {
-                    "help": "generate a new private key instead, and use it to create the signer",
+                    "help": "generate a new private key instead, and use it to create the signer; then print the private key",
                     "action": "store_true",
                 },
             ),
@@ -108,6 +108,9 @@ class DbSignerController(Controller):
         self.app.log.info(
             f"Signer '{self.app.pargs.name}' added correctly (address={address})"
         )
+        if self.app.pargs.create:
+            # Print private key
+            self.app.print(key)
 
     @ex(
         help="delete a signer",
