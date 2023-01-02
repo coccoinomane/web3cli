@@ -41,12 +41,14 @@ def make_contract_wallet(
     """Client suitable to interact with the given smart contract"""
     # Fetch contract
     contract = Contract.get_by_name_and_chain_or_raise(
-        app.chain_name, contract_name.lower()
+        contract_name.lower(), app.chain_name
     )
     if contract.type != contract_type:
         raise Web3CliError(
             f"Contract with name '{contract_name}' is not a saved token of type '{contract_type}'"
         )
+    if not contract.abi:
+        raise Web3CliError(f"Contract '{contract_name}' has no ABI")
     # Create and return client
     return make_base_wallet(
         chain=app.chain,

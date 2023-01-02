@@ -1,5 +1,5 @@
 import sys
-from typing import Any
+from typing import Union
 
 from web3core.types import Logger
 
@@ -20,3 +20,11 @@ def yes_or_exit(
             logger(exit_msg)
         sys.exit(exit_code)
     return answer
+
+
+def to_number(s: str) -> Union[int, float]:
+    """Cast a string to either an integer or a float"""
+    try:
+        return int(s)
+    except ValueError:
+        return float(s)

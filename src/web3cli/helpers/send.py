@@ -46,7 +46,11 @@ def send_coin_or_token(
             )
         return send_native_coin(app, to, amount, unit)
 
-    # Try to send ERC20 token
+    # Check if a contract exist with name=ticker
+    token = Contract.get_by_name_and_chain(ticker, app.chain_name)
+    if not token or not token.type == "erc20":
+        raise Web3CliError(f"No ERC20 contract with name {ticker} on {app.chain.name}")
+
     return send_erc20_token(app, ticker, to, amount, unit)
 
 
@@ -84,7 +88,7 @@ def send_erc20_token(
         return send_erc20_token_in_decimals(app, ticker, to, amount)
 
     raise Web3CliError(
-        f"Invalid unit for token: {unit}. Please use 'smallest' or leave blank"
+        f"Invalid unit {unit} for a token. Please use 'smallest' or leave blank"
     )
 
 

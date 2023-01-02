@@ -4,7 +4,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.send import send_coin_or_token
 from web3cli.helpers.signer import signer_ready_or_raise
-from web3core.helpers.input import yes_or_exit
+from web3core.helpers.misc import to_number, yes_or_exit
 from web3core.models.address import Address
 
 
@@ -26,7 +26,7 @@ class SendController(Controller):
                     "help": "receiver of the funds; can be an actual address or an address tag",
                 },
             ),
-            (["amount"], {"help": "how much to send", "type": float}),
+            (["amount"], {"help": "how much to send"}),
             (
                 ["ticker"],
                 {"help": "ticker of the coin or token to send"},
@@ -52,10 +52,12 @@ class SendController(Controller):
         signer_ready_or_raise(self.app)
         # Parse arguments
         to_address = Address.resolve_address(self.app.pargs.to)
+        amount = to_number(self.app.pargs.amount)
+        ticker = self.app.pargs.ticker.lower()
         if not self.app.pargs.force:
-            what = f"{self.app.pargs.amount} {self.app.pargs.ticker}"
+            what = f"{amount} {ticker}"
             if self.app.pargs.unit:
-                what = f"{self.app.pargs.amount} {self.app.pargs.unit} units of {self.app.pargs.ticker}"
+                what = f"{amount} {self.app.pargs.unit} unit(s) of {ticker}"
             print(
                 f"You are about to send {what} on the {self.app.chain.name} chain from signer {self.app.signer} to {to_address}."
             )
@@ -63,9 +65,9 @@ class SendController(Controller):
         # Send
         tx_hash = send_coin_or_token(
             self.app,
-            ticker=self.app.pargs.ticker,
+            ticker=ticker,
             to=to_address,
-            amount=self.app.pargs.amount,
+            amount=amount,
             unit=self.app.pargs.unit,
         )
         self.app.print(tx_hash)
