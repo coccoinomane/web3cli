@@ -36,7 +36,6 @@ class SendController(Controller):
                 {
                     "help": "optionally specify the unit to use (wei, gwei, etc)",
                     "nargs": "?",
-                    "default": "ether",
                 },
             ),
             (
@@ -55,7 +54,7 @@ class SendController(Controller):
         to_address = Address.resolve_address(self.app.pargs.to)
         if not self.app.pargs.force:
             what = f"{self.app.pargs.amount} {self.app.pargs.ticker}"
-            if self.app.pargs.unit != "ether":
+            if self.app.pargs.unit:
                 what = f"{self.app.pargs.amount} {self.app.pargs.unit} units of {self.app.pargs.ticker}"
             print(
                 f"You are about to send {what} on the {self.app.chain.name} chain from signer {self.app.signer} to {to_address}."
