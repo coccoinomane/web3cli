@@ -9,17 +9,17 @@ Interact with blockchains and smart contracts using the command line: no coding 
 
 # Features
 
-- Interact with Ethereum-compatible chains via your terminal
+- Interact with Ethereum and EVM-compatible chains via your terminal
 - Bypass sluggish and potentially compromised frontends
 - No configuration needed
 - Label addresses, tokens and contracts for ease of use
 - Use as many signers as you wish
 - Concatenate commands to build powerful scripts
+- Transfer tokens via their ticker
 - Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
 
 Soon:
 
-- Transfer tokens via their ticker
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Claim and reinvest yield from DeFi protocols
 - Set up scheduled buys and sells (DCA)
@@ -53,6 +53,11 @@ pip3 install -U web3cli
    w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
    w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
    w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
+   ```
+
+- Send tokens as well:
+   ```
+   w3 send unicef 1 USDC # send 1 USDC
    ```
 
 - Fetch blocks from the blockchain, in easy-to-read JSON format:

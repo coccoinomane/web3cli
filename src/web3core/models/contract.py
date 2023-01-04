@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Type
 
-from peewee import TextField
+from peewee import ForeignKeyField, TextField
 from playhouse.signals import pre_save
 from playhouse.sqlite_ext import JSONField
 from web3._utils.validation import validate_abi
@@ -10,8 +10,22 @@ from web3._utils.validation import validate_abi
 from web3core.exceptions import ContractIsInvalid, ContractNotFound
 from web3core.models.address import Address
 from web3core.models.base_model import BaseModel
-from web3core.models.types import ContractFields
+from web3core.models.types import ContractFields, ContractTypeFields
 from web3core.types import Logger
+
+
+class ContractType(BaseModel):
+    class Meta:
+        table_name = "contract_types"
+
+    name = TextField(unique=True)
+    desc = TextField(null=True)
+    abi = JSONField()
+
+    @classmethod
+    def upsert(cls, fields: ContractTypeFields, logger: Logger = None) -> ContractType:
+        """Create a contract type or update it if one with the same name already exists"""
+        return cls.upsert_by_field(cls.name, fields["name"], fields, logger, True)
 
 
 class Contract(BaseModel):

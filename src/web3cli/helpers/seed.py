@@ -5,11 +5,17 @@ from cement import App
 from web3cli.helpers.database import db_ready_or_raise
 from web3core.models.address import Address
 from web3core.models.chain import Chain
-from web3core.models.contract import Contract
+from web3core.models.contract import Contract, ContractType
 from web3core.models.signer import Signer
 from web3core.models.tx import Tx
-from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
-from web3core.seeds import chain_seeds, contract_seeds
+from web3core.models.types import (
+    AddressFields,
+    ChainFields,
+    ContractFields,
+    ContractTypeFields,
+    TxFields,
+)
+from web3core.seeds import chain_seeds, contract_seeds, contract_type_seeds
 
 
 def populate_db(app: App) -> None:
@@ -39,7 +45,16 @@ def seed_chains(app: App, chains: List[ChainFields]) -> List[Chain]:
 def seed_contracts(app: App, contracts: List[ContractFields]) -> List[Contract]:
     """Add the given contracts to the database"""
     db_ready_or_raise(app)
+    seed_contract_types(app, contract_type_seeds.all)
     return [Contract.upsert(c) for c in contracts]
+
+
+def seed_contract_types(
+    app: App, contract_types: List[ContractTypeFields]
+) -> List[ContractType]:
+    """Add the given contract types to the database"""
+    db_ready_or_raise(app)
+    return [ContractType.upsert(ct) for ct in contract_types]
 
 
 def seed_addresses(app: App, addresses: List[AddressFields]) -> List[Address]:

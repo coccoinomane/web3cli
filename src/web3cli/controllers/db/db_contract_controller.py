@@ -25,8 +25,8 @@ class DbContractController(Controller):
             self.app,
             data=[
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
-                # TODO: order by name AND chain
                 for c in Contract.get_all(Contract.name)
+                if c.chain == self.app.chain_name
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
             wrap=42,

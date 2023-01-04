@@ -7,11 +7,20 @@ from web3core.helpers.os import create_folder
 from web3core.models.address import Address
 from web3core.models.base_model import BaseModel, db
 from web3core.models.chain import Chain, ChainRpc, Rpc
-from web3core.models.contract import Contract
+from web3core.models.contract import Contract, ContractType
 from web3core.models.signer import Signer
 from web3core.models.tx import Tx
 
-tables: List[Type[BaseModel]] = [Signer, Address, Chain, Rpc, ChainRpc, Tx, Contract]
+tables: List[Type[BaseModel]] = [
+    Signer,
+    Address,
+    Chain,
+    Rpc,
+    ChainRpc,
+    Tx,
+    ContractType,
+    Contract,
+]
 
 
 def init_db(db_path: str) -> SqliteExtDatabase:
