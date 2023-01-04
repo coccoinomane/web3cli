@@ -2,8 +2,8 @@
 
 ### Top priority
 
+- Add token send to README
 - contract_type model with most common ABIs (erc20, uniswap_router_v2)
-- Launch local block explorer after tests
 - Make web3cli extensible
 
 ### Extra commands 
@@ -37,6 +37,7 @@
 
 ### Misc
 
+- Launch local block explorer after tests
 - Enforce lowercase for all model names (at the db level?)
 - Reset local chain between tests
 - Add trailing newline to json output
