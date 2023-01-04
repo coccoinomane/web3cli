@@ -1,4 +1,3 @@
-import pytest
 from cement import ex
 
 from web3cli.controllers.controller import Controller
@@ -115,5 +114,3 @@ class DbRpcController(Controller):
             rpc = Rpc.get(id)
             rpc.delete_instance()
             self.app.log.info(f"Rpc {id} deleted correctly [url => {rpc.url}]")
-            with pytest.raises(Rpc.DoesNotExist):
-                Rpc.get_by_id(id)
