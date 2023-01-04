@@ -63,3 +63,9 @@ def validate(model_class: Contract, instance: Type[Contract], created: bool) -> 
         )
     if instance.abi:
         validate_abi(instance.abi)
+
+
+@pre_save(sender=Contract)
+def sanitize(model_class: Contract, instance: Type[Contract], created: bool) -> None:
+    """Sanitize the contract which is about to be saved"""
+    instance.name = instance.name.lower()

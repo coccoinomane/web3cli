@@ -2,12 +2,13 @@
 
 ### Top priority
 
-- Send tokens
-- Test send tokens
+- contract_type model with most common ABIs (erc20, uniswap_router_v2)
+- Launch local block explorer after tests
 - Make web3cli extensible
 
 ### Extra commands 
 
+- Command to swap tokens via Defi LLama token aggregator (https://twitter.com/DefiLlama/status/1609989799653285888)
 - Command to import chains from https://chainid.network/chains.json
 - Command to import tokens from ethereum-lists
 - Command to import contracts from ethPM or etherscan ([like brownie](https://eth-brownie.readthedocs.io/en/latest/core-contracts.html#fetching-from-a-remote-source))

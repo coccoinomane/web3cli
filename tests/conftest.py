@@ -6,11 +6,12 @@ import secrets
 from typing import Any, Dict, Iterator, List
 
 import pytest
-from brownie.network.account import Account
+from brownie.network.account import Account as BrownieAccount
+from brownie.network.contract import Contract as BrownieContract
+from brownie_tokens import ERC20
 from cement import fs
 from pytest import FixtureRequest
 
-import brownie
 from tests.seed import seed_local_accounts, seed_local_chain
 from tests.web3cli.main import Web3CliTest
 from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
@@ -131,14 +132,28 @@ def base_app(app_key: bytes) -> Iterator[Web3CliTest]:
 
 @pytest.fixture()
 def app(
-    base_app: Web3CliTest, accounts: List[Account], accounts_keys: List[str]
-) -> str:
+    base_app: Web3CliTest, accounts: List[BrownieAccount], accounts_keys: List[str]
+) -> Iterator[Web3CliTest]:
     """An app instance that can be used for tests on the local ganache
-    network. It depends on the accounts fixture of brownie, which in
+    network.
+
+    It has Brownie's accounts preloaded as signers.
+
+    It depends on the accounts fixture of brownie, which in
     turn depends on devnetwork fixture, which activates ganache"""
     seed_local_chain(base_app)
     seed_local_accounts(base_app, accounts, accounts_keys)
-    return base_app
+    yield base_app
+
+
+##
+#  ____                                      _
+# | __ )   _ __    ___   __      __  _ __   (_)   ___
+# |  _ \  | '__|  / _ \  \ \ /\ / / | '_ \  | |  / _ \
+# | |_) | | |    | (_) |  \ V  V /  | | | | | | |  __/
+# |____/  |_|     \___/    \_/\_/   |_| |_| |_|  \___|
+#
+##
 
 
 @pytest.fixture()
@@ -161,12 +176,32 @@ def accounts_keys() -> Iterator[List[str]]:
 
 
 @pytest.fixture()
-def alice() -> Account:
+def alice(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
-    yield brownie.accounts[0]
+    yield accounts[0]
 
 
 @pytest.fixture()
-def bob() -> Account:
+def bob(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
-    yield brownie.accounts[1]
+    yield accounts[1]
+
+
+@pytest.fixture(scope="session")
+def token_TST18(accounts: List[BrownieAccount]) -> BrownieContract:
+    """The TST18 token deployed on the local chain, with
+    18 decimals; each account will have 100 tokens"""
+    token = ERC20(name="Test Token", symbol="TST18", decimals=18)
+    for account in accounts:
+        token._mint_for_testing(account.address, 100 * 10**18)
+    yield token
+
+
+@pytest.fixture(scope="session")
+def token_TST6(accounts: List[BrownieAccount]) -> BrownieContract:
+    """The TST6 token deployed on the local chain, with
+    6 decimals; each account will have 100 tokens"""
+    token = ERC20(name="Test Token", symbol="TST", decimals=6)
+    for account in accounts:
+        token._mint_for_testing(account.address, 100 * 10**6)
+    yield token
