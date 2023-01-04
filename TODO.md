@@ -2,8 +2,8 @@
 
 ### Top priority
 
-- Add token send to README
 - contract_type model with most common ABIs (erc20, uniswap_router_v2)
+- Get tokens balance
 - Make web3cli extensible
 
 ### Extra commands 
