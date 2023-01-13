@@ -1,5 +1,3 @@
-import json
-
 from web3core.models.types import ContractFields
 
 avax_usdc: ContractFields = {

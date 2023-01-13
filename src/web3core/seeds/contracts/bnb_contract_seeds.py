@@ -1,10 +1,8 @@
-import json
-
 from web3core.models.types import ContractFields
 
 bnb_busd: ContractFields = {
     "name": "busd",
-    "desc": "BUSD Paxos token",
+    "desc": "Binance-Peg BUSD Token",
     "type": "erc20",
     "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
     "chain": "bnb",
