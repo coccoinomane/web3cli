@@ -81,3 +81,9 @@ class ContractIsInvalid(Web3CoreError):
     EVM format"""
 
     pass
+
+
+class ContractAbiNotResolved(Web3CoreError):
+    """When the ABI of a contract cannot be found"""
+
+    pass

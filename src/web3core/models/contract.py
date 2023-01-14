@@ -2,12 +2,17 @@ from __future__ import annotations
 
 from typing import Type
 
-from peewee import ForeignKeyField, TextField
+from peewee import TextField
 from playhouse.signals import pre_save
 from playhouse.sqlite_ext import JSONField
 from web3._utils.validation import validate_abi
+from web3.types import ABI
 
-from web3core.exceptions import ContractIsInvalid, ContractNotFound
+from web3core.exceptions import (
+    ContractAbiNotResolved,
+    ContractIsInvalid,
+    ContractNotFound,
+)
 from web3core.models.address import Address
 from web3core.models.base_model import BaseModel
 from web3core.models.types import ContractFields, ContractTypeFields
@@ -65,6 +70,23 @@ class Contract(BaseModel):
             fields,
             logger,
             True,
+        )
+
+    def resolve_abi(self) -> ABI:
+        """Return the ABI for the given contract.
+
+        First look in the abi property of the contract.
+        If not found, look up the contract type and return its ABI.
+        If not found, raise a ContractAbiNotResolved error.
+        """
+        if self.abi:
+            return self.abi
+        if self.type:
+            contract_type = ContractType.get_or_none(ContractType.name == self.type)
+            if contract_type:
+                return contract_type.abi
+        raise ContractAbiNotResolved(
+            f"ABI for contract '{self.name}' on chain '{self.chain}' could not be resolved"
         )
 
 
