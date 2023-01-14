@@ -4,6 +4,7 @@ from web3client.base_client import BaseClient
 
 from web3core.helpers.crypto import decrypt_string
 from web3core.models.chain import Chain
+from web3core.models.contract import Contract
 from web3core.models.signer import Signer
 from web3core.types import Logger
 
@@ -45,4 +46,25 @@ def make_base_wallet(
     if logger:
         logger(f"Using signer {signer_name}")
     client.setAccount(decrypt_string(signer.key, password))
+    return client
+
+
+def make_contract_wallet(
+    contract_name: str,
+    chain: Chain,
+    signer_name: str,
+    password: bytes,
+    node_uri: str = None,
+    base: Type[BaseClient] = BaseClient,
+    logger: Logger = lambda msg: None,
+    **client_args: Any,
+) -> BaseClient:
+    """Client suitable to interact with the given smart contract.
+    The contract ABI will be fetched from the contract's itself,
+    if present, or from the contract's type, if not."""
+    contract = Contract.get_by_name_and_chain_or_raise(contract_name, chain.name)
+    client = make_base_wallet(
+        chain, signer_name, password, node_uri, base, logger, **client_args
+    )
+    client.setContract(contract.address, contract.resolve_abi())
     return client
