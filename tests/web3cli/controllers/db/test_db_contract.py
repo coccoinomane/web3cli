@@ -3,8 +3,8 @@ from typing import List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_chains, seed_contracts
 from web3core.exceptions import ContractNotFound
+from web3core.helpers.seed import seed_chains, seed_contracts
 from web3core.models.contract import Contract
 from web3core.models.types import ChainFields, ContractFields
 
@@ -17,8 +17,8 @@ def test_contract_list(
     contracts = sorted(contracts, key=lambda c: c["name"])
     for chain in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
-            seed_contracts(app, contracts)
+            seed_chains(chains)
+            seed_contracts(contracts)
             chain_contracts = [c for c in contracts if c["chain"] == chain["name"]]
             app.set_args(["-c", chain["name"], "db", "contract", "list"]).run()
             data, output = app.last_rendered
@@ -32,7 +32,7 @@ def test_contract_list(
 def test_contract_get(contracts: List[ContractFields]) -> None:
     for c in contracts:
         with Web3CliTest() as app:
-            seed_contracts(app, contracts)
+            seed_contracts(contracts)
             app.set_args(
                 [
                     "--chain",
@@ -80,7 +80,7 @@ def test_contract_update(contracts: List[ContractFields]) -> None:
     """Create contract 0, then update it with the data of contract 1,
     while keeping the same name and chain"""
     with Web3CliTest() as app:
-        seed_contracts(app, [contracts[0]])
+        seed_contracts([contracts[0]])
         app.set_args(
             argv=[
                 "--chain",
@@ -108,7 +108,7 @@ def test_contract_update(contracts: List[ContractFields]) -> None:
 def test_contract_delete(contracts: List[ContractFields]) -> None:
     for c in contracts:
         with Web3CliTest() as app:
-            seed_contracts(app, contracts)
+            seed_contracts(contracts)
             app.set_args(
                 [
                     "--chain",

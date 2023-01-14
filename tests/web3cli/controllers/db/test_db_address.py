@@ -3,8 +3,8 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_addresses
 from web3core.exceptions import AddressIsInvalid, RecordNotFound
+from web3core.helpers.seed import seed_addresses
 from web3core.models.address import Address
 from web3core.models.types import AddressFields
 
@@ -16,7 +16,7 @@ def test_address_list(addresses: List[AddressFields]) -> None:
     addresses = sorted(addresses, key=lambda a: a["name"])
     with Web3CliTest() as app:
         # Add the addresses
-        seed_addresses(app, addresses)
+        seed_addresses(addresses)
         # Run `w3 db address list`
         app.set_args(["db", "address", "list"]).run()
         # Catpure output
@@ -30,7 +30,7 @@ def test_address_list(addresses: List[AddressFields]) -> None:
 def test_address_get(addresses: List[AddressFields]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
-            seed_addresses(app, addresses)
+            seed_addresses(addresses)
             app.set_args(
                 [
                     "db",
@@ -89,7 +89,7 @@ def test_address_update(addresses: List[AddressFields]) -> None:
     """Create address 0, then update it with the data of address 1,
     while keeping the same name"""
     with Web3CliTest() as app:
-        seed_addresses(app, [addresses[0]])
+        seed_addresses([addresses[0]])
         app.set_args(
             argv=[
                 "db",
@@ -110,7 +110,7 @@ def test_address_update(addresses: List[AddressFields]) -> None:
 def test_address_delete(addresses: List[AddressFields]) -> None:
     for a in addresses:
         with Web3CliTest() as app:
-            seed_addresses(app, addresses)
+            seed_addresses(addresses)
             app.set_args(
                 [
                     "db",

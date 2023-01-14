@@ -4,15 +4,15 @@ import pytest
 
 from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
-from web3cli.helpers.seed import seed_chains
 from web3core.exceptions import RecordNotFound
+from web3core.helpers.seed import seed_chains
 from web3core.models.chain import Chain
 from web3core.models.types import ChainFields
 
 
 def test_chain_list(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
-        seed_chains(app, chains)
+        seed_chains(chains)
         app.set_args(["db", "chain", "list"]).run()
         data, output = app.last_rendered
         for c in chains:
@@ -64,7 +64,7 @@ def test_chain_get(chains: List[ChainFields]) -> None:
     """With explicit argument > return argument value"""
     for chain in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
+            seed_chains(chains)
             app.set_args(["--chain", chain["name"], "db", "chain", "get"]).run()
             data, output = app.last_rendered
             assert data["out"] == chain["name"]
@@ -74,7 +74,7 @@ def test_chain_get_no_args(chains: List[ChainFields]) -> None:
     """Without any argument > return the default chain"""
     for chain in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
+            seed_chains(chains)
             app.config.set("web3cli", "default_chain", chain["name"])
             app.set_args(["db", "chain", "get"]).run()
             data, output = app.last_rendered
@@ -84,7 +84,7 @@ def test_chain_get_no_args(chains: List[ChainFields]) -> None:
 def test_chain_delete(chains: List[ChainFields]) -> None:
     for c in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
+            seed_chains(chains)
             app.set_args(
                 [
                     "db",

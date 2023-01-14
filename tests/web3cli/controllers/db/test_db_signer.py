@@ -7,8 +7,8 @@ from tests.helper import get_random_string
 from tests.web3cli.main import Web3CliTest
 from web3cli.helpers.crypto import decrypt_string_with_app_key
 from web3cli.helpers.database import truncate_tables
-from web3cli.helpers.seed import seed_signers
 from web3core.exceptions import RecordNotFound, SignerNotFound
+from web3core.helpers.seed import seed_signers
 from web3core.models.signer import Signer
 
 
@@ -17,7 +17,7 @@ def test_signer_list(signers: List[Dict[str, Any]]) -> None:
 
     signers = sorted(signers, key=lambda s: s["name"])
     with Web3CliTest() as app:
-        seed_signers(app, signers)
+        seed_signers(signers, app.app_key)
         app.set_args(["db", "signer", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(signers)):
@@ -28,7 +28,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
     # Test with name argument > returns address of signer with name
     for s in signers:
         with Web3CliTest() as app:
-            seed_signers(app, signers)
+            seed_signers(signers, app.app_key)
             app.set_args(
                 [
                     "db",
@@ -43,7 +43,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
     # Test with --signer argument > returns value of argument
     for s in signers:
         with Web3CliTest() as app:
-            seed_signers(app, signers)
+            seed_signers(signers, app.app_key)
             app.set_args(
                 [
                     "--signer",
@@ -59,7 +59,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
     # Test without arguments > returns whatever is written in config file
     s = signers[0]
     with Web3CliTest() as app:
-        seed_signers(app, signers)
+        seed_signers(signers, app.app_key)
         app.config.set("web3cli", "default_signer", s["name"])
         app.set_args(
             [
@@ -74,7 +74,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
     # Test without arguments, without config file, but there's one signer in the DB > returns that one signer
     s = signers[0]
     with Web3CliTest() as app:
-        seed_signers(app, [s])
+        seed_signers([s], app.app_key)
         app.set_args(
             [
                 "db",
@@ -87,7 +87,7 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
 
     # Test without arguments, without config file, but there are multiple signers in the DB > raise error
     with Web3CliTest() as app:
-        seed_signers(app, signers)
+        seed_signers(signers, app.app_key)
         with pytest.raises(SignerNotFound):
             app.set_args(
                 [
@@ -151,7 +151,7 @@ def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
 def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
     for s in signers:
         with Web3CliTest() as app:
-            seed_signers(app, signers)
+            seed_signers(signers, app.app_key)
             app.set_args(
                 [
                     "db",

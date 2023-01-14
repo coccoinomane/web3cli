@@ -3,15 +3,15 @@ from typing import List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_chains
 from web3core.exceptions import RpcIsInvalid
+from web3core.helpers.seed import seed_chains
 from web3core.models.chain import Chain, Rpc
 from web3core.models.types import ChainFields
 
 
 def test_rpc_list(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
-        seed_chains(app, chains)
+        seed_chains(chains)
         app.set_args(["db", "rpc", "list"]).run()
         data, output = app.last_rendered
         for c in chains:
@@ -47,7 +47,7 @@ def test_rpc_add(chains: List[ChainFields]) -> None:
 def test_rpc_get_with_id_argument(chains: List[ChainFields]) -> None:
     """With ID argument > it should return the url of the RPC with given ID"""
     with Web3CliTest() as app:
-        seed_chains(app, chains)
+        seed_chains(chains)
         rpcs = Rpc.get_all()
     for rpc in rpcs:
         with Web3CliTest(delete_db=False) as app:
@@ -70,7 +70,7 @@ def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
     """Without arguments > should return an RPC of the user-provided chain"""
     for c in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
+            seed_chains(chains)
             app.set_args(["--chain", c["name"], "db", "rpc", "get"]).run()
             data, output = app.last_rendered
             chain: Chain = Chain.select().where(Chain.name == c["name"]).get()
@@ -79,7 +79,7 @@ def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
 
 def test_rpc_delete(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
-        seed_chains(app, chains)
+        seed_chains(chains)
         rpcs = Rpc.get_all()
     n_rpcs = len(rpcs)
     for i, rpc in enumerate(rpcs):
