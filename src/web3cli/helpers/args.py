@@ -44,7 +44,7 @@ def parse_chain(app: App) -> str:
     if app.pargs.chain:
         chain = app.pargs.chain
     elif Chain.select().count() == 1:
-        chain = Chain.select().get()
+        chain = Chain.select().get().name
     elif app.config.get("web3cli", "default_chain"):
         chain = app.config.get("web3cli", "default_chain")
     else:
