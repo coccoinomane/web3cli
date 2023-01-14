@@ -64,3 +64,11 @@ class ContractFields(TypedDict):
     address: str
     chain: str
     abi: NotRequired[ABI]
+
+
+class ContractTypeFields(TypedDict):
+    """Typing for ContractType model creation and update"""
+
+    name: str
+    desc: NotRequired[str]
+    abi: ABI

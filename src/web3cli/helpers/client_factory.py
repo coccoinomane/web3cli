@@ -6,6 +6,9 @@ from web3client.base_client import BaseClient
 
 from web3cli.exceptions import Web3CliError
 from web3core.helpers.client_factory import make_base_client, make_base_wallet
+from web3core.helpers.client_factory import (
+    make_contract_wallet as make_contract_wallet_,
+)
 from web3core.models.contract import Contract
 
 
@@ -44,20 +47,14 @@ def make_contract_wallet(
         contract_name.lower(), app.chain_name
     )
     if contract.type != contract_type:
-        raise Web3CliError(
-            f"Contract with name '{contract_name}' is not a saved token of type '{contract_type}'"
-        )
-    if not contract.abi:
-        raise Web3CliError(f"Contract '{contract_name}' has no ABI")
-    # Create and return client
-    return make_base_wallet(
+        raise Web3CliError(f"Contract '{contract_name}' not of type '{contract_type}'")
+    return make_contract_wallet_(
+        contract_name=contract_name,
         chain=app.chain,
         signer_name=app.signer,
         password=app.app_key,
         node_uri=app.rpc,
         logger=app.log.info if log else app.log.info if log else None,
-        contractAddress=contract.address,
-        abi=contract.abi,
         **client_args,
     )
 

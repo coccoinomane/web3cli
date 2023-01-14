@@ -2,12 +2,12 @@
 
 ### Top priority
 
-- Add token send to README
-- contract_type model with most common ABIs (erc20, uniswap_router_v2)
+- Document contract in README with examples
 - Make web3cli extensible
 
 ### Extra commands 
 
+- Get tokens balance
 - Command to swap tokens via Defi LLama token aggregator (https://twitter.com/DefiLlama/status/1609989799653285888)
 - Command to import chains from https://chainid.network/chains.json
 - Command to import tokens from ethereum-lists
@@ -37,11 +37,12 @@
 
 ### Misc
 
+- Use memory db for dev environment
+- Make contract.type a foreign key to ContractType?
 - Launch local block explorer after tests
 - Enforce lowercase for all model names (at the db level?)
 - Reset local chain between tests
 - Add trailing newline to json output
-- Use different db file for dev environment
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
 - Tests: use london hardfork instead of istanbul?

@@ -35,6 +35,7 @@ class TxController(Controller):
         arguments=[
             (["hash"], {"help": "hash of the transaction"}),
         ],
+        aliases=["rc"],
     )
     def get_receipt(self) -> None:
         chain_ready_or_raise(self.app)

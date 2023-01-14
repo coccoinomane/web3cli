@@ -3,31 +3,36 @@ from typing import List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_contracts
 from web3core.exceptions import ContractNotFound
+from web3core.helpers.seed import seed_chains, seed_contracts
 from web3core.models.contract import Contract
-from web3core.models.types import ContractFields
+from web3core.models.types import ChainFields, ContractFields
 
 
-def test_contract_list(contracts: List[ContractFields]) -> None:
-    """Add contracts and check that they are listed alphabetically"""
-    contracts = sorted(contracts, key=lambda c: c["name"] + c["chain"])
-    print([c["name"] for c in contracts])
-    with Web3CliTest() as app:
-        seed_contracts(app, contracts)
-        app.set_args(["db", "contract", "list"]).run()
-        data, output = app.last_rendered
-        for i in range(0, len(contracts)):
-            assert data[i][0] == contracts[i]["name"]
-            assert data[i][1] == str(contracts[i]["chain"])
-            assert data[i][2] == str(contracts[i]["type"])
-            assert data[i][4] == str(contracts[i]["address"])
+def test_contract_list(
+    contracts: List[ContractFields], chains: List[ChainFields]
+) -> None:
+    """Add contracts and check that they are listed alphabetically
+    by name and chain"""
+    contracts = sorted(contracts, key=lambda c: c["name"])
+    for chain in chains:
+        with Web3CliTest() as app:
+            seed_chains(chains)
+            seed_contracts(contracts)
+            chain_contracts = [c for c in contracts if c["chain"] == chain["name"]]
+            app.set_args(["-c", chain["name"], "db", "contract", "list"]).run()
+            data, output = app.last_rendered
+            for i in range(0, len(chain_contracts)):
+                assert data[i][0] == chain_contracts[i]["name"]
+                assert data[i][1] == str(chain_contracts[i]["chain"])
+                assert data[i][2] == str(chain_contracts[i]["type"])
+                assert data[i][4] == str(chain_contracts[i]["address"])
 
 
 def test_contract_get(contracts: List[ContractFields]) -> None:
     for c in contracts:
         with Web3CliTest() as app:
-            seed_contracts(app, contracts)
+            seed_contracts(contracts)
             app.set_args(
                 [
                     "--chain",
@@ -75,7 +80,7 @@ def test_contract_update(contracts: List[ContractFields]) -> None:
     """Create contract 0, then update it with the data of contract 1,
     while keeping the same name and chain"""
     with Web3CliTest() as app:
-        seed_contracts(app, [contracts[0]])
+        seed_contracts([contracts[0]])
         app.set_args(
             argv=[
                 "--chain",
@@ -103,7 +108,7 @@ def test_contract_update(contracts: List[ContractFields]) -> None:
 def test_contract_delete(contracts: List[ContractFields]) -> None:
     for c in contracts:
         with Web3CliTest() as app:
-            seed_contracts(app, contracts)
+            seed_contracts(contracts)
             app.set_args(
                 [
                     "--chain",

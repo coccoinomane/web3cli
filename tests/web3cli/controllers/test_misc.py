@@ -2,17 +2,17 @@ import json
 from typing import Any, Dict, List
 
 import pytest
-from brownie.network.account import Account
 
+from brownie.network.account import Account
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_chains, seed_signers
+from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
 
 @pytest.mark.slow
 def test_balance(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
-        seed_chains(app, chains)
+        seed_chains(chains)
         app.set_args(["balance", "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"]).run()
         data, output = app.last_rendered
         assert type(data["amount"]) is float
@@ -32,8 +32,8 @@ def test_sign(
     msg: str, signers: List[Dict[str, Any]], chains: List[ChainFields]
 ) -> None:
     with Web3CliTest() as app:
-        seed_chains(app, chains)
-        seed_signers(app, [signers[0]])
+        seed_chains(chains)
+        seed_signers([signers[0]], app.app_key)
         app.set_args(["sign", msg]).run()
         data, output = app.last_rendered
         assert "messageHash" in data["out"]

@@ -9,17 +9,17 @@ Interact with blockchains and smart contracts using the command line: no coding 
 
 # Features
 
-- Interact with Ethereum-compatible chains via your terminal
+- Interact with Ethereum and EVM-compatible chains via your terminal
 - Bypass sluggish and potentially compromised frontends
 - No configuration needed
 - Label addresses, tokens and contracts for ease of use
 - Use as many signers as you wish
 - Concatenate commands to build powerful scripts
+- Transfer tokens via their ticker
 - Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
 
 Soon:
 
-- Transfer tokens via their ticker
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Claim and reinvest yield from DeFi protocols
 - Set up scheduled buys and sells (DCA)
@@ -55,18 +55,23 @@ pip3 install -U web3cli
    w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
    ```
 
+- Send tokens as well:
+   ```
+   w3 send unicef 1 USDC # send 1 USDC
+   ```
+
 - Fetch blocks from the blockchain, in easy-to-read JSON format:
    ```bash
    w3 block latest
    w3 block finalized
    w3 block 6094305
-   w3 block 0xe737f53528e7ee8e700f87b399251f285fd1ed6a9a1518ce66dc2b4885f9fbb2
+   w3 block 0x54c891931a2d1195e668e77391b14b9fa43a4d68bc2f60b14d90fef0c63e9c4c
    ```
 
 - Fetch transactions & receipts from the blockchain:
    ```bash
    w3 tx get 0x3bbdcc2c7721521f7c767b7873ccb857f0816ac94e9f32c5601f4b15c87d1ef1
-   w3 tx get-receipt 0x3bbdcc2c7721521f7c767b7873ccb857f0816ac94e9f32c5601f4b15c87d1ef1
+   w3 tx rc 0x3bbdcc2c7721521f7c767b7873ccb857f0816ac94e9f32c5601f4b15c87d1ef1
    ```
 
 - Extract single fields from blocks or transactions, using `jq` (more details [in the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)):

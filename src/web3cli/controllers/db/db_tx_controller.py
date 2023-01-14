@@ -16,6 +16,7 @@ class DbTxController(Controller):
         help = "add, list or delete transactions"
         stacked_type = "nested"
         stacked_on = "db"
+        aliases = ["tx"]
 
     @ex(help="list transactions")
     def list(self) -> None:

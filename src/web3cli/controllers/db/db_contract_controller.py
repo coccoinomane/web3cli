@@ -4,8 +4,8 @@ from playhouse.shortcuts import model_to_dict
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.render import render_table
-from web3cli.helpers.seed import seed_contracts
 from web3core.helpers.os import read_json
+from web3core.helpers.seed import seed_contracts
 from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
 
@@ -25,8 +25,8 @@ class DbContractController(Controller):
             self.app,
             data=[
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
-                # TODO: order by name AND chain
                 for c in Contract.get_all(Contract.name)
+                if c.chain == self.app.chain_name
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
             wrap=42,
@@ -120,7 +120,7 @@ class DbContractController(Controller):
 
     @ex(help="preload a few contracts and their chains")
     def seed(self) -> None:
-        seed_contracts(self.app, contract_seeds.all)
+        seed_contracts(contract_seeds.all)
         self.app.log.info(
             f"Imported {len(contract_seeds.all)} contracts, run `w3 db contract list` to show them"
         )

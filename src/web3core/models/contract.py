@@ -6,12 +6,31 @@ from peewee import TextField
 from playhouse.signals import pre_save
 from playhouse.sqlite_ext import JSONField
 from web3._utils.validation import validate_abi
+from web3.types import ABI
 
-from web3core.exceptions import ContractIsInvalid, ContractNotFound
+from web3core.exceptions import (
+    ContractAbiNotResolved,
+    ContractIsInvalid,
+    ContractNotFound,
+)
 from web3core.models.address import Address
 from web3core.models.base_model import BaseModel
-from web3core.models.types import ContractFields
+from web3core.models.types import ContractFields, ContractTypeFields
 from web3core.types import Logger
+
+
+class ContractType(BaseModel):
+    class Meta:
+        table_name = "contract_types"
+
+    name = TextField(unique=True)
+    desc = TextField(null=True)
+    abi = JSONField()
+
+    @classmethod
+    def upsert(cls, fields: ContractTypeFields, logger: Logger = None) -> ContractType:
+        """Create a contract type or update it if one with the same name already exists"""
+        return cls.upsert_by_field(cls.name, fields["name"], fields, logger, True)
 
 
 class Contract(BaseModel):
@@ -51,6 +70,23 @@ class Contract(BaseModel):
             fields,
             logger,
             True,
+        )
+
+    def resolve_abi(self) -> ABI:
+        """Return the ABI for the given contract.
+
+        First look in the abi property of the contract.
+        If not found, look up the contract type and return its ABI.
+        If not found, raise a ContractAbiNotResolved error.
+        """
+        if self.abi:
+            return self.abi
+        if self.type:
+            contract_type = ContractType.get_or_none(ContractType.name == self.type)
+            if contract_type:
+                return contract_type.abi
+        raise ContractAbiNotResolved(
+            f"ABI for contract '{self.name}' on chain '{self.chain}' could not be resolved"
         )
 
 

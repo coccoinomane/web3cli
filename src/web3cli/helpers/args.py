@@ -31,14 +31,26 @@ def get_command(app: App) -> str:
 
 
 def parse_chain(app: App) -> str:
-    """If the argument --chain or -c was passed to the CLI, return it;
-    otherwise, return its default value from the config file"""
+    """Try to infer which chain the user wants to use.
+
+    The following is the order in which the chain is
+    discovered and loaded:
+
+    - Argument --chain or -c passed to the CLI
+    - Default chain from the config file
+    - If there's only one chain in the DB, use it
+
+    Otherwise, raise a Web3CliError."""
     if app.pargs.chain:
         chain = app.pargs.chain
-    else:
+    elif Chain.select().count() == 1:
+        chain = Chain.select().get().name
+    elif app.config.get("web3cli", "default_chain"):
         chain = app.config.get("web3cli", "default_chain")
-    if not chain:
-        raise Web3CliError("Chain not defined, should not be here")
+    else:
+        raise Web3CliError(
+            "Could not infer the chain you want to use. Try specifying it with the --chain argument."
+        )
     return chain
 
 

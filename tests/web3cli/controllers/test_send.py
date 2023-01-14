@@ -1,10 +1,10 @@
 from typing import Any
 
 import pytest
+
 from brownie.network.account import Account
 from brownie.network.contract import Contract as BrownieContract
 from brownie.network.state import TxHistory
-
 from tests.seed import seed_local_token
 from tests.web3cli.main import Web3CliTest
 
@@ -31,22 +31,22 @@ def test_send_eth_wei(app: Web3CliTest, alice: Account, bob: Account) -> None:
 
 @pytest.mark.local
 def test_send_token18(
-    app: Web3CliTest, alice: Account, bob: Account, token_TST18: BrownieContract
+    app: Web3CliTest, alice: Account, bob: Account, token18: BrownieContract
 ) -> None:
-    bob_balance = token_TST18.balanceOf(bob.address)
-    seed_local_token(app, token_TST18)
+    bob_balance = token18.balanceOf(bob.address)
+    seed_local_token(app, token18)
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", token_TST18.symbol(), "--force"]
+        ["--signer", "alice", "send", bob.address, "1", token18.symbol(), "--force"]
     ).run()
-    assert token_TST18.balanceOf(bob.address) == bob_balance + 10**18
+    assert token18.balanceOf(bob.address) == bob_balance + 10**18
 
 
 @pytest.mark.local
 def test_send_token18_smallest(
-    app: Web3CliTest, alice: Account, bob: Account, token_TST18: BrownieContract
+    app: Web3CliTest, alice: Account, bob: Account, token18: BrownieContract
 ) -> None:
-    bob_balance = token_TST18.balanceOf(bob.address)
-    seed_local_token(app, token_TST18)
+    bob_balance = token18.balanceOf(bob.address)
+    seed_local_token(app, token18)
     app.set_args(
         [
             "--signer",
@@ -54,32 +54,32 @@ def test_send_token18_smallest(
             "send",
             bob.address,
             "1",
-            token_TST18.symbol(),
+            token18.symbol(),
             "smallest",
             "--force",
         ]
     ).run()
-    assert token_TST18.balanceOf(bob.address) == bob_balance + 1
+    assert token18.balanceOf(bob.address) == bob_balance + 1
 
 
 @pytest.mark.local
 def test_send_token6(
-    app: Web3CliTest, alice: Account, bob: Account, token_TST6: BrownieContract
+    app: Web3CliTest, alice: Account, bob: Account, token6: BrownieContract
 ) -> None:
-    bob_balance = token_TST6.balanceOf(bob.address)
-    seed_local_token(app, token_TST6)
+    bob_balance = token6.balanceOf(bob.address)
+    seed_local_token(app, token6)
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", token_TST6.symbol(), "--force"]
+        ["--signer", "alice", "send", bob.address, "1", token6.symbol(), "--force"]
     ).run()
-    assert token_TST6.balanceOf(bob.address) == bob_balance + 10**6
+    assert token6.balanceOf(bob.address) == bob_balance + 10**6
 
 
 @pytest.mark.local
 def test_send_token6_smallest(
-    app: Web3CliTest, alice: Account, bob: Account, token_TST6: BrownieContract
+    app: Web3CliTest, alice: Account, bob: Account, token6: BrownieContract
 ) -> None:
-    bob_balance = token_TST6.balanceOf(bob.address)
-    seed_local_token(app, token_TST6)
+    bob_balance = token6.balanceOf(bob.address)
+    seed_local_token(app, token6)
     app.set_args(
         [
             "--signer",
@@ -87,9 +87,9 @@ def test_send_token6_smallest(
             "send",
             bob.address,
             "1",
-            token_TST6.symbol(),
+            token6.symbol(),
             "smallest",
             "--force",
         ]
     ).run()
-    assert token_TST6.balanceOf(bob.address) == bob_balance + 1
+    assert token6.balanceOf(bob.address) == bob_balance + 1

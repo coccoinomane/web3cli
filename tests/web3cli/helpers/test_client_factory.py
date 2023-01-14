@@ -3,8 +3,8 @@ from typing import Any, Dict, List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.client_factory import make_client, make_wallet
-from web3cli.helpers.seed import seed_chains, seed_signers
+from web3cli.helpers.client_factory import make_client
+from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
 
@@ -12,7 +12,7 @@ from web3core.models.types import ChainFields
 def test_make_client(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
+            seed_chains(chains)
             app.set_args(argv=["--chain", chain["name"], "version"]).run()
             client = make_client(app)
             block = client.getLatestBlock()
@@ -31,8 +31,8 @@ def test_make_wallet(chains: List[ChainFields], signers: List[Dict[str, Any]]) -
     s = signers[0]
     for chain in chains:
         with Web3CliTest() as app:
-            seed_chains(app, chains)
-            seed_signers(app, [s])
+            seed_chains(chains)
+            seed_signers([s], app.app_key)
             app.set_args(
                 [
                     "--chain",

@@ -3,8 +3,8 @@ from typing import List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
-from web3cli.helpers.seed import seed_txs
 from web3core.exceptions import TxNotFound
+from web3core.helpers.seed import seed_txs
 from web3core.models.tx import Tx
 from web3core.models.types import TxFields
 
@@ -13,7 +13,7 @@ def test_tx_list(txs: List[TxFields]) -> None:
     """Add txs and check that they are listed from oldest to newest"""
     txs = sorted(txs, key=lambda t: t["created_at"], reverse=True)
     with Web3CliTest() as app:
-        seed_txs(app, txs)
+        seed_txs(txs)
         app.set_args(["db", "trx", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(txs)):
@@ -24,7 +24,7 @@ def test_tx_list(txs: List[TxFields]) -> None:
 def test_tx_get(txs: List[TxFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
-            seed_txs(app, txs)
+            seed_txs(txs)
             app.set_args(
                 [
                     "db",
@@ -62,7 +62,7 @@ def test_tx_update(txs: List[TxFields]) -> None:
     """Create tx 0, then update it with the data of tx 1,
     while keeping the same hash"""
     with Web3CliTest() as app:
-        seed_txs(app, [txs[0]])
+        seed_txs([txs[0]])
         app.set_args(
             argv=[
                 "db",
@@ -82,7 +82,7 @@ def test_tx_update(txs: List[TxFields]) -> None:
 def test_tx_delete(txs: List[TxFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
-            seed_txs(app, txs)
+            seed_txs(txs)
             app.set_args(
                 [
                     "db",

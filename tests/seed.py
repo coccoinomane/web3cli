@@ -4,11 +4,10 @@ from typing import List
 
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
-
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.database import db_ready_or_raise
-from web3cli.helpers.seed import seed_chain
 from web3cli.main import Web3Cli
+from web3core.helpers.seed import seed_chain
 from web3core.models.chain import Chain
 from web3core.models.contract import Contract
 from web3core.models.signer import Signer
@@ -18,7 +17,10 @@ from web3core.seeds import chain_seeds
 def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
     """Add the local network as a chain, with name 'local' and
     make it the default network"""
-    return seed_chain(app, chain_seeds.local, make_default)
+    chain = seed_chain(chain_seeds.local)
+    if make_default:
+        app.config.set("web3cli", "default_chain", chain.name)
+    return chain
 
 
 def seed_local_accounts(
