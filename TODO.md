@@ -4,6 +4,7 @@
 
 - Document contract in README with examples
 - Make web3cli extensible
+- Test on Windows
 
 ### Extra commands 
 
@@ -27,7 +28,6 @@
 
 ### UX
 
-- Test on Windows
 - Retry transactions until gas fee goes below x gwei
 - Autocomplete commands
 - Autocomplete addresses, signers and contracts
