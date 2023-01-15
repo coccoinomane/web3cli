@@ -38,6 +38,7 @@
 ### Misc
 
 - Use memory db for dev environment
+- Test ABI controller
 - Make contract.type a foreign key to ContractType?
 - Launch local block explorer after tests
 - Enforce lowercase for all model names (at the db level?)

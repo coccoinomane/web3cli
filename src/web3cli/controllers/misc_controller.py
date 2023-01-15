@@ -1,12 +1,17 @@
 import json
 from pprint import pformat
 
+import web3
 from cement import ex
-from web3 import Web3
 
 from web3cli.controllers.controller import Controller
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers.chain import chain_ready_or_raise
-from web3cli.helpers.client_factory import make_client, make_wallet
+from web3cli.helpers.client_factory import (
+    make_client,
+    make_contract_client,
+    make_wallet,
+)
 from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.models.address import Address
 
@@ -60,7 +65,7 @@ class MiscController(Controller):
         # In case a string
         if not block:
             block = client.w3.eth.get_block(self.app.pargs.block_identifier)
-        block_as_dict = json.loads(Web3.toJSON(block))
+        block_as_dict = json.loads(web3.Web3.toJSON(block))
         self.app.render(block_as_dict, indent=4, handler="json")
 
     @ex(
@@ -71,3 +76,23 @@ class MiscController(Controller):
         signer_ready_or_raise(self.app)
         signed_message = make_wallet(self.app).signMessage(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))
+
+    @ex(
+        help="Call a function in the given smart contract, using eth_call. To see the list of functions, use `w3 abi functions`.",
+        arguments=[
+            (["contract"], {"action": "store"}),
+            (["function"], {"action": "store"}),
+            (["args"], {"action": "store", "nargs": "*"}),
+        ],
+    )
+    def call(self) -> None:
+        chain_ready_or_raise(self.app)
+        # Try to fetch the function from the ABI
+        functions = make_contract_client(self.app, self.app.pargs.contract).functions
+        try:
+            function = functions[self.app.pargs.function]
+        except web3.exceptions.ABIFunctionNotFound:
+            raise Web3CliError(f"Function must be one of: {', '.join(functions)}")
+        # Call the function
+        result = function(*self.app.pargs.args).call()
+        self.app.print(str(result))

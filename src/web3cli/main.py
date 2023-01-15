@@ -1,10 +1,12 @@
 import os
 from typing import Callable
 
+import web3
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
 
 from web3cli import hooks
+from web3cli.controllers.abi_controller import AbiController
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.config_controller import ConfigController
 from web3cli.controllers.db.db_address_controller import DbAddressController
@@ -105,6 +107,7 @@ class Web3Cli(App):
             MiscController,
             SendController,
             TxController,
+            AbiController,
         ]
 
         # extend the app with cement hook system
@@ -132,6 +135,43 @@ def main(filter_app: Callable[[App], App] = None) -> None:
 
         except Web3CliError as e:
             print("Web3CliError > %s" % e.args[0])
+            app.exit_code = 1
+
+            if app.debug is True:
+                import traceback
+
+                traceback.print_exc()
+
+        except (
+            web3.exceptions.BadFunctionCallOutput,
+            web3.exceptions.BlockNumberOutofRange,
+            web3.exceptions.CannotHandleRequest,
+            web3.exceptions.InvalidAddress,
+            web3.exceptions.NameNotFound,
+            web3.exceptions.StaleBlockchain,
+            web3.exceptions.MismatchedABI,
+            web3.exceptions.ABIEventFunctionNotFound,
+            web3.exceptions.ABIFunctionNotFound,
+            web3.exceptions.FallbackNotFound,
+            web3.exceptions.ValidationError,
+            web3.exceptions.ExtraDataLengthError,
+            web3.exceptions.NoABIFunctionsFound,
+            web3.exceptions.NoABIFound,
+            web3.exceptions.NoABIEventsFound,
+            web3.exceptions.InsufficientData,
+            web3.exceptions.TimeExhausted,
+            web3.exceptions.PMError,
+            web3.exceptions.ManifestValidationError,
+            web3.exceptions.TransactionNotFound,
+            web3.exceptions.BlockNotFound,
+            web3.exceptions.LogTopicError,
+            web3.exceptions.InvalidEventABI,
+            web3.exceptions.ContractLogicError,
+            web3.exceptions.InvalidTransaction,
+            web3.exceptions.TransactionTypeMismatch,
+            web3.exceptions.BadResponseFormat,
+        ) as e:
+            print("web3.py error > %s" % e.args[0])
             app.exit_code = 1
 
             if app.debug is True:
