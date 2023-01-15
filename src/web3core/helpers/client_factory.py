@@ -49,6 +49,23 @@ def make_base_wallet(
     return client
 
 
+def make_contract_client(
+    contract_name: str,
+    chain: Chain,
+    node_uri: str = None,
+    base: Type[BaseClient] = BaseClient,
+    logger: Logger = lambda msg: None,
+    **client_args: Any,
+) -> BaseClient:
+    """Client suitable to read from the given smart contract.
+    The contract ABI will be fetched from the contract's itself,
+    if present, or from the contract's type, if not."""
+    contract = Contract.get_by_name_and_chain_or_raise(contract_name, chain.name)
+    client = make_base_client(chain, node_uri, base, logger, **client_args)
+    client.setContract(contract.address, contract.resolve_abi())
+    return client
+
+
 def make_contract_wallet(
     contract_name: str,
     chain: Chain,
