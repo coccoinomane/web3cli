@@ -113,7 +113,6 @@ pypi-*/
 tests/brownie/build
 tests/brownie/interfaces
 tests/brownie/reports
-tests/brownie/scripts
 
 # other
 .vscode/settings.json

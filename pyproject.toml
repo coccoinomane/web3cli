@@ -45,6 +45,7 @@ test_verbose = "brownie test tests -s"
 test_fast = "brownie test tests -m 'not slow'"
 
 db_open = "open -a TablePlus $HOME/.web3cli/database/web3cli.sqlite"
+db_open_test = "open -a TablePlus $HOME/.web3cli/database/web3cli_test.sqlite"
 db_delete = "rm -rf $HOME/.web3cli/database"
 
 docker = "pdm run clean && docker build -t web3cli:latest ."
