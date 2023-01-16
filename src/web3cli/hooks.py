@@ -10,8 +10,10 @@ from genericpath import isfile
 
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_file
+from web3core.db import DB
 from web3core.helpers.database import init_db
 from web3core.helpers.seed import populate_db
+from web3core.models import MODELS
 
 ####################
 # Register hooks
@@ -50,7 +52,7 @@ def init_and_attach_db(app: App) -> None:
     )
     if not isfile(db_path):
         app.log.debug("Creating database...")
-    app.extend("db", init_db(db_path))
+    app.extend("db", init_db(DB, MODELS, db_path))
     if do_populate:
         populate_db()
 

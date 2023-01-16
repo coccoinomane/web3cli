@@ -7,16 +7,19 @@ from typing import Any, Dict, Iterator, List
 import pytest
 from playhouse.sqlite_ext import SqliteExtDatabase
 
+from web3core.db import DB
 from web3core.helpers.database import init_db
+from web3core.models import MODELS
 from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
 from web3core.seeds import chain_seeds, contract_seeds
 
 
 @pytest.fixture(scope="function")
 def db() -> Iterator[SqliteExtDatabase]:
-    db = init_db(":memory:")
-    yield db
-    db.close()
+    init_db(DB, MODELS, ":memory:")
+    yield DB
+    DB.drop_tables(MODELS)
+    DB.close()
 
 
 @pytest.fixture()

@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Type, TypeVar
 
-from peewee import Field, SqliteDatabase
+from peewee import Field
 from playhouse.shortcuts import update_model_from_dict
 from playhouse.signals import Model
 
+from web3core.db import DB
 from web3core.exceptions import RecordNotFound
 from web3core.types import Logger
-
-db = SqliteDatabase(None, pragmas={"foreign_keys": 1})
-"""Database, initialized during post_setup hook"""
 
 Self = TypeVar("Self", bound="BaseModel")
 """Type for class methods returning (sub)class instances"""
@@ -18,7 +16,7 @@ Self = TypeVar("Self", bound="BaseModel")
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = DB
 
     @classmethod
     def get_all_as_dicts(cls, order_by: Any = None) -> List[Dict[str, Any]]:

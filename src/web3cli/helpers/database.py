@@ -3,7 +3,7 @@ import os
 from cement import App
 
 from web3cli.exceptions import Web3CliError
-from web3core.helpers.database import tables
+from web3core.models import MODELS
 
 
 def db_ready_or_raise(app: App) -> None:
@@ -37,5 +37,5 @@ def delete_db_file(app: App) -> bool:
 def truncate_tables(app: App) -> None:
     """Empty all tables in the database"""
     db_ready_or_raise(app)
-    for table in tables:
-        table.delete().execute()
+    for model in MODELS:
+        model.delete().execute()

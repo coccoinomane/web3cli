@@ -1,6 +1,6 @@
 import json
 from pprint import pformat
-from typing import Any, List
+from typing import Any, Callable, List
 
 import web3
 from cement import ex
@@ -28,7 +28,7 @@ from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.exceptions import NotSupportedYet
 from web3core.helpers.abi import get_function_abi
 from web3core.helpers.misc import to_bool
-from web3core.models.address import Address
+from web3core.helpers.resolve import resolve_address
 
 
 class MiscController(Controller):
@@ -47,7 +47,7 @@ class MiscController(Controller):
     def balance(self) -> None:
         chain_ready_or_raise(self.app)
         balance = make_client(self.app).getBalanceInEth(
-            Address.resolve_address(self.app.pargs.address)
+            resolve_address(self.app.pargs.address, chain=self.app.chain_name)
         )
         self.app.render(
             {"amount": balance, "ticker": self.app.chain.coin},
@@ -131,7 +131,13 @@ class MiscController(Controller):
             abi_name = input["name"]
             abi_type = input["type"]
             try:
-                converted_value = _convert_string_value(abi_type, string_value)
+                converted_value = _convert_string_value(
+                    abi_type,
+                    string_value,
+                    resolve_address_fn=lambda x: resolve_address(
+                        x, chain=self.app.chain_name
+                    ),
+                )
                 converted_args.append(converted_value)
             except TypeError:
                 raise Web3CliError(
@@ -143,7 +149,10 @@ class MiscController(Controller):
 
 
 def _convert_string_value(
-    abi_type: str, string_value: str, checksum_addreses: bool = True
+    abi_type: str,
+    string_value: str,
+    checksum_addresses: bool = True,
+    resolve_address_fn: Callable[[Any], str] = lambda x: x,
 ) -> Any:
     """Convert an ABI value from a string to a python type"""
     value: Any = None
@@ -158,12 +167,15 @@ def _convert_string_value(
     elif is_string_type(abi_type):
         value = str(string_value)
     elif is_address_type(abi_type):
-        value = Address.resolve_address(string_value)
-        if checksum_addreses:
+        value = resolve_address_fn(string_value)
+        if checksum_addresses:
             value = web3.Web3.toChecksumAddress(value)
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
-        value = [_convert_string_value(sub_type, v) for v in string_value.split(",")]
+        value = [
+            _convert_string_value(sub_type, v, checksum_addresses, resolve_address_fn)
+            for v in string_value.split(",")
+        ]
     else:
         raise Web3CliError(f"Unsupported ABI type: {abi_type}")
 

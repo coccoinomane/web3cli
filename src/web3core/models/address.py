@@ -6,7 +6,7 @@ import web3
 from peewee import TextField
 from playhouse.signals import pre_save
 
-from web3core.exceptions import AddressIsInvalid, AddressNotResolved, RecordNotFound
+from web3core.exceptions import AddressIsInvalid
 from web3core.models.base_model import BaseModel
 from web3core.models.types import AddressFields
 from web3core.types import Logger
@@ -43,21 +43,6 @@ class Address(BaseModel):
         if no such address is found"""
         address = Address.get_by_name_or_raise(name)
         return address.address
-
-    @classmethod
-    def resolve_address(cls, address_or_name: str) -> str:
-        """Return the address with the given name, but if an actual valid
-        address is passed (0x...) then return it"""
-        try:
-            return (
-                address_or_name
-                if cls.is_valid_address(address_or_name)
-                else cls.get_address(address_or_name)
-            )
-        except RecordNotFound:
-            raise AddressNotResolved(
-                f"Could not resolve '{address_or_name}': neither a valid address nor a name of a stored address"
-            )
 
 
 @pre_save(sender=Address)
