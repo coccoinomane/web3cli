@@ -38,7 +38,6 @@ class DbAddressController(Controller):
 
     @ex(
         help="add a new address",
-        aliases=["pippo pippa"],
         arguments=[
             (["name"], {"help": "name of the address"}),
             (["address"], {"help": "blockchain address (0x...)"}),

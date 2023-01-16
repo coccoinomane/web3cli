@@ -28,6 +28,7 @@
 
 ### UX
 
+- Hide stack trace from errors unless --debug is passed
 - Retry transactions until gas fee goes below x gwei
 - Autocomplete commands
 - Autocomplete addresses, signers and contracts
