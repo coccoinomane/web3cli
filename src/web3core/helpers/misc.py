@@ -28,3 +28,20 @@ def to_number(s: str) -> Union[int, float]:
         return int(s)
     except ValueError:
         return float(s)
+
+
+def to_bool(s: str) -> bool:
+    """Cast a string to False or True. The string case is ignored.
+
+    >>> to_bool("true") == True
+    >>> to_bool("false") == False
+    >>> to_bool("0") == False
+    >>> to_bool("1") == True
+    >>> to_bool("foo") == ValueError
+    """
+    if s.lower() in ("false", "0"):
+        return False
+    elif s.lower() in ("true", "1"):
+        return True
+    else:
+        raise ValueError(f"Cannot cast {s} to bool")
