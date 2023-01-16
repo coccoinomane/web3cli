@@ -21,6 +21,15 @@ def test_send_eth(
 
 
 @pytest.mark.local
+def test_send_eth_using_address_tag(
+    app: Web3CliTest, alice: Account, bob: Account, history: TxHistory
+) -> None:
+    bob_balance = bob.balance()
+    app.set_args(["--signer", "alice", "send", "bob", "1", "ETH", "--force"]).run()
+    assert bob.balance() == bob_balance + 10**18
+
+
+@pytest.mark.local
 def test_send_eth_wei(app: Web3CliTest, alice: Account, bob: Account) -> None:
     bob_balance = bob.balance()
     app.set_args(

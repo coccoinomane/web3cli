@@ -10,9 +10,11 @@ from web3 import Web3
 
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.client_factory import make_erc20_wallet, make_wallet
+from web3core.helpers.resolve import resolve_address
 from web3core.models.address import Address
 from web3core.models.chain import Chain
 from web3core.models.contract import Contract
+from web3core.models.signer import Signer
 
 
 def send_coin_or_token(
@@ -61,7 +63,7 @@ def send_native_coin(
 ) -> HexStr:
     """Send a native coin to the given address"""
     return make_wallet(app).sendEthInWei(
-        to=Address.resolve_address(to),
+        to=resolve_address(to, [Address, Signer]),
         valueInWei=Web3.toWei(amount, unit if unit else "ether"),
         maxPriorityFeePerGasInGwei=app.priority_fee,
     )
@@ -105,7 +107,7 @@ def send_erc20_token_in_decimals(
     actual amount is 0.000001 in token units."""
     client = make_erc20_wallet(app, ticker)
     return client.transact(
-        client.functions.transfer(Address.resolve_address(to), amount)
+        client.functions.transfer(resolve_address(to, [Address, Signer]), amount)
     )
 
 

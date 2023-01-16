@@ -2,7 +2,8 @@
 
 ### Top priority
 
-- Resolve address should look also in signer names and contract addresses
+- Refactor _convert_string_value and test it
+- Test resolve address with signer in send and balance funcs
 - Group contract and ABI functions: contract add, contract list, contract call,
   contract abi...
 
