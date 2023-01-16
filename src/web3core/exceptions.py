@@ -4,6 +4,12 @@ class Web3CoreError(Exception):
     pass
 
 
+class NotSupportedYet(Web3CoreError):
+    """When a feature is not supported yet"""
+
+    pass
+
+
 class RecordNotFound(Web3CoreError):
     """When a record from the database is not found"""
 

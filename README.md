@@ -57,7 +57,8 @@ pip3 install -U web3cli
 
 - Send tokens as well:
    ```
-   w3 send unicef 1 USDC # send 1 USDC
+   w3 send unicef 1 USDC           # send 1 USDC
+   w3 send unicef 1 USDC smallest  # send 1 decimal unit of USDC (10^-6)
    ```
 
 - Fetch blocks from the blockchain, in easy-to-read JSON format:
@@ -87,7 +88,14 @@ pip3 install -U web3cli
 # Smart Contract support
 
 `web3cli` comes with a database of common contracts, including ERC20 tokens and
-Uniswap pools; to see them all, run `w3 db contract list`.
+Uniswap clones.
+
+See the available contracts with `w3 db contract list`:
+
+```
+w3 db contract list              # contracts on Ethereum
+w3 --chain bnb db contract list  # contracts on BNB chain
+```
 
 You can also add custom contracts with `w3 db contract add`:
 
@@ -95,7 +103,7 @@ You can also add custom contracts with `w3 db contract add`:
 w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 ```
 
-See available functions with `w3 abi functions`:
+See available functions on a contract with `w3 abi functions`:
 
 ```
 w3 abi functions weth
@@ -104,7 +112,19 @@ w3 abi functions weth
 Call a function on the contract with `w3 call`:
 
 ```
+w3 call weth totalSupply
+```
+
+Function arguments are parsed automatically, so you can call `balanceOf` with:
+
+```
 w3 call weth balanceOf 0xA59B29d7dbC9794d1e7f45123C48b2b8d0a34636
+```
+
+You can also do more complex stuff like:
+
+```
+w3 call uniswap_router_v2 getAmountsOut 100000000000 usdc,usdt
 ```
 
 # Multichain support

@@ -2,10 +2,9 @@
 
 ### Top priority
 
+- Resolve address should look also in signer names and contract addresses
 - Group contract and ABI functions: contract add, contract list, contract call,
   contract abi...
-- Make web3cli extensible
-- Test on Windows
 
 ### Extra commands 
 
@@ -39,6 +38,8 @@
 
 ### Misc
 
+- Make web3cli extensible
+- Test on Windows
 - Use memory db for dev environment
 - Test ABI controller
 - Make contract.type a foreign key to ContractType?
