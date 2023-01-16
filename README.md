@@ -84,6 +84,29 @@ pip3 install -U web3cli
    w3 sign "Hello world!"
    ```
 
+# Smart Contract support
+
+`web3cli` comes with a database of common contracts, including ERC20 tokens and
+Uniswap pools; to see them all, run `w3 db contract list`.
+
+You can also add custom contracts with `w3 db contract add`:
+
+```
+w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
+```
+
+See available functions with `w3 abi functions`:
+
+```
+w3 abi functions weth
+```
+
+Call a function on the contract with `w3 call`:
+
+```
+w3 call weth balanceOf 0xA59B29d7dbC9794d1e7f45123C48b2b8d0a34636
+```
+
 # Multichain support
 
 `web3cli` comes with out-of-the-box support for [many chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains), including Binance Chain, Avalanche and Polygon.

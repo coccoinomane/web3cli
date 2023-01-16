@@ -2,7 +2,8 @@
 
 ### Top priority
 
-- Document contract in README with examples
+- Group contract and ABI functions: contract add, contract list, contract call,
+  contract abi...
 - Make web3cli extensible
 - Test on Windows
 
