@@ -109,4 +109,3 @@ src_paths = ["src", "tests"]
 in_place = true
 remove_all_unused_imports = true
 ignore_pass_after_docstring = true
-ignore_pass_statements = true

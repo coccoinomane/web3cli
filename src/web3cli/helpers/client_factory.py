@@ -1,10 +1,8 @@
 from typing import Any
 
 from cement import App
-from web3.types import ABI
 from web3client.base_client import BaseClient
 
-from web3cli.exceptions import Web3CliError
 from web3core.helpers.client_factory import make_base_client, make_base_wallet
 from web3core.helpers.client_factory import (
     make_contract_client as make_contract_client_,
@@ -12,7 +10,6 @@ from web3core.helpers.client_factory import (
 from web3core.helpers.client_factory import (
     make_contract_wallet as make_contract_wallet_,
 )
-from web3core.models.contract import Contract
 
 
 def make_client(app: App, log: bool = False, **client_args: Any) -> BaseClient:
