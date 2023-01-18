@@ -22,6 +22,8 @@ Soon:
 
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Claim and reinvest yield from DeFi protocols
+- Automatically buy when slippage is low enough
+- Get notified on Telegram when a pair is liquid enough, or unbalanced
 - Set up scheduled buys and sells (DCA)
 - Analys on-chain data for tax or sleuthing purposes
 
@@ -123,8 +125,9 @@ w3 call weth balanceOf 0xA59B29d7dbC9794d1e7f45123C48b2b8d0a34636
 
 You can also do more complex stuff like:
 
-```
-w3 call uniswap_router_v2 getAmountsOut 100000000000 usdc,usdt
+```bash
+# get the amount of USDT you get for 100 USDC
+w3 call uniswap_router_v2 getAmountsOut 100e6 usdc,usdt | jq -r '.[1]' 
 ```
 
 # Multichain support
