@@ -3,14 +3,11 @@ from typing import Any, List, Union, cast
 from web3._utils.abi import abi_to_signature, filter_by_name, filter_by_type
 from web3.types import ABI, ABIEvent, ABIFunction
 
-"""
-  _____                          _     _
- |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___
- | |_    | | | | | '_ \   / __| | __| | |  / _ \  | '_ \  / __|
- |  _|   | |_| | | | | | | (__  | |_  | | | (_) | | | | | \__ \
- |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
-
-"""
+#  _____                          _     _
+# |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___
+# | |_    | | | | | '_ \   / __| | __| | |  / _ \  | '_ \  / __|
+# |  _|   | |_| | | | | | | (__  | |_  | | | (_) | | | | | \__ \
+# |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
 
 
 def get_function_names(abi: ABI) -> List[str]:
@@ -37,14 +34,11 @@ def get_function_abi(abi: ABI, name: str) -> List[ABIFunction]:
     return cast(List[ABIFunction], filter_abi_by_type_and_name(abi, "function", name))
 
 
-"""
-  _____                          _
- | ____| __   __   ___   _ __   | |_   ___
- |  _|   \ \ / /  / _ \ | '_ \  | __| / __|
- | |___   \ V /  |  __/ | | | | | |_  \__ \
- |_____|   \_/    \___| |_| |_|  \__| |___/
-
-"""
+#  _____                          _
+# | ____| __   __   ___   _ __   | |_   ___
+# |  _|   \ \ / /  / _ \ | '_ \  | __| / __|
+# | |___   \ V /  |  __/ | | | | | |_  \__ \
+# |_____|   \_/    \___| |_| |_|  \__| |___/
 
 
 def get_event_names(abi: ABI) -> List[str]:
@@ -71,14 +65,11 @@ def get_event_abi(abi: ABI, name: str) -> List[ABIEvent]:
     return cast(List[ABIEvent], filter_abi_by_type_and_name(abi, "event", name))
 
 
-"""
-  _   _   _     _   _
- | | | | | |_  (_) | |  ___
- | | | | | __| | | | | / __|
- | |_| | | |_  | | | | \__ \
-  \___/   \__| |_| |_| |___/
-
-"""
+#  _   _   _     _   _
+# | | | | | |_  (_) | |  ___
+# | | | | | __| | | | | / __|
+# | |_| | | |_  | | | | \__ \
+#  \___/   \__| |_| |_| |___/
 
 
 def filter_abi_by_type_and_name(abi: ABI, type: str = None, name: str = None) -> ABI:

@@ -8,6 +8,7 @@ from cement.core.exc import CaughtSignal
 from web3cli import hooks
 from web3cli.controllers.abi_controller import AbiController
 from web3cli.controllers.base_controller import BaseController
+from web3cli.controllers.call_controller import CallController
 from web3cli.controllers.config_controller import ConfigController
 from web3cli.controllers.db.db_address_controller import DbAddressController
 from web3cli.controllers.db.db_base_controller import DbBaseController
@@ -108,6 +109,7 @@ class Web3Cli(App):
             SendController,
             TxController,
             AbiController,
+            CallController,
         ]
 
         # extend the app with cement hook system
