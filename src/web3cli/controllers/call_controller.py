@@ -1,26 +1,14 @@
-from typing import Any, Callable, List
+from typing import Any, List
 
 import web3
 from cement import ex
-from web3._utils.abi import (
-    is_address_type,
-    is_array_type,
-    is_bool_type,
-    is_bytes_type,
-    is_int_type,
-    is_string_type,
-    is_uint_type,
-    sub_type_of_array_type,
-)
-from web3._utils.validation import validate_abi_value
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
 from web3core.exceptions import NotSupportedYet
-from web3core.helpers.abi import get_function_abi
-from web3core.helpers.misc import to_bool
+from web3core.helpers.abi import get_function_abi, parse_abi_value
 from web3core.helpers.resolve import resolve_address
 
 
@@ -71,12 +59,13 @@ class CallController(Controller):
             abi_name = input["name"]
             abi_type = input["type"]
             try:
-                converted_value = _convert_string_value(
+                converted_value = parse_abi_value(
                     abi_type,
                     string_value,
                     resolve_address_fn=lambda x: resolve_address(
                         x, chain=self.app.chain_name
                     ),
+                    allow_exp_notation=True,
                 )
                 converted_args.append(converted_value)
             except TypeError:
@@ -86,39 +75,3 @@ class CallController(Controller):
         # Call the function
         result = function(*converted_args).call()
         self.app.print(str(result))
-
-
-def _convert_string_value(
-    abi_type: str,
-    string_value: str,
-    checksum_addresses: bool = True,
-    resolve_address_fn: Callable[[Any], str] = lambda x: x,
-) -> Any:
-    """Convert an ABI value from a string to a python type"""
-    value: Any = None
-    if is_bool_type(abi_type):
-        value = to_bool(string_value)
-    elif is_int_type(abi_type):
-        value = int(string_value)
-    elif is_uint_type(abi_type):
-        value = int(string_value)
-    elif is_bytes_type(abi_type):
-        raise NotSupportedYet("Bytes type is not supported yet")
-    elif is_string_type(abi_type):
-        value = str(string_value)
-    elif is_address_type(abi_type):
-        value = resolve_address_fn(string_value)
-        if checksum_addresses:
-            value = web3.Web3.toChecksumAddress(value)
-    elif is_array_type(abi_type):
-        sub_type = sub_type_of_array_type(abi_type)
-        value = [
-            _convert_string_value(sub_type, v, checksum_addresses, resolve_address_fn)
-            for v in string_value.split(",")
-        ]
-    else:
-        raise Web3CliError(f"Unsupported ABI type: {abi_type}")
-
-    validate_abi_value(abi_type, value)
-
-    return value

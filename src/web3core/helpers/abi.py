@@ -1,7 +1,25 @@
-from typing import Any, List, Union, cast
+from typing import Any, Callable, List, Union, cast
 
-from web3._utils.abi import abi_to_signature, filter_by_name, filter_by_type
+import web3
+from web3._utils.abi import (
+    abi_to_signature,
+    filter_by_name,
+    filter_by_type,
+    is_address_type,
+    is_array_type,
+    is_bool_type,
+    is_bytes_type,
+    is_int_type,
+    is_string_type,
+    is_uint_type,
+    sub_type_of_array_type,
+)
+from web3._utils.validation import validate_abi_value
 from web3.types import ABI, ABIEvent, ABIFunction
+
+from web3cli.exceptions import Web3CliError
+from web3core.exceptions import NotSupportedYet
+from web3core.helpers.misc import to_bool
 
 #  _____                          _     _
 # |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___
@@ -84,6 +102,52 @@ def filter_abi_by_type_and_name(abi: ABI, type: str = None, name: str = None) ->
     if name is not None:
         abi = filter_by_name(name, abi)
     return abi
+
+
+def parse_abi_value(
+    abi_type: str,
+    string_value: str,
+    checksum_addresses: bool = True,
+    resolve_address_fn: Callable[[Any], str] = lambda x: x,
+    allow_exp_notation: bool = True,
+) -> Any:
+    """Convert an ABI value from a string to a python type.
+
+    Args:
+        abi_type: The ABI type of the value to convert.
+        string_value: The value to convert.
+        checksum_addresses: Whether to convert addresses to checksum addresses.
+        resolve_address_fn: A function to resolve addresses from strings.
+        allow_exp_notation: Whether to allow exponential notation for integers
+        (e.g. 5e18 will be translated to 5000000000000000000).
+    """
+    value: Any = None
+    if is_bool_type(abi_type):
+        value = to_bool(string_value)
+    elif is_int_type(abi_type) or is_uint_type(abi_type):
+        value = int(float(string_value)) if allow_exp_notation else int(string_value)
+    elif is_bytes_type(abi_type):
+        raise NotSupportedYet("Bytes type is not supported yet")
+    elif is_string_type(abi_type):
+        value = str(string_value)
+    elif is_address_type(abi_type):
+        value = resolve_address_fn(string_value)
+        if checksum_addresses:
+            value = web3.Web3.toChecksumAddress(value)
+    elif is_array_type(abi_type):
+        sub_type = sub_type_of_array_type(abi_type)
+        value = [
+            parse_abi_value(
+                sub_type, v, checksum_addresses, resolve_address_fn, allow_exp_notation
+            )
+            for v in string_value.split(",")
+        ]
+    else:
+        raise Web3CliError(f"Unsupported ABI type: {abi_type}")
+
+    validate_abi_value(abi_type, value)
+
+    return value
 
 
 def get_type_strings(abi_params: Any) -> List[str]:
