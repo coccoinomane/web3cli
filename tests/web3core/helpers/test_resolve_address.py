@@ -10,7 +10,7 @@ from web3core.helpers.seed import seed_addresses, seed_contracts, seed_signers
 from web3core.models.address import Address
 from web3core.models.contract import Contract
 from web3core.models.signer import Signer
-from web3core.models.types import AddressFields, ContractFields, SignerFields
+from web3core.models.types import AddressFields, ContractFields
 
 
 def test_with_valid_address() -> None:

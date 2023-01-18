@@ -28,7 +28,6 @@ class ConfigController(Controller):
         ],
     )
     def get(self) -> None:
-        pass
         if self.app.pargs.setting:
             self.app.print(self.app.config.get("web3cli", self.app.pargs.setting))
         else:

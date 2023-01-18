@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from brownie.network.account import Account

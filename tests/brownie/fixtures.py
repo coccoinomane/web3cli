@@ -3,7 +3,7 @@ PyTest Fixtures.
 """
 
 import json
-from typing import Any, Iterator, List
+from typing import Iterator, List
 
 import pytest
 from brownie_tokens import ERC20

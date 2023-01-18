@@ -3,7 +3,6 @@ from __future__ import annotations
 from peewee import BlobField, TextField
 from web3 import Account
 
-from web3core.exceptions import SignerNotFound
 from web3core.helpers.crypto import encrypt_string
 from web3core.models.base_model import BaseModel
 
