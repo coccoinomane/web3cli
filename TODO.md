@@ -2,7 +2,7 @@
 
 ### Top priority
 
-- Refactor _convert_string_value and test it
+- Test parse_abi_value & `w3 call`
 - Test resolve address with signer in send and balance funcs
 - Group contract and ABI functions: contract add, contract list, contract call,
   contract abi...

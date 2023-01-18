@@ -1,3 +1,4 @@
+import decimal
 import sys
 from typing import Union
 
@@ -28,6 +29,23 @@ def to_number(s: str) -> Union[int, float]:
         return int(s)
     except ValueError:
         return float(s)
+
+
+def to_int(string_value: str, allow_exp_notation: bool = True) -> int:
+    """Convert a string to an integer.
+
+    Args:
+        string_value: The string to convert.
+        allow_exp_notation: Whether to allow exponential notation for integers
+        (e.g. 5e18 will be translated to 5000000000000000000). This is done in
+        a way that prevents floating point errors.
+    """
+    if allow_exp_notation:
+        dec = decimal.Decimal(string_value)
+        if dec.as_integer_ratio()[1] != 1:
+            raise ValueError(f"String {string_value} is not an integer")
+        return int(dec)
+    return int(string_value)
 
 
 def to_bool(s: str) -> bool:

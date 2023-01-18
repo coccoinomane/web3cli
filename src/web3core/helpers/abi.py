@@ -12,14 +12,15 @@ from web3._utils.abi import (
     is_int_type,
     is_string_type,
     is_uint_type,
+    size_of_type,
     sub_type_of_array_type,
 )
 from web3._utils.validation import validate_abi_value
 from web3.types import ABI, ABIEvent, ABIFunction
 
 from web3cli.exceptions import Web3CliError
-from web3core.exceptions import NotSupportedYet
-from web3core.helpers.misc import to_bool
+from web3core.exceptions import AbiOverflow, NotSupportedYet
+from web3core.helpers.misc import to_bool, to_int
 
 #  _____                          _     _
 # |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___
@@ -124,8 +125,16 @@ def parse_abi_value(
     value: Any = None
     if is_bool_type(abi_type):
         value = to_bool(string_value)
-    elif is_int_type(abi_type) or is_uint_type(abi_type):
-        value = int(float(string_value)) if allow_exp_notation else int(string_value)
+    elif is_int_type(abi_type):
+        if string_value.startswith("0x"):
+            raise NotSupportedYet("Hexadecimal integers are not supported yet")
+        value = to_int(string_value, allow_exp_notation)
+    elif is_uint_type(abi_type):
+        if string_value.startswith("0x"):
+            raise NotSupportedYet("Hexadecimal integers are not supported yet")
+        value = to_int(string_value, allow_exp_notation)
+        if value < 0:
+            raise ValueError("Unsigned integers must be positive")
     elif is_bytes_type(abi_type):
         raise NotSupportedYet("Bytes type is not supported yet")
     elif is_string_type(abi_type):
@@ -144,6 +153,16 @@ def parse_abi_value(
         ]
     else:
         raise Web3CliError(f"Unsupported ABI type: {abi_type}")
+
+    # Check that the value is not too big for the type
+    if is_int_type(abi_type) or is_uint_type(abi_type):
+        size = size_of_type(abi_type)  # 256 for uint256, 8 for uint8, etc.
+        max_int = 2 ** (size if is_uint_type(abi_type) else size - 1)
+        if abs(value) >= max_int:
+            raise AbiOverflow(
+                f"Value {string_value} is too big for type {abi_type}, "
+                f"max value is {max_int - 1}"
+            )
 
     validate_abi_value(abi_type, value)
 

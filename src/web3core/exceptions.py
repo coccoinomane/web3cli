@@ -93,3 +93,9 @@ class ContractAbiNotResolved(Web3CoreError):
     """When the ABI of a contract cannot be found"""
 
     pass
+
+
+class AbiOverflow(Web3CoreError):
+    """When you pass an int or unit too big for the ABI type"""
+
+    pass
