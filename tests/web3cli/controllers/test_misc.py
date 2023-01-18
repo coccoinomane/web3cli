@@ -9,7 +9,7 @@ from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
 
-@pytest.mark.slow
+@pytest.mark.remote
 def test_balance(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)

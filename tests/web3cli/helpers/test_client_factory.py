@@ -8,7 +8,7 @@ from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
 
-@pytest.mark.slow
+@pytest.mark.remote
 def test_make_client(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
@@ -27,7 +27,6 @@ def test_make_client(chains: List[ChainFields]) -> None:
 
 def test_make_wallet(chains: List[ChainFields], signers: List[Dict[str, Any]]) -> None:
     """Sign a message with a wallet created by make_wallet"""
-    msg = "Hello world"
     s = signers[0]
     for chain in chains:
         with Web3CliTest() as app:
