@@ -49,17 +49,25 @@ def to_int(string_value: str, allow_exp_notation: bool = True) -> int:
 
 
 def to_bool(s: str) -> bool:
-    """Cast a string to False or True. The string case is ignored.
+    """Cast a string to False or True.
 
+    Cast a string to False or True, ignoring both case and
+    leading/trailing whitespace. Raise ValueError if the string
+    is not a valid boolean value.
+
+    EXAMPLES:
     >>> to_bool("true") == True
     >>> to_bool("false") == False
+    >>> to_bool(" true ") == True
+    >>> to_bool(" false ") == False
     >>> to_bool("0") == False
     >>> to_bool("1") == True
     >>> to_bool("foo") == ValueError
     """
-    if s.lower() in ("false", "0"):
+    clean_string = s.lower().strip()
+    if clean_string in ("false", "0"):
         return False
-    elif s.lower() in ("true", "1"):
+    elif clean_string in ("true", "1"):
         return True
     else:
         raise ValueError(f"Cannot cast {s} to bool")

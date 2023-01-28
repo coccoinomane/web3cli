@@ -1,3 +1,4 @@
+import csv
 from typing import Any, Callable, List, Union, cast
 
 import web3
@@ -109,10 +110,14 @@ def parse_abi_value(
     abi_type: str,
     string_value: str,
     checksum_addresses: bool = True,
-    resolve_address_fn: Callable[[Any], str] = lambda x: x,
+    resolve_address_fn: Callable[[str], str] = lambda x: x,
     allow_exp_notation: bool = True,
 ) -> Any:
     """Convert an ABI value from a string to a python type.
+
+    For array types, the string value must be a comma-separated
+    list of values; to use spaces or commas in a value, enclose
+    it in double quotes.
 
     Args:
         abi_type: The ABI type of the value to convert.
@@ -145,12 +150,8 @@ def parse_abi_value(
             value = web3.Web3.toChecksumAddress(value)
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
-        value = [
-            parse_abi_value(
-                sub_type, v, checksum_addresses, resolve_address_fn, allow_exp_notation
-            )
-            for v in string_value.split(",")
-        ]
+        csv_reader = csv.reader([string_value], skipinitialspace=True)
+        value = [parse_abi_value(sub_type, v) for v in next(csv_reader)]
     else:
         raise Web3CliError(f"Unsupported ABI type: {abi_type}")
 
