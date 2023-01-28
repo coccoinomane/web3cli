@@ -74,4 +74,4 @@ class CallController(Controller):
                 )
         # Call the function
         result = function(*converted_args).call()
-        self.app.print(str(result))
+        self.app.render(result, indent=4, handler="json")
