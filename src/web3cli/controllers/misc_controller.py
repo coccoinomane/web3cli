@@ -41,7 +41,7 @@ class MiscController(Controller):
             (
                 ["block_identifier"],
                 {
-                    "help": "Block identifier. Can be a block number, an hash, or one of the following: latest, earliest, pending, safe, finalized",
+                    "help": "Block identifier. Can be a block number, a hash, or one of the following: latest, earliest, pending, safe, finalized",
                     "nargs": "?",
                     "default": "latest",
                 },
@@ -54,12 +54,10 @@ class MiscController(Controller):
         client = make_client(self.app)
         # In case a block number was given
         try:
-            block = client.w3.eth.get_block(int(self.app.pargs.block_identifier))
+            block_identifier = int(self.app.pargs.block_identifier)
         except ValueError:
-            pass
-        # In case a string
-        if not block:
-            block = client.w3.eth.get_block(self.app.pargs.block_identifier)
+            block_identifier = self.app.pargs.block_identifier
+        block = client.w3.eth.get_block(block_identifier)
         block_as_dict = json.loads(web3.Web3.toJSON(block))
         self.app.render(block_as_dict, indent=4, handler="json")
 

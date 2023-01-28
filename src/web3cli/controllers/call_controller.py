@@ -26,6 +26,14 @@ class CallController(Controller):
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
+            (
+                ["-b", "--block"],
+                {
+                    "action": "store",
+                    "help": "Block identifier. Can be a block number, a hash, or one of the following: latest, earliest, pending, safe, finalized",
+                    "default": "latest",
+                },
+            ),
         ],
     )
     def call(self) -> None:
@@ -72,6 +80,11 @@ class CallController(Controller):
                 raise Web3CliError(
                     f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted"
                 )
+        # Parse block identifier
+        try:
+            block = int(self.app.pargs.block)
+        except ValueError:
+            block = self.app.pargs.block
         # Call the function
-        result = function(*converted_args).call()
+        result = function(*converted_args).call(block_identifier=block)
         self.app.render(result, indent=4, handler="json")

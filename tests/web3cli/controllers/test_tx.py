@@ -3,12 +3,16 @@ from typing import Any
 
 import pytest
 
+from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account
 from tests.web3cli.main import Web3CliTest
 
 
 @pytest.mark.local
-def test_tx_get(app: Web3CliTest, alice: Account, bob: Account) -> None:
+def test_tx_get(
+    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+) -> None:
+    chain.reset()
     value = 10000
     sent_tx = alice.transfer(bob, value)
     app.set_args(["tx", "get", str(sent_tx.txid)]).run()
@@ -24,7 +28,10 @@ def test_tx_get(app: Web3CliTest, alice: Account, bob: Account) -> None:
 
 
 @pytest.mark.local
-def test_tx_get_receipt(app: Web3CliTest, alice: Account, bob: Account) -> None:
+def test_tx_get_receipt(
+    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+) -> None:
+    chain.reset()
     sent_tx = alice.transfer(bob, 10000)
     app.set_args(["tx", "get-receipt", str(sent_tx.txid)]).run()
     data, output = app.last_rendered

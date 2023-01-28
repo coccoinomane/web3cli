@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 
 import pytest
 
+from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account
 from tests.web3cli.main import Web3CliTest
 from web3core.helpers.seed import seed_chains, seed_signers
@@ -44,9 +45,46 @@ def test_sign(
 
 
 @pytest.mark.local
-def test_block(app: Web3CliTest, alice: Account, bob: Account) -> None:
+def test_block_latest(
+    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+) -> None:
+    chain.reset()
     tx = alice.transfer(bob, 10000)
     app.set_args(["block", "latest"]).run()
+    data, output = app.last_rendered
+    block: dict[str, Any] = json.loads(output)
+    assert type(block.get("transactions")) == list
+    assert len(block["transactions"]) == 1
+    assert block["transactions"][0] == tx.txid
+
+
+@pytest.mark.local
+def test_block_number(
+    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+) -> None:
+    chain.reset()
+    tx = alice.transfer(bob, 10000)  # block 1
+    chain.mine()
+    app.set_args(["block", "1"]).run()
+    data, output = app.last_rendered
+    block: dict[str, Any] = json.loads(output)
+    assert type(block.get("transactions")) == list
+    assert len(block["transactions"]) == 1
+    assert block["transactions"][0] == tx.txid
+
+
+@pytest.mark.local
+def test_block_hash(
+    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+) -> None:
+    # Make a transaction in block 1 then mine a block
+    chain.reset()
+    tx = alice.transfer(bob, 10000)  # block 1
+    chain.mine()
+    # Retrieve hash of block 1
+    hash = chain[1].hash.hex()
+    # Retrieve block 1 by hash using the CLI
+    app.set_args(["block", hash]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
     assert type(block.get("transactions")) == list

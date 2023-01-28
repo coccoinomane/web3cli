@@ -2,8 +2,8 @@
 
 ### Top priority
 
-- Test parse_abi_value & `w3 call`
 - Test resolve address with signer in send and balance funcs
+- Transact controller
 - Group contract and ABI functions: contract add, contract list, contract call,
   contract abi...
 

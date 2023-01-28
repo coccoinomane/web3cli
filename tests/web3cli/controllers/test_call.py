@@ -57,3 +57,41 @@ def test_call_eth_weth_total_supply(
         data, output = app.last_rendered
         assert type(data) is int
         assert data > 1e18
+
+
+@pytest.mark.remote
+# Test calling the WETH contract's totalSupply function
+# (two blocks ago)
+def test_call_eth_weth_total_supply_two_blocks_ago(
+    contracts: List[ContractFields], chains: List[ChainFields]
+) -> None:
+    with Web3CliTest() as app:
+        seed_chains(chains)
+        app.set_args(
+            [
+                "-c",
+                "eth",
+                "block",
+                "latest",
+            ]
+        ).run()
+        data, output = app.last_rendered
+        latest = data["number"]
+
+    with Web3CliTest() as app:
+        seed_chains(chains)
+        seed_contracts(contracts)
+        app.set_args(
+            [
+                "-c",
+                "eth",
+                "call",
+                "weth",
+                "totalSupply",
+                "--block",
+                str(latest - 2),
+            ]
+        ).run()
+        data, output = app.last_rendered
+        assert type(data) is int
+        assert data > 1e18
