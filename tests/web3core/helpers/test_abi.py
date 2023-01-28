@@ -197,6 +197,13 @@ def test_parse_abi_value_with_resolve_fn() -> None:
         "0x0000000000000000000000000000000000000002"
     )
 
+    assert parse_abi_value("address[]", "alice,bob", resolve_address_fn=resolve_fn) == (
+        [
+            "0x0000000000000000000000000000000000000001",
+            "0x0000000000000000000000000000000000000002",
+        ]
+    )
+
     assert parse_abi_value(
         "address",
         "0x0000000000000000000000000000000000000003",

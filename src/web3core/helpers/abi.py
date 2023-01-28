@@ -151,7 +151,12 @@ def parse_abi_value(
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
         csv_reader = csv.reader([string_value], skipinitialspace=True)
-        value = [parse_abi_value(sub_type, v) for v in next(csv_reader)]
+        value = [
+            parse_abi_value(
+                sub_type, v, checksum_addresses, resolve_address_fn, allow_exp_notation
+            )
+            for v in next(csv_reader)
+        ]
     else:
         raise Web3CliError(f"Unsupported ABI type: {abi_type}")
 

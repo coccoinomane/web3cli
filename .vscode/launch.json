@@ -17,7 +17,7 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["chain", "get"]
+            "args": ["db", "chain", "get"]
         },
         {
             "name": "w3 chain list",
@@ -25,7 +25,7 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["chain", "list"]
+            "args": ["db", "chain", "list"]
         },
         {
             "name": "w3 signer list",
@@ -33,7 +33,15 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["signer", "list"]
+            "args": ["db", "signer", "list"]
+        },
+        {
+            "name": "getAmountsOut",
+            "type": "python",
+            "request": "launch",
+            "module": "web3cli.main",
+            "justMyCode": false,
+            "args": ["call", "uniswap_router_v2", "getAmountsOut", "100e6", "usdc,usdt"]
         },
     ]
 }
