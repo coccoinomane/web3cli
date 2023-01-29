@@ -175,7 +175,7 @@ def parse_abi_value(
     return value
 
 
-def parse_abis(
+def parse_abi_values(
     args: List[str],
     contract_abi: ABI,
     function: str,

@@ -41,9 +41,14 @@ def to_int(string_value: str, allow_exp_notation: bool = True) -> int:
         a way that prevents floating point errors.
     """
     if allow_exp_notation:
-        dec = decimal.Decimal(string_value)
+        try:
+            dec = decimal.Decimal(string_value)
+        except decimal.InvalidOperation:
+            raise ValueError(f"String '{string_value}' cannot be converted to a number")
         if dec.as_integer_ratio()[1] != 1:
-            raise ValueError(f"String {string_value} is not an integer")
+            raise ValueError(
+                f"String '{string_value}' cannot be converted to an integer"
+            )
         return int(dec)
     return int(string_value)
 

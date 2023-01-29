@@ -61,7 +61,7 @@ def seed_local_token(app: Web3Cli, token: BrownieContract) -> Contract:
     """Create a contract in the DB for the given Brownie token"""
     db_ready_or_raise(app)
     return Contract.create(
-        name=token.symbol(),
+        name=token.symbol().lower(),
         desc=token.name(),
         chain="local",
         address=token.address,

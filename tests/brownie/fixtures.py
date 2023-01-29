@@ -76,7 +76,7 @@ def bob(accounts: List[BrownieAccount]) -> BrownieAccount:
     yield accounts[1]
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def token18(accounts: List[BrownieAccount]) -> BrownieContract:
     """The TST18 token deployed on the local chain, with
     18 decimals; each account will have 100 tokens"""
@@ -86,11 +86,11 @@ def token18(accounts: List[BrownieAccount]) -> BrownieContract:
     yield token
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def token6(accounts: List[BrownieAccount]) -> BrownieContract:
     """The TST6 token deployed on the local chain, with
     6 decimals; each account will have 100 tokens"""
-    token = ERC20(name="Test Token", symbol="TST", decimals=6)
+    token = ERC20(name="Test Token", symbol="TST6", decimals=6)
     for account in accounts:
         token._mint_for_testing(account.address, 100 * 10**6)
     yield token

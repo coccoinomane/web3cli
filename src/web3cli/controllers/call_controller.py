@@ -7,7 +7,7 @@ from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
-from web3core.helpers.abi import parse_abis
+from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.resolve import resolve_address
 
 
@@ -40,7 +40,7 @@ class CallController(Controller):
         # Parse block identifier
         block = parse_block(self.app, "block")
         # Parse function args
-        function_args = parse_abis(
+        function_args = parse_abi_values(
             self.app.pargs.args,
             client.contract.abi,
             self.app.pargs.function,

@@ -1,7 +1,7 @@
 import pytest
 
 from brownie.network import Chain as BrownieChain
-from brownie.network.account import Account
+from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
 from tests.seed import seed_local_token
 from tests.web3cli.main import Web3CliTest
@@ -9,7 +9,7 @@ from tests.web3cli.main import Web3CliTest
 
 @pytest.mark.local
 def test_send_eth(
-    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
 ) -> None:
     ganache.reset()
     bob_balance = bob.balance()
@@ -21,7 +21,7 @@ def test_send_eth(
 
 @pytest.mark.local
 def test_send_eth_using_address_tag(
-    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
 ) -> None:
     ganache.reset()
     bob_balance = bob.balance()
@@ -31,7 +31,7 @@ def test_send_eth_using_address_tag(
 
 @pytest.mark.local
 def test_send_eth_wei(
-    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
 ) -> None:
     ganache.reset()
     bob_balance = bob.balance()
@@ -44,8 +44,8 @@ def test_send_eth_wei(
 @pytest.mark.local
 def test_send_token18(
     app: Web3CliTest,
-    alice: Account,
-    bob: Account,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
     token18: BrownieContract,
 ) -> None:
     bob_balance = token18.balanceOf(bob.address)
@@ -59,8 +59,8 @@ def test_send_token18(
 @pytest.mark.local
 def test_send_token18_with_alias(
     app: Web3CliTest,
-    alice: Account,
-    bob: Account,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
     token18: BrownieContract,
 ) -> None:
     bob_balance = token18.balanceOf(bob.address)
@@ -74,8 +74,8 @@ def test_send_token18_with_alias(
 @pytest.mark.local
 def test_send_token18_smallest(
     app: Web3CliTest,
-    alice: Account,
-    bob: Account,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
     token18: BrownieContract,
 ) -> None:
     bob_balance = token18.balanceOf(bob.address)
@@ -98,8 +98,8 @@ def test_send_token18_smallest(
 @pytest.mark.local
 def test_send_token6(
     app: Web3CliTest,
-    alice: Account,
-    bob: Account,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
     token6: BrownieContract,
 ) -> None:
     bob_balance = token6.balanceOf(bob.address)
@@ -113,8 +113,8 @@ def test_send_token6(
 @pytest.mark.local
 def test_send_token6_smallest(
     app: Web3CliTest,
-    alice: Account,
-    bob: Account,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
     token6: BrownieContract,
 ) -> None:
     bob_balance = token6.balanceOf(bob.address)
