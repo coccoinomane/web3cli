@@ -57,6 +57,21 @@ def test_send_token18(
 
 
 @pytest.mark.local
+def test_send_token18_with_alias(
+    app: Web3CliTest,
+    alice: Account,
+    bob: Account,
+    token18: BrownieContract,
+) -> None:
+    bob_balance = token18.balanceOf(bob.address)
+    seed_local_token(app, token18)
+    app.set_args(
+        ["--signer", "alice", "send", "bob", "1", token18.symbol(), "--force"]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 10**18
+
+
+@pytest.mark.local
 def test_send_token18_smallest(
     app: Web3CliTest,
     alice: Account,

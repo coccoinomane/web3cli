@@ -1,8 +1,8 @@
 import json
 from pprint import pformat
 
-import web3
 from cement import ex
+from web3 import Web3
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.chain import chain_ready_or_raise
@@ -22,15 +22,32 @@ class MiscController(Controller):
 
     @ex(
         help="Get the balance of the given address in the blockchain coin (ETH, BNB, AVAX, etc)",
-        arguments=[(["address"], {"action": "store"})],
+        arguments=[
+            (["address"], {"action": "store"}),
+            (
+                ["unit"],
+                {
+                    "help": "optionally specify the unit to use to show the balance (wei, gwei, etc). If you need exact comparisons, use wei.",
+                    "nargs": "?",
+                    "default": "ether",
+                },
+            ),
+        ],
     )
     def balance(self) -> None:
         chain_ready_or_raise(self.app)
-        balance = make_client(self.app).getBalanceInEth(
-            resolve_address(self.app.pargs.address, chain=self.app.chain_name)
+        address = resolve_address(self.app.pargs.address, chain=self.app.chain_name)
+        balance = make_client(self.app).w3.eth.get_balance(
+            Web3.toChecksumAddress(address)
         )
+        if self.app.pargs.unit != "wei":
+            balance = Web3.fromWei(balance, self.app.pargs.unit)
         self.app.render(
-            {"amount": balance, "ticker": self.app.chain.coin},
+            {
+                "amount": balance,
+                "ticker": self.app.chain.coin,
+                "unit": self.app.pargs.unit,
+            },
             "balance.jinja2",
             handler="jinja2",
         )
@@ -58,7 +75,7 @@ class MiscController(Controller):
         except ValueError:
             block_identifier = self.app.pargs.block_identifier
         block = client.w3.eth.get_block(block_identifier)
-        block_as_dict = json.loads(web3.Web3.toJSON(block))
+        block_as_dict = json.loads(Web3.toJSON(block))
         self.app.render(block_as_dict, indent=4, handler="json")
 
     @ex(

@@ -2,10 +2,10 @@
 
 ### Top priority
 
-- Test resolve address with signer in send and balance funcs
 - Transact controller
 - Group contract and ABI functions: contract add, contract list, contract call,
   contract abi...
+- Handle decimal output (e.g. w3 balance)
 
 ### Extra commands 
 

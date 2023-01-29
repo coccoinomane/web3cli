@@ -20,7 +20,7 @@ class SendController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="Send a coin or token to the given address and show the transaction hash",
+        help="Send a coin or token to the given address, and show the transaction hash",
         arguments=[
             (
                 ["to"],
@@ -36,7 +36,7 @@ class SendController(Controller):
             (
                 ["unit"],
                 {
-                    "help": "optionally specify the unit to use (wei, gwei, etc)",
+                    "help": "optionally specify the unit to use. For native-coins: wei, gwei, etc. For tokens: specify 'smallest' to send using the smallest unit of the token.",
                     "nargs": "?",
                 },
             ),

@@ -1,2 +1,8 @@
 {#- A coin or token balance, with ticker #}
-{{- '%0.4f %s\n' % (amount, ticker) }}
+{%- if unit == "wei" %}
+{{- '%d %s wei\n' % (amount, ticker) }}
+{%- elif unit == "ether" %}
+{{- '%0f %s\n' % (amount, ticker) }}
+{%- else %}
+{{- '%0f %s %s\n' % (amount, ticker, unit) }}
+{%- endif %}
