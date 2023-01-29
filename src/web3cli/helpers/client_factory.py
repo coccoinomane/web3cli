@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 from cement import App
 from web3client.base_client import BaseClient
@@ -14,11 +14,14 @@ from web3core.helpers.client_factory import (
 
 def make_client(app: App, log: bool = False, **client_args: Any) -> BaseClient:
     """Client suitable to read from the blockchain"""
-    return make_base_client(
-        chain=app.chain,
-        node_uri=app.rpc,
-        logger=app.log.info if log else None,
-        **client_args,
+    return cast(
+        BaseClient,
+        make_base_client(
+            chain=app.chain,
+            node_uri=app.rpc,
+            logger=app.log.info if log else None,
+            **client_args,
+        ),
     )
 
 

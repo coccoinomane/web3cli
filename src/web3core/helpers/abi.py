@@ -175,6 +175,58 @@ def parse_abi_value(
     return value
 
 
+def parse_abis(
+    args: List[str],
+    contract_abi: ABI,
+    function: str,
+    checksum_addresses: bool = True,
+    resolve_address_fn: Callable[[str], str] = lambda x: x,
+    allow_exp_notation: bool = True,
+) -> List[Any]:
+    """Cast strings to python arguments for the given contract
+    function.
+
+    This is basically a loop of parse_abi calls, with some
+    additional checks.
+    """
+    # Check that the function is contained in the ABI
+    function_abis = get_function_abi(contract_abi, function)
+    if len(function_abis) > 1:
+        raise NotSupportedYet(
+            f"The contract has {len(function_abis)} overloaded functions for {function}. This is not supported yet."
+        )
+    elif len(function_abis) == 0:
+        raise Web3CliError(f"Function {function} not found in the ABI")
+
+    # Check that the number of args passed from the command line is correct
+    function_abi = function_abis[0]
+    function_inputs = function_abi["inputs"]
+    if len(function_inputs) != len(args):
+        raise Web3CliError(
+            f"Function {function} expects {len(function_inputs)} arguments, but {len(args)} were given"
+        )
+    # Convert the string list into python arguments for the function
+    converted_args: List[Any] = []
+    for i, input in enumerate(function_inputs):
+        string_value = args[i]
+        abi_name = input["name"]
+        abi_type = input["type"]
+        try:
+            converted_value = parse_abi_value(
+                abi_type,
+                string_value,
+                checksum_addresses=checksum_addresses,
+                resolve_address_fn=resolve_address_fn,
+                allow_exp_notation=allow_exp_notation,
+            )
+            converted_args.append(converted_value)
+        except TypeError:
+            raise Web3CliError(
+                f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted"
+            )
+    return converted_args
+
+
 def get_type_strings(abi_params: Any) -> List[str]:
     """Converts a list of parameters from an ABI into a list of type strings.
     Source: Brownie"""

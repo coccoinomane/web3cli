@@ -1,7 +1,10 @@
+from typing import Union
+
 from cement import App
 
 from web3cli.exceptions import Web3CliError
 from web3core.exceptions import RpcIsInvalid
+from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
 from web3core.models.chain import Chain
 from web3core.models.signer import Signer
@@ -101,6 +104,28 @@ def parse_priority_fee(app: App) -> int:
     if not priority_fee:
         raise Web3CliError("Priority fee not defined, should not be here")
     return priority_fee
+
+
+def parse_block(app: App, label: str = "block") -> Union[str, int]:
+    """Return the block number or hash passed to the CLI, converted
+    to the proper type (int if number, str if hash)"""
+    # Is it a number, a hash or a predefined identifier?
+    value = getattr(app.pargs, label)
+    try:
+        block_type = get_block_type(value)
+    except:
+        raise Web3CliError(
+            f"Invalid block identifier '{value}', must be either an integer, an hex string, or one beetween "
+            + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS)
+        )
+    # Non numeric blocks are returned as is, no conversion needed
+    if block_type != "number":
+        return value
+    # Numeric blocks are converted to int
+    try:
+        return int(value)
+    except:
+        return int(value, 16)
 
 
 def override_arg(app: App, arg: str, value: str) -> App:

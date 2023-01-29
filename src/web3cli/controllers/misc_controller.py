@@ -5,6 +5,7 @@ from cement import ex
 from web3 import Web3
 
 from web3cli.controllers.controller import Controller
+from web3cli.helpers.args import parse_block
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
 from web3cli.helpers.signer import signer_ready_or_raise
@@ -67,14 +68,8 @@ class MiscController(Controller):
     )
     def block(self) -> None:
         chain_ready_or_raise(self.app)
-        block = None
-        client = make_client(self.app)
-        # In case a block number was given
-        try:
-            block_identifier = int(self.app.pargs.block_identifier)
-        except ValueError:
-            block_identifier = self.app.pargs.block_identifier
-        block = client.w3.eth.get_block(block_identifier)
+        block_identifier = parse_block(self.app, "block_identifier")
+        block = make_client(self.app).w3.eth.get_block(block_identifier)
         block_as_dict = json.loads(Web3.toJSON(block))
         self.app.render(block_as_dict, indent=4, handler="json")
 
