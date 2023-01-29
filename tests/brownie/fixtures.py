@@ -9,8 +9,16 @@ import pytest
 from brownie_tokens import ERC20
 from web3.types import ABI
 
+from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
+
+
+@pytest.fixture()
+def ganache(chain: BrownieChain) -> BrownieChain:
+    """Alias for the 'chain' fixture of Brownie, to avoid naming
+    conflicts with the Chain model of web3core."""
+    return chain
 
 
 @pytest.fixture()

@@ -71,7 +71,7 @@ def test_on_contracts_table(db: Any, contracts: List[ContractFields]) -> None:
 # Test that if all three records exist (address, signer, contract)
 # with the same name, then the 0x address is returned in the right
 # order of precedence
-def test_resolve_address_priority(
+def test_priority(
     db: Any,
     addresses: List[AddressFields],
     signers: List[Dict[str, Any]],

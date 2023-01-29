@@ -10,7 +10,7 @@ from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
 
-@pytest.mark.remote
+@pytest.mark.local
 def test_balance(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)
@@ -46,9 +46,9 @@ def test_sign(
 
 @pytest.mark.local
 def test_block_latest(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
-    chain.reset()
+    ganache.reset()
     tx = alice.transfer(bob, 10000)
     app.set_args(["block", "latest"]).run()
     data, output = app.last_rendered
@@ -60,11 +60,11 @@ def test_block_latest(
 
 @pytest.mark.local
 def test_block_number(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
-    chain.reset()
+    ganache.reset()
     tx = alice.transfer(bob, 10000)  # block 1
-    chain.mine()
+    ganache.mine()
     app.set_args(["block", "1"]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
@@ -75,14 +75,14 @@ def test_block_number(
 
 @pytest.mark.local
 def test_block_hash(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
     # Make a transaction in block 1 then mine a block
-    chain.reset()
+    ganache.reset()
     tx = alice.transfer(bob, 10000)  # block 1
-    chain.mine()
+    ganache.mine()
     # Retrieve hash of block 1
-    hash = chain[1].hash.hex()
+    hash = ganache[1].hash.hex()
     # Retrieve block 1 by hash using the CLI
     app.set_args(["block", hash]).run()
     data, output = app.last_rendered

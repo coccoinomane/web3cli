@@ -9,9 +9,9 @@ from tests.web3cli.main import Web3CliTest
 
 @pytest.mark.local
 def test_send_eth(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
-    chain.reset()
+    ganache.reset()
     bob_balance = bob.balance()
     app.set_args(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "--force"]
@@ -21,9 +21,9 @@ def test_send_eth(
 
 @pytest.mark.local
 def test_send_eth_using_address_tag(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
-    chain.reset()
+    ganache.reset()
     bob_balance = bob.balance()
     app.set_args(["--signer", "alice", "send", "bob", "1", "ETH", "--force"]).run()
     assert bob.balance() == bob_balance + 10**18
@@ -31,9 +31,9 @@ def test_send_eth_using_address_tag(
 
 @pytest.mark.local
 def test_send_eth_wei(
-    app: Web3CliTest, alice: Account, bob: Account, chain: BrownieChain
+    app: Web3CliTest, alice: Account, bob: Account, ganache: BrownieChain
 ) -> None:
-    chain.reset()
+    ganache.reset()
     bob_balance = bob.balance()
     app.set_args(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "wei", "--force"]
