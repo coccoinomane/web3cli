@@ -3,6 +3,7 @@ from typing import Any, cast
 from cement import App
 from web3client.base_client import BaseClient
 
+from web3cli.exceptions import Web3CliError
 from web3core.helpers.client_factory import make_base_client, make_base_wallet
 from web3core.helpers.client_factory import (
     make_contract_client as make_contract_client_,
@@ -27,6 +28,10 @@ def make_client(app: App, log: bool = False, **client_args: Any) -> BaseClient:
 
 def make_wallet(app: App, log: bool = False, **client_args: Any) -> BaseClient:
     """Client suitable to read from and write to the blockchain"""
+    if app.signer is None:
+        raise Web3CliError(
+            "Cannot create a contract wallet without a signer: please add one with `w3 db signer add`"
+        )
     return make_base_wallet(
         chain=app.chain,
         signer_name=app.signer,
@@ -60,6 +65,10 @@ def make_contract_wallet(
     **client_args: Any,
 ) -> BaseClient:
     """Client suitable to interact with the given smart contract"""
+    if app.signer is None:
+        raise Web3CliError(
+            "Cannot create a contract wallet without a signer: please add one with `w3 db signer add`"
+        )
     return make_contract_wallet_(
         contract_name=contract_name,
         chain=app.chain,

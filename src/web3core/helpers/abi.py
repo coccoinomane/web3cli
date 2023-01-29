@@ -49,7 +49,7 @@ def get_function_full_signatures(abi: ABI) -> List[str]:
     ]
 
 
-def get_function_abi(abi: ABI, name: str) -> List[ABIFunction]:
+def get_function_abis(abi: ABI, name: str) -> List[ABIFunction]:
     """Given an ABI, return the ABIs of the functions with the given name"""
     return cast(List[ABIFunction], filter_abi_by_type_and_name(abi, "function", name))
 
@@ -190,7 +190,7 @@ def parse_abi_values(
     additional checks.
     """
     # Check that the function is contained in the ABI
-    function_abis = get_function_abi(contract_abi, function)
+    function_abis = get_function_abis(contract_abi, function)
     if len(function_abis) > 1:
         raise NotSupportedYet(
             f"The contract has {len(function_abis)} overloaded functions for {function}. This is not supported yet."
@@ -242,6 +242,11 @@ def get_type_strings(abi_params: Any) -> List[str]:
             types_list.append(type_str)
 
     return types_list
+
+
+def does_function_write_to_state(abi: ABIFunction) -> bool:
+    """Returns True if the function writes to the state, False otherwise."""
+    return abi["stateMutability"] not in ("view", "pure")
 
 
 def _inputs(abi: Union[ABIFunction, ABIEvent]) -> str:

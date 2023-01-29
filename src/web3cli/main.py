@@ -20,6 +20,7 @@ from web3cli.controllers.db.db_tx_controller import DbTxController
 from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
+from web3cli.controllers.transact_controller import TransactController
 from web3cli.controllers.tx_controller import TxController
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.args import override_arg
@@ -110,6 +111,7 @@ class Web3Cli(App):
             TxController,
             AbiController,
             CallController,
+            TransactController,
         ]
 
         # extend the app with cement hook system

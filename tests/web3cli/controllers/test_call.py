@@ -29,12 +29,17 @@ def test_call_non_existing_function(app: Web3CliTest, token18: BrownieContract) 
 @pytest.mark.local
 # Test that calling a function with the wrong number of arguments fails
 def test_call_wrong_number_of_arguments(
-    app: Web3CliTest, token18: BrownieContract
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
 ) -> None:
     seed_local_token(app, token18)
     with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
         app.set_args(
             [
+                "--signer",
+                "alice",
                 "call",
                 "tst18",
                 "transfer",
@@ -46,12 +51,17 @@ def test_call_wrong_number_of_arguments(
 @pytest.mark.local
 # Test that calling a function with the wrong type of arguments fails
 def test_call_wrong_type_of_arguments(
-    app: Web3CliTest, token18: BrownieContract
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
 ) -> None:
     seed_local_token(app, token18)
     with pytest.raises(ValueError):
         app.set_args(
             [
+                "--signer",
+                "alice",
                 "call",
                 "tst18",
                 "transfer",
@@ -59,6 +69,56 @@ def test_call_wrong_type_of_arguments(
                 "should_be_an_int",
             ]
         ).run()
+
+
+@pytest.mark.local
+# Test that calling a write function without neither a signer nor a from address fails
+def test_call_local_token_transfer_without_signer_without_from(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    token18.balanceOf(bob.address)
+    with pytest.raises(
+        Web3CliError, match="Cannot call a write operation without a from address"
+    ):
+        app.set_args(
+            [
+                "call",
+                "tst18",
+                "transfer",
+                "bob",
+                "1e18",
+            ]
+        ).run()
+
+
+@pytest.mark.local
+# Test that calling a write function without a signer but with a from address
+# works
+def test_call_local_token_transfer_without_signer_with_from(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "call",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--from",
+            "alice",
+        ]
+    ).run()
+    data, output = app.last_rendered
+    assert output == "true"
 
 
 @pytest.mark.local
@@ -78,7 +138,7 @@ def test_call_local_token_transfer(
             "call",
             "tst18",
             "transfer",
-            bob.address,
+            "bob",
             "1e18",
         ]
     ).run()
@@ -174,3 +234,27 @@ def test_call_eth_weth_total_supply_two_blocks_ago(
         data, output = app.last_rendered
         assert type(data) is int
         assert data > 1e18
+
+
+@pytest.mark.remote
+# Test that calling a write function without a from address fails
+def test_call_eth_weth_transfer_without_from_address(
+    contracts: List[ContractFields], chains: List[ChainFields]
+) -> None:
+    with Web3CliTest() as app:
+        seed_chains(chains)
+        seed_contracts(contracts)
+        with pytest.raises(
+            Web3CliError, match="Cannot call a write operation without a from address"
+        ):
+            app.set_args(
+                [
+                    "-c",
+                    "eth",
+                    "call",
+                    "weth",
+                    "transfer",
+                    "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                    "1e18",
+                ]
+            ).run()

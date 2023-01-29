@@ -2,10 +2,10 @@
 
 ### Top priority
 
-- Transact controller
-- Group contract and ABI functions: contract add, contract list, contract call,
-  contract abi...
-- Handle decimal output (e.g. w3 balance)
+- Transact: Ask for confirmation before sending tx (--force to override)
+- Transact: Allow to simulate the transaction first with eth_call
+- Transact: Allow to have different outputs: receipt, function output, etc
+- Transact: Make sure --max-priority-fee is respected
 
 ### Extra commands 
 
@@ -29,6 +29,10 @@
 
 ### UX
 
+- Transact: Warn before sending tx if gas price is too high
+- Handle decimal output (e.g. w3 balance)
+- Group contract and ABI functions: contract add, contract list, contract call,
+  contract abi...
 - Add trailing newline to json output
 - Harmonize JSON/YAML CLI output
 - Hide stack trace from errors unless --debug is passed
