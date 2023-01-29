@@ -5,6 +5,7 @@ from cement import ex
 from web3 import Web3
 
 from web3cli.controllers.controller import Controller
+from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_client, make_wallet
@@ -55,16 +56,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
-        arguments=[
-            (
-                ["block_identifier"],
-                {
-                    "help": "Block identifier. Can be a block number, a hash, or one of the following: latest, earliest, pending, safe, finalized",
-                    "nargs": "?",
-                    "default": "latest",
-                },
-            )
-        ],
+        arguments=[(["block_identifier"], args.block())],
     )
     def block(self) -> None:
         chain_ready_or_raise(self.app)

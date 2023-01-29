@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Any, Union
 
 from cement import App
 
@@ -8,6 +8,12 @@ from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
 from web3core.models.chain import Chain
 from web3core.models.signer import Signer
+
+#  ____
+# |  _ \    __ _   _ __   ___    ___
+# | |_) |  / _` | | '__| / __|  / _ \
+# |  __/  | (_| | | |    \__ \ |  __/
+# |_|      \__,_| |_|    |___/  \___|
 
 
 def parse_global_args(app: App) -> None:
@@ -126,6 +132,31 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
         return int(value)
     except:
         return int(value, 16)
+
+
+#     _
+#    / \     _ __    __ _   ___
+#   / _ \   | '__|  / _` | / __|
+#  / ___ \  | |    | (_| | \__ \
+# /_/   \_\ |_|     \__, | |___/
+#                   |___/
+
+
+def block() -> dict[str, Any]:
+    """The block argument to feed to argparse"""
+    return {
+        "action": "store",
+        "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
+        + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
+        "default": "latest",
+    }
+
+
+#  _   _   _     _   _
+# | | | | | |_  (_) | |  ___
+# | | | | | __| | | | | / __|
+# | |_| | | |_  | | | | \__ \
+#  \___/   \__| |_| |_| |___/
 
 
 def override_arg(app: App, arg: str, value: str) -> App:

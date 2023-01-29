@@ -29,6 +29,8 @@
 
 ### UX
 
+- Add trailing newline to json output
+- Harmonize JSON/YAML CLI output
 - Hide stack trace from errors unless --debug is passed
 - Retry transactions until gas fee goes below x gwei
 - Autocomplete commands
@@ -47,7 +49,6 @@
 - Launch local block explorer after tests
 - Enforce lowercase for all model names (at the db level?)
 - Reset local chain between tests
-- Add trailing newline to json output
 - Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
 - Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
 - Tests: use london hardfork instead of istanbul?
