@@ -12,7 +12,15 @@
             "args": ["tests"]
         },
         {
-            "name": "w3 chain get",
+            "name": "w3 block",
+            "type": "python",
+            "request": "launch",
+            "module": "web3cli.main",
+            "justMyCode": true,
+            "args": ["block"]
+        },
+        {
+            "name": "w3 db chain get",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
@@ -20,7 +28,7 @@
             "args": ["db", "chain", "get"]
         },
         {
-            "name": "w3 chain list",
+            "name": "w3 db chain list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
@@ -28,7 +36,7 @@
             "args": ["db", "chain", "list"]
         },
         {
-            "name": "w3 signer list",
+            "name": "w3 db signer list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",

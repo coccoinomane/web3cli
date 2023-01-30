@@ -56,7 +56,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
-        arguments=[(["block_identifier"], args.block())],
+        arguments=[(["block_identifier"], args.block(nargs="?"))],
     )
     def block(self) -> None:
         chain_ready_or_raise(self.app)

@@ -142,14 +142,14 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
 #                   |___/
 
 
-def block() -> dict[str, Any]:
+def block(**kwargs: Any) -> dict[str, Any]:
     """The block argument to feed to argparse"""
     return {
         "action": "store",
         "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
         + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
         "default": "latest",
-    }
+    } | kwargs
 
 
 #  _   _   _     _   _
