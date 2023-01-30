@@ -37,7 +37,7 @@ class BaseController(Controller):
                 },
             ),
             (
-                ["--priority-fee"],
+                ["--priority-fee", "--tip"],
                 {
                     "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
                     "type": int,

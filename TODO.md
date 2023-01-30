@@ -3,7 +3,6 @@
 ### Top priority
 
 - Transact: Allow to simulate the transaction first with eth_call
-- Transact: Allow to have different outputs: receipt, function output, etc
 - Transact: Make sure --max-priority-fee is respected
 - Transact: README examples
 

@@ -100,6 +100,9 @@ def test_transact_local_token_transfer(
         ]
     ).run()
     assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert type(data) is str
+    assert data.startswith("0x")
 
 
 @pytest.mark.local
@@ -153,3 +156,130 @@ def test_transact_local_token_transfer_no_confirm(
             ]
         ).run()
     assert token18.balanceOf(bob.address) == bob_balance
+
+
+@pytest.mark.local
+# Test that execution stops when --dry-run is used
+def test_transact_local_token_transfer_dry_run(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--dry-run",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance
+
+
+@pytest.mark.local
+# Test that the transaction JSON is printed when --output=tx is used
+def test_transact_local_token_transfer_output_tx(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--output",
+            "tx",
+            "--force",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert type(data) is dict
+    assert "to" in data
+    assert "data" in data
+    assert "value" in data
+    assert "gas" in data
+    assert "nonce" in data
+    assert "chainId" in data
+
+
+@pytest.mark.local
+# Test that the signed transaction JSON is printed when --output=sig is used
+def test_transact_local_token_transfer_output_sig(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--output",
+            "sig",
+            "--force",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert type(data) is dict
+    assert "rawTransaction" in data
+    assert "hash" in data
+    assert "r" in data
+    assert "s" in data
+    assert "v" in data
+
+
+@pytest.mark.local
+# Test that the transaction receipt JSON is printed when --output=receipt is
+# used
+def test_transact_local_token_transfer_output_receipt(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--output",
+            "receipt",
+            "--force",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert type(data) is dict
+    assert "blockHash" in data
+    assert "blockNumber" in data
+    assert "logs" in data

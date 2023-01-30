@@ -1,5 +1,8 @@
+import json
+
 import web3
 from cement import ex
+from web3 import Web3
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
@@ -21,11 +24,27 @@ class TransactController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="Execute a function in the given smart contract and, by default, return the transaction ID. This will cost gas and write to the blockchain. Please use `w3 send` if you just need to send tokens around, as it is less error prone. To see the list of functions in a given contract, run `w3 abi functions <contract>`.",
+        help="Execute a function in the given smart contract and, by default, return the transaction hash. This will cost gas and write to the blockchain. Please use `w3 send` if you just need to send tokens around, as it is less error prone. To see the list of functions in a given contract, run `w3 abi functions <contract>`.",
         arguments=[
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
+            (
+                ["-o", "--output"],
+                {
+                    "action": "store",
+                    "help": "What should be printed after the command has been executed.",
+                    "choices": ["hash", "tx", "sig", "receipt", "rcpt"],
+                    "default": "hash",
+                },
+            ),
+            (
+                ["--dry-run"],
+                {
+                    "action": "store_true",
+                    "help": "If set, the transaction will not be sent. Useful to print the transaction data and check that it is correct.",
+                },
+            ),
             (["-f", "--force"], args.force()),
         ],
         aliases=["exec"],
@@ -49,14 +68,34 @@ class TransactController(Controller):
             resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
             allow_exp_notation=True,
         )
+        # Build transaction
+        tx = client.buildContractTransaction(function(*function_args))
+        # Sign transaction
+        tx_signed = client.signTransaction(tx)
         # Ask for confirmation
-        if not self.app.pargs.force:
+        if not self.app.pargs.force and not self.app.pargs.dry_run:
             print(
-                f"You are about to execute the function '{self.app.pargs.function}' of contract '{self.app.pargs.contract}' on the {self.app.chain.name} chain with the following arguments:"
+                f"You are about to execute '{self.app.pargs.function}' on contract '{self.app.pargs.contract}' on the {self.app.chain.name} chain with the following arguments:"
             )
             for i, arg in enumerate(function_args):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
-        # Execute the function
-        tx_hash = client.transact(function(*function_args))
-        self.app.print(str(tx_hash))
+        # Send transaction
+        if not self.app.pargs.dry_run:
+            tx_hash = client.sendSignedTransaction(tx_signed)
+        else:
+            tx_hash = tx_signed.hash.hex()
+        # Print output
+        if self.app.pargs.output == "hash":
+            self.app.render(tx_hash, indent=4, handler="json")
+        elif self.app.pargs.output == "tx":
+            self.app.render(tx, indent=4, handler="json")
+        elif self.app.pargs.output == "sig":
+            self.app.render(
+                json.loads(Web3.toJSON(tx_signed._asdict())), indent=4, handler="json"
+            )
+        elif self.app.pargs.output in ["receipt", "rcpt"]:
+            rcpt = client.getTransactionReceipt(tx_hash)
+            self.app.render(json.loads(Web3.toJSON(rcpt)), indent=4, handler="json")
+        else:
+            raise Web3CliError(f"Unknown output type: {self.app.pargs.output}")
