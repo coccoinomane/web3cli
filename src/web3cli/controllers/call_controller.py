@@ -73,7 +73,7 @@ class CallController(Controller):
         block = parse_block(self.app, "block")
 
         # Parse function args
-        function_args = parse_abi_values(
+        function_args, _ = parse_abi_values(
             self.app.pargs.args,
             client.contract.abi,
             self.app.pargs.function,

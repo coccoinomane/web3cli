@@ -25,6 +25,7 @@ def test_transact_non_existing_function(
                 "transact",
                 "tst18",
                 "non_existing_function",
+                "--force",
             ]
         ).run()
 
@@ -47,6 +48,7 @@ def test_transact_wrong_number_of_arguments(
                 "tst18",
                 "transfer",
                 "0x123",
+                "--force",
             ]
         ).run()
 
@@ -70,6 +72,7 @@ def test_transact_wrong_type_of_arguments(
                 "transfer",
                 "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                 "should_be_an_int",
+                "--force",
             ]
         ).run()
 
@@ -93,6 +96,60 @@ def test_transact_local_token_transfer(
             "transfer",
             "bob",
             "1e18",
+            "--force",
         ]
     ).run()
     assert token18.balanceOf(bob.address) == bob_balance + 1e18
+
+
+@pytest.mark.local
+# Test that excution continues if the user does confirm
+def test_transact_local_token_transfer_with_confirm(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    monkeypatch.setattr("builtins.input", lambda _: "yes")
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+
+
+@pytest.mark.local
+# Test that excution stops if the user does not confirm
+def test_transact_local_token_transfer_no_confirm(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    monkeypatch.setattr("builtins.input", lambda _: "no")
+    with pytest.raises(SystemExit):
+        app.set_args(
+            [
+                "--signer",
+                "alice",
+                "transact",
+                "tst18",
+                "transfer",
+                "bob",
+                "1e18",
+            ]
+        ).run()
+    assert token18.balanceOf(bob.address) == bob_balance

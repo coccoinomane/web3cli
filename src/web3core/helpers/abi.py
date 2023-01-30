@@ -1,5 +1,5 @@
 import csv
-from typing import Any, Callable, List, Union, cast
+from typing import Any, Callable, List, Tuple, Union, cast
 
 import web3
 from web3._utils.abi import (
@@ -182,12 +182,16 @@ def parse_abi_values(
     checksum_addresses: bool = True,
     resolve_address_fn: Callable[[str], str] = lambda x: x,
     allow_exp_notation: bool = True,
-) -> List[Any]:
+) -> Tuple[List[Any], List[str]]:
     """Cast strings to python arguments for the given contract
     function.
 
     This is basically a loop of parse_abi calls, with some
     additional checks.
+
+    Returns:
+        A tuple with the converted arguments and the names of the
+        arguments.
     """
     # Check that the function is contained in the ABI
     function_abis = get_function_abis(contract_abi, function)
@@ -224,7 +228,7 @@ def parse_abi_values(
             raise Web3CliError(
                 f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted"
             )
-    return converted_args
+    return (converted_args, [i["name"] for i in function_inputs])
 
 
 def get_type_strings(abi_params: Any) -> List[str]:

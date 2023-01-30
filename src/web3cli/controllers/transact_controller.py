@@ -3,10 +3,12 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.helpers.abi import parse_abi_values
+from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
 
 
@@ -24,6 +26,7 @@ class TransactController(Controller):
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
+            (["-f", "--force"], args.force()),
         ],
         aliases=["exec"],
     )
@@ -38,7 +41,7 @@ class TransactController(Controller):
         except web3.exceptions.ABIFunctionNotFound:
             raise Web3CliError(f"Function must be one of: {', '.join(functions)}")
         # Parse function args
-        function_args = parse_abi_values(
+        function_args, input_names = parse_abi_values(
             self.app.pargs.args,
             client.contract.abi,
             self.app.pargs.function,
@@ -46,6 +49,14 @@ class TransactController(Controller):
             resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
             allow_exp_notation=True,
         )
+        # Ask for confirmation
+        if not self.app.pargs.force:
+            print(
+                f"You are about to execute the function '{self.app.pargs.function}' of contract '{self.app.pargs.contract}' on the {self.app.chain.name} chain with the following arguments:"
+            )
+            for i, arg in enumerate(function_args):
+                print(f"  {input_names[i]}: {arg}")
+            yes_or_exit(logger=self.app.log.info)
         # Execute the function
         tx_hash = client.transact(function(*function_args))
         self.app.print(str(tx_hash))

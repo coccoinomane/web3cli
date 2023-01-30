@@ -152,6 +152,14 @@ def block(**kwargs: Any) -> dict[str, Any]:
     } | kwargs
 
 
+def force(**kwargs: Any) -> dict[str, Any]:
+    """The force argument to feed to argparse"""
+    return {
+        "action": "store_true",
+        "help": "Proceed without asking for confirmation",
+    } | kwargs
+
+
 #  _   _   _     _   _
 # | | | | | |_  (_) | |  ___
 # | | | | | __| | | | | / __|

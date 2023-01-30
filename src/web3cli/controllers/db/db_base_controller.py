@@ -1,6 +1,7 @@
 from cement import ex
 
 from web3cli.controllers.controller import Controller
+from web3cli.helpers import args
 from web3cli.helpers.database import delete_db_file, get_db_file
 from web3core.helpers.misc import yes_or_exit
 
@@ -16,15 +17,7 @@ class DbBaseController(Controller):
 
     @ex(
         help="delete the entire db: signers, addresses, chains, etc",
-        arguments=[
-            (
-                ["--force"],
-                {
-                    "help": "Delete without asking",
-                    "action": "store_true",
-                },
-            ),
-        ],
+        arguments=[(["--force"], args.force())],
     )
     def delete(self) -> None:
         if not self.app.pargs.force:

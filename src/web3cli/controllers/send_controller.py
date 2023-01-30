@@ -1,6 +1,7 @@
 from cement import ex
 
 from web3cli.controllers.controller import Controller
+from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.send import send_coin_or_token
 from web3cli.helpers.signer import signer_ready_or_raise
@@ -40,13 +41,7 @@ class SendController(Controller):
                     "nargs": "?",
                 },
             ),
-            (
-                ["-f", "--force"],
-                {
-                    "help": "do not ask for confirmation",
-                    "action": "store_true",
-                },
-            ),
+            (["-f", "--force"], args.force()),
         ],
     )
     def send(self) -> None:

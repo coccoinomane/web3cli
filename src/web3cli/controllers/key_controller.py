@@ -4,6 +4,7 @@ import sys
 from cement import ex
 
 from web3cli.controllers.controller import Controller
+from web3cli.helpers import args
 from web3cli.helpers.config import update_setting_in_config_file
 
 
@@ -21,10 +22,9 @@ class KeyController(Controller):
         arguments=[
             (
                 ["-f", "--force"],
-                {
-                    "help": "if an app key already exists, replace it without asking (all signers added with the old app key will need to be recreated)",
-                    "action": "store_true",
-                },
+                args.force(
+                    help="replace the key if it already exists; all signers will need to be recreated"
+                ),
             )
         ],
     )
