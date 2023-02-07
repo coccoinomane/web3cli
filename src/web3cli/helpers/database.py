@@ -3,6 +3,7 @@ import os
 from cement import App
 
 from web3cli.exceptions import Web3CliError
+from web3core.db import DB
 from web3core.models import MODELS
 
 
@@ -29,6 +30,10 @@ def delete_db_file(app: App) -> bool:
     deleted, false if it was not found"""
     file = get_db_file(app)
     if os.path.isfile(file):
+        try:
+            DB.close()
+        except:
+            pass
         os.remove(file)
         return True
     return False
