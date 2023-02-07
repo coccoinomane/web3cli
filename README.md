@@ -246,6 +246,9 @@ Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wik
 - [🪟 Run web3cli on Windows](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 - [↪️ Output processing](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)
 
+# Contributing
+
+All contributions are welcome! To start improving `web3cli`, please refer to our [__contribution guide__](./CONTRIBUTING.md).
 
 # Acknowledgements
 
