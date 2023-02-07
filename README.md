@@ -17,6 +17,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Concatenate commands to build powerful scripts
 - Transfer tokens via their ticker
 - Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
+- [Windows compatible](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 
 Soon:
 
@@ -30,9 +31,13 @@ Soon:
 
 # Install
 
+Make sure you have at least Python 3.7 installed, then run:
+
 ```bash
 pip3 install -U web3cli
 ```
+
+Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)!
 
 # Simple examples
 
@@ -238,6 +243,7 @@ Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wik
 - [🫡 List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands)
 - [⛓ Supported chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains)
 - [📝 Configuration](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%9D-Configuration)
+- [🪟 Run web3cli on Windows](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 - [↪️ Output processing](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)
 
 
