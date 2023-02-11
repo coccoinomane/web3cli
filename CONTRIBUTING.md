@@ -46,6 +46,10 @@ This will instruct git to run some checks before every commit, to ensure that yo
 - The CLI, in the [`src/web3cli/`](./src/web3cli/) folder. Here goes everything related to CLI commands: controllers, hooks, CLI-aware helper functions, templates. The CLI makes ample use of the library.
 - The library, in the [`src/web3core/`](src/web3core/) folder. The library contains the models and various general-purpose helpers. The library does not know that the CLI exists, and can therefore be used for other projects, e.g. a web interface.
 
+For example, if you want to add a new command, you should create a new
+controller in the [`src/web3cli/controllers/`](./src/web3cli/controllers/) folder, and add it
+to the `handlers` list in [`src/web3cli/main.py`](./src/web3cli/main.py) file.
+
 When you are done with your changes, please make sure to run `pdm test` to make
 sure that your code does not break anything (see section 5).
 
