@@ -46,15 +46,30 @@ This will instruct git to run some checks before every commit, to ensure that yo
 - The CLI, in the [`src/web3cli/`](./src/web3cli/) folder. Here goes everything related to CLI commands: controllers, hooks, CLI-aware helper functions, templates. The CLI makes ample use of the library.
 - The library, in the [`src/web3core/`](src/web3core/) folder. The library contains the models and various general-purpose helpers. The library does not know that the CLI exists, and can therefore be used for other projects, e.g. a web interface.
 
+When you are done with your changes, please make sure to run `pdm test` to make
+sure that your code does not break anything (see section 5).
+
+# 4. Run your code
+
 To run a command against your modifications, use `pdm w3` instead of just `w3`:
 
 ```bash
 pdm w3 <command>
 ```
 
-The rule is simple: `pdm w3` runs against your local `web3cli` folder, while `w3` runs against the system-installed `w3` (if any).
+The rule is simple: `pdm w3` runs against your working `web3cli` folder, while `w3` runs against the system-installed `w3` (if any).
 
-# 4. Test
+## Custom database
+
+If you want to have a separate DB for your working `web3cli` folder, run:
+
+```bash
+pdm w3 config set db_file db --no-global
+```
+
+This will create a `db` file in the current folder, which will be used by `web3cli` instead of the global one.
+
+# 5. Run tests
 
 Plese run `pdm test` before every commit, to make sure your edits did not mess with the pre-existing code.
 
