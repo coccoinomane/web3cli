@@ -14,7 +14,7 @@ def init_db(
     If the database file does not exist, a new database file will be created
     at the given path, along with its parent folders."""
     if db_path != ":memory:":
-        db_path = os.path.expanduser(db_path)
+        db_path = os.path.abspath(os.path.expanduser(db_path))
         create_folder(os.path.dirname(db_path), 0o744)
     db.init(db_path)
     db.connect()

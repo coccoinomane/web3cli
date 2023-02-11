@@ -13,10 +13,10 @@ def db_ready_or_raise(app: App) -> None:
         raise Web3CliError("Could not establish database connection")
 
 
-def get_db_file(app: App) -> str:
+def get_db_filepath(app: App) -> str:
     """Return the full path of the database file, from
     the configuration"""
-    return os.path.expanduser(app.config.get("web3cli", "db_file"))
+    return os.path.abspath(os.path.expanduser(app.config.get("web3cli", "db_file")))
 
 
 def maybe_delete_db_file(app: App) -> None:
@@ -28,7 +28,7 @@ def maybe_delete_db_file(app: App) -> None:
 def delete_db_file(app: App) -> bool:
     """Delete the database file; return True if the file was
     deleted, false if it was not found"""
-    file = get_db_file(app)
+    file = get_db_filepath(app)
     if os.path.isfile(file):
         try:
             DB.close()

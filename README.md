@@ -94,8 +94,7 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 # Smart Contract support
 
-`web3cli` comes with a database of common contracts, including ERC20 tokens and
-Uniswap clones.
+`web3cli` comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
 
 See the available contracts with `w3 db contract list`:
 

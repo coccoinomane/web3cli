@@ -5,6 +5,9 @@
 - Transact: Allow to simulate the transaction first with eth_call
 - Transact: Make sure --max-priority-fee is respected
 - Transact: README examples
+- resolve_contract: return a contract from ethPM or etherscan
+- Use pipx to install web3cli (https://pypa.github.io/pipx/)
+- Should be able to run `config get` and `config set` even if db file configuration is wrong
 
 ### Extra commands 
 
@@ -45,7 +48,6 @@
 ### Misc
 
 - Make web3cli extensible
-- Test on Windows
 - Use memory db for dev environment
 - Test ABI controller
 - Make contract.type a foreign key to ContractType?

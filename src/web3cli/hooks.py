@@ -9,7 +9,7 @@ from cement import App
 from genericpath import isfile
 
 from web3cli.helpers.config import update_setting_in_config_file
-from web3cli.helpers.database import get_db_file
+from web3cli.helpers.database import get_db_filepath
 from web3core.db import DB
 from web3core.helpers.database import init_db
 from web3core.helpers.seed import populate_db
@@ -46,7 +46,7 @@ def init_and_attach_db(app: App) -> None:
     """Attach the production database to the app object, so that the
     controllers can access it. If the database file does not exist,
     create it and seed it"""
-    db_path = get_db_file(app)
+    db_path = get_db_filepath(app)
     do_populate = (
         not isfile(db_path) and app.config.get("web3cli", "populate_db") == True
     )
