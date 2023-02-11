@@ -51,7 +51,9 @@ class DbContractController(Controller):
             (["-d", "--desc"], {"action": "store"}),
             (
                 ["-t", "--type"],
-                {"help": "type of the contract, e.g. erc20 or uniswap_router_v2"},
+                {
+                    "help": "type of the contract, e.g. erc20 or uniswap_router_v2. The type will be used to infer the contract's ABI."
+                },
             ),
             (
                 ["address"],
@@ -67,7 +69,7 @@ class DbContractController(Controller):
             (
                 ["--abi"],
                 {
-                    "help": "json file containing the contract's ABI",
+                    "help": "JSON file containing the contract's ABI. Must be provided unless --type is provided.",
                 },
             ),
         ],
@@ -81,6 +83,10 @@ class DbContractController(Controller):
                 abi = read_json(self.app.pargs.abi)
             except:
                 raise Web3CliError(f"Could not read ABI from file {self.app.pargs.abi}")
+
+        # Throw if no ABI and no type
+        if not self.app.pargs.update and not abi and not self.app.pargs.type:
+            raise Web3CliError("Either --type or --abi must be provided")
 
         # Add or update contract
         contract = Contract.get_by_name_and_chain(

@@ -3,6 +3,7 @@ from typing import List
 import pytest
 
 from tests.web3cli.main import Web3CliTest
+from web3cli.exceptions import Web3CliError
 from web3core.exceptions import ContractNotFound
 from web3core.helpers.seed import seed_chains, seed_contracts
 from web3core.models.contract import Contract
@@ -74,6 +75,26 @@ def test_contract_add(contracts: List[ContractFields]) -> None:
             assert Contract.desc == c["desc"]
             assert Contract.type == c["type"]
             assert Contract.address == c["address"]
+
+
+# If neither --type nor --abi is provided, should throw an error
+def test_contract_add_without_abi_and_type(contracts: List[ContractFields]) -> None:
+    c = contracts[0]
+    with pytest.raises(Web3CliError, match="Either --type or --abi must be provided"):
+        with Web3CliTest() as app:
+            app.set_args(
+                [
+                    "--chain",
+                    c["chain"],
+                    "db",
+                    "contract",
+                    "add",
+                    c["name"],
+                    c["address"],
+                    "--desc",
+                    c["desc"],
+                ]
+            ).run()
 
 
 def test_contract_update(contracts: List[ContractFields]) -> None:
