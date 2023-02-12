@@ -33,7 +33,7 @@ class TransactController(Controller):
                 ["-o", "--output"],
                 {
                     "action": "store",
-                    "help": "What should be printed after the command has been executed.",
+                    "help": "What should be printed after the command has been executed. 'hash' will print the transaction hash, 'tx' will print the transaction object, 'sig' will print the signed transaction object, 'receipt' or 'rcpt' will wait for the transaction to be confirmed and print the tx receipt.",
                     "choices": ["hash", "tx", "sig", "receipt", "rcpt"],
                     "default": "hash",
                 },
@@ -52,6 +52,11 @@ class TransactController(Controller):
     def transact(self) -> None:
         chain_ready_or_raise(self.app)
         signer_ready_or_raise(self.app)
+        # Throw if asking for a receipt and dry run at the same time
+        if self.app.pargs.output in ["receipt", "rcpt"] and self.app.pargs.dry_run:
+            raise Web3CliError(
+                "Cannot ask for a receipt when running in dry run mode. Either remove the `--dry-run` flag or change the output type to `hash`, `tx` or `sig`."
+            )
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions
@@ -69,7 +74,9 @@ class TransactController(Controller):
             allow_exp_notation=True,
         )
         # Build transaction
-        tx = client.buildContractTransaction(function(*function_args))
+        tx = client.buildContractTransaction(
+            function(*function_args), maxPriorityFeePerGasInGwei=self.app.priority_fee
+        )
         # Sign transaction
         tx_signed = client.signTransaction(tx)
         # Ask for confirmation

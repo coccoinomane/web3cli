@@ -2,8 +2,6 @@
 
 ### Top priority
 
-- Transact: Allow to simulate the transaction first with eth_call
-- Transact: Make sure --max-priority-fee is respected
 - Transact: README examples
 - resolve_contract: return a contract from ethPM or etherscan
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
