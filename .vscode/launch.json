@@ -58,7 +58,7 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": false,
-            "args": ["call", "uniswap_router_v2", "getAmountsOut", "100e6", "usdc,usdt"]
+            "args": ["call", "uniswap_v2", "getAmountsOut", "100e6", "usdc,usdt"]
         },
     ]
 }

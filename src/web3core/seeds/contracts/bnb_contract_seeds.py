@@ -8,12 +8,12 @@ bnb_busd: ContractFields = {
     "chain": "bnb",
 }
 
-bnb_pancakeswap_router_v2: ContractFields = {
-    "name": "pancakeswap_router_v2",
+bnb_pancakeswap_v2: ContractFields = {
+    "name": "pancakeswap_v2",
     "desc": "PancakeSwap: Router v2",
-    "type": "uniswap_router_v2",
+    "type": "uniswap_v2",
     "address": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
     "chain": "bnb",
 }
 
-all = [bnb_busd, bnb_pancakeswap_router_v2]
+all = [bnb_busd, bnb_pancakeswap_v2]

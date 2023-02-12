@@ -24,16 +24,16 @@ eth_weth: ContractFields = {
     "chain": "eth",
 }
 
-eth_uniswap_router_v2: ContractFields = {
-    "name": "uniswap_router_v2",
+eth_uniswap_v2: ContractFields = {
+    "name": "uniswap_v2",
     "desc": "Uniswap V2: Router 2",
-    "type": "uniswap_router_v2",
+    "type": "uniswap_v2",
     "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "chain": "eth",
 }
 
-eth_uniswap_pool_usdc_usdt_v2: ContractFields = {
-    "name": "uniswap_pool_usdc_usdt_v2",
+eth_uniswap_v2_usdc_usdt: ContractFields = {
+    "name": "uniswap_v2_usdc_usdt",
     "desc": "Uniswap V2: Pool USDC/USDT",
     "type": "uniswap_pool_v2",
     "address": "0x3041cbd36888becc7bbcbc0045e3b1f144466f5f",
@@ -44,6 +44,6 @@ all = [
     eth_usdc,
     eth_weth,
     eth_usdt,
-    eth_uniswap_router_v2,
-    eth_uniswap_pool_usdc_usdt_v2,
+    eth_uniswap_v2,
+    eth_uniswap_v2_usdc_usdt,
 ]

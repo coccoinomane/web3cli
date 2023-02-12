@@ -8,12 +8,20 @@ avax_usdc: ContractFields = {
     "chain": "avax",
 }
 
-avax_traderjoe_router: ContractFields = {
-    "name": "traderjoe_router",
-    "desc": "Trader Joe: Router",
-    "type": "uniswap_router_v2",
+avax_usdt_e: ContractFields = {
+    "name": "usdt.e",
+    "desc": "Tether USD",
+    "type": "erc20",
+    "address": "0xc7198437980c041c805A1EDcbA50c1Ce5db95118",
+    "chain": "avax",
+}
+
+avax_traderjoe_v2: ContractFields = {
+    "name": "traderjoe_v2",
+    "desc": "Trader Joe: Router V2",
+    "type": "uniswap_v2",
     "address": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
     "chain": "avax",
 }
 
-all = [avax_usdc, avax_traderjoe_router]
+all = [avax_usdc, avax_usdt_e, avax_traderjoe_v2]

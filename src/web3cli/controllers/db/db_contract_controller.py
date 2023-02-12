@@ -52,7 +52,7 @@ class DbContractController(Controller):
             (
                 ["-t", "--type"],
                 {
-                    "help": "type of the contract, e.g. erc20 or uniswap_router_v2. The type will be used to infer the contract's ABI."
+                    "help": "type of the contract, e.g. erc20 or uniswap_v2. The type will be used to infer the contract's ABI."
                 },
             ),
             (

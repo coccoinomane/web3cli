@@ -149,7 +149,7 @@ def test_call_local_token_transfer(
 @pytest.mark.remote
 # Test calling the Uniswap Router V2 contract's getAmountsOut function
 # (2 arguments of which one is an array)
-def test_call_eth_uniswap_router_v2_get_amounts_out(
+def test_call_eth_uniswap_v2_get_amounts_out(
     contracts: List[ContractFields], chains: List[ChainFields]
 ) -> None:
     with Web3CliTest() as app:
@@ -160,7 +160,7 @@ def test_call_eth_uniswap_router_v2_get_amounts_out(
                 "-c",
                 "eth",
                 "call",
-                "uniswap_router_v2",
+                "uniswap_v2",
                 "getAmountsOut",
                 "100e6",
                 "usdc,usdt",
