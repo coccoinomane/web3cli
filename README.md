@@ -112,10 +112,14 @@ w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 See available functions on a contract with `w3 abi functions`:
 
 ```
-w3 abi functions weth
+w3 abi functions weth              # functions on the WETH contract
+w3 abi functions uniswap_router_v2 # functions on the Uniswap V2 router contract
 ```
 
-Call a function on the contract with `w3 call`:
+### Read from a smart contract
+
+To read from a smart contract, use `w3 call`. For example, to get the total
+supply of the WETH token, run:
 
 ```
 w3 call weth totalSupply
@@ -132,6 +136,22 @@ You can also do more complex stuff like:
 ```bash
 # get the amount of USDT you get for 100 USDC
 w3 call uniswap_router_v2 getAmountsOut 100e6 usdc,usdt | jq -r '.[1]' 
+```
+
+### Write to the blockchain
+
+To write to the blockchain, use `w3 transact`. For example, to transfer 1 ETH to 
+address, run:
+
+```
+w3 transact weth transfer <address> 1e18
+```
+
+To swap 1 USDC for USDT on Uniswap, accepting no less than 0.9 USDT in return, run:
+
+```
+w3 transact usdc approve uniswap_pool_usdc_usdt_v2 1e6
+w3 transact uniswap_router_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver address> 9e9
 ```
 
 # Multichain support

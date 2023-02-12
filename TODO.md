@@ -2,10 +2,9 @@
 
 ### Top priority
 
-- Transact: README examples
+- Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - resolve_contract: return a contract from ethPM or etherscan
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
-- Should be able to run `config get` and `config set` even if db file configuration is wrong
 
 ### Extra commands 
 
@@ -45,6 +44,7 @@
 
 ### Misc
 
+- Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible
 - Use memory db for dev environment
 - Test ABI controller
