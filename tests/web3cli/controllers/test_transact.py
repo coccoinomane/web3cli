@@ -159,7 +159,7 @@ def test_transact_local_token_transfer_no_confirm(
 
 
 @pytest.mark.local
-# Test that execution stops when --dry-run is used
+# Test that the transaction is not sent when --dry-run is used
 def test_transact_local_token_transfer_dry_run(
     app: Web3CliTest,
     token18: BrownieContract,
@@ -181,6 +181,61 @@ def test_transact_local_token_transfer_dry_run(
         ]
     ).run()
     assert token18.balanceOf(bob.address) == bob_balance
+
+
+@pytest.mark.local
+# Test that the function's output is printed when --output=call is used
+def test_transact_local_token_transfer_output_call(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--output",
+            "call",
+            "--dry-run",
+        ]
+    ).run()
+    data, output = app.last_rendered
+    assert type(data) is bool
+    assert data == True
+
+
+@pytest.mark.local
+# Test that when --output=call is used we default to dry-run mode
+def test_transact_local_token_transfer_output_call_no_dry_run(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--output",
+            "call",
+        ]
+    ).run()
+    data, output = app.last_rendered
+    assert type(data) is bool
+    assert data == True
 
 
 @pytest.mark.local
@@ -283,3 +338,32 @@ def test_transact_local_token_transfer_output_receipt(
     assert "blockHash" in data
     assert "blockNumber" in data
     assert "logs" in data
+
+
+@pytest.mark.local
+# Test that an error is thrown when --output=receipt is used in a dry run
+def test_transact_local_token_transfer_output_receipt_dry_run(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    with pytest.raises(
+        Web3CliError, match="Cannot get transaction receipt in dry run mode"
+    ):
+        app.set_args(
+            [
+                "--signer",
+                "alice",
+                "transact",
+                "tst18",
+                "transfer",
+                "bob",
+                "1e18",
+                "--output",
+                "receipt",
+                "--force",
+                "--dry-run",
+            ]
+        ).run()

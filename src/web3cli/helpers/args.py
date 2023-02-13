@@ -1,4 +1,5 @@
-from typing import Any, Union
+import argparse
+from typing import Any, Tuple, Union
 
 from cement import App
 
@@ -134,6 +135,28 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
         return int(value, 16)
 
 
+def parse_dry_run_and_tx_output(
+    app: App, dry_run_dest: str = "dry_run", tx_output_dest: str = "output"
+) -> Tuple[str, str]:
+    """Return the values of the 'dry_run' and 'output' arguments passed
+    to the CLI. The two parameters are not independent therefore they need
+    to be parsed together."""
+    tx_output = getattr(app.pargs, tx_output_dest)
+    dry_run = getattr(app.pargs, dry_run_dest)
+    # Handle receipt & dry run incompatibility
+    if tx_output in ["receipt", "rcpt"] and dry_run:
+        raise Web3CliError(
+            "Cannot get transaction receipt in dry run mode. Please choose one or the other."
+        )
+    # Default to dry run for output=call
+    if tx_output == "call" and not dry_run:
+        dry_run = True
+        app.log.warning(
+            "Return value can be obtained only in dry run mode. Defaulting to dry run."
+        )
+    return (dry_run, tx_output)
+
+
 #     _
 #    / \     _ __    __ _   ___
 #   / _ \   | '__|  / _` | / __|
@@ -143,20 +166,39 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
 
 
 def block(**kwargs: Any) -> dict[str, Any]:
-    """The block argument to feed to argparse"""
+    """The 'block' argument for argparse"""
     return {
-        "action": "store",
         "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
         + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
+        "action": "store",
         "default": "latest",
     } | kwargs
 
 
 def force(**kwargs: Any) -> dict[str, Any]:
-    """The force argument to feed to argparse"""
+    """The 'force' argument for argparse"""
     return {
-        "action": "store_true",
         "help": "Proceed without asking for confirmation",
+        "action": "store_true",
+    } | kwargs
+
+
+def tx_output(**kwargs: Any) -> dict[str, Any]:
+    """The 'output' argument for argparse"""
+    return {
+        "help": "Requested output. 'hash' will print the transaction hash, 'tx' will print the transaction object, 'sig' will print the signed transaction object, 'receipt' or 'rcpt' will wait for the tx receipt and print it, 'call' will force a dry run and print the return value of the function.",
+        "action": "store",
+        "choices": ["hash", "tx", "sig", "receipt", "rcpt", "call"],
+        "default": "hash",
+    } | kwargs
+
+
+def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
+    """The 'dry_run' argument for argparse"""
+    return {
+        "help": "Do not send the transaction, just print transaction data",
+        "action": argparse.BooleanOptionalAction,
+        "default": False,
     } | kwargs
 
 
