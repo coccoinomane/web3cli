@@ -16,6 +16,14 @@ avax_usdt_e: ContractFields = {
     "chain": "avax",
 }
 
+avax_wavax: ContractFields = {
+    "name": "wavax",
+    "desc": "Wrapped AVAX",
+    "type": "erc20",
+    "address": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
+    "chain": "avax",
+}
+
 avax_traderjoe_v2: ContractFields = {
     "name": "traderjoe_v2",
     "desc": "Trader Joe: Router V2",
@@ -24,4 +32,4 @@ avax_traderjoe_v2: ContractFields = {
     "chain": "avax",
 }
 
-all = [avax_usdc, avax_usdt_e, avax_traderjoe_v2]
+all = [avax_usdc, avax_usdt_e, avax_wavax, avax_traderjoe_v2]

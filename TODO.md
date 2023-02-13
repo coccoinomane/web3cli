@@ -2,7 +2,8 @@
 
 ### Top priority
 
-- Swap with Uniswap, TraderJoe, PancakeSwap, etc
+- Swap: refactor
+- Token: Approve and allowance commands
 - resolve_contract: return a contract from ethPM or etherscan
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
 
