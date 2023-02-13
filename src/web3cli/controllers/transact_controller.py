@@ -13,6 +13,7 @@ from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
+from web3core.helpers.tx import send_contract_transaction
 
 
 class TransactController(Controller):
@@ -56,12 +57,6 @@ class TransactController(Controller):
             resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
             allow_exp_notation=True,
         )
-        # Build transaction
-        tx = client.buildContractTransaction(
-            function(*function_args), maxPriorityFeePerGasInGwei=self.app.priority_fee
-        )
-        # Sign transaction
-        tx_signed = client.signTransaction(tx)
         # Ask for confirmation
         if not self.app.pargs.force and not dry_run:
             print(
@@ -71,23 +66,12 @@ class TransactController(Controller):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
-        if not dry_run:
-            tx_hash = client.sendSignedTransaction(tx_signed)
-        else:
-            tx_hash = tx_signed.hash.hex()
+        output = send_contract_transaction(
+            client,
+            function(*function_args),
+            dry_run=dry_run,
+            output_type=output_type,
+            maxPriorityFeePerGasInGwei=self.app.priority_fee,
+        )
         # Print output
-        if output_type == "hash":
-            self.app.render(tx_hash, indent=4, handler="json")
-        elif output_type == "tx":
-            self.app.render(tx, indent=4, handler="json")
-        elif output_type == "sig":
-            self.app.render(
-                json.loads(Web3.toJSON(tx_signed._asdict())), indent=4, handler="json"
-            )
-        elif output_type == "call":
-            self.app.render(function(*function_args).call(), indent=4, handler="json")
-        elif output_type in ["receipt", "rcpt"]:
-            rcpt = client.getTransactionReceipt(tx_hash)
-            self.app.render(json.loads(Web3.toJSON(rcpt)), indent=4, handler="json")
-        else:
-            raise Web3CliError(f"Unknown output type: {output_type}")
+        self.app.render(json.loads(Web3.toJSON(output)), indent=4, handler="json")

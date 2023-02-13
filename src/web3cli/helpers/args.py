@@ -137,7 +137,7 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
 
 def parse_dry_run_and_tx_output(
     app: App, dry_run_dest: str = "dry_run", tx_output_dest: str = "output"
-) -> Tuple[str, str]:
+) -> Tuple[bool, str]:
     """Return the values of the 'dry_run' and 'output' arguments passed
     to the CLI. The two parameters are not independent therefore they need
     to be parsed together."""
