@@ -2,9 +2,11 @@ import argparse
 import decimal
 from time import time
 
+import web3
 from cement import ex
 
 from web3cli.controllers.controller import Controller
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
@@ -109,9 +111,14 @@ class SwapController(Controller):
         amount_in = int(amount_in_token_units * 10**decimals_in)
         # Compute amount out
         decimals_out = token_out_client.functions["decimals"]().call()
-        amounts_out = router_client.functions["getAmountsOut"](
-            amount_in, [token_in, token_out]
-        ).call()
+        try:
+            amounts_out = router_client.functions["getAmountsOut"](
+                amount_in, [token_in, token_out]
+            ).call()
+        except web3.exceptions.ContractLogicError as e:
+            raise Web3CliError(
+                f"Could not compute the amount out. This is probably because the pair {self.app.pargs.token_in}-{self.app.pargs.token_out} is not supported by the DEX. Original error: {e}"
+            )
         amount_out = amounts_out[1]
         amount_out_token_units = decimal.Decimal(amount_out) / 10**decimals_out
         # Enforce slippage
