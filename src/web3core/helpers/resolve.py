@@ -14,6 +14,7 @@ def resolve_address(
     address_or_name: str,
     models: List[Type[BaseModel]] = [Address, Signer, Contract],
     chain: str = None,
+    to_checksum: bool = True,
 ) -> str:
     """Search the given models for records with the given name,
     and if the record is found, return the corresponding address.
@@ -24,21 +25,24 @@ def resolve_address(
     specified, too, otherwise the first matching record is returned.
     """
 
+    def format(address: str) -> str:
+        if to_checksum:
+            return Web3.toChecksumAddress(address)
+        return address
+
     if is_valid_address(address_or_name):
-        return Web3.toChecksumAddress(address_or_name)
+        return format(address_or_name)
 
     for model in models:
         try:
             if hasattr(model, "chain"):
                 if chain is not None:
-                    return Web3.toChecksumAddress(
-                        model.get(name=address_or_name, chain=chain).address
-                    )
+                    return format(model.get(name=address_or_name, chain=chain).address)
                 raise ValueError(
                     f"Chain must be specified for {model.__name__} model, but was not"
                 )
             else:
-                return Web3.toChecksumAddress(model.get(name=address_or_name).address)
+                return format(model.get(name=address_or_name).address)
         except model.DoesNotExist:
             pass
 

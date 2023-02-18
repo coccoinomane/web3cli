@@ -15,45 +15,50 @@ from web3core.models.types import AddressFields, ContractFields
 
 def test_with_valid_address() -> None:
     """Resolve a valid address which is not in the DB by its value"""
-    address = resolve_address("0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A")
-    assert type(address) is str
-    assert address == "0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A"
+    assert (
+        resolve_address("0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A", to_checksum=False)
+        == "0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A"
+    )
+    assert (
+        resolve_address("0xd0111cf5bf230832f422da1c6c1d0a512d4e005a", to_checksum=True)
+        == "0xd0111cF5bF230832F422dA1C6c1D0A512D4e005A"
+    )
 
 
 def test_with_invalid_address_or_name(db: Any, addresses: List[AddressFields]) -> None:
     """Resolve either an invalid address by its value, or a name that
     does not exist in the DB"""
     with pytest.raises(AddressNotResolved):
-        resolve_address("non existing name", [Address, Signer])
+        resolve_address("non existing name", [Address, Signer], to_checksum=False)
 
 
 def test_without_chain_parameter(db: Any, addresses: List[AddressFields]) -> None:
     """Raise error when called on a chain-aware model without specifying
     the chain"""
     with pytest.raises(ValueError):
-        resolve_address("whatever", [Contract], chain=None)
+        resolve_address("whatever", [Contract], chain=None, to_checksum=False)
 
 
 def test_on_addresses_table(db: Any, addresses: List[AddressFields]) -> None:
     """Resolve existing addresses in the address table"""
     seed_addresses(addresses)
     for a in addresses:
-        address = resolve_address(a["name"], [Address])
+        address = resolve_address(a["name"], [Address], to_checksum=False)
         assert type(address) is str
         assert address == a["address"]
         with pytest.raises(Exception):
-            address = resolve_address(a["name"], [Signer])
+            address = resolve_address(a["name"], [Signer], to_checksum=False)
 
 
 def test_on_signers_table(db: Any, signers: List[Dict[str, Any]]) -> None:
     """Resolve existing addresses in the signers table"""
     seed_signers(signers, secrets.token_bytes(32))
     for s in signers:
-        address = resolve_address(s["name"], [Signer])
+        address = resolve_address(s["name"], [Signer], to_checksum=False)
         assert type(address) is str
         assert address == s["address"]
         with pytest.raises(AddressNotResolved):
-            address = resolve_address(s["name"], [Address])
+            address = resolve_address(s["name"], [Address], to_checksum=False)
 
 
 def test_on_contracts_table(db: Any, contracts: List[ContractFields]) -> None:
@@ -61,11 +66,13 @@ def test_on_contracts_table(db: Any, contracts: List[ContractFields]) -> None:
     chain-aware, so the chain must be specified"""
     seed_contracts(contracts)
     for c in contracts:
-        address = resolve_address(c["name"], [Contract], chain=c["chain"])
+        address = resolve_address(
+            c["name"], [Contract], chain=c["chain"], to_checksum=False
+        )
         assert type(address) is str
         assert address == c["address"]
         with pytest.raises(AddressNotResolved):
-            address = resolve_address(c["name"], [Address, Signer])
+            address = resolve_address(c["name"], [Address, Signer], to_checksum=False)
 
 
 # Test that if all three records exist (address, signer, contract)
@@ -98,14 +105,29 @@ def test_priority(
     contract.save()
     # Check that the first in the list always wins
     assert (
-        resolve_address(same_name, [Address, Signer, Contract], chain=contract.chain)
+        resolve_address(
+            same_name,
+            [Address, Signer, Contract],
+            chain=contract.chain,
+            to_checksum=False,
+        )
         == address.address
     )
     assert (
-        resolve_address(same_name, [Signer, Contract, Address], chain=contract.chain)
+        resolve_address(
+            same_name,
+            [Signer, Contract, Address],
+            chain=contract.chain,
+            to_checksum=False,
+        )
         == signer.address
     )
     assert (
-        resolve_address(same_name, [Contract, Address, Signer], chain=contract.chain)
+        resolve_address(
+            same_name,
+            [Contract, Address, Signer],
+            chain=contract.chain,
+            to_checksum=False,
+        )
         == contract.address
     )
