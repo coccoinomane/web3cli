@@ -9,6 +9,7 @@ from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
 from web3core.models.chain import Chain
 from web3core.models.signer import Signer
+from web3core.types import TX_LIFE_PROPERTIES, TxLifeProperty
 
 #  ____
 # |  _ \    __ _   _ __   ___    ___
@@ -135,26 +136,30 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
         return int(value, 16)
 
 
-def parse_dry_run_and_tx_output(
-    app: App, dry_run_dest: str = "dry_run", tx_output_dest: str = "output"
-) -> Tuple[bool, str]:
-    """Return the values of the 'dry_run' and 'output' arguments passed
-    to the CLI. The two parameters are not independent therefore they need
-    to be parsed together."""
-    tx_output = getattr(app.pargs, tx_output_dest)
-    dry_run = getattr(app.pargs, dry_run_dest)
-    # Handle receipt & dry run incompatibility
-    if tx_output in ["receipt", "rcpt"] and dry_run:
+def parse_tx_args(
+    app: App,
+    dry_run_dest: str = "dry_run",
+    tx_return_dest: str = "return",
+    tx_call_dest: str = "call",
+) -> Tuple[bool, TxLifeProperty, bool]:
+    """Parse the CLI arguments '--dry-run', '--return' and '--call'.
+
+    These parameters are not independent therefore need to be parsed
+    together."""
+    dry_run: bool = getattr(app.pargs, dry_run_dest)
+    tx_return: TxLifeProperty = getattr(app.pargs, tx_return_dest)
+    tx_call: bool = getattr(app.pargs, tx_call_dest)
+    # Handle incompatibilities between options
+    if tx_return in ["data", "receipt"] and (dry_run or tx_call):
+        flag = dry_run_dest if dry_run else tx_call_dest
         raise Web3CliError(
-            "Cannot get transaction receipt in dry run mode. Please choose one or the other."
+            f"Cannot return '{tx_return}' with '{flag}' option. Please choose one or the other."
         )
-    # Default to dry run for output=call
-    if tx_output == "call" and not dry_run:
-        dry_run = True
-        app.log.warning(
-            "Return value can be obtained only in dry run mode. Defaulting to dry run."
-        )
-    return (dry_run, tx_output)
+    # Force 'call' mode when function output is requested
+    if tx_return == "output" and not tx_call:
+        tx_call = True
+
+    return (dry_run, tx_return, tx_call)
 
 
 #     _
@@ -166,7 +171,7 @@ def parse_dry_run_and_tx_output(
 
 
 def block(**kwargs: Any) -> dict[str, Any]:
-    """The 'block' argument for argparse"""
+    """The 'block' argument, used to specify a block number or hash"""
     return {
         "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
         + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
@@ -176,27 +181,48 @@ def block(**kwargs: Any) -> dict[str, Any]:
 
 
 def force(**kwargs: Any) -> dict[str, Any]:
-    """The 'force' argument for argparse"""
+    """The 'force' argument, used to force a command to run without asking for
+    confirmation"""
     return {
         "help": "Proceed without asking for confirmation",
         "action": "store_true",
     } | kwargs
 
 
-def tx_output(**kwargs: Any) -> dict[str, Any]:
-    """The 'output' argument for argparse"""
-    return {
-        "help": "Requested output. 'hash' will print the transaction hash, 'tx' will print the transaction object, 'sig' will print the signed transaction object, 'receipt' or 'rcpt' will wait for the tx receipt and print it, 'call' will force a dry run and print the return value of the function.",
-        "action": "store",
-        "choices": ["hash", "tx", "sig", "receipt", "rcpt", "call"],
-        "default": "hash",
-    } | kwargs
+def tx_return(**kwargs: Any) -> dict[str, Any]:
+    """The 'return' argument, used to choose what to return from a
+    transaction"""
+    return (
+        {
+            "help": """Requested output.
+                'hash' will print the transaction hash,
+                'params' will print the tx sent to the blockchain,
+                'sig' will print the signed transaction object,
+                'output' will force a dry run and print the return value of the function,
+                'data' will print the tx after it was sent to the blockchain,
+                'receipt' will wait for the tx receipt and print it,
+            """,
+            "action": "store",
+            "choices": TX_LIFE_PROPERTIES,
+            "default": "hash",
+        }
+        | kwargs
+    )
 
 
 def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
-    """The 'dry_run' argument for argparse"""
+    """The 'dry_run' argument, to allow the user to avoid sendin the transaction"""
     return {
-        "help": "Do not send the transaction, just print transaction data",
+        "help": "do not send the transaction to the blockchain",
+        "action": argparse.BooleanOptionalAction,
+        "default": False,
+    } | kwargs
+
+
+def tx_call(**kwargs: Any) -> dict[str, Any]:
+    """The 'call' argument, to allow the user to simulate the transaction"""
+    return {
+        "help": "call the contract function with eth_call, before sending it. Useful to test the tx before sending it.",
         "action": argparse.BooleanOptionalAction,
         "default": False,
     } | kwargs

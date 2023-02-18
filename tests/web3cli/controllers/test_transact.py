@@ -1,3 +1,5 @@
+from typing import Any, List
+
 import pytest
 
 from brownie.network.account import Account as BrownieAccount
@@ -8,82 +10,74 @@ from web3cli.exceptions import Web3CliError
 
 
 @pytest.mark.local
-# Test that executing a non existing function fails with a Web3CliError
-# exception containing the string "Function must be one..."
-def test_transact_non_existing_function(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    with pytest.raises(Web3CliError, match="Function must be one of"):
-        app.set_args(
+@pytest.mark.parametrize(
+    "args, error, error_message",
+    [
+        (
             [
-                "--signer",
-                "alice",
                 "transact",
                 "tst18",
                 "non_existing_function",
-                "--force",
-            ]
-        ).run()
-
-
-@pytest.mark.local
-# Test that executing a function with the wrong number of arguments fails
-def test_transact_wrong_number_of_arguments(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
-        app.set_args(
+            ],
+            Web3CliError,
+            "Function must be one of",
+        ),
+        (
             [
-                "--signer",
-                "alice",
                 "transact",
                 "tst18",
                 "transfer",
                 "0x123",
-                "--force",
-            ]
-        ).run()
-
-
-@pytest.mark.local
-# Test that executing a function with the wrong type of arguments fails
-def test_transact_wrong_type_of_arguments(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    with pytest.raises(ValueError):
-        app.set_args(
+            ],
+            Web3CliError,
+            "Function transfer expects 2 arguments",
+        ),
+        (
             [
-                "--signer",
-                "alice",
                 "transact",
                 "tst18",
                 "transfer",
                 "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                 "should_be_an_int",
-                "--force",
-            ]
-        ).run()
-
-
-@pytest.mark.local
-# Test executing the 'trasfer' function on the TST18 token on the local chain
-def test_transact_local_token_transfer(
+            ],
+            ValueError,
+            "String 'should_be_an_int' cannot be converted to a number",
+        ),
+    ],
+)
+# Test that providing a non existing function or
+# wrong args to an existing function fails
+def test_transact_invalid_input(
     app: Web3CliTest,
     token18: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
+    args: List[str],
+    error: Any,
+    error_message: Any,
+) -> None:
+    seed_local_token(app, token18)
+    with pytest.raises(error, match=error_message):
+        app.set_args(
+            [
+                "--signer",
+                "alice",
+            ]
+            + args
+            + ["--force"]
+        ).run()
+
+
+@pytest.mark.local
+@pytest.mark.parametrize("dry_run", [True, False])
+# Test executing the 'trasfer' on the local chain,
+# with and without the --dry-run flag
+def test_transact(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    dry_run: bool,
 ) -> None:
     seed_local_token(app, token18)
     bob_balance = token18.balanceOf(bob.address)
@@ -98,223 +92,99 @@ def test_transact_local_token_transfer(
             "1e18",
             "--force",
         ]
+        + (["--dry-run"] if dry_run else ["--force"])
     ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    if dry_run:
+        assert token18.balanceOf(bob.address) == bob_balance
+    else:
+        assert token18.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert type(data) is str
     assert data.startswith("0x")
 
 
 @pytest.mark.local
-# Test that excution continues if the user does confirm
-def test_transact_local_token_transfer_with_confirm(
+@pytest.mark.parametrize("answer", ["yes", "no"])
+# Test that the confirmation prompt works as intended
+def test_transact_with_confirm(
     app: Web3CliTest,
     token18: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     monkeypatch: pytest.MonkeyPatch,
+    answer: str,
 ) -> None:
     seed_local_token(app, token18)
     bob_balance = token18.balanceOf(bob.address)
-    monkeypatch.setattr("builtins.input", lambda _: "yes")
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-        ]
-    ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    args = [
+        "--signer",
+        "alice",
+        "transact",
+        "tst18",
+        "transfer",
+        "bob",
+        "1e18",
+    ]
+    monkeypatch.setattr("builtins.input", lambda _: answer)
+    if answer == "yes":
+        app.set_args(args).run()
+        assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    else:
+        with pytest.raises(SystemExit):
+            app.set_args(args).run()
+            assert token18.balanceOf(bob.address) == bob_balance
 
 
 @pytest.mark.local
-# Test that excution stops if the user does not confirm
-def test_transact_local_token_transfer_no_confirm(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    seed_local_token(app, token18)
-    bob_balance = token18.balanceOf(bob.address)
-    monkeypatch.setattr("builtins.input", lambda _: "no")
-    with pytest.raises(SystemExit):
-        app.set_args(
+@pytest.mark.parametrize(
+    "return_, has_keys",
+    [
+        (
+            "params",
             [
-                "--signer",
-                "alice",
-                "transact",
-                "tst18",
-                "transfer",
-                "bob",
-                "1e18",
-            ]
-        ).run()
-    assert token18.balanceOf(bob.address) == bob_balance
-
-
-@pytest.mark.local
-# Test that the transaction is not sent when --dry-run is used
-def test_transact_local_token_transfer_dry_run(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    bob_balance = token18.balanceOf(bob.address)
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-            "--dry-run",
-        ]
-    ).run()
-    assert token18.balanceOf(bob.address) == bob_balance
-
-
-@pytest.mark.local
-# Test that the function's output is printed when --output=call is used
-def test_transact_local_token_transfer_output_call(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-            "--output",
-            "call",
-            "--dry-run",
-        ]
-    ).run()
-    data, output = app.last_rendered
-    assert type(data) is bool
-    assert data == True
-
-
-@pytest.mark.local
-# Test that when --output=call is used we default to dry-run mode
-def test_transact_local_token_transfer_output_call_no_dry_run(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-            "--output",
-            "call",
-        ]
-    ).run()
-    data, output = app.last_rendered
-    assert type(data) is bool
-    assert data == True
-
-
-@pytest.mark.local
-# Test that the transaction JSON is printed when --output=tx is used
-def test_transact_local_token_transfer_output_tx(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    bob_balance = token18.balanceOf(bob.address)
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-            "--output",
-            "tx",
-            "--force",
-        ]
-    ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 1e18
-    data, output = app.last_rendered
-    assert type(data) is dict
-    assert "to" in data
-    assert "data" in data
-    assert "value" in data
-    assert "gas" in data
-    assert "nonce" in data
-    assert "chainId" in data
-
-
-@pytest.mark.local
-# Test that the signed transaction JSON is printed when --output=sig is used
-def test_transact_local_token_transfer_output_sig(
-    app: Web3CliTest,
-    token18: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-) -> None:
-    seed_local_token(app, token18)
-    bob_balance = token18.balanceOf(bob.address)
-    app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-            "--output",
+                "to",
+                "data",
+                "value",
+                "gas",
+                "nonce",
+                "chainId",
+            ],
+        ),
+        (
             "sig",
-            "--force",
-        ]
-    ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 1e18
-    data, output = app.last_rendered
-    assert type(data) is dict
-    assert "rawTransaction" in data
-    assert "hash" in data
-    assert "r" in data
-    assert "s" in data
-    assert "v" in data
-
-
-@pytest.mark.local
-# Test that the transaction receipt JSON is printed when --output=receipt is
-# used
-def test_transact_local_token_transfer_output_receipt(
+            [
+                "rawTransaction",
+                "hash",
+                "r",
+                "s",
+                "v",
+            ],
+        ),
+        (
+            "data",
+            [
+                "blockNumber",
+                "blockHash",
+            ],
+        ),
+        (
+            "receipt",
+            [
+                "blockHash",
+                "blockNumber",
+                "logs",
+            ],
+        ),
+    ],
+)
+# Test that varying the --return parameter the output varies
+def test_transact_return(
     app: Web3CliTest,
     token18: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
+    return_: str,
+    has_keys: List[str],
 ) -> None:
     seed_local_token(app, token18)
     bob_balance = token18.balanceOf(bob.address)
@@ -327,30 +197,63 @@ def test_transact_local_token_transfer_output_receipt(
             "transfer",
             "bob",
             "1e18",
-            "--output",
-            "receipt",
+            "--return",
+            return_,
             "--force",
         ]
     ).run()
     assert token18.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert type(data) is dict
-    assert "blockHash" in data
-    assert "blockNumber" in data
-    assert "logs" in data
+    for key in has_keys:
+        assert key in data
 
 
 @pytest.mark.local
-# Test that an error is thrown when --output=receipt is used in a dry run
-def test_transact_local_token_transfer_output_receipt_dry_run(
+@pytest.mark.parametrize("dry_run", [True, False])
+# Test that the function's output is printed when --return=output is used,
+# regardless of whether we are in dry-run mode or not
+def test_transact_result_output(
     app: Web3CliTest,
     token18: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
+    dry_run: bool,
+) -> None:
+    seed_local_token(app, token18)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--return",
+            "output",
+        ]
+        + (["--dry-run"] if dry_run else ["--force"])
+    ).run()
+    data, output = app.last_rendered
+    assert type(data) is bool
+    assert data == True
+
+
+@pytest.mark.local
+@pytest.mark.parametrize("return_type", ["data", "receipt"])
+# Test that an error is thrown when --return=receipt or --return=data
+# is used in a dry run
+def test_transact_output_receipt_dry_run(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    return_type: str,
 ) -> None:
     seed_local_token(app, token18)
     with pytest.raises(
-        Web3CliError, match="Cannot get transaction receipt in dry run mode"
+        Web3CliError, match=f"Cannot return '{return_type}' with 'dry_run' option"
     ):
         app.set_args(
             [
@@ -361,8 +264,8 @@ def test_transact_local_token_transfer_output_receipt_dry_run(
                 "transfer",
                 "bob",
                 "1e18",
-                "--output",
-                "receipt",
+                "--return",
+                return_type,
                 "--force",
                 "--dry-run",
             ]

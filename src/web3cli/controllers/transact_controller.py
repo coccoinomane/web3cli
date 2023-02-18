@@ -1,14 +1,12 @@
-import json
-
 import web3
 from cement import ex
-from web3 import Web3
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
+from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.misc import yes_or_exit
@@ -25,22 +23,26 @@ class TransactController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="Execute a function in the given smart contract and, by default, return the transaction hash. This will cost gas and write to the blockchain. Please use `w3 send` if you just need to send tokens around, as it is less error prone. To see the list of functions in a given contract, run `w3 abi functions <contract>`.",
+        help="""Execute a function in the given smart contract and, by default,
+            return the transaction hash. This will cost gas and write to the
+            blockchain, unless the --dry-run or --call flags are used. To send
+            tokens, please use `w3 send` as it is easier to use. To see the list
+            of functions in a given contract, run `w3 abi functions <contract>`.""",
         arguments=[
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
-            (["-o", "--output"], args.tx_output()),
+            (["--return"], args.tx_return()),
             (["--dry-run"], args.tx_dry_run()),
+            (["--call"], args.tx_call()),
             (["-f", "--force"], args.force()),
         ],
-        aliases=["exec"],
     )
     def transact(self) -> None:
         chain_ready_or_raise(self.app)
         signer_ready_or_raise(self.app)
         # Parse args
-        dry_run, output_type = args.parse_dry_run_and_tx_output(self.app)
+        dry_run, tx_return, tx_call = args.parse_tx_args(self.app)
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions
@@ -66,12 +68,14 @@ class TransactController(Controller):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
-        output = send_contract_transaction(
+        tx_life = send_contract_transaction(
             client,
             function(*function_args),
             dry_run=dry_run,
-            output_type=output_type,
+            call=tx_call,
+            fetch_data=True if tx_return == "data" else False,
+            fetch_receipt=True if tx_return == "receipt" else False,
             maxPriorityFeePerGasInGwei=self.app.priority_fee,
         )
         # Print output
-        self.app.render(json.loads(Web3.toJSON(output)), indent=4, handler="json")
+        render_web3py(self.app, tx_life[tx_return])

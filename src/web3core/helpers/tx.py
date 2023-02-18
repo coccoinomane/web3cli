@@ -1,24 +1,66 @@
-from typing import Any
-
 from web3.contract import ContractFunction
 from web3.types import Nonce, Wei
 from web3client.base_client import BaseClient
 
-from web3core.exceptions import Web3CoreError
+from web3core.types import TxLife
 
 
 def send_contract_transaction(
     client: BaseClient,
     function: ContractFunction,
-    dry_run: bool,
-    output_type: str,
+    dry_run: bool = False,
+    call: bool = False,
+    fetch_data: bool = False,
+    fetch_receipt: bool = False,
     valueInWei: Wei = None,
     nonce: Nonce = None,
     gasLimit: int = None,
     maxPriorityFeePerGasInGwei: int = None,
-) -> Any:
+) -> TxLife:
+    """Shortcut to send a transaction to a contract function, printing the
+    output according to the output_type parameter.
+
+    ARGS:
+        client (BaseClient): The client to use to send the transaction.
+        function (ContractFunction): The function to call.
+        dry_run (bool): If True, the transaction will not be sent to the
+            blockchain.
+        call (bool): If True, the contract function will be called with eth_call before
+            sending the transaction. This is useful to check if the transaction
+            will fail for any reason (e.g. insufficient gas) before sending it.
+        fetch_data (bool): If True, fetch the transaction data after sending the
+            tx, and include it in the output. Ignored if dry_run is True.
+        fetch_receipt (bool): If True, fetch the receipt after sending the tx,
+            and include it in the output. This will wait for the transaction to
+            be mined. Ignored if dry_run is True.
+        valueInWei (Wei): The value to send with the transaction.
+        nonce (Nonce): The nonce to use for the transaction.
+        gasLimit (int): The gas limit to use for the transaction.
+        maxPriorityFeePerGasInGwei (int): The max priority fee per gas to use
+            for the transaction.
+
+    RETURNS:
+        TxLife: The transaction life cycle, as a dictionary with the following
+            keys:
+                - params: The transaction parameters.
+                - hash: The transaction hash.
+                - sig: The signed transaction.
+                - function_output: The output of the contract function, if
+                    call is True.
+                - data: The transaction data, if fetch_data is True.
+                - receipt: The transaction receipt, if fetch_receipt is True.
+    """
+    # Prepare output
+    tx_life: TxLife = {
+        "params": None,
+        "hash": None,
+        "sig": None,
+        "output": None,
+        "data": None,
+        "receipt": None,
+    }
     # Build transaction
-    tx = client.buildContractTransaction(
+    tx_life["params"] = client.buildContractTransaction(
         function,
         valueInWei=valueInWei,
         nonce=nonce,
@@ -26,23 +68,19 @@ def send_contract_transaction(
         maxPriorityFeePerGasInGwei=maxPriorityFeePerGasInGwei,
     )
     # Sign transaction
-    tx_signed = client.signTransaction(tx)
+    signed_tx = client.signTransaction(tx_life["params"])
+    tx_life["sig"] = signed_tx._asdict()
+    # Call function
+    if call:
+        dry_run = True
+        tx_life["output"] = function.call()
     # Send transaction
     if not dry_run:
-        tx_hash = client.sendSignedTransaction(tx_signed)
+        tx_life["hash"] = client.sendSignedTransaction(signed_tx)
+        if fetch_data:
+            tx_life["data"] = client.getTransaction(tx_life["hash"])
+        if fetch_receipt:
+            tx_life["receipt"] = client.getTransactionReceipt(tx_life["hash"])
     else:
-        tx_hash = tx_signed.hash.hex()
-    # Print output
-    if output_type == "hash":
-        return tx_hash
-    elif output_type == "tx":
-        return tx
-    elif output_type == "sig":
-        return tx_signed._asdict()
-    elif output_type == "call":
-        return function.call()
-    elif output_type in ["receipt", "rcpt"]:
-        rcpt = client.getTransactionReceipt(tx_hash)
-        return rcpt
-    else:
-        raise Web3CoreError(f"Unknown output type: {output_type}")
+        tx_life["hash"] = signed_tx.hash.hex()
+    return tx_life
