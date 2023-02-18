@@ -36,6 +36,6 @@ class TxLife(TypedDict):
     receipt: TxReceipt
 
 
-TX_LIFE_PROPERTIES = TxLife.__annotations__.keys()
+TX_LIFE_PROPERTIES = list(TxLife.__annotations__.keys())
 
 TxLifeProperty = Literal["params", "hash", "sig", "output", "data", "receipt"]

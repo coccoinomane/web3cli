@@ -2,10 +2,10 @@
 
 ### Top priority
 
-- Swap: refactor
+- Swap: refactor and test
 - Token: Approve and allowance commands
 - resolve_contract: return a contract from ethPM or etherscan
-- Use pipx to install web3cli (https://pypa.github.io/pipx/)
+- Add support for uniswap v3 (https://docs.traderjoexyz.com/, https://snowtrace.io/address/0xe3ffc583dc176575eea7fd9df2a7c65f7e23f4c3#code)
 
 ### Extra commands 
 
@@ -45,6 +45,7 @@
 
 ### Misc
 
+- Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible
 - Use memory db for dev environment

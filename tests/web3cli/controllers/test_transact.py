@@ -90,7 +90,6 @@ def test_transact(
             "transfer",
             "bob",
             "1e18",
-            "--force",
         ]
         + (["--dry-run"] if dry_run else ["--force"])
     ).run()
@@ -175,6 +174,17 @@ def test_transact_with_confirm(
                 "logs",
             ],
         ),
+        (
+            "all",
+            [
+                "params",
+                "hash",
+                "sig",
+                "output",
+                "data",
+                "receipt",
+            ],
+        ),
     ],
 )
 # Test that varying the --return parameter the output varies
@@ -213,7 +223,7 @@ def test_transact_return(
 @pytest.mark.parametrize("dry_run", [True, False])
 # Test that the function's output is printed when --return=output is used,
 # regardless of whether we are in dry-run mode or not
-def test_transact_result_output(
+def test_transact_return_output(
     app: Web3CliTest,
     token18: BrownieContract,
     alice: BrownieAccount,
@@ -270,3 +280,51 @@ def test_transact_output_receipt_dry_run(
                 "--dry-run",
             ]
         ).run()
+
+
+@pytest.mark.local
+@pytest.mark.parametrize("call", [True, False])
+# Test that executing the 'trasfer' on the local chain,
+# with and without the --call flag, will always result in
+# the transaction being executed. The difference is that
+# when --call is used, the output of the function is available
+# in the output when --return=all is used
+def test_transact_call(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    call: bool,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--return",
+            "all",
+            "--force",
+        ]
+        + (["--call"] if call else ["--force"])
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert "output" in data
+    if call:
+        # If we are calling the function, the output should be populated
+        assert type(data["output"]) is bool
+        assert data["output"] == True
+    else:
+        # If we are not calling the function, the output should be empty
+        assert data["output"] is None
+
+    # The receipt should always be populated because we are not in dry-run mode
+    assert "receipt" in data
+    assert type(data["receipt"]) is dict
+    assert "logs" in data["receipt"]

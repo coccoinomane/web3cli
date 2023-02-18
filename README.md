@@ -13,15 +13,15 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Bypass sluggish and potentially compromised frontends
 - No configuration needed
 - Label addresses, tokens and contracts for ease of use
-- Use as many signers as you wish
-- Concatenate commands to build powerful scripts
+- Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Transfer tokens via their ticker
+- Concatenate commands to build powerful scripts
+- Use as many signers as you wish
 - Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
 - [Windows compatible](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 
 Soon:
 
-- Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Claim and reinvest yield from DeFi protocols
 - Automatically buy when slippage is low enough
 - Get notified on Telegram when a pair is liquid enough, or unbalanced

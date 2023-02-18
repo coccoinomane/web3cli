@@ -63,6 +63,21 @@ class Contract(BaseModel):
             )
 
     @classmethod
+    def get_by_name_chain_and_type_or_raise(
+        cls, name: str, chain: str, type: str
+    ) -> Contract:
+        """Return the contract with the given name on the given chain,
+        with the given type, or raise if it does not exist"""
+        try:
+            return cls.get(
+                (cls.name == name) & (cls.chain == chain) & (cls.type == type)
+            )
+        except cls.DoesNotExist:
+            raise ContractNotFound(
+                f"Could not find a '{type}' contract with '{name}' on chain '{chain}'"
+            )
+
+    @classmethod
     def upsert(cls, fields: ContractFields, logger: Logger = None) -> Contract:
         """Create contract or update it if one with the same name already exists"""
         return cls.upsert_by_query(

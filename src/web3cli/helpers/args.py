@@ -1,5 +1,5 @@
 import argparse
-from typing import Any, Tuple, Union
+from typing import Any, Literal, Tuple, Union
 
 from cement import App
 
@@ -10,6 +10,9 @@ from web3core.helpers.rpc import is_rpc_uri_valid
 from web3core.models.chain import Chain
 from web3core.models.signer import Signer
 from web3core.types import TX_LIFE_PROPERTIES, TxLifeProperty
+
+ReturnArg = Union[TxLifeProperty, Literal["all"]]
+
 
 #  ____
 # |  _ \    __ _   _ __   ___    ___
@@ -141,13 +144,13 @@ def parse_tx_args(
     dry_run_dest: str = "dry_run",
     tx_return_dest: str = "return",
     tx_call_dest: str = "call",
-) -> Tuple[bool, TxLifeProperty, bool]:
+) -> Tuple[bool, ReturnArg, bool]:
     """Parse the CLI arguments '--dry-run', '--return' and '--call'.
 
     These parameters are not independent therefore need to be parsed
     together."""
     dry_run: bool = getattr(app.pargs, dry_run_dest)
-    tx_return: TxLifeProperty = getattr(app.pargs, tx_return_dest)
+    tx_return: ReturnArg = getattr(app.pargs, tx_return_dest)
     tx_call: bool = getattr(app.pargs, tx_call_dest)
     # Handle incompatibilities between options
     if tx_return in ["data", "receipt"] and (dry_run or tx_call):
@@ -201,9 +204,10 @@ def tx_return(**kwargs: Any) -> dict[str, Any]:
                 'output' will force a dry run and print the return value of the function,
                 'data' will print the tx after it was sent to the blockchain,
                 'receipt' will wait for the tx receipt and print it,
+                'all' will print all the above
             """,
             "action": "store",
-            "choices": TX_LIFE_PROPERTIES,
+            "choices": TX_LIFE_PROPERTIES + ["all"],
             "default": "hash",
         }
         | kwargs

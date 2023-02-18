@@ -73,9 +73,12 @@ class TransactController(Controller):
             function(*function_args),
             dry_run=dry_run,
             call=tx_call,
-            fetch_data=True if tx_return == "data" else False,
-            fetch_receipt=True if tx_return == "receipt" else False,
+            fetch_data=True if tx_return in ["data", "all"] else False,
+            fetch_receipt=True if tx_return in ["receipt", "all"] else False,
             maxPriorityFeePerGasInGwei=self.app.priority_fee,
         )
         # Print output
-        render_web3py(self.app, tx_life[tx_return])
+        if tx_return == "all":
+            render_web3py(self.app, tx_life)
+        else:
+            render_web3py(self.app, tx_life[tx_return])

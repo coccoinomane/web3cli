@@ -42,6 +42,6 @@ def render_yaml(app: App, data: Any) -> None:
     app.render(data, handler="yaml")
 
 
-def render_web3py(app: App, data: Any, indent: int = None) -> None:
+def render_web3py(app: App, data: Any, indent: int = 4) -> None:
     """Print data as a Python object"""
     render_json(app, json.loads(Web3.toJSON(data)), indent=indent)
