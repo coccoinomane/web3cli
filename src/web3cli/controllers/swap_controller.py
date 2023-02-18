@@ -109,6 +109,12 @@ class SwapController(Controller):
         # Compute amount in
         decimals_in = token_in_client.functions["decimals"]().call()
         amount_in = int(amount_in_token_units * 10**decimals_in)
+        # Throw if the amount is larger than the balance
+        balance = token_in_client.functions["balanceOf"](signer.address).call()
+        if amount_in > balance:
+            raise Web3CliError(
+                f"Not enough {self.app.pargs.token_in} to swap. Balance: {balance/10**decimals_in}"
+            )
         # Compute amount out
         decimals_out = token_out_client.functions["decimals"]().call()
         try:
