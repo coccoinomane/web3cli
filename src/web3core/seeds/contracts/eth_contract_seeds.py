@@ -48,6 +48,15 @@ eth_uniswap_v2_usdc_usdt: ContractFields = {
     "chain": "eth",
 }
 
+eth_uniswap_v3: ContractFields = {
+    "name": "uniswap_v3",
+    "desc": "Uniswap V3: SwapRouter",
+    "type": "uniswap_v3",
+    "address": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+    "chain": "eth",
+}
+
+
 all = [
     eth_usdc,
     eth_weth,
@@ -55,4 +64,5 @@ all = [
     eth_uniswap_v2,
     eth_uniswap_v2_factory,
     eth_uniswap_v2_usdc_usdt,
+    eth_uniswap_v3,
 ]

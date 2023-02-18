@@ -24,6 +24,14 @@ avax_wavax: ContractFields = {
     "chain": "avax",
 }
 
+avax_yeti: ContractFields = {
+    "name": "yeti",
+    "desc": "YETI Token",
+    "type": "erc20",
+    "address": "0x77777777777d4554c39223C354A05825b2E8Faa3",
+    "chain": "avax",
+}
+
 avax_traderjoe_v2: ContractFields = {
     "name": "traderjoe_v2",
     "desc": "Trader Joe: Router V2",
@@ -32,4 +40,19 @@ avax_traderjoe_v2: ContractFields = {
     "chain": "avax",
 }
 
-all = [avax_usdc, avax_usdt_e, avax_wavax, avax_traderjoe_v2]
+avax_traderjoe_v3: ContractFields = {
+    "name": "traderjoe_v3",
+    "desc": "Trader Joe V3: LBRouter",
+    "type": "traderjoe_v3",
+    "address": "0xE3Ffc583dC176575eEA7FD9dF2A7c65F7E23f4C3",
+    "chain": "avax",
+}
+
+all = [
+    avax_usdc,
+    avax_usdt_e,
+    avax_wavax,
+    avax_yeti,
+    avax_traderjoe_v2,
+    avax_traderjoe_v3,
+]
