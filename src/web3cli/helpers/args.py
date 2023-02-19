@@ -1,4 +1,5 @@
-from typing import Any, Union
+import argparse
+from typing import Any, Literal, Tuple, Union
 
 from cement import App
 
@@ -8,6 +9,10 @@ from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
 from web3core.models.chain import Chain
 from web3core.models.signer import Signer
+from web3core.types import TX_LIFE_PROPERTIES, TxLifeProperty
+
+ReturnArg = Union[TxLifeProperty, Literal["all"]]
+
 
 #  ____
 # |  _ \    __ _   _ __   ___    ___
@@ -134,6 +139,38 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
         return int(value, 16)
 
 
+def parse_tx_args(
+    app: App,
+    dry_run_dest: str = "dry_run",
+    tx_return_dest: str = "return",
+    tx_call_dest: str = "call",
+    tx_gas_limit_dest: str = "gas_limit",
+) -> Tuple[bool, ReturnArg, bool]:
+    """Parse the CLI arguments '--dry-run', '--return' and '--call'.
+
+    These parameters are not independent therefore need to be parsed
+    together."""
+    dry_run: bool = getattr(app.pargs, dry_run_dest)
+    tx_return: ReturnArg = getattr(app.pargs, tx_return_dest)
+    tx_call: bool = getattr(app.pargs, tx_call_dest)
+    tx_gas_limit: bool = getattr(app.pargs, tx_gas_limit_dest)
+    # Dry run is incompatibile with certain return values
+    if tx_return in ["data", "receipt"] and dry_run:
+        raise Web3CliError(
+            f"Cannot return '{tx_return}' with 'dry_run' option. Please choose one or the other."
+        )
+    # Force 'call' mode when function output is requested
+    if tx_return == "output" and not tx_call:
+        tx_call = True
+    # You need to specify a gas limit when call=false
+    if not tx_call and not tx_gas_limit:
+        raise Web3CliError(
+            "Specify a gas limit with '--no-call', otherwise you'll end up with a function call anyway to estimate gas."
+        )
+
+    return (dry_run, tx_return, tx_call)
+
+
 #     _
 #    / \     _ __    __ _   ___
 #   / _ \   | '__|  / _` | / __|
@@ -143,20 +180,142 @@ def parse_block(app: App, label: str = "block") -> Union[str, int]:
 
 
 def block(**kwargs: Any) -> dict[str, Any]:
-    """The block argument to feed to argparse"""
     return {
-        "action": "store",
         "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
         + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
+        "action": "store",
         "default": "latest",
     } | kwargs
 
 
 def force(**kwargs: Any) -> dict[str, Any]:
-    """The force argument to feed to argparse"""
     return {
+        "help": "proceed without asking for confirmation",
         "action": "store_true",
-        "help": "Proceed without asking for confirmation",
+    } | kwargs
+
+
+def tx_return(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """Requested output, defaults to 'hash'. Can be one of:
+                'hash' will print the transaction hash;
+                'params' will print the tx sent to the blockchain;
+                'sig' will print the signed transaction object;
+                'output' will force a dry run and print the return value of the function;
+                'data' will print the tx after it was sent to the blockchain;
+                'receipt' will wait for the tx receipt and print it;
+                'all' will print all the above.
+            """,
+            "choices": TX_LIFE_PROPERTIES + ["all"],
+            "default": "hash",
+        }
+        | kwargs
+    )
+
+
+def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Stop before sending the transaction to the blockchain",
+        "action": argparse.BooleanOptionalAction,
+        "default": False,
+    } | kwargs
+
+
+def tx_call(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """
+                Call the contract function with eth_call, before sending it.
+                Useful to test the tx without spending gas
+            """,
+            "action": argparse.BooleanOptionalAction,
+            "default": True,
+        }
+        | kwargs
+    )
+
+
+def tx_gas_limit(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """
+                Gas limit to use for the transaction. If not specified, it will
+                be estimated by simulating a function call. Usually, you need to
+                specify the gas limit only if in conjunction with the --no-call
+                option.
+            """,
+            "type": int,
+        }
+        | kwargs
+    )
+
+
+def swap_dex(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """
+                Decentralized Exchange to use for the swap.
+                Only Uniswap V2 clones supported for now.
+                To see full list: `w3 db contract list uniswap_v2`.
+            """,
+        }
+        | kwargs
+    )
+
+
+def swap_token_in(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Ticker or Address of the token to swap from, e.g. USDC.",
+    } | kwargs
+
+
+def swap_amount(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Amount of tokens to swap, e.g. 100.",
+        "type": float,
+    } | kwargs
+
+
+def swap_token_out(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Ticker or Address of the token to swap to, e.g. WETH.",
+    } | kwargs
+
+
+def swap_slippage(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Slippage tolerance for the swap, as a percentage. Must be between 0 and 100, defaults to 2.",
+        "type": float,
+        "default": 2,
+    } | kwargs
+
+
+def swap_min_out(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Minimum amount of tokens to receive. If the swap would result in less tokens, the swap will fail.",
+        "type": float,
+    } | kwargs
+
+
+def swap_to(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Address to send the output tokens to. Defaults to the address of the signer.",
+    } | kwargs
+
+
+def swap_approve(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Whether to approve the DEX to spend the input token",
+        "action": argparse.BooleanOptionalAction,
+        "default": True,
+    } | kwargs
+
+
+def swap_deadline(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes.",
+        "default": 15 * 60,
     } | kwargs
 
 

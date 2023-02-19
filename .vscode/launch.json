@@ -1,9 +1,6 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "tests",
             "type": "python",
@@ -19,6 +16,14 @@
             "module": "pytest",
             "justMyCode": true,
             "args": ["tests", "-k", "test_db_base"]
+        },
+        {
+            "name": "tests - only transact",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "justMyCode": true,
+            "args": ["tests", "-k", "test_transact"]
         },
         {
             "name": "w3 block",
@@ -60,5 +65,13 @@
             "justMyCode": false,
             "args": ["call", "uniswap_v2", "getAmountsOut", "100e6", "usdc,usdt"]
         },
+        {
+            "name": "getAmountsOut",
+            "type": "python",
+            "request": "launch",
+            "module": "web3cli.main",
+            "justMyCode": false,
+            "args": ["call", "uniswap_v2", "getAmountsOut", "100e6", "usdc,usdt"]
+        }
     ]
 }

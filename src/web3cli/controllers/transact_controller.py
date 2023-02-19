@@ -1,18 +1,17 @@
-import json
-
 import web3
 from cement import ex
-from web3 import Web3
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
+from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
 from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
+from web3core.helpers.tx import send_contract_transaction
 
 
 class TransactController(Controller):
@@ -24,39 +23,27 @@ class TransactController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="Execute a function in the given smart contract and, by default, return the transaction hash. This will cost gas and write to the blockchain. Please use `w3 send` if you just need to send tokens around, as it is less error prone. To see the list of functions in a given contract, run `w3 abi functions <contract>`.",
+        help="""Execute a function in the given smart contract and, by default,
+            return the transaction hash. This will cost gas and write to the
+            blockchain, unless the --dry-run or --call flags are used. To send
+            tokens, please use `w3 send` as it is easier to use. To see the list
+            of functions in a given contract, run `w3 abi functions <contract>`.""",
         arguments=[
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
-            (
-                ["-o", "--output"],
-                {
-                    "action": "store",
-                    "help": "What should be printed after the command has been executed. 'hash' will print the transaction hash, 'tx' will print the transaction object, 'sig' will print the signed transaction object, 'receipt' or 'rcpt' will wait for the transaction to be confirmed and print the tx receipt.",
-                    "choices": ["hash", "tx", "sig", "receipt", "rcpt"],
-                    "default": "hash",
-                },
-            ),
-            (
-                ["--dry-run"],
-                {
-                    "action": "store_true",
-                    "help": "If set, the transaction will not be sent. Useful to print the transaction data and check that it is correct.",
-                },
-            ),
+            (["--return"], args.tx_return()),
+            (["--dry-run"], args.tx_dry_run()),
+            (["--call"], args.tx_call()),
+            (["--gas-limit"], args.tx_gas_limit()),
             (["-f", "--force"], args.force()),
         ],
-        aliases=["exec"],
     )
     def transact(self) -> None:
         chain_ready_or_raise(self.app)
         signer_ready_or_raise(self.app)
-        # Throw if asking for a receipt and dry run at the same time
-        if self.app.pargs.output in ["receipt", "rcpt"] and self.app.pargs.dry_run:
-            raise Web3CliError(
-                "Cannot ask for a receipt when running in dry run mode. Either remove the `--dry-run` flag or change the output type to `hash`, `tx` or `sig`."
-            )
+        # Parse args
+        dry_run, tx_return, tx_call = args.parse_tx_args(self.app)
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions
@@ -73,14 +60,8 @@ class TransactController(Controller):
             resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
             allow_exp_notation=True,
         )
-        # Build transaction
-        tx = client.buildContractTransaction(
-            function(*function_args), maxPriorityFeePerGasInGwei=self.app.priority_fee
-        )
-        # Sign transaction
-        tx_signed = client.signTransaction(tx)
         # Ask for confirmation
-        if not self.app.pargs.force and not self.app.pargs.dry_run:
+        if not self.app.pargs.force and not dry_run:
             print(
                 f"You are about to execute '{self.app.pargs.function}' on contract '{self.app.pargs.contract}' on the {self.app.chain.name} chain with the following arguments:"
             )
@@ -88,21 +69,18 @@ class TransactController(Controller):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
-        if not self.app.pargs.dry_run:
-            tx_hash = client.sendSignedTransaction(tx_signed)
-        else:
-            tx_hash = tx_signed.hash.hex()
+        tx_life = send_contract_transaction(
+            client,
+            function(*function_args),
+            dry_run=dry_run,
+            call=tx_call,
+            fetch_data=True if tx_return in ["data", "all"] else False,
+            fetch_receipt=True if tx_return in ["receipt", "all"] else False,
+            gasLimit=self.app.pargs.gas_limit,
+            maxPriorityFeePerGasInGwei=self.app.priority_fee,
+        )
         # Print output
-        if self.app.pargs.output == "hash":
-            self.app.render(tx_hash, indent=4, handler="json")
-        elif self.app.pargs.output == "tx":
-            self.app.render(tx, indent=4, handler="json")
-        elif self.app.pargs.output == "sig":
-            self.app.render(
-                json.loads(Web3.toJSON(tx_signed._asdict())), indent=4, handler="json"
-            )
-        elif self.app.pargs.output in ["receipt", "rcpt"]:
-            rcpt = client.getTransactionReceipt(tx_hash)
-            self.app.render(json.loads(Web3.toJSON(rcpt)), indent=4, handler="json")
+        if tx_return == "all":
+            render_web3py(self.app, tx_life)
         else:
-            raise Web3CliError(f"Unknown output type: {self.app.pargs.output}")
+            render_web3py(self.app, tx_life[tx_return])

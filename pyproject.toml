@@ -31,6 +31,7 @@ dev = [
     "pre-commit>=2.20.0",
     "brownie-token-tester>=0.3.2",
     "autoflake>=2.0.0",
+    "black>=22.10",
 ]
 
 [tool.pdm.scripts]

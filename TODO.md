@@ -2,13 +2,14 @@
 
 ### Top priority
 
-- Swap with Uniswap, TraderJoe, PancakeSwap, etc
+- Swap: refactor and test
 - resolve_contract: return a contract from ethPM or etherscan
-- Use pipx to install web3cli (https://pypa.github.io/pipx/)
 
-### Extra commands 
+### Commands 
 
 - Get tokens balance
+- Token: Approve and allowance commands
+- Add support for uniswap v3 (https://docs.traderjoexyz.com/, https://snowtrace.io/address/0xe3ffc583dc176575eea7fd9df2a7c65f7e23f4c3#code)
 - Command to swap tokens via Defi LLama token aggregator (https://twitter.com/DefiLlama/status/1609989799653285888)
 - Command to import chains from https://chainid.network/chains.json
 - Command to import tokens from ethereum-lists
@@ -44,6 +45,8 @@
 
 ### Misc
 
+- Support multi-hop swaps
+- Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible
 - Use memory db for dev environment
