@@ -22,11 +22,11 @@ Interact with blockchains and smart contracts using the command line: no coding 
 
 Soon:
 
-- Claim and reinvest yield from DeFi protocols
+- Set up scheduled buys and sells (DCA)
 - Automatically buy when slippage is low enough
 - Get notified on Telegram when a pair is liquid enough, or unbalanced
-- Set up scheduled buys and sells (DCA)
-- Analys on-chain data for tax or sleuthing purposes
+- Analyze on-chain data for tax or sleuthing purposes
+- Claim and reinvest yield from DeFi protocols
 
 
 # Install
@@ -55,17 +55,18 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    w3 balance unicef
    ```
 
-- Send native coins to any address and in any unit:
+- Send coins or tokens to any address:
    ```
    w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
    w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
-   w3 send unicef 1 ETH gwei --force # send 1 gwei straight away
+   w3 send unicef 1 usdc             # send 1 USDC
    ```
 
-- Send tokens as well:
+- Swap tokens on a DEX:
    ```
-   w3 send unicef 1 USDC           # send 1 USDC
-   w3 send unicef 1 USDC smallest  # send 1 decimal unit of USDC (10^-6)
+   w3 swap uniswap_v2 usdc 1 usdt              # swap 1 USDC for USDT on Uniswap
+   w3 swap uniswap_v2 usdc 1 usdt --return all # swap 1 USDC for USDT on Uniswap, show more info
+   w3avax swap traderjoe_v2 usdc 1 wavax       # swap 1 USDC for WAVAX on TraderJoe
    ```
 
 - Fetch blocks from the blockchain, in easy-to-read JSON format:
@@ -73,7 +74,6 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    w3 block latest
    w3 block finalized
    w3 block 6094305
-   w3 block 0x54c891931a2d1195e668e77391b14b9fa43a4d68bc2f60b14d90fef0c63e9c4c
    ```
 
 - Fetch transactions & receipts from the blockchain:

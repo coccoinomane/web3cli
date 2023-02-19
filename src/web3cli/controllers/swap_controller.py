@@ -35,7 +35,10 @@ class SwapController(Controller):
             (["token_in"], args.swap_token_in()),
             (["amount"], args.swap_amount()),
             (["token_out"], args.swap_token_out()),
-            (["--slippage"], args.swap_slippage(help="Not implemented yet")),
+            (
+                ["--slippage"],
+                args.swap_slippage(help="Not implemented yet", default=None),
+            ),
             (["--min-out"], args.swap_min_out()),
             (["--to"], args.swap_to()),
             (["--approve"], args.swap_approve()),
@@ -110,7 +113,7 @@ class SwapController(Controller):
         # Confirm
         if not self.app.pargs.force:
             print(f"You are about to perform the following swap:")
-            what_in = f"{amount_in_token_units} {self.app.pargs.token_in}"
+            what_in = f"{self.app.pargs.amount} {self.app.pargs.token_in}"
             what_out = f"{amount_out_token_units} {self.app.pargs.token_out}"
             print(f"  {what_in} -> {what_out}")
             if self.app.pargs.min_out:

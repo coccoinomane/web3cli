@@ -1,5 +1,8 @@
+import time
+
 from web3.contract import ContractFunction
-from web3.types import Nonce, Wei
+from web3.exceptions import TransactionNotFound
+from web3.types import Nonce, TxData, Wei
 from web3client.base_client import BaseClient
 
 from web3core.types import TxLife
@@ -86,9 +89,43 @@ def send_contract_transaction(
     if not dry_run:
         tx_life["hash"] = client.sendSignedTransaction(signed_tx)
         if fetch_data:
-            tx_life["data"] = client.getTransaction(tx_life["hash"])
+            tx_life["data"] = poll_transaction(client, tx_life["hash"])
         if fetch_receipt:
             tx_life["receipt"] = client.getTransactionReceipt(tx_life["hash"])
     else:
         tx_life["hash"] = signed_tx.hash.hex()
     return tx_life
+
+
+def poll_transaction(
+    client: BaseClient, tx_hash: str, poll_interval: int = 1, poll_timeout: int = 30
+) -> TxData:
+    """Get a transaction from the blockchain. If the transaction is not
+    found, poll until it is found. If it is not found after poll_timeout
+    seconds, return None.
+
+    ARGUMENTS
+    ---------
+    - client (BaseClient): The client to use to send the transaction.
+    - tx_hash (str): The transaction hash.
+    - poll_interval (int): The number of seconds to wait between polls. Set
+      to None to disable polling.
+    - poll_timeout (int): The number of seconds to wait before timing out,
+      and returning None. Set to None to wait indefinitely. Set to zero
+      to disable polling.
+
+    RETURNS
+    -------
+    TxData: The transaction data.
+    """
+    if poll_interval is None:
+        return client.getTransaction(tx_hash)
+
+    start_time = time.time()
+    while True:
+        try:
+            return client.getTransaction(tx_hash)
+        except TransactionNotFound:
+            time.sleep(poll_interval)
+            if time.time() - start_time > poll_timeout:
+                return None
