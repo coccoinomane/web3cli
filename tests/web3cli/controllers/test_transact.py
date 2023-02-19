@@ -43,6 +43,18 @@ from web3cli.exceptions import Web3CliError
             ValueError,
             "String 'should_be_an_int' cannot be converted to a number",
         ),
+        (
+            [
+                "transact",
+                "tst18",
+                "transfer",
+                "bob",
+                "1e18",
+                "--no-call",
+            ],
+            Web3CliError,
+            "Specify a gas limit",
+        ),
     ],
 )
 # Test that providing a non existing function or
@@ -164,6 +176,7 @@ def test_transact_with_confirm(
             [
                 "blockNumber",
                 "blockHash",
+                "gas",
             ],
         ),
         (
@@ -172,6 +185,7 @@ def test_transact_with_confirm(
                 "blockHash",
                 "blockNumber",
                 "logs",
+                "gasUsed",
             ],
         ),
         (
@@ -284,11 +298,11 @@ def test_transact_output_receipt_dry_run(
 
 @pytest.mark.local
 @pytest.mark.parametrize("call", [True, False])
-# Test that executing the 'trasfer' on the local chain,
-# with and without the --call flag, will always result in
-# the transaction being executed. The difference is that
-# when --call is used, the output of the function is available
-# in the output when --return=all is used
+# Test that executing the 'trasfer' on the local chain, with and without the
+# --no-call flag, will always result in the transaction being executed. The
+# difference is that when --no-call is used, the output of the function is not
+# available in the output when --return=all is used. Also tests that the default
+# is --call
 def test_transact_call(
     app: Web3CliTest,
     token18: BrownieContract,
@@ -311,7 +325,7 @@ def test_transact_call(
             "all",
             "--force",
         ]
-        + (["--call"] if call else ["--force"])
+        + (["--no-call", "--gas-limit", "300000"] if not call else [])
     ).run()
     assert token18.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
@@ -328,3 +342,37 @@ def test_transact_call(
     assert "receipt" in data
     assert type(data["receipt"]) is dict
     assert "logs" in data["receipt"]
+
+
+@pytest.mark.local
+# Test that the gas_limit is correctly passed to the transaction
+def test_transact_call_with_gas_limit(
+    app: Web3CliTest,
+    token18: BrownieContract,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+) -> None:
+    seed_local_token(app, token18)
+    bob_balance = token18.balanceOf(bob.address)
+    gas_limit = 300000
+    app.set_args(
+        [
+            "--signer",
+            "alice",
+            "transact",
+            "tst18",
+            "transfer",
+            "bob",
+            "1e18",
+            "--gas-limit",
+            str(gas_limit),
+            "--return",
+            "data",
+            "--force",
+        ]
+    ).run()
+    assert token18.balanceOf(bob.address) == bob_balance + 1e18
+    data, output = app.last_rendered
+    assert "gas" in data
+    assert type(data["gas"]) is int
+    assert data["gas"] == gas_limit

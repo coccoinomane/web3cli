@@ -144,6 +144,7 @@ def parse_tx_args(
     dry_run_dest: str = "dry_run",
     tx_return_dest: str = "return",
     tx_call_dest: str = "call",
+    tx_gas_limit_dest: str = "gas_limit",
 ) -> Tuple[bool, ReturnArg, bool]:
     """Parse the CLI arguments '--dry-run', '--return' and '--call'.
 
@@ -152,15 +153,20 @@ def parse_tx_args(
     dry_run: bool = getattr(app.pargs, dry_run_dest)
     tx_return: ReturnArg = getattr(app.pargs, tx_return_dest)
     tx_call: bool = getattr(app.pargs, tx_call_dest)
-    # Handle incompatibilities between options
-    if tx_return in ["data", "receipt"] and (dry_run or tx_call):
-        flag = dry_run_dest if dry_run else tx_call_dest
+    tx_gas_limit: bool = getattr(app.pargs, tx_gas_limit_dest)
+    # Dry run is incompatibile with certain return values
+    if tx_return in ["data", "receipt"] and dry_run:
         raise Web3CliError(
-            f"Cannot return '{tx_return}' with '{flag}' option. Please choose one or the other."
+            f"Cannot return '{tx_return}' with 'dry_run' option. Please choose one or the other."
         )
     # Force 'call' mode when function output is requested
     if tx_return == "output" and not tx_call:
         tx_call = True
+    # You need to specify a gas limit when call=false
+    if not tx_call and not tx_gas_limit:
+        raise Web3CliError(
+            "Specify a gas limit with '--no-call', otherwise you'll end up with a function call anyway to estimate gas."
+        )
 
     return (dry_run, tx_return, tx_call)
 
@@ -192,16 +198,15 @@ def force(**kwargs: Any) -> dict[str, Any]:
 def tx_return(**kwargs: Any) -> dict[str, Any]:
     return (
         {
-            "help": """Requested output.
-                'hash' will print the transaction hash,
-                'params' will print the tx sent to the blockchain,
-                'sig' will print the signed transaction object,
-                'output' will force a dry run and print the return value of the function,
-                'data' will print the tx after it was sent to the blockchain,
-                'receipt' will wait for the tx receipt and print it,
-                'all' will print all the above
+            "help": """Requested output, defaults to 'hash'. Can be one of:
+                'hash' will print the transaction hash;
+                'params' will print the tx sent to the blockchain;
+                'sig' will print the signed transaction object;
+                'output' will force a dry run and print the return value of the function;
+                'data' will print the tx after it was sent to the blockchain;
+                'receipt' will wait for the tx receipt and print it;
+                'all' will print all the above.
             """,
-            "action": "store",
             "choices": TX_LIFE_PROPERTIES + ["all"],
             "default": "hash",
         }
@@ -211,18 +216,39 @@ def tx_return(**kwargs: Any) -> dict[str, Any]:
 
 def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
     return {
-        "help": "do not send the transaction to the blockchain",
+        "help": "Stop before sending the transaction to the blockchain",
         "action": argparse.BooleanOptionalAction,
         "default": False,
     } | kwargs
 
 
 def tx_call(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "call the contract function with eth_call, before sending it. Useful to test the tx before sending it.",
-        "action": argparse.BooleanOptionalAction,
-        "default": False,
-    } | kwargs
+    return (
+        {
+            "help": """
+                Call the contract function with eth_call, before sending it.
+                Useful to test the tx without spending gas
+            """,
+            "action": argparse.BooleanOptionalAction,
+            "default": True,
+        }
+        | kwargs
+    )
+
+
+def tx_gas_limit(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """
+                Gas limit to use for the transaction. If not specified, it will
+                be estimated by simulating a function call. Usually, you need to
+                specify the gas limit only if in conjunction with the --no-call
+                option.
+            """,
+            "type": int,
+        }
+        | kwargs
+    )
 
 
 def swap_dex(**kwargs: Any) -> dict[str, Any]:
@@ -280,17 +306,16 @@ def swap_to(**kwargs: Any) -> dict[str, Any]:
 
 def swap_approve(**kwargs: Any) -> dict[str, Any]:
     return {
-        "help": "Whether to approve the DEX to spend the input token. Defaults to False.",
+        "help": "Whether to approve the DEX to spend the input token",
         "action": argparse.BooleanOptionalAction,
-        "default": False,
+        "default": True,
     } | kwargs
 
 
 def swap_deadline(**kwargs: Any) -> dict[str, Any]:
     return {
-        "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes",
+        "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes.",
         "default": 15 * 60,
-        "type": int,
     } | kwargs
 
 

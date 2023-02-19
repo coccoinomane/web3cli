@@ -35,6 +35,7 @@ class TransactController(Controller):
             (["--return"], args.tx_return()),
             (["--dry-run"], args.tx_dry_run()),
             (["--call"], args.tx_call()),
+            (["--gas-limit"], args.tx_gas_limit()),
             (["-f", "--force"], args.force()),
         ],
     )
@@ -75,6 +76,7 @@ class TransactController(Controller):
             call=tx_call,
             fetch_data=True if tx_return in ["data", "all"] else False,
             fetch_receipt=True if tx_return in ["receipt", "all"] else False,
+            gasLimit=self.app.pargs.gas_limit,
             maxPriorityFeePerGasInGwei=self.app.priority_fee,
         )
         # Print output

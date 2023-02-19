@@ -30,6 +30,9 @@ def send_contract_transaction(
     - call (bool): If True, the contract function will be called with eth_call before
       sending the transaction. This is useful to check if the transaction
       will fail for any reason (e.g. insufficient gas) before sending it.
+      Please note that if you use --no-call you also need to provide a gasLimit,
+      lest web3.py will try to estimate the gas limit on-chain which another
+      function call.
     - fetch_data (bool): If True, fetch the transaction data after sending the
       tx, and include it in the output. Ignored if dry_run is True.
     - fetch_receipt (bool): If True, fetch the receipt after sending the tx,

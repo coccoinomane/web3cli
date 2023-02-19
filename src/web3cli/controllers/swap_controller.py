@@ -35,7 +35,7 @@ class SwapController(Controller):
             (["token_in"], args.swap_token_in()),
             (["amount"], args.swap_amount()),
             (["token_out"], args.swap_token_out()),
-            (["--slippage"], args.swap_slippage()),
+            (["--slippage"], args.swap_slippage(help="Not implemented yet")),
             (["--min-out"], args.swap_min_out()),
             (["--to"], args.swap_to()),
             (["--approve"], args.swap_approve()),
@@ -43,6 +43,7 @@ class SwapController(Controller):
             (["--return"], args.tx_return()),
             (["--dry-run"], args.tx_dry_run()),
             (["--call"], args.tx_call()),
+            (["--gas-limit"], args.tx_gas_limit()),
             (["-f", "--force"], args.force()),
         ],
     )
@@ -90,19 +91,37 @@ class SwapController(Controller):
             )
         amount_out = amounts_out[1]
         amount_out_token_units = decimal.Decimal(amount_out) / 10**decimals_out
-        # Enforce slippage
-        # if not dry_run:
-        #     amount_out = amounts_out[1]
-        #     amount_out_token_units = decimal.Decimal(amount_out) / 10**decimals_out
-        #     slippage = (amount_out_token_units - amount_in_token_units) / amount_in_token_units
-        #     if slippage > self.app.pargs.slippage / 100:
-        #         raise Exception(f"Slippage is too high: {slippage * 100}%")
+        # Compute minimum amount out
+        min_amount_out = 0
+        # - from min_out argument
+        if self.app.pargs.min_out:
+            min_amount_out_token_units = decimal.Decimal(self.app.pargs.min_out)
+            min_amount_out = min(
+                min_amount_out, int(min_amount_out_token_units * 10**decimals_out)
+            )
+            if amount_out < min_amount_out:
+                raise Web3CliError(
+                    f"Amount out is too low: {amount_out_token_units} < {min_amount_out_token_units}"
+                )
+        # - from slippage argument
+        if self.app.pargs.slippage:
+            # NOT IMPLEMENTED YET
+            pass
         # Confirm
-        if not self.app.pargs.force and not dry_run:
+        if not self.app.pargs.force:
+            print(f"You are about to perform the following swap:")
             what_in = f"{amount_in_token_units} {self.app.pargs.token_in}"
             what_out = f"{amount_out_token_units} {self.app.pargs.token_out}"
-            print(f"You are about to peform the following swap:")
             print(f"  {what_in} -> {what_out}")
+            if self.app.pargs.min_out:
+                what_min_out = (
+                    f"{min_amount_out_token_units} {self.app.pargs.token_out}"
+                )
+                print(f"  Minimum you will get: {what_min_out}")
+            if self.app.pargs.slippage:
+                print(f"  Max slippage: {self.app.pargs.slippage}%")
+            if dry_run:
+                print("  Dry run: yes")
             print(f"  Dex: {self.app.pargs.dex}")
             print(f"  Chain: {self.app.chain_name}")
             print(f"  From: {self.app.signer} ({signer.address})")
@@ -111,7 +130,6 @@ class SwapController(Controller):
             print(f"  Contract address: {router_client.contractAddress}")
             print(f"  Token in address: {token_in}")
             print(f"  Token out address: {token_out}")
-            # print(f"  Slippage: {self.app.pargs.slippage}%")
             yes_or_exit(logger=self.app.log.info)
         # Approve
         if self.app.pargs.approve:
@@ -145,7 +163,7 @@ class SwapController(Controller):
         # Build swap function
         swap_function = router_client.functions["swapExactTokensForTokens"](
             amount_in,
-            0,
+            min_amount_out,
             [token_in, token_out],
             to_address,
             int(time()) + self.app.pargs.deadline,
@@ -163,6 +181,7 @@ class SwapController(Controller):
             call=tx_call,
             fetch_data=True if tx_return in ["data", "all"] else False,
             fetch_receipt=True if tx_return in ["receipt", "all"] else False,
+            gasLimit=self.app.pargs.gas_limit,
             maxPriorityFeePerGasInGwei=self.app.priority_fee,
         )
         # Print output
