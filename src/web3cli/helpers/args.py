@@ -174,7 +174,6 @@ def parse_tx_args(
 
 
 def block(**kwargs: Any) -> dict[str, Any]:
-    """The 'block' argument, used to specify a block number or hash"""
     return {
         "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
         + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
@@ -184,17 +183,13 @@ def block(**kwargs: Any) -> dict[str, Any]:
 
 
 def force(**kwargs: Any) -> dict[str, Any]:
-    """The 'force' argument, used to force a command to run without asking for
-    confirmation"""
     return {
-        "help": "Proceed without asking for confirmation",
+        "help": "proceed without asking for confirmation",
         "action": "store_true",
     } | kwargs
 
 
 def tx_return(**kwargs: Any) -> dict[str, Any]:
-    """The 'return' argument, used to choose what to return from a
-    transaction"""
     return (
         {
             "help": """Requested output.
@@ -215,7 +210,6 @@ def tx_return(**kwargs: Any) -> dict[str, Any]:
 
 
 def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
-    """The 'dry_run' argument, to allow the user to avoid sendin the transaction"""
     return {
         "help": "do not send the transaction to the blockchain",
         "action": argparse.BooleanOptionalAction,
@@ -224,11 +218,79 @@ def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
 
 
 def tx_call(**kwargs: Any) -> dict[str, Any]:
-    """The 'call' argument, to allow the user to simulate the transaction"""
     return {
         "help": "call the contract function with eth_call, before sending it. Useful to test the tx before sending it.",
         "action": argparse.BooleanOptionalAction,
         "default": False,
+    } | kwargs
+
+
+def swap_dex(**kwargs: Any) -> dict[str, Any]:
+    return (
+        {
+            "help": """
+                Decentralized Exchange to use for the swap.
+                Only Uniswap V2 clones supported for now.
+                To see full list: `w3 db contract list uniswap_v2`.
+            """,
+        }
+        | kwargs
+    )
+
+
+def swap_token_in(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Ticker or Address of the token to swap from, e.g. USDC.",
+    } | kwargs
+
+
+def swap_amount(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Amount of tokens to swap, e.g. 100.",
+        "type": float,
+    } | kwargs
+
+
+def swap_token_out(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Ticker or Address of the token to swap to, e.g. WETH.",
+    } | kwargs
+
+
+def swap_slippage(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Slippage tolerance for the swap, as a percentage. Must be between 0 and 100, defaults to 2.",
+        "type": float,
+        "default": 2,
+    } | kwargs
+
+
+def swap_min_out(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Minimum amount of tokens to receive. If the swap would result in less tokens, the swap will fail.",
+        "type": float,
+    } | kwargs
+
+
+def swap_to(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Address to send the output tokens to. Defaults to the address of the signer.",
+    } | kwargs
+
+
+def swap_approve(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Whether to approve the DEX to spend the input token. Defaults to False.",
+        "action": argparse.BooleanOptionalAction,
+        "default": False,
+    } | kwargs
+
+
+def swap_deadline(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes",
+        "default": 15 * 60,
+        "type": int,
     } | kwargs
 
 

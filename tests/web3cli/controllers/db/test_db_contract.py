@@ -30,6 +30,33 @@ def test_contract_list(
                 assert data[i][4] == str(chain_contracts[i]["address"])
 
 
+def test_contract_list_with_type(
+    contracts: List[ContractFields], chains: List[ChainFields]
+) -> None:
+    """Add contracts and check that they are listed alphabetically
+    by name and chain"""
+    contract_type = "erc20"
+    contracts = sorted(contracts, key=lambda c: c["name"])
+    for chain in chains:
+        with Web3CliTest() as app:
+            seed_chains(chains)
+            seed_contracts(contracts)
+            chain_contracts = [
+                c
+                for c in contracts
+                if c["chain"] == chain["name"] and c["type"] == contract_type
+            ]
+            app.set_args(
+                ["-c", chain["name"], "db", "contract", "list", contract_type]
+            ).run()
+            data, output = app.last_rendered
+            for i in range(0, len(chain_contracts)):
+                assert data[i][0] == chain_contracts[i]["name"]
+                assert data[i][1] == str(chain_contracts[i]["chain"])
+                assert data[i][2] == str(chain_contracts[i]["type"])
+                assert data[i][4] == str(chain_contracts[i]["address"])
+
+
 def test_contract_get(contracts: List[ContractFields]) -> None:
     for c in contracts:
         with Web3CliTest() as app:

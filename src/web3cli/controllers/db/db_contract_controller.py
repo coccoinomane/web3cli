@@ -19,7 +19,19 @@ class DbContractController(Controller):
         stacked_type = "nested"
         stacked_on = "db"
 
-    @ex(help="list contracts")
+    @ex(
+        help="list contracts",
+        arguments=[
+            (
+                ["type"],
+                {
+                    "help": "optionally restrict to a certain type of contract, e.g. uniswap_v2, erc20, etc.",
+                    "default": None,
+                    "nargs": "?",
+                },
+            ),
+        ],
+    )
     def list(self) -> None:
         render_table(
             self.app,
@@ -27,6 +39,7 @@ class DbContractController(Controller):
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
                 for c in Contract.get_all(Contract.name)
                 if c.chain == self.app.chain_name
+                and (self.app.pargs.type is None or self.app.pargs.type == c.type)
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
             wrap=42,

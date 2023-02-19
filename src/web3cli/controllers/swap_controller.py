@@ -1,4 +1,3 @@
-import argparse
 import decimal
 from time import time
 
@@ -32,51 +31,15 @@ class SwapController(Controller):
     @ex(
         help="Swap tokens using a DEX",
         arguments=[
-            (
-                ["dex"],
-                {
-                    "help": "name of the DEX to use, e.g. uniswap_v2, pancakeswap_v2, traderjoe_v2, etc.",
-                },
-            ),
-            (
-                ["token_in"],
-                {"help": "ticker of the coin to swap from, e.g. USDC"},
-            ),
-            (["amount"], {"help": "how much to swap"}),
-            (
-                ["token_out"],
-                {"help": "ticker of the coin to swap to, e.g. USDT"},
-            ),
-            (
-                ["--slippage"],
-                {
-                    "help": "max slippage percentage you are willing to tolerate. Defaults to 0.5%.",
-                    "default": 0.5,
-                    "type": float,
-                },
-            ),
-            (
-                ["--to"],
-                {
-                    "help": "optionally specify the address to receive the swapped tokens. Defaults to the signer's address.",
-                },
-            ),
-            (
-                ["--approve"],
-                {
-                    "help": "whether to approve the DEX to spend the token_in. Defaults to False.",
-                    "action": argparse.BooleanOptionalAction,
-                    "default": False,
-                },
-            ),
-            (
-                ["--deadline"],
-                {
-                    "help": "deadline for the swap, in seconds. Defaults to 15 minutes.",
-                    "default": 15 * 60,
-                    "type": int,
-                },
-            ),
+            (["dex"], args.swap_dex()),
+            (["token_in"], args.swap_token_in()),
+            (["amount"], args.swap_amount()),
+            (["token_out"], args.swap_token_out()),
+            (["--slippage"], args.swap_slippage()),
+            (["--min-out"], args.swap_min_out()),
+            (["--to"], args.swap_to()),
+            (["--approve"], args.swap_approve()),
+            (["--deadline"], args.swap_deadline()),
             (["--return"], args.tx_return()),
             (["--dry-run"], args.tx_dry_run()),
             (["--call"], args.tx_call()),
