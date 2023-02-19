@@ -14,9 +14,6 @@ eth: ChainFields = {
         {
             "url": "https://cloudflare-eth.com",
         },
-        {
-            "url": "https://mainnet.infura.io/v3/98c23dcc2c3947cbacc2a0c7e1b1757a",
-        },
     ],
 }
 
@@ -80,6 +77,22 @@ cro: ChainFields = {
     ],
 }
 
+# Ethereum
+arb: ChainFields = {
+    "name": "arb",
+    "desc": "Arbitrum One",
+    "chain_id": 42161,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://arb1.arbitrum.io/rpc",
+        },
+    ],
+}
+
+
 # Local chain (e.g. ganache or hardhat network)
 local: ChainFields = {
     "name": "local",
@@ -95,4 +108,4 @@ local: ChainFields = {
     ],
 }
 
-all: List[ChainFields] = [eth, bnb, avax, matic, cro, local]
+all: List[ChainFields] = [eth, arb, bnb, avax, matic, cro, local]

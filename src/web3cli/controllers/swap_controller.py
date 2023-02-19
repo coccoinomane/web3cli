@@ -3,6 +3,8 @@ from time import time
 
 import web3
 from cement import ex
+from web3.contract import ContractFunction
+from web3client.base_client import BaseClient
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
@@ -11,6 +13,7 @@ from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
+from web3core.constants import ZERO_ADDRESS
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
 from web3core.helpers.tx import send_contract_transaction
@@ -161,13 +164,17 @@ class SwapController(Controller):
                     self.app.log.info(f"Approval tx: {approve_tx_hash}")
                     token_in_client.getTransactionReceipt(approve_tx_hash)
                     self.app.log.debug(f"Approval tx mined")
+                else:
+                    self.app.log.debug("Dry run: skipping approval")
             else:
                 self.app.log.debug("Token allowance is already sufficient")
         # Build swap function
-        swap_function = router_client.functions["swapExactTokensForTokens"](
+        swap_function = get_swap_function(
+            router_client,
             amount_in,
             min_amount_out,
-            [token_in, token_out],
+            token_in,
+            token_out,
             to_address,
             int(time()) + self.app.pargs.deadline,
         )
@@ -192,3 +199,44 @@ class SwapController(Controller):
             render_web3py(self.app, tx_life)
         else:
             render_web3py(self.app, tx_life[tx_return])
+
+
+def get_swap_function(
+    router_client: BaseClient,
+    amount_in: int,
+    min_amount_out: int,
+    token_in: str,
+    token_out: str,
+    to_address: str,
+    deadline: int,
+) -> ContractFunction:
+    """Return the swap function to use in the router contract.
+    Here we account for the fact that some routers have a different
+    function signature than the standard Uniswap V2 router."""
+
+    # Standard case: use swapExactTokensForTokens as defined in
+    # the Uniswap V2 router ABI
+    try:
+        return router_client.functions["swapExactTokensForTokens"](
+            amount_in, min_amount_out, [token_in, token_out], to_address, deadline
+        )
+    except web3.exceptions.ABIFunctionNotFound:
+        pass
+
+    # Special case: Camelot DEX on Arbitrum One, which has an
+    # additional 'referrer' parameter
+    try:
+        return router_client.functions[
+            "swapExactTokensForTokensSupportingFeeOnTransferTokens"
+        ](
+            amount_in,
+            min_amount_out,
+            [token_in, token_out],
+            to_address,
+            ZERO_ADDRESS,
+            deadline,
+        )
+    except web3.exceptions.ABIFunctionNotFound:
+        pass
+
+    raise Web3CliError("Could not find a suitable swap function in the router contract")

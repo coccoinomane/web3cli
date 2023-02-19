@@ -29,6 +29,7 @@
 
 ### UX
 
+- Swap should support native coins too
 - Transact: Warn before sending tx if gas price is too high
 - Handle decimal output (e.g. w3 balance)
 - Group contract and ABI functions: contract add, contract list, contract call,
