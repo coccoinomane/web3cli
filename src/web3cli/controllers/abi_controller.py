@@ -1,8 +1,12 @@
 import argparse
+import json
 
 from cement import ex
+from web3.types import ABI
 
 from web3cli.controllers.controller import Controller
+from web3cli.exceptions import Web3CliError
+from web3cli.helpers.render import render_json
 from web3core.helpers.abi import (
     filter_abi_by_type_and_name,
     get_event_full_signatures,
@@ -10,7 +14,7 @@ from web3core.helpers.abi import (
     get_function_full_signatures,
     get_function_signatures,
 )
-from web3core.models.contract import Contract
+from web3core.models.contract import Contract, ContractType
 
 
 class AbiController(Controller):
@@ -23,9 +27,16 @@ class AbiController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="List of functions in the given contract, with signatures",
+        help="List the functions in the given contract, contract type or ABI string, with signatures",
         arguments=[
-            (["contract"], {"help": "Name of the contract to inspect"}),
+            (
+                ["contract"],
+                {
+                    "help": "Name of the contract or contract type in the database",
+                    "nargs": "?",
+                },
+            ),
+            (["--abi"], {"help": "Pass the ABI string of the contract instead"}),
             (
                 ["--full", "-f"],
                 {
@@ -35,23 +46,28 @@ class AbiController(Controller):
                 },
             ),
         ],
-        aliases=["fns"],
+        aliases=["fns", "f"],
     )
     def functions(self) -> None:
-        contract = Contract.get_by_name_and_chain_or_raise(
-            self.app.pargs.contract, self.app.chain_name
-        )
+        abi = self.parse_abi()
         functions = (
-            get_function_full_signatures(contract.resolve_abi())
+            get_function_full_signatures(abi)
             if self.app.pargs.full
-            else get_function_signatures(contract.resolve_abi())
+            else get_function_signatures(abi)
         )
-        self.app.render(sorted(functions, key=str.lower))
+        render_json(self.app, sorted(functions, key=str.lower))
 
     @ex(
-        help="List of events in the given contract, with signatures",
+        help="List the events in the given contract, contract type or ABI string, with signatures",
         arguments=[
-            (["contract"], {"help": "Name of the contract to inspect"}),
+            (
+                ["contract"],
+                {
+                    "help": "Name of the contract or contract type in the database",
+                    "nargs": "?",
+                },
+            ),
+            (["--abi"], {"help": "Pass the ABI string of the contract instead"}),
             (
                 ["--full", "-f"],
                 {
@@ -61,33 +77,55 @@ class AbiController(Controller):
                 },
             ),
         ],
-        aliases=["evts"],
+        aliases=["evts", "e"],
     )
     def events(self) -> None:
-        contract = Contract.get_by_name_and_chain_or_raise(
-            self.app.pargs.contract, self.app.chain_name
-        )
+        abi = self.parse_abi()
         events = (
-            get_event_full_signatures(contract.resolve_abi())
+            get_event_full_signatures(abi)
             if self.app.pargs.full
-            else get_event_signatures(contract.resolve_abi())
+            else get_event_signatures(abi)
         )
-        self.app.render(sorted(events, key=str.lower))
+        render_json(self.app, sorted(events, key=str.lower))
 
     @ex(
         help="Show the ABI of a specific contract function or event",
         arguments=[
-            (["contract"], {"help": "Name of the contract to inspect"}),
+            (
+                ["contract"],
+                {"help": "Name of the contract or contract type in the database"},
+            ),
             (["name"], {"help": "Name of the function or event"}),
         ],
     )
     def get(self) -> None:
-        contract = Contract.get_by_name_and_chain_or_raise(
-            self.app.pargs.contract, self.app.chain_name
-        )
-        abi = contract.resolve_abi()
-        self.app.render(
-            filter_abi_by_type_and_name(abi, type=None, name=self.app.pargs.name),
-            indent=4,
-            handler="json",
-        )
+        abi = self.parse_abi()
+        obj = filter_abi_by_type_and_name(abi, type=None, name=self.app.pargs.name)
+        if not obj:
+            self.app.log.warning(f"Function or event '{self.app.pargs.name}' not found")
+        render_json(self.app, obj)
+
+    def parse_abi(self) -> ABI:
+        """Parse the 'contract' and '--abi' arguments and return the ABI"""
+        # Contract name given, try to retrieve the ABI from the database
+        if self.app.pargs.contract:
+            # Try to retrieve ABI from contracts table
+            contract = Contract.get_by_name_and_chain(
+                self.app.pargs.contract, self.app.chain_name
+            )
+            if contract:
+                return contract.resolve_abi()
+            # Try to retrieve ABI from contract_types table
+            contract_type = ContractType.get_by_name(self.app.pargs.contract)
+            if contract_type:
+                return contract_type.abi
+            # Contract not found
+            raise Web3CliError(f"Contract {self.app.pargs.contract} not found")
+        # No contract name given, try to parse the ABI
+        if self.app.pargs.abi:
+            try:
+                return json.loads(self.app.pargs.abi)
+            except json.JSONDecodeError:
+                raise Web3CliError("Invalid ABI string")
+        # Should never happen
+        raise Web3CliError("ABI not found")
