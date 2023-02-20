@@ -1,7 +1,10 @@
 import argparse
+import json
+import os
 from typing import Any, Literal, Tuple, Union
 
 from cement import App
+from web3.types import ABI
 
 from web3cli.exceptions import Web3CliError
 from web3core.exceptions import RpcIsInvalid
@@ -171,6 +174,20 @@ def parse_tx_args(
     return (dry_run, tx_return, tx_call)
 
 
+def parse_contract_abi(app: App) -> ABI:
+    """Parse the --abi argument passed to the CLI, be it a string or a file,
+    and return it as a list of dicts"""
+    abi = app.pargs.abi
+    if os.path.isfile(abi):
+        with open(abi, "r", encoding="utf-8") as f:
+            abi = f.read()
+    try:
+        abi = json.loads(abi)
+    except:
+        raise Web3CliError("Invalid ABI")
+    return abi
+
+
 #     _
 #    / \     _ __    __ _   ___
 #   / _ \   | '__|  / _` | / __|
@@ -316,6 +333,12 @@ def swap_deadline(**kwargs: Any) -> dict[str, Any]:
     return {
         "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes.",
         "default": 15 * 60,
+    } | kwargs
+
+
+def contract_abi(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "ABI of the contract. Can be a path to a file, or a JSON string.",
     } | kwargs
 
 

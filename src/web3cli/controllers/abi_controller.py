@@ -1,11 +1,11 @@
 import argparse
-import json
 
 from cement import ex
 from web3.types import ABI
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.render import render_json
 from web3core.helpers.abi import (
     filter_abi_by_type_and_name,
@@ -36,7 +36,12 @@ class AbiController(Controller):
                     "nargs": "?",
                 },
             ),
-            (["--abi"], {"help": "Pass the ABI string of the contract instead"}),
+            (
+                ["--abi"],
+                args.contract_abi(
+                    help="Pass the ABI of the contract instead, as a string or file"
+                ),
+            ),
             (
                 ["--full", "-f"],
                 {
@@ -63,11 +68,16 @@ class AbiController(Controller):
             (
                 ["contract"],
                 {
-                    "help": "Name of the contract or contract type in the database",
+                    "help": "Name of the contract or contract type in the database.",
                     "nargs": "?",
                 },
             ),
-            (["--abi"], {"help": "Pass the ABI string of the contract instead"}),
+            (
+                ["--abi"],
+                args.contract_abi(
+                    help="Pass the ABI of the contract instead, as a string or file"
+                ),
+            ),
             (
                 ["--full", "-f"],
                 {
@@ -121,11 +131,8 @@ class AbiController(Controller):
                 return contract_type.abi
             # Contract not found
             raise Web3CliError(f"Contract {self.app.pargs.contract} not found")
-        # No contract name given, try to parse the ABI
+        # No contract name given, try to parse the ABI as string or file
         if self.app.pargs.abi:
-            try:
-                return json.loads(self.app.pargs.abi)
-            except json.JSONDecodeError:
-                raise Web3CliError("Invalid ABI string")
+            return args.parse_contract_abi(self.app)
         # Should never happen
         raise Web3CliError("ABI not found")

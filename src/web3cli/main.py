@@ -42,13 +42,6 @@ CONFIG["web3cli"] = {
     "populate_db": True,
 }
 
-# Allow to use `w3 -o json` for json output
-# and `w3 -o yaml` for yaml output
-META = {
-    "output.json": {"overridable": True},
-    "output.yaml": {"overridable": True},
-}
-
 
 class Web3Cli(App):
     """Web3 Cli primary application."""
@@ -91,9 +84,6 @@ class Web3Cli(App):
 
         # set the output handler
         output_handler = "yaml"
-
-        ### override default handler meta options
-        meta_defaults = META
 
         # register handlers
         handlers = [

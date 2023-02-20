@@ -55,20 +55,6 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    w3 balance unicef
    ```
 
-- Send coins or tokens to any address:
-   ```
-   w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
-   w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
-   w3 send unicef 1 usdc             # send 1 USDC
-   ```
-
-- Swap tokens on a DEX:
-   ```
-   w3 swap uniswap_v2 usdc 1 usdt              # swap 1 USDC for USDT on Uniswap
-   w3 swap uniswap_v2 usdc 1 usdt --return all # swap 1 USDC for USDT on Uniswap, show more info
-   w3avax swap traderjoe_v2 usdc 1 wavax       # swap 1 USDC for WAVAX on TraderJoe
-   ```
-
 - Fetch blocks from the blockchain, in easy-to-read JSON format:
    ```bash
    w3 block latest
@@ -92,6 +78,22 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    w3 sign "Hello world!"
    ```
 
+# Advanced examples
+
+- Send coins or tokens to any address:
+   ```
+   w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
+   w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
+   w3 send unicef 1 usdc             # send 1 USDC
+   ```
+
+- Swap tokens on a DEX:
+   ```
+   w3 swap uniswap_v2 usdc 1 usdt              # swap 1 USDC for USDT on Uniswap
+   w3 swap uniswap_v2 usdc 1 usdt --return all # swap 1 USDC for USDT on Uniswap, show more info
+   w3avax swap traderjoe_v2 usdc 1 wavax       # swap 1 USDC for WAVAX on TraderJoe
+   ```
+
 # Smart Contract support
 
 `web3cli` comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
@@ -109,11 +111,12 @@ You can also add custom contracts with `w3 db contract add`:
 w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 ```
 
-See available functions on a contract with `w3 abi functions`:
+See available functions and events on a contract with `w3 abi functions` and `w3 abi events`:
 
 ```
-w3 abi functions weth       # functions on the WETH contract
-w3 abi functions uniswap_v2 # functions on the Uniswap V2 router contract
+w3 abi functions weth           # functions on WETH token
+w3 abi events uniswap_v2        # events on Uniswap V2
+w3 abi functions --abi abi.json # functions of an arbitrary ABI
 ```
 
 ### Read from a smart contract
@@ -138,7 +141,7 @@ You can also do more complex stuff like:
 w3 call uniswap_v2 getAmountsOut 100e6 usdc,usdt | jq -r '.[1]' 
 ```
 
-### Write to the blockchain
+### Write to a smart contract
 
 To write to the blockchain, use `w3 transact`. For example, to transfer 1 ETH to 
 address, run:

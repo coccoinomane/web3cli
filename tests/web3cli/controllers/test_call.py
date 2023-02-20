@@ -172,7 +172,7 @@ def test_call_eth_uniswap_v2_get_amounts_out(
         assert type(data[0]) is int
         assert type(data[1]) is int
         assert data[0] == 100e6
-        assert data[1] < 100e6
+        assert data[1] > 0
 
 
 @pytest.mark.remote

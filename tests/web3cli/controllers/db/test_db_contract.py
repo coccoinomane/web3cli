@@ -5,6 +5,7 @@ import pytest
 from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
 from web3core.exceptions import ContractNotFound
+from web3core.helpers.os import read_json
 from web3core.helpers.seed import seed_chains, seed_contracts
 from web3core.models.contract import Contract
 from web3core.models.types import ChainFields, ContractFields
@@ -122,6 +123,66 @@ def test_contract_add_without_abi_and_type(contracts: List[ContractFields]) -> N
                     c["desc"],
                 ]
             ).run()
+
+
+# Test that a contract can be added with an ABI as a string
+def test_contract_add_with_abi_string(
+    contracts: List[ContractFields], erc20_abi_string: str
+) -> None:
+    c = contracts[0]
+    with Web3CliTest() as app:
+        app.set_args(
+            [
+                "--chain",
+                c["chain"],
+                "db",
+                "contract",
+                "add",
+                c["name"],
+                c["address"],
+                "--desc",
+                c["desc"],
+                "--abi",
+                erc20_abi_string,
+            ]
+        ).run()
+        contract = Contract.get_by_name_and_chain(c["name"], c["chain"])
+        assert contract.select().count() == 1
+        assert Contract.name == c["name"]
+        assert Contract.desc == c["desc"]
+        assert Contract.type == c["type"]
+        assert Contract.address == c["address"]
+        assert Contract.abi == erc20_abi_string
+
+
+# Test that a contract can be added with an ABI from a file
+def test_contract_add_with_abi_file(
+    contracts: List[ContractFields], erc20_abi_file: str
+) -> None:
+    c = contracts[0]
+    with Web3CliTest() as app:
+        app.set_args(
+            [
+                "--chain",
+                c["chain"],
+                "db",
+                "contract",
+                "add",
+                c["name"],
+                c["address"],
+                "--desc",
+                c["desc"],
+                "--abi",
+                erc20_abi_file,
+            ]
+        ).run()
+        contract = Contract.get_by_name_and_chain(c["name"], c["chain"])
+        assert contract.select().count() == 1
+        assert Contract.name == c["name"]
+        assert Contract.desc == c["desc"]
+        assert Contract.type == c["type"]
+        assert Contract.address == c["address"]
+        assert Contract.abi == read_json(erc20_abi_file)
 
 
 def test_contract_update(contracts: List[ContractFields]) -> None:

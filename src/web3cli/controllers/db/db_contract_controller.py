@@ -3,8 +3,8 @@ from playhouse.shortcuts import model_to_dict
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.render import render_table
-from web3core.helpers.os import read_json
 from web3core.helpers.seed import seed_contracts
 from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
@@ -81,9 +81,9 @@ class DbContractController(Controller):
             ),
             (
                 ["--abi"],
-                {
-                    "help": "JSON file containing the contract's ABI. Must be provided unless --type is provided.",
-                },
+                args.contract_abi(
+                    help="Contract's ABI, as a string or file. Required, unless --type is provided.",
+                ),
             ),
         ],
     )
@@ -92,10 +92,7 @@ class DbContractController(Controller):
         # Parse ABI file
         abi = None
         if self.app.pargs.abi:
-            try:
-                abi = read_json(self.app.pargs.abi)
-            except:
-                raise Web3CliError(f"Could not read ABI from file {self.app.pargs.abi}")
+            abi = args.parse_contract_abi(self.app)
 
         # Throw if no ABI and no type
         if not self.app.pargs.update and not abi and not self.app.pargs.type:
