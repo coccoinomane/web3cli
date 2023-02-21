@@ -8,6 +8,8 @@ from web3 import Web3
 from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from tests.web3cli.main import Web3CliTest
+from web3cli.exceptions import Web3CliError
+from web3core.helpers.misc import to_number
 from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
@@ -151,3 +153,17 @@ def test_block_hash(
     assert type(block.get("transactions")) == list
     assert len(block["transactions"]) == 1
     assert block["transactions"][0] == tx.txid
+
+
+@pytest.mark.local
+def test_gas_price(app: Web3CliTest) -> None:
+    app.set_args(["gas-price"]).run()
+    data, output = app.last_rendered
+    assert type(to_number(output)) in [float, int]
+    assert to_number(output) > 0
+
+
+@pytest.mark.local
+def test_base_fee(app: Web3CliTest) -> None:
+    with pytest.raises(Web3CliError, match="Could not find base fee"):
+        app.set_args(["base-fee"]).run()

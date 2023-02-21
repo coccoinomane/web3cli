@@ -77,7 +77,7 @@ cro: ChainFields = {
     ],
 }
 
-# Ethereum
+# Arbitrum One chain
 arb: ChainFields = {
     "name": "arb",
     "desc": "Arbitrum One",

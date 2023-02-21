@@ -5,6 +5,7 @@ from cement import ex
 from web3 import Web3
 
 from web3cli.controllers.controller import Controller
+from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.chain import chain_ready_or_raise
@@ -73,3 +74,28 @@ class MiscController(Controller):
         signer_ready_or_raise(self.app)
         signed_message = make_wallet(self.app).signMessage(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))
+
+    @ex(
+        help="Get the current gas price in gwei by calling the eth_gasPrice method. For EIP1559 chains, this should return the max priority fee per gas.",
+    )
+    def gas_price(self) -> None:
+        chain_ready_or_raise(self.app)
+        gas_price_in_wei = make_client(self.app).w3.eth.gas_price
+        gas_price_in_gwei = Web3.fromWei(gas_price_in_wei, "gwei")
+        self.app.print(str(gas_price_in_gwei))
+
+    @ex(
+        help="Get the base fee in gwei of the last block. Will error for non-EIP1559 chains.",
+    )
+    def base_fee(self) -> None:
+        chain_ready_or_raise(self.app)
+        try:
+            base_fee_in_wei = make_client(self.app).w3.eth.get_block("latest")[
+                "baseFeePerGas"
+            ]
+        except KeyError:
+            raise Web3CliError(
+                f"Could not find base fee. Please check that chain '{self.app.chain_name}' is EIP-1599 compatible."
+            )
+        base_fee_in_gwei = Web3.fromWei(base_fee_in_wei, "gwei")
+        self.app.render(str(base_fee_in_gwei))
