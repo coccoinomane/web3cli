@@ -2,6 +2,7 @@
 
 ### Top priority
 
+- Token: test approve
 - Swap: refactor and test
 - resolve_contract: return a contract from ethPM or etherscan
 

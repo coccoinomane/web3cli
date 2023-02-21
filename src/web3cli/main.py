@@ -21,6 +21,7 @@ from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
 from web3cli.controllers.swap_controller import SwapController
+from web3cli.controllers.token_controller import TokenController
 from web3cli.controllers.transact_controller import TransactController
 from web3cli.controllers.tx_controller import TxController
 from web3cli.exceptions import Web3CliError
@@ -104,6 +105,7 @@ class Web3Cli(App):
             CallController,
             TransactController,
             SwapController,
+            TokenController,
         ]
 
         # extend the app with cement hook system

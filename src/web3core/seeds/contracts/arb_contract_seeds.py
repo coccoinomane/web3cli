@@ -37,10 +37,19 @@ arb_camelot: ContractFields = {
     "chain": "arb",
 }
 
+arb_sushiswap_v2: ContractFields = {
+    "name": "sushi_v2",
+    "desc": "SushiSwap Router",
+    "address": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+    "type": "uniswap_v2",
+    "chain": "arb",
+}
+
 
 all = [
     arb_usdc,
     arb_weth,
     arb_usdt,
     arb_camelot,
+    arb_sushiswap_v2,
 ]

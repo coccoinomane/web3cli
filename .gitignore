@@ -119,3 +119,4 @@ tests/brownie/reports
 .DS_Store
 web3cli.yml
 *.sqlite
+envs/
