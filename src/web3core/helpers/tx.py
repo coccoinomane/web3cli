@@ -8,7 +8,7 @@ from web3client.base_client import BaseClient
 from web3core.types import TxLife
 
 
-def send_contract_transaction(
+def send_contract_tx(
     client: BaseClient,
     function: ContractFunction,
     dry_run: bool = False,
@@ -21,8 +21,7 @@ def send_contract_transaction(
     gasLimit: int = None,
     maxPriorityFeePerGasInGwei: int = None,
 ) -> TxLife:
-    """Shortcut to send a transaction to a contract function, printing the
-    output according to the output_type parameter.
+    """Send a transaction to a contract function, and return its details
 
     ARGUMENTS
     ---------

@@ -8,10 +8,10 @@ from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
+from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
-from web3core.helpers.tx import send_contract_transaction
 
 
 class TransactController(Controller):
@@ -42,8 +42,6 @@ class TransactController(Controller):
     def transact(self) -> None:
         chain_ready_or_raise(self.app)
         signer_ready_or_raise(self.app)
-        # Parse args
-        dry_run, tx_return, tx_call = args.parse_tx_args(self.app)
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions
@@ -61,7 +59,7 @@ class TransactController(Controller):
             allow_exp_notation=True,
         )
         # Ask for confirmation
-        if not self.app.pargs.force and not dry_run:
+        if not self.app.pargs.force:
             print(
                 f"You are about to execute '{self.app.pargs.function}' on contract '{self.app.pargs.contract}' on the {self.app.chain.name} chain with the following arguments:"
             )
@@ -69,18 +67,6 @@ class TransactController(Controller):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
-        tx_life = send_contract_transaction(
-            client,
-            function(*function_args),
-            dry_run=dry_run,
-            call=tx_call,
-            fetch_data=True if tx_return in ["data", "all"] else False,
-            fetch_receipt=True if tx_return in ["receipt", "all"] else False,
-            gasLimit=self.app.pargs.gas_limit,
-            maxPriorityFeePerGasInGwei=self.app.priority_fee,
-        )
+        output = send_contract_tx(self.app, client, function(*function_args))
         # Print output
-        if tx_return == "all":
-            render_web3py(self.app, tx_life)
-        else:
-            render_web3py(self.app, tx_life[tx_return])
+        render_web3py(self.app, output)

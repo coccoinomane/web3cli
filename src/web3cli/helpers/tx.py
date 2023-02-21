@@ -1,0 +1,64 @@
+from typing import Any
+
+from cement import App
+from web3.contract import ContractFunction
+from web3.types import Nonce, Wei
+from web3client.base_client import BaseClient
+
+from web3cli.helpers import args
+from web3core.helpers.tx import send_contract_tx as _send_contract_tx
+
+
+def send_contract_tx(
+    app: App,
+    client: BaseClient,
+    function: ContractFunction,
+    valueInWei: Wei = None,
+    nonce: Nonce = None,
+    dry_run_dest: str = "dry_run",
+    tx_return_dest: str = "return",
+    tx_call_dest: str = "call",
+    tx_gas_limit_dest: str = "gas_limit",
+    **kwargs: Any,
+) -> Any:
+    """Send a transaction to a contract function, and return the
+    output according to the output_type parameter.
+
+    This is a wrapper around web3core's send_contract_tx
+    that prefills some of the arguments from the CLI and the app."""
+    # Parse tx-related arguments
+    dry_run, tx_return, tx_call, tx_gas_limit = args.parse_tx_args(
+        app, dry_run_dest, tx_return_dest, tx_call_dest, tx_gas_limit_dest
+    )
+    # Build args
+    fixed_args = {
+        "client": client,
+        "function": function,
+        "dry_run": dry_run,
+        "valueInWei": valueInWei,
+        "nonce": nonce,
+    }
+    extra_args = {
+        "call": tx_call,
+        "fetch_data": True if tx_return in ["data", "all"] else False,
+        "fetch_receipt": True if tx_return in ["receipt", "all"] else False,
+        "from_address": client.userAddress,
+        "gasLimit": tx_gas_limit,
+        "maxPriorityFeePerGasInGwei": app.priority_fee,
+    } | kwargs
+    # Inform user
+    if not dry_run:
+        app.log.debug(
+            f"Sending tx '{function.fn_name}' {tx_call and '(with call)' or ''}..."
+        )
+    elif dry_run and tx_call:
+        app.log.debug(f"Sending tx '{function.fn_name}'... (dry run with call)")
+    else:
+        app.log.debug(f"Sending tx '{function.fn_name}'... (dry run)")
+    # Send transaction
+    tx_life = _send_contract_tx(**(fixed_args | extra_args))
+    # Return tx details according to tx_return
+    if tx_return == "all":
+        return tx_life
+    else:
+        return tx_life[tx_return]

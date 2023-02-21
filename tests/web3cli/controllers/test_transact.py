@@ -94,16 +94,8 @@ def test_transact(
     seed_local_token(app, token18)
     bob_balance = token18.balanceOf(bob.address)
     app.set_args(
-        [
-            "--signer",
-            "alice",
-            "transact",
-            "tst18",
-            "transfer",
-            "bob",
-            "1e18",
-        ]
-        + (["--dry-run"] if dry_run else ["--force"])
+        ["--signer", "alice", "transact", "tst18", "transfer", "bob", "1e18", "--force"]
+        + (["--dry-run"] if dry_run else [])
     ).run()
     if dry_run:
         assert token18.balanceOf(bob.address) == bob_balance
@@ -256,8 +248,9 @@ def test_transact_return_output(
             "1e18",
             "--return",
             "output",
+            "--force",
         ]
-        + (["--dry-run"] if dry_run else ["--force"])
+        + (["--dry-run"] if dry_run else [])
     ).run()
     data, output = app.last_rendered
     assert type(data) is bool

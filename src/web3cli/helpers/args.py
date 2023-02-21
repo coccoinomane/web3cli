@@ -148,11 +148,13 @@ def parse_tx_args(
     tx_return_dest: str = "return",
     tx_call_dest: str = "call",
     tx_gas_limit_dest: str = "gas_limit",
-) -> Tuple[bool, ReturnArg, bool]:
-    """Parse the CLI arguments '--dry-run', '--return' and '--call'.
+) -> Tuple[bool, ReturnArg, bool, int]:
+    """Parse the CLI arguments '--dry-run', '--return', '--call' and
+    '--gas-limit'.
 
     These parameters are not independent therefore need to be parsed
-    together."""
+    together. The gas limit is generally optional, but this function
+    requires it when call=true."""
     dry_run: bool = getattr(app.pargs, dry_run_dest)
     tx_return: ReturnArg = getattr(app.pargs, tx_return_dest)
     tx_call: bool = getattr(app.pargs, tx_call_dest)
@@ -171,7 +173,7 @@ def parse_tx_args(
             "Specify a gas limit with '--no-call', otherwise you'll end up with a function call anyway to estimate gas."
         )
 
-    return (dry_run, tx_return, tx_call)
+    return (dry_run, tx_return, tx_call, tx_gas_limit)
 
 
 def parse_contract_abi(app: App) -> ABI:

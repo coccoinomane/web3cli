@@ -8,9 +8,9 @@ from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
+from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
-from web3core.helpers.tx import send_contract_transaction
 from web3core.models.signer import Signer
 
 
@@ -56,15 +56,14 @@ class TokenController(Controller):
         signer = Signer.get_by_name(self.app.signer)
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain_name)
-        dry_run, tx_return, tx_call = args.parse_tx_args(self.app)
         # Initialize client
-        token_client = make_contract_wallet(self.app, self.app.pargs.token)
+        client = make_contract_wallet(self.app, self.app.pargs.token)
         # Compute amount in
         if not self.app.pargs.amount:
             amount = 2**256 - 1
         else:
             amount_token_units = decimal.Decimal(self.app.pargs.amount)
-            decimals = token_client.functions["decimals"]().call()
+            decimals = client.functions["decimals"]().call()
             amount = int(amount_token_units * 10**decimals)
         # Confirm
         if not self.app.pargs.force:
@@ -80,9 +79,7 @@ class TokenController(Controller):
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
-            allowance = token_client.functions["allowance"](
-                signer.address, spender
-            ).call()
+            allowance = client.functions["allowance"](signer.address, spender).call()
             # If allowance is not sufficient, approve
             if allowance >= amount:
                 self.app.log.info(
@@ -90,25 +87,10 @@ class TokenController(Controller):
                 )
                 return
         self.app.log.debug("Approving DEX spender spend token...")
-        approve_function = token_client.functions["approve"](spender, amount)
-        approve_tx_life = send_contract_transaction(
-            token_client,
-            approve_function,
-            dry_run=dry_run,
-            call=tx_call,
-            fetch_data=True if tx_return in ["data", "all"] else False,
-            fetch_receipt=True if tx_return in ["receipt", "all"] else False,
-            maxPriorityFeePerGasInGwei=self.app.priority_fee,
+        output = send_contract_tx(
+            self.app,
+            client,
+            client.functions["approve"](spender, amount),
         )
-        # Wait for tx to be mined
-        if not dry_run:
-            approve_tx_hash = approve_tx_life["hash"]
-            self.app.log.info(f"Approval tx: {approve_tx_hash}")
-            token_client.getTransactionReceipt(approve_tx_hash)
-            self.app.log.debug(f"Approval tx mined")
-        else:
-            self.app.log.info("Dry run: skipping approval")
-        if tx_return == "all":
-            render_web3py(self.app, approve_tx_life)
-        else:
-            render_web3py(self.app, approve_tx_life[tx_return])
+        # Print output
+        render_web3py(self.app, output)

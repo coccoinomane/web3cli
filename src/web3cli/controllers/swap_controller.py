@@ -3,8 +3,6 @@ from time import time
 
 import web3
 from cement import ex
-from web3.contract import ContractFunction
-from web3client.base_client import BaseClient
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
@@ -13,10 +11,10 @@ from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.signer import signer_ready_or_raise
-from web3core.constants import ZERO_ADDRESS
+from web3cli.helpers.tx import send_contract_tx
+from web3core.helpers import dex
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
-from web3core.helpers.tx import send_contract_transaction
 from web3core.models.address import Address
 from web3core.models.contract import Contract
 from web3core.models.signer import Signer
@@ -58,7 +56,6 @@ class SwapController(Controller):
         signer_ready_or_raise(self.app)
         signer = Signer.get_by_name(self.app.signer)
         # Parse arguments
-        dry_run, tx_return, tx_call = args.parse_tx_args(self.app)
         to = self.app.pargs.to if self.app.pargs.to else signer.address
         to_address = resolve_address(to, [Address, Signer])
         amount_in_token_units = decimal.Decimal(self.app.pargs.amount)
@@ -113,7 +110,8 @@ class SwapController(Controller):
         if self.app.pargs.slippage:
             # NOT IMPLEMENTED YET
             pass
-        # Confirm
+        # Confirm transaction
+        # TODO: move to send_contract_tx function
         if not self.app.pargs.force:
             print(f"You are about to perform the following swap:")
             what_in = f"{self.app.pargs.amount} {self.app.pargs.token_in}"
@@ -126,7 +124,7 @@ class SwapController(Controller):
                 print(f"  Minimum you will get: {what_min_out}")
             if self.app.pargs.slippage:
                 print(f"  Max slippage: {self.app.pargs.slippage}%")
-            if dry_run:
+            if self.app.pargs.dry_run:
                 print("  Dry run: yes")
             print(f"  Dex: {self.app.pargs.dex}")
             print(f"  Chain: {self.app.chain_name}")
@@ -146,30 +144,20 @@ class SwapController(Controller):
             ).call()
             # If allowance is not sufficient, approve
             if allowance < amount_in:
-                self.app.log.info("Approving DEX to spend token_in...")
                 approve_function = token_in_client.functions["approve"](
                     router_client.contractAddress, amount_in
                 )
-                approve_tx_life = send_contract_transaction(
+                send_contract_tx(
+                    self.app,
                     token_in_client,
                     approve_function,
-                    dry_run=dry_run,
-                    call=tx_call,
+                    fetch_data=False,
                     fetch_receipt=True,
-                    maxPriorityFeePerGasInGwei=self.app.priority_fee,
                 )
-                # Wait for tx to be mined
-                if not dry_run:
-                    approve_tx_hash = approve_tx_life["hash"]
-                    self.app.log.info(f"Approval tx: {approve_tx_hash}")
-                    token_in_client.getTransactionReceipt(approve_tx_hash)
-                    self.app.log.debug(f"Approval tx mined")
-                else:
-                    self.app.log.debug("Dry run: skipping approval")
             else:
                 self.app.log.debug("Token allowance is already sufficient")
         # Build swap function
-        swap_function = get_swap_function(
+        swap_function = dex.get_swap_function(
             router_client,
             amount_in,
             min_amount_out,
@@ -178,65 +166,7 @@ class SwapController(Controller):
             to_address,
             int(time()) + self.app.pargs.deadline,
         )
-        # Inform user
-        if not dry_run:
-            self.app.log.debug("Swapping...")
-        if dry_run and tx_call:
-            self.app.log.debug("Simulating swap...")
         # Swap or simulate
-        tx_life = send_contract_transaction(
-            router_client,
-            swap_function,
-            dry_run=dry_run,
-            call=tx_call,
-            fetch_data=True if tx_return in ["data", "all"] else False,
-            fetch_receipt=True if tx_return in ["receipt", "all"] else False,
-            gasLimit=self.app.pargs.gas_limit,
-            maxPriorityFeePerGasInGwei=self.app.priority_fee,
-        )
+        output = send_contract_tx(self.app, router_client, swap_function)
         # Print output
-        if tx_return == "all":
-            render_web3py(self.app, tx_life)
-        else:
-            render_web3py(self.app, tx_life[tx_return])
-
-
-def get_swap_function(
-    router_client: BaseClient,
-    amount_in: int,
-    min_amount_out: int,
-    token_in: str,
-    token_out: str,
-    to_address: str,
-    deadline: int,
-) -> ContractFunction:
-    """Return the swap function to use in the router contract.
-    Here we account for the fact that some routers have a different
-    function signature than the standard Uniswap V2 router."""
-
-    # Standard case: use swapExactTokensForTokens as defined in
-    # the Uniswap V2 router ABI
-    try:
-        return router_client.functions["swapExactTokensForTokens"](
-            amount_in, min_amount_out, [token_in, token_out], to_address, deadline
-        )
-    except web3.exceptions.ABIFunctionNotFound:
-        pass
-
-    # Special case: Camelot DEX on Arbitrum One, which has an
-    # additional 'referrer' parameter
-    try:
-        return router_client.functions[
-            "swapExactTokensForTokensSupportingFeeOnTransferTokens"
-        ](
-            amount_in,
-            min_amount_out,
-            [token_in, token_out],
-            to_address,
-            ZERO_ADDRESS,
-            deadline,
-        )
-    except web3.exceptions.ABIFunctionNotFound:
-        pass
-
-    raise Web3CliError("Could not find a suitable swap function in the router contract")
+        render_web3py(self.app, output)
