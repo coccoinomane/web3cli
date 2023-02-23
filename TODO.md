@@ -3,7 +3,7 @@
 ### Top priority
 
 - Token: test approve
-- Swap: refactor and test
+- Swap: refactor in web3core + test
 - resolve_contract: return a contract from ethPM or etherscan
 
 ### Commands 

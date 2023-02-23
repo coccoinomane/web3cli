@@ -103,7 +103,7 @@ def chains() -> List[ChainFields]:
     return chain_seeds.all
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def contracts() -> List[ContractFields]:
     return contract_seeds.all
 

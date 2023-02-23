@@ -9,7 +9,7 @@ from cement import fs
 from pytest import FixtureRequest
 
 pytest_plugins = [
-    "tests.brownie.fixtures",
+    "tests.brownie.tests.fixtures",
     "tests.web3cli.fixtures",
     "tests.web3core.fixtures",
 ]

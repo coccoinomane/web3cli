@@ -14,13 +14,13 @@ from web3core.models.types import ChainFields, ContractFields
 @pytest.mark.local
 # Test that calling a non existing function fails with a Web3CliError
 # exception containing the string "Function must be one..."
-def test_call_non_existing_function(app: Web3CliTest, token18: BrownieContract) -> None:
-    seed_local_token(app, token18)
+def test_call_non_existing_function(app: Web3CliTest, token: BrownieContract) -> None:
+    seed_local_token(app, token)
     with pytest.raises(Web3CliError, match="Function must be one of"):
         app.set_args(
             [
                 "call",
-                "tst18",
+                "tst",
                 "non_existing_function",
             ]
         ).run()
@@ -30,18 +30,18 @@ def test_call_non_existing_function(app: Web3CliTest, token18: BrownieContract) 
 # Test that calling a function with the wrong number of arguments fails
 def test_call_wrong_number_of_arguments(
     app: Web3CliTest,
-    token18: BrownieContract,
+    token: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token18)
+    seed_local_token(app, token)
     with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
         app.set_args(
             [
                 "--signer",
                 "alice",
                 "call",
-                "tst18",
+                "tst",
                 "transfer",
                 "0x123",
             ]
@@ -52,18 +52,18 @@ def test_call_wrong_number_of_arguments(
 # Test that calling a function with the wrong type of arguments fails
 def test_call_wrong_type_of_arguments(
     app: Web3CliTest,
-    token18: BrownieContract,
+    token: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token18)
+    seed_local_token(app, token)
     with pytest.raises(ValueError):
         app.set_args(
             [
                 "--signer",
                 "alice",
                 "call",
-                "tst18",
+                "tst",
                 "transfer",
                 "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                 "should_be_an_int",
@@ -75,19 +75,19 @@ def test_call_wrong_type_of_arguments(
 # Test that calling a write function without neither a signer nor a from address fails
 def test_call_local_token_transfer_without_signer_without_from(
     app: Web3CliTest,
-    token18: BrownieContract,
+    token: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token18)
-    token18.balanceOf(bob.address)
+    seed_local_token(app, token)
+    token.balanceOf(bob.address)
     with pytest.raises(
         Web3CliError, match="Cannot call a write operation without a from address"
     ):
         app.set_args(
             [
                 "call",
-                "tst18",
+                "tst",
                 "transfer",
                 "bob",
                 "1e18",
@@ -100,16 +100,16 @@ def test_call_local_token_transfer_without_signer_without_from(
 # works
 def test_call_local_token_transfer_without_signer_with_from(
     app: Web3CliTest,
-    token18: BrownieContract,
+    token: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token18)
-    token18.balanceOf(bob.address)
+    seed_local_token(app, token)
+    token.balanceOf(bob.address)
     app.set_args(
         [
             "call",
-            "tst18",
+            "tst",
             "transfer",
             "bob",
             "1e18",
@@ -122,21 +122,21 @@ def test_call_local_token_transfer_without_signer_with_from(
 
 
 @pytest.mark.local
-# Test calling the 'trasfer' function on the TST18 token on the local chain
+# Test calling the 'trasfer' function on the TST token on the local chain
 def test_call_local_token_transfer(
     app: Web3CliTest,
-    token18: BrownieContract,
+    token: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token18)
-    token18.balanceOf(bob.address)
+    seed_local_token(app, token)
+    token.balanceOf(bob.address)
     app.set_args(
         [
             "--signer",
             "alice",
             "call",
-            "tst18",
+            "tst",
             "transfer",
             "bob",
             "1e18",

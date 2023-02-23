@@ -42,44 +42,44 @@ def test_send_eth_wei(
 
 
 @pytest.mark.local
-def test_send_token18(
+def test_send_token(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    token18: BrownieContract,
+    token: BrownieContract,
 ) -> None:
-    bob_balance = token18.balanceOf(bob.address)
-    seed_local_token(app, token18)
+    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, token)
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", token18.symbol(), "--force"]
+        ["--signer", "alice", "send", bob.address, "1", token.symbol(), "--force"]
     ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 10**18
+    assert token.balanceOf(bob.address) == bob_balance + 10**18
 
 
 @pytest.mark.local
-def test_send_token18_with_alias(
+def test_send_token_with_alias(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    token18: BrownieContract,
+    token: BrownieContract,
 ) -> None:
-    bob_balance = token18.balanceOf(bob.address)
-    seed_local_token(app, token18)
+    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, token)
     app.set_args(
-        ["--signer", "alice", "send", "bob", "1", token18.symbol(), "--force"]
+        ["--signer", "alice", "send", "bob", "1", token.symbol(), "--force"]
     ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 10**18
+    assert token.balanceOf(bob.address) == bob_balance + 10**18
 
 
 @pytest.mark.local
-def test_send_token18_smallest(
+def test_send_token_smallest(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    token18: BrownieContract,
+    token: BrownieContract,
 ) -> None:
-    bob_balance = token18.balanceOf(bob.address)
-    seed_local_token(app, token18)
+    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, token)
     app.set_args(
         [
             "--signer",
@@ -87,12 +87,12 @@ def test_send_token18_smallest(
             "send",
             bob.address,
             "1",
-            token18.symbol(),
+            token.symbol(),
             "smallest",
             "--force",
         ]
     ).run()
-    assert token18.balanceOf(bob.address) == bob_balance + 1
+    assert token.balanceOf(bob.address) == bob_balance + 1
 
 
 @pytest.mark.local

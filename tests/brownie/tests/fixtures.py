@@ -7,12 +7,12 @@ from pathlib import Path
 from typing import Iterator, List
 
 import pytest
-from brownie_tokens import ERC20
 from web3.types import ABI
 
 from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
+from brownie.network.contract import ContractContainer as BrownieContractContainer
 
 
 @pytest.fixture()
@@ -22,7 +22,7 @@ def ganache(chain: BrownieChain) -> BrownieChain:
     return chain
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def accounts_keys() -> Iterator[List[str]]:
     """Private keys of the local accounts created by brownie.
     There are just the keys from the mnemonic phrase 'brownie'
@@ -41,7 +41,7 @@ def accounts_keys() -> Iterator[List[str]]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def simple_abi() -> Iterator[ABI]:
     """A simple ABI for a contract with a single function"""
     yield [
@@ -57,7 +57,7 @@ def simple_abi() -> Iterator[ABI]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def erc20_abi_string() -> Iterator[str]:
     """The ABI for the ERC20 token standard, as a string"""
     yield '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]'
@@ -72,39 +72,39 @@ def erc20_abi_file(tmp_path: Path, erc20_abi_string: str) -> Iterator[str]:
     yield str(f)
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
     """The ABI for the ERC20 token standard, as a JSON object"""
     yield json.loads(erc20_abi_string)
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def alice(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
     yield accounts[0]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def bob(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
     yield accounts[1]
 
 
 @pytest.fixture(scope="module")
-def token18(accounts: List[BrownieAccount]) -> BrownieContract:
-    """The TST18 token deployed on the local chain, with
-    18 decimals; each account will have 100 tokens"""
-    token = ERC20(name="Test Token", symbol="TST18", decimals=18)
-    for account in accounts:
-        token._mint_for_testing(account.address, 100 * 10**18)
-    yield token
+def token(
+    Token: BrownieContractContainer,
+    alice: BrownieAccount,
+) -> BrownieContract:
+    """The TST token deployed on the local chain, with
+    18 decimals; the first account (alice) will have 1000 tokens"""
+    return Token.deploy("Test Token", "TST", 18, 1e21, {"from": alice})
 
 
 @pytest.fixture(scope="module")
-def token6(accounts: List[BrownieAccount]) -> BrownieContract:
+def token6(
+    Token: BrownieContractContainer,
+    alice: BrownieAccount,
+) -> BrownieContract:
     """The TST6 token deployed on the local chain, with
-    6 decimals; each account will have 100 tokens"""
-    token = ERC20(name="Test Token", symbol="TST6", decimals=6)
-    for account in accounts:
-        token._mint_for_testing(account.address, 100 * 10**6)
-    yield token
+    6 decimals; the first account (alice) will have 1000 tokens"""
+    return Token.deploy("Test Token", "TST6", 6, 1e21, {"from": alice})
