@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity >=0.5.0 <0.8.0;
 
 import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol';
@@ -16,7 +17,7 @@ library UniswapV2OracleLibrary {
     // produces the cumulative price using counterfactuals to save gas and avoid a call to sync.
     function currentCumulativePrices(
         address pair
-    ) internal view returns (uint32 blockTimestamp, uint price0Cumulative, uint price1Cumulative) {
+    ) internal view returns (uint price0Cumulative, uint price1Cumulative, uint32 blockTimestamp) {
         blockTimestamp = currentBlockTimestamp();
         price0Cumulative = IUniswapV2Pair(pair).price0CumulativeLast();
         price1Cumulative = IUniswapV2Pair(pair).price1CumulativeLast();

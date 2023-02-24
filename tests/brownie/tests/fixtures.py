@@ -126,6 +126,23 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 
 
 @pytest.fixture(scope="module")
+def weth(
+    Token: BrownieContractContainer, accounts: List[BrownieAccount]
+) -> BrownieContract:
+    """A token deployed on the local chain, with 18 decimals, that
+    we will use as if it were WETH; each account will have 1000."""
+    return deploy_token(
+        Token,
+        accounts,
+        f"Wrapper Ether",
+        f"WETH",
+        18,
+        10000,
+        True,
+    )
+
+
+@pytest.fixture(scope="module")
 def token(
     Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
@@ -207,3 +224,40 @@ def token6_pair(
 # | |_| | | | | | | | \__ \  \ V  V /  | (_| | | |_) |
 #  \___/  |_| |_| |_| |___/   \_/\_/    \__,_| | .__/
 #                                              |_|
+
+
+@pytest.fixture(scope="module")
+def uniswap_v2_factory(
+    accounts: List[BrownieAccount],
+    UniswapV2Factory: BrownieContractContainer,
+) -> BrownieContract:
+    """The Uniswap factory contract, deployed on the local chain"""
+    return UniswapV2Factory.deploy(accounts[0], {"from": accounts[0]})
+
+
+@pytest.fixture(scope="module")
+def uniswap_v2_router(
+    accounts: List[BrownieAccount],
+    UniswapV2Router02: BrownieContractContainer,
+    uniswap_v2_factory: BrownieContract,
+    weth: BrownieContract,
+) -> BrownieContract:
+    """The Uniswap router contract, deployed on the local chain"""
+    return UniswapV2Router02.deploy(
+        uniswap_v2_factory.address, weth.address, {"from": accounts[0]}
+    )
+
+
+@pytest.fixture(scope="module")
+def uniswap_v2_pair_weth_tst(
+    accounts: List[BrownieAccount],
+    uniswap_v2_factory: BrownieContract,
+    weth: BrownieContract,
+    token: BrownieContract,
+    UniswapV2Pair: BrownieContractContainer,
+) -> BrownieContract:
+    """The Uniswap pair contract for WETH-TST, deployed on the
+    local chain"""
+    uniswap_v2_factory.createPair(weth.address, token.address, {"from": accounts[0]})
+    address = uniswap_v2_factory.getPair(weth.address, token.address)
+    return UniswapV2Pair.at(address)
