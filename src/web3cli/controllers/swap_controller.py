@@ -33,8 +33,8 @@ class SwapController(Controller):
         help="Swap tokens using a DEX",
         arguments=[
             (["dex"], args.swap_dex()),
-            (["token_in"], args.swap_token_in()),
             (["amount"], args.swap_amount()),
+            (["token_in"], args.swap_token_in()),
             (["token_out"], args.swap_token_out()),
             (
                 ["--slippage"],

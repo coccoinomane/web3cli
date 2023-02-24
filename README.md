@@ -89,9 +89,8 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 - Swap tokens on a DEX:
    ```
-   w3 swap uniswap_v2 usdc 1 usdt              # swap 1 USDC for USDT on Uniswap
-   w3 swap uniswap_v2 usdc 1 usdt --return all # swap 1 USDC for USDT on Uniswap, show more info
-   w3avax swap traderjoe_v2 usdc 1 wavax       # swap 1 USDC for WAVAX on TraderJoe
+   w3 swap uniswap_v2 1 usdc usdt              # swap 1 USDC for USDT on Uniswap
+   w3avax swap traderjoe_v2 1 usdc wavax       # swap 1 USDC for WAVAX on TraderJoe
    ```
 
 # Smart Contract support
