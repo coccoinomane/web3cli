@@ -13,6 +13,7 @@ from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
 from brownie.network.contract import ContractContainer as BrownieContractContainer
+from tests.brownie.tests.helper import deploy_token
 
 #   ____   _               _
 #  / ___| | |__     __ _  (_)  _ __
@@ -21,7 +22,7 @@ from brownie.network.contract import ContractContainer as BrownieContractContain
 #  \____| |_| |_|  \__,_| |_| |_| |_|
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def ganache(chain: BrownieChain) -> BrownieChain:
     """Alias for the 'chain' fixture of Brownie, to avoid naming
     conflicts with the Chain model of web3core."""
@@ -42,13 +43,13 @@ def isolate(fn_isolation: Any) -> None:
 # /_/   \_\  \___|  \___|  \___/   \__,_| |_| |_|  \__| |___/
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def alice(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
     yield accounts[0]
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def bob(accounts: List[BrownieAccount]) -> BrownieAccount:
     """A Brownie account preloaded in the local chain"""
     yield accounts[1]
@@ -126,22 +127,78 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 
 @pytest.fixture(scope="module")
 def token(
-    Token: BrownieContractContainer,
-    alice: BrownieAccount,
+    Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
-    """The TST token deployed on the local chain, with
-    18 decimals; the first account (alice) will have 1000 tokens"""
-    return Token.deploy("Test Token", "TST", 18, 1e21, {"from": alice})
+    """The TST_0 token deployed on the local chain, with 18 decimals;
+    each account will have 1000 of each token"""
+    return deploy_token(
+        Token,
+        accounts,
+        f"Test token (18 decimals)",
+        f"TST",
+        18,
+        10000,
+        True,
+    )
+
+
+@pytest.fixture(scope="module")
+def token_pair(
+    Token: BrownieContractContainer,
+    accounts: List[BrownieAccount],
+) -> List[BrownieContract]:
+    """Tokens TST_0 and TST_1, deployed on the local chain, with 18 decimals;
+    each account will have 1000 of each token"""
+    return [
+        deploy_token(
+            Token,
+            accounts,
+            f"Test token {i} (18 decimals)",
+            f"TST_{i}",
+            18,
+            10000,
+            True,
+        )
+        for i in range(len(accounts))
+    ]
 
 
 @pytest.fixture(scope="module")
 def token6(
-    Token: BrownieContractContainer,
-    alice: BrownieAccount,
+    Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
-    """The TST6 token deployed on the local chain, with
-    6 decimals; the first account (alice) will have 1000 tokens"""
-    return Token.deploy("Test Token", "TST6", 6, 1e21, {"from": alice})
+    """The TST6_0 token deployed on the local chain, with 6 decimals;
+    each account will have 1000 of each token"""
+    return deploy_token(
+        Token,
+        accounts,
+        f"Test token (6 decimals)",
+        f"TST",
+        6,
+        10000,
+        True,
+    )
+
+
+@pytest.fixture(scope="module")
+def token6_pair(
+    Token: BrownieContractContainer,
+    accounts: List[BrownieAccount],
+) -> List[BrownieContract]:
+    """Tokens TST6_0 and TST6_1, deployed on the local chain, with 6 decimals;
+    each account will have 1000 of each token"""
+    return [
+        deploy_token(
+            Token,
+            accounts,
+            f"Test token {i} (6 decimals)",
+            f"TST6_{i}",
+            6,
+            10000,
+            True,
+        )
+        for i in range(len(accounts))
+    ]
 
 
 #  _   _           _

@@ -19,7 +19,6 @@ def test_balance(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    fn_isolation: Any,
 ) -> None:
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
@@ -35,7 +34,6 @@ def test_balance_with_alias(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    fn_isolation: Any,
 ) -> None:
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
@@ -51,7 +49,6 @@ def test_balance_with_unit_gwei(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    fn_isolation: Any,
 ) -> None:
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
@@ -68,7 +65,6 @@ def test_balance_with_unit_wei(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    fn_isolation: Any,
 ) -> None:
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
@@ -123,9 +119,10 @@ def test_block_number(
     bob: BrownieAccount,
     ganache: BrownieChain,
 ) -> None:
-    tx = alice.transfer(bob, 10000)  # block 1
+    initial_height = ganache.height
+    tx = alice.transfer(bob, 10000)
     ganache.mine()
-    app.set_args(["block", "1"]).run()
+    app.set_args(["block", str(initial_height + 1)]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
     assert type(block.get("transactions")) == list
@@ -140,12 +137,13 @@ def test_block_hash(
     bob: BrownieAccount,
     ganache: BrownieChain,
 ) -> None:
-    # Make a transaction in block 1 then mine a block
-    tx = alice.transfer(bob, 10000)  # block 1
+    # Make a transaction (+1 height) then mine a block (+1 height)
+    initial_height = ganache.height
+    tx = alice.transfer(bob, 10000)
     ganache.mine()
-    # Retrieve hash of block 1
-    hash = ganache[1].hash.hex()
-    # Retrieve block 1 by hash using the CLI
+    # Retrieve hash of transaction block
+    hash = ganache[initial_height + 1].hash.hex()
+    # Retrieve transaction block by hash using the CLI
     app.set_args(["block", hash]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
