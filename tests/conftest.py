@@ -22,10 +22,3 @@ def tmp(request: FixtureRequest) -> Any:
     t = fs.Tmp()
     yield t
     t.remove()
-
-
-@pytest.fixture(scope="function", autouse=True)
-def isolate(fn_isolation: Any) -> None:
-    """Reset the local blockchain before each single test.
-    https://eth-brownie.readthedocs.io/en/stable/tests-pytest-intro.html"""
-    pass

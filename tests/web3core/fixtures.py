@@ -22,7 +22,7 @@ def db() -> Iterator[SqliteExtDatabase]:
     DB.close()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def addresses() -> List[AddressFields]:
     return [
         {
@@ -43,7 +43,7 @@ def addresses() -> List[AddressFields]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def signers() -> List[Dict[str, Any]]:
     return [
         {
@@ -64,7 +64,7 @@ def signers() -> List[Dict[str, Any]]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def txs() -> List[TxFields]:
     return [
         {
@@ -98,7 +98,7 @@ def txs() -> List[TxFields]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def chains() -> List[ChainFields]:
     return chain_seeds.all
 
@@ -108,7 +108,7 @@ def contracts() -> List[ContractFields]:
     return contract_seeds.all
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def contract_without_abi(contracts: List[ContractFields]) -> ContractFields:
     contracts[0]["abi"] = None
     return contracts[0]
