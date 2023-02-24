@@ -19,9 +19,8 @@ def test_balance(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    ganache: BrownieChain,
+    fn_isolation: Any,
 ) -> None:
-    ganache.reset()
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
     app.set_args(["balance", alice.address]).run()
@@ -36,9 +35,8 @@ def test_balance_with_alias(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    ganache: BrownieChain,
+    fn_isolation: Any,
 ) -> None:
-    ganache.reset()
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
     app.set_args(["balance", "alice"]).run()  # use the alias
@@ -53,9 +51,8 @@ def test_balance_with_unit_gwei(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    ganache: BrownieChain,
+    fn_isolation: Any,
 ) -> None:
-    ganache.reset()
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
     app.set_args(["balance", alice.address, "gwei"]).run()
@@ -71,9 +68,8 @@ def test_balance_with_unit_wei(
     app: Web3CliTest,
     alice: BrownieAccount,
     bob: BrownieAccount,
-    ganache: BrownieChain,
+    fn_isolation: Any,
 ) -> None:
-    ganache.reset()
     alice_balance = alice.balance()
     alice.transfer(bob, 1e18)
     app.set_args(["balance", alice.address, "wei"]).run()
@@ -109,9 +105,8 @@ def test_sign(
 
 @pytest.mark.local
 def test_block_latest(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
 ) -> None:
-    ganache.reset()
     tx = alice.transfer(bob, 10000)
     app.set_args(["block", "latest"]).run()
     data, output = app.last_rendered
@@ -123,9 +118,11 @@ def test_block_latest(
 
 @pytest.mark.local
 def test_block_number(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
+    app: Web3CliTest,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    ganache: BrownieChain,
 ) -> None:
-    ganache.reset()
     tx = alice.transfer(bob, 10000)  # block 1
     ganache.mine()
     app.set_args(["block", "1"]).run()
@@ -138,10 +135,12 @@ def test_block_number(
 
 @pytest.mark.local
 def test_block_hash(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
+    app: Web3CliTest,
+    alice: BrownieAccount,
+    bob: BrownieAccount,
+    ganache: BrownieChain,
 ) -> None:
     # Make a transaction in block 1 then mine a block
-    ganache.reset()
     tx = alice.transfer(bob, 10000)  # block 1
     ganache.mine()
     # Retrieve hash of block 1

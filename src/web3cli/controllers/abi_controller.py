@@ -51,7 +51,7 @@ class AbiController(Controller):
                 },
             ),
         ],
-        aliases=["fns", "f"],
+        aliases=["fns", "fn", "f"],
     )
     def functions(self) -> None:
         abi = self.parse_abi()
@@ -87,7 +87,7 @@ class AbiController(Controller):
                 },
             ),
         ],
-        aliases=["evts", "e"],
+        aliases=["evs", "ev", "e"],
     )
     def events(self) -> None:
         abi = self.parse_abi()

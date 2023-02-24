@@ -113,9 +113,9 @@ w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 See available functions and events on a contract with `w3 abi functions` and `w3 abi events`:
 
 ```
-w3 abi functions weth           # functions on WETH token
-w3 abi events uniswap_v2        # events on Uniswap V2
-w3 abi functions --abi abi.json # functions of an arbitrary ABI
+w3 abi fns weth           # functions on WETH token
+w3 abi evs uniswap_v2     # events on Uniswap V2
+w3 abi fns --abi abi.json # functions of an arbitrary ABI
 ```
 
 ### Read from a smart contract

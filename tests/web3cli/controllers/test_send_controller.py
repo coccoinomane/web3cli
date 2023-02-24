@@ -1,6 +1,5 @@
 import pytest
 
-from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
 from tests.seed import seed_local_token
@@ -8,10 +7,7 @@ from tests.web3cli.main import Web3CliTest
 
 
 @pytest.mark.local
-def test_send_eth(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
-) -> None:
-    ganache.reset()
+def test_send_eth(app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount) -> None:
     bob_balance = bob.balance()
     app.set_args(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "--force"]
@@ -21,9 +17,8 @@ def test_send_eth(
 
 @pytest.mark.local
 def test_send_eth_using_address_tag(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
 ) -> None:
-    ganache.reset()
     bob_balance = bob.balance()
     app.set_args(["--signer", "alice", "send", "bob", "1", "ETH", "--force"]).run()
     assert bob.balance() == bob_balance + 10**18
@@ -31,9 +26,8 @@ def test_send_eth_using_address_tag(
 
 @pytest.mark.local
 def test_send_eth_wei(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount, ganache: BrownieChain
+    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
 ) -> None:
-    ganache.reset()
     bob_balance = bob.balance()
     app.set_args(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "wei", "--force"]
