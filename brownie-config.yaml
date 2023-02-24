@@ -5,3 +5,7 @@ project_structure:
     reports: tests/brownie/reports
     scripts: tests/brownie/scripts
     tests: tests
+compiler:
+    solc:
+        remappings:
+          - "@uniswap=tests/brownie/contracts/uniswap"

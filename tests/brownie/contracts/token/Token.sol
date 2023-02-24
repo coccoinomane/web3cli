@@ -1,8 +1,8 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.6.0 <0.8.0;
 
 // SPDX-License-Identifier: MIT
 
-import "./SafeMath.sol";
+import "./Token_SafeMath.sol";
 
 /**
     @title Bare-bones Token implementation
@@ -11,7 +11,7 @@ import "./SafeMath.sol";
  */
 contract Token {
 
-    using SafeMath for uint256;
+    using Token_SafeMath for uint256;
 
     string public symbol;
     string public name;

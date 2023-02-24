@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -111,7 +110,6 @@ pypi-*/
 
 # Brownie folder created during tests
 tests/brownie/build
-tests/brownie/interfaces
 tests/brownie/reports
 
 # other

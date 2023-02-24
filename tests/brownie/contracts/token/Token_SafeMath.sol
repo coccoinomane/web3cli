@@ -1,6 +1,6 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.6.0 <0.8.0;
 
-library SafeMath {
+library Token_SafeMath {
 
     function add(uint a, uint b) internal pure returns (uint c) {
         c = a + b;
