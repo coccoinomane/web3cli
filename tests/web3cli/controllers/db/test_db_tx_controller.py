@@ -54,8 +54,8 @@ def test_tx_add(txs: List[TxFields]) -> None:
             ).run()
             tx = Tx.get_by_hash(t["hash"])
             assert tx.select().count() == 1
-            assert Tx.from_ == t["from_"]
-            assert Tx.to == t["to"]
+            assert tx.from_ == t["from_"]
+            assert tx.to == t["to"]
 
 
 def test_tx_update(txs: List[TxFields]) -> None:
@@ -75,8 +75,8 @@ def test_tx_update(txs: List[TxFields]) -> None:
             ]
         ).run()
         tx = Tx.get_by_hash(txs[0]["hash"])
-        assert Tx.from_ == txs[1]["from_"]
-        assert Tx.to == txs[1]["to"]
+        assert tx.from_ == txs[1]["from_"]
+        assert tx.to == txs[1]["to"]
 
 
 def test_tx_delete(txs: List[TxFields]) -> None:
