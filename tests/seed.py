@@ -57,6 +57,24 @@ def seed_local_accounts(
     return accounts
 
 
+def seed_local_contract(
+    app: Web3Cli, name: str, brownie_contract: BrownieContract, type: str = None
+) -> Contract:
+    """Create a contract in the DB for the given Brownie contract.
+
+    If you specify the contract type, the contract ABI will not be
+    stored in the DB."""
+    db_ready_or_raise(app)
+    return Contract.create(
+        name=brownie_contract.symbol().lower(),
+        desc=brownie_contract.name(),
+        chain="local",
+        address=brownie_contract.address,
+        type=type,
+        abi=None if type else brownie_contract.abi,
+    )
+
+
 def seed_local_token(app: Web3Cli, token: BrownieContract) -> Contract:
     """Create a contract in the DB for the given Brownie token"""
     db_ready_or_raise(app)
