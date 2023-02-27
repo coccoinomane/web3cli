@@ -2,7 +2,7 @@ import json
 
 from web3core.models.types import ContractFields
 
-arb_usdc: ContractFields = {
+usdc: ContractFields = {
     "name": "usdc",
     "desc": "USDC Circle token",
     "type": "erc20",
@@ -10,7 +10,7 @@ arb_usdc: ContractFields = {
     "chain": "arb",
 }
 
-arb_usdt: ContractFields = {
+usdt: ContractFields = {
     "name": "usdt",
     "desc": "Tether USD",
     "type": "erc20",
@@ -18,7 +18,7 @@ arb_usdt: ContractFields = {
     "chain": "arb",
 }
 
-arb_weth: ContractFields = {
+weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
     "type": "erc20",
@@ -26,7 +26,7 @@ arb_weth: ContractFields = {
     "chain": "arb",
 }
 
-arb_camelot: ContractFields = {
+camelot: ContractFields = {
     "name": "camelot",
     "desc": "Camelot Router",
     "address": "0xc873fEcbd354f5A56E00E710B90EF4201db2448d",
@@ -37,7 +37,7 @@ arb_camelot: ContractFields = {
     "chain": "arb",
 }
 
-arb_sushiswap_v2: ContractFields = {
+sushiswap_v2: ContractFields = {
     "name": "sushi_v2",
     "desc": "SushiSwap Router",
     "address": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
@@ -47,9 +47,9 @@ arb_sushiswap_v2: ContractFields = {
 
 
 all = [
-    arb_usdc,
-    arb_weth,
-    arb_usdt,
-    arb_camelot,
-    arb_sushiswap_v2,
+    usdc,
+    weth,
+    usdt,
+    camelot,
+    sushiswap_v2,
 ]

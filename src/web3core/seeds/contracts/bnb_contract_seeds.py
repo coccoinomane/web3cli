@@ -1,6 +1,6 @@
 from web3core.models.types import ContractFields
 
-bnb_busd: ContractFields = {
+busd: ContractFields = {
     "name": "busd",
     "desc": "Binance-Peg BUSD Token",
     "type": "erc20",
@@ -8,7 +8,7 @@ bnb_busd: ContractFields = {
     "chain": "bnb",
 }
 
-bnb_pancakeswap_v2: ContractFields = {
+pancakeswap_v2: ContractFields = {
     "name": "pancakeswap_v2",
     "desc": "PancakeSwap: Router v2",
     "type": "uniswap_v2",
@@ -16,4 +16,4 @@ bnb_pancakeswap_v2: ContractFields = {
     "chain": "bnb",
 }
 
-all = [bnb_busd, bnb_pancakeswap_v2]
+all = [busd, pancakeswap_v2]

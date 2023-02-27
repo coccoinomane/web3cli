@@ -1,6 +1,6 @@
 from web3core.models.types import ContractFields
 
-eth_usdc: ContractFields = {
+usdc: ContractFields = {
     "name": "usdc",
     "desc": "USDC Circle token",
     "type": "erc20",
@@ -8,7 +8,7 @@ eth_usdc: ContractFields = {
     "chain": "eth",
 }
 
-eth_usdt: ContractFields = {
+usdt: ContractFields = {
     "name": "usdt",
     "desc": "Tether USD",
     "type": "erc20",
@@ -16,7 +16,7 @@ eth_usdt: ContractFields = {
     "chain": "eth",
 }
 
-eth_weth: ContractFields = {
+weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
     "type": "erc20",
@@ -24,7 +24,7 @@ eth_weth: ContractFields = {
     "chain": "eth",
 }
 
-eth_uniswap_v2: ContractFields = {
+uniswap_v2: ContractFields = {
     "name": "uniswap_v2",
     "desc": "Uniswap V2: Router 2",
     "type": "uniswap_v2",
@@ -32,7 +32,7 @@ eth_uniswap_v2: ContractFields = {
     "chain": "eth",
 }
 
-eth_uniswap_v2_factory: ContractFields = {
+uniswap_v2_factory: ContractFields = {
     "name": "uniswap_v2_factory",
     "desc": "Uniswap V2: Factory",
     "type": "uniswap_v2_factory",
@@ -40,7 +40,7 @@ eth_uniswap_v2_factory: ContractFields = {
     "chain": "eth",
 }
 
-eth_uniswap_v2_usdc_usdt: ContractFields = {
+uniswap_v2_usdc_usdt: ContractFields = {
     "name": "uniswap_v2_usdc_usdt",
     "desc": "Uniswap V2: Pool USDC/USDT",
     "type": "uniswap_v2_pool",
@@ -48,7 +48,7 @@ eth_uniswap_v2_usdc_usdt: ContractFields = {
     "chain": "eth",
 }
 
-eth_uniswap_v3: ContractFields = {
+uniswap_v3: ContractFields = {
     "name": "uniswap_v3",
     "desc": "Uniswap V3: SwapRouter",
     "type": "uniswap_v3",
@@ -58,11 +58,11 @@ eth_uniswap_v3: ContractFields = {
 
 
 all = [
-    eth_usdc,
-    eth_weth,
-    eth_usdt,
-    eth_uniswap_v2,
-    eth_uniswap_v2_factory,
-    eth_uniswap_v2_usdc_usdt,
-    eth_uniswap_v3,
+    usdc,
+    weth,
+    usdt,
+    uniswap_v2,
+    uniswap_v2_factory,
+    uniswap_v2_usdc_usdt,
+    uniswap_v3,
 ]
