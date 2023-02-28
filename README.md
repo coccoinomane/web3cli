@@ -82,15 +82,15 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 - Send coins or tokens to any address:
    ```
-   w3 send unicef 1 ETH              # send 1 ETH, ask for confirmation
-   w3 send unicef 1 ETH gwei         # send 1 gwei, ask for confirmation
-   w3 send unicef 1 usdc             # send 1 USDC
+   w3 send unicef 1 ETH      # send 1 ETH, ask for confirmation
+   w3 send unicef 1 ETH gwei # send 1 gwei, ask for confirmation
+   w3 send unicef 1 usdc     # send 1 USDC
    ```
 
 - Swap tokens on a DEX:
    ```
-   w3 swap uniswap_v2 1 usdc usdt              # swap 1 USDC for USDT on Uniswap
-   w3avax swap traderjoe_v2 1 usdc wavax       # swap 1 USDC for WAVAX on TraderJoe
+   w3 swap uniswap_v2 1 usdc usdt     # swap 1 USDC for USDT on Uniswap
+   w3avax swap traderjoe 1 usdc wavax # swap 1 USDC for WAVAX on TraderJoe
    ```
 
 # Smart Contract support

@@ -2,9 +2,9 @@
 
 ### Top priority
 
-- Token: test approve
+- Brownie: test add liq + swap
 - Swap: refactor in web3core + test
-- resolve_contract: return a contract from ethPM or etherscan
+- Token: test approve
 
 ### Commands 
 
@@ -30,6 +30,7 @@
 
 ### UX
 
+- resolve_contract: return a contract from ethPM or etherscan
 - Swap should support native coins too
 - Transact: Warn before sending tx if gas price is too high
 - Handle decimal output (e.g. w3 balance)
