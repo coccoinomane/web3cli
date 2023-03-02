@@ -61,14 +61,14 @@ from web3cli.exceptions import Web3CliError
 # wrong args to an existing function fails
 def test_transact_invalid_input(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     args: List[str],
     error: Any,
     error_message: Any,
 ) -> None:
-    seed_local_token(app, token)
+    seed_local_token(app, TST)
     with pytest.raises(error, match=error_message):
         app.set_args(
             [
@@ -86,21 +86,21 @@ def test_transact_invalid_input(
 # with and without the --dry-run flag
 def test_transact(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     dry_run: bool,
 ) -> None:
-    seed_local_token(app, token)
-    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    bob_balance = TST.balanceOf(bob.address)
     app.set_args(
         ["--signer", "alice", "transact", "tst", "transfer", "bob", "1e18", "--force"]
         + (["--dry-run"] if dry_run else [])
     ).run()
     if dry_run:
-        assert token.balanceOf(bob.address) == bob_balance
+        assert TST.balanceOf(bob.address) == bob_balance
     else:
-        assert token.balanceOf(bob.address) == bob_balance + 1e18
+        assert TST.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert type(data) is str
     assert data.startswith("0x")
@@ -111,14 +111,14 @@ def test_transact(
 # Test that the confirmation prompt works as intended
 def test_transact_with_confirm(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     monkeypatch: pytest.MonkeyPatch,
     answer: str,
 ) -> None:
-    seed_local_token(app, token)
-    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    bob_balance = TST.balanceOf(bob.address)
     args = [
         "--signer",
         "alice",
@@ -131,11 +131,11 @@ def test_transact_with_confirm(
     monkeypatch.setattr("builtins.input", lambda _: answer)
     if answer == "yes":
         app.set_args(args).run()
-        assert token.balanceOf(bob.address) == bob_balance + 1e18
+        assert TST.balanceOf(bob.address) == bob_balance + 1e18
     else:
         with pytest.raises(SystemExit):
             app.set_args(args).run()
-            assert token.balanceOf(bob.address) == bob_balance
+            assert TST.balanceOf(bob.address) == bob_balance
 
 
 @pytest.mark.local
@@ -196,14 +196,14 @@ def test_transact_with_confirm(
 # Test that varying the --return parameter the output varies
 def test_transact_return(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     return_: str,
     has_keys: List[str],
 ) -> None:
-    seed_local_token(app, token)
-    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    bob_balance = TST.balanceOf(bob.address)
     app.set_args(
         [
             "--signer",
@@ -218,7 +218,7 @@ def test_transact_return(
             "--force",
         ]
     ).run()
-    assert token.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert type(data) is dict
     for key in has_keys:
@@ -231,12 +231,12 @@ def test_transact_return(
 # regardless of whether we are in dry-run mode or not
 def test_transact_return_output(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     dry_run: bool,
 ) -> None:
-    seed_local_token(app, token)
+    seed_local_token(app, TST)
     app.set_args(
         [
             "--signer",
@@ -263,12 +263,12 @@ def test_transact_return_output(
 # is used in a dry run
 def test_transact_output_receipt_dry_run(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     return_type: str,
 ) -> None:
-    seed_local_token(app, token)
+    seed_local_token(app, TST)
     with pytest.raises(
         Web3CliError, match=f"Cannot return '{return_type}' with 'dry_run' option"
     ):
@@ -298,13 +298,13 @@ def test_transact_output_receipt_dry_run(
 # is --call
 def test_transact_call(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
     call: bool,
 ) -> None:
-    seed_local_token(app, token)
-    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    bob_balance = TST.balanceOf(bob.address)
     app.set_args(
         [
             "--signer",
@@ -320,7 +320,7 @@ def test_transact_call(
         ]
         + (["--no-call", "--gas-limit", "300000"] if not call else [])
     ).run()
-    assert token.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert "output" in data
     if call:
@@ -341,12 +341,12 @@ def test_transact_call(
 # Test that the gas_limit is correctly passed to the transaction
 def test_transact_call_with_gas_limit(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
-    bob_balance = token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    bob_balance = TST.balanceOf(bob.address)
     gas_limit = 300000
     app.set_args(
         [
@@ -364,7 +364,7 @@ def test_transact_call_with_gas_limit(
             "--force",
         ]
     ).run()
-    assert token.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 1e18
     data, output = app.last_rendered
     assert "gas" in data
     assert type(data["gas"]) is int

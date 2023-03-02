@@ -14,8 +14,8 @@ from web3core.models.types import ChainFields, ContractFields
 @pytest.mark.local
 # Test that calling a non existing function fails with a Web3CliError
 # exception containing the string "Function must be one..."
-def test_call_non_existing_function(app: Web3CliTest, token: BrownieContract) -> None:
-    seed_local_token(app, token)
+def test_call_non_existing_function(app: Web3CliTest, TST: BrownieContract) -> None:
+    seed_local_token(app, TST)
     with pytest.raises(Web3CliError, match="Function must be one of"):
         app.set_args(
             [
@@ -30,11 +30,11 @@ def test_call_non_existing_function(app: Web3CliTest, token: BrownieContract) ->
 # Test that calling a function with the wrong number of arguments fails
 def test_call_wrong_number_of_arguments(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
+    seed_local_token(app, TST)
     with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
         app.set_args(
             [
@@ -52,11 +52,11 @@ def test_call_wrong_number_of_arguments(
 # Test that calling a function with the wrong type of arguments fails
 def test_call_wrong_type_of_arguments(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
+    seed_local_token(app, TST)
     with pytest.raises(ValueError):
         app.set_args(
             [
@@ -75,12 +75,12 @@ def test_call_wrong_type_of_arguments(
 # Test that calling a write function without neither a signer nor a from address fails
 def test_call_local_token_transfer_without_signer_without_from(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
-    token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    TST.balanceOf(bob.address)
     with pytest.raises(
         Web3CliError, match="Cannot call a write operation without a from address"
     ):
@@ -100,12 +100,12 @@ def test_call_local_token_transfer_without_signer_without_from(
 # works
 def test_call_local_token_transfer_without_signer_with_from(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
-    token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    TST.balanceOf(bob.address)
     app.set_args(
         [
             "call",
@@ -125,12 +125,12 @@ def test_call_local_token_transfer_without_signer_with_from(
 # Test calling the 'trasfer' function on the TST token on the local chain
 def test_call_local_token_transfer(
     app: Web3CliTest,
-    token: BrownieContract,
+    TST: BrownieContract,
     alice: BrownieAccount,
     bob: BrownieAccount,
 ) -> None:
-    seed_local_token(app, token)
-    token.balanceOf(bob.address)
+    seed_local_token(app, TST)
+    TST.balanceOf(bob.address)
     app.set_args(
         [
             "--signer",

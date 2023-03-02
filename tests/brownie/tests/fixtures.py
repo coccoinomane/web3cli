@@ -128,11 +128,11 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 
 
 @pytest.fixture(scope="module")
-def weth(
+def WETH(
     Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
     """A token deployed on the local chain, with 18 decimals, that
-    we will use as if it were WETH. Supply of 1 billion, shared between
+    we will use as if it were WETH. Supply of 1000 tokens, shared between
     all accounts."""
     return deploy_token(
         Token,
@@ -140,60 +140,75 @@ def weth(
         f"Wrapper Ether",
         f"WETH",
         18,
-        10**9,
+        10**21,
         True,
     )
 
 
 @pytest.fixture(scope="module")
-def token(
+def TST(
     Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
-    """The TST_0 token deployed on the local chain, with 18 decimals.
-    Supply of 1 billion, shared between all accounts."""
+    """TST token deployed on the local chain, with 18 decimals.
+    Supply of 1000 tokens, shared between all accounts."""
     return deploy_token(
         Token,
         accounts,
         f"Test token (18 decimals)",
         f"TST",
         18,
-        10**9,
+        10**21,
         True,
     )
 
 
 @pytest.fixture(scope="module")
-def token_pair(
+def TST_0(
     Token: BrownieContractContainer,
     accounts: List[BrownieAccount],
-) -> List[BrownieContract]:
-    """Tokens TST_0 and TST_1, deployed on the local chain, with 18
-    decimals. Supply of 1 billion, shared between all accounts."""
-    return [
-        deploy_token(
-            Token,
-            accounts,
-            f"Test token {i} (18 decimals)",
-            f"TST_{i}",
-            18,
-            10**9,
-            True,
-        )
-        for i in range(2)
-    ]
+) -> BrownieContract:
+    """TST_0 token deployed on the local chain, with 18 decimals.
+    Supply of 1000 tokens, shared between all accounts."""
+    return deploy_token(
+        Token,
+        accounts,
+        f"Test token 0 (18 decimals)",
+        f"TST_0",
+        18,
+        10**21,
+        True,
+    )
 
 
 @pytest.fixture(scope="module")
-def token6(
+def TST_1(
+    Token: BrownieContractContainer,
+    accounts: List[BrownieAccount],
+) -> BrownieContract:
+    """TST_1 token deployed on the local chain, with 18 decimals.
+    Supply of 1000 tokens, shared between all accounts."""
+    return deploy_token(
+        Token,
+        accounts,
+        f"Test token 1 (18 decimals)",
+        f"TST_1",
+        18,
+        10**21,
+        True,
+    )
+
+
+@pytest.fixture(scope="module")
+def TST6(
     Token: BrownieContractContainer, accounts: List[BrownieAccount]
 ) -> BrownieContract:
-    """The TST6_0 token deployed on the local chain, with 6
-    decimals. Supply of 1 billion, shared between all accounts"""
+    """TST6 token deployed on the local chain, with 6 decimals.
+    Supply of 1000 tokens, shared between all accounts"""
     return deploy_token(
         Token,
         accounts,
         f"Test token (6 decimals)",
-        f"TST",
+        f"TST6",
         6,
         10**9,
         True,
@@ -201,36 +216,39 @@ def token6(
 
 
 @pytest.fixture(scope="module")
-def token6_pair(
+def TST6_0(
     Token: BrownieContractContainer,
     accounts: List[BrownieAccount],
-) -> List[BrownieContract]:
-    """Tokens TST6_0 and TST6_1, deployed on the local chain, with 6
-    decimals;
-    each account will have 1000 of each token"""
-    return [
-        deploy_token(
-            Token,
-            accounts,
-            f"Test token {i} (6 decimals)",
-            f"TST6_{i}",
-            6,
-            10**9,
-            True,
-        )
-        for i in range(2)
-    ]
+) -> BrownieContract:
+    """TST6_0 token deployed on the local chain, with 6
+    decimals; each account will have 1000 of each token"""
+    deploy_token(
+        Token,
+        accounts,
+        f"Test token 0 (6 decimals)",
+        f"TST6_0",
+        6,
+        10**9,
+        True,
+    )
 
 
 @pytest.fixture(scope="module")
-def all_tokens(
-    token: BrownieContract,
-    token6: BrownieContract,
-    token_pair: List[BrownieContract],
-    token6_pair: List[BrownieContract],
-) -> List[BrownieContract]:
-    """Delpoy all test tokens on the local chain and return them as a list"""
-    return [token, token6] + token_pair + token6_pair
+def TST6_1(
+    Token: BrownieContractContainer,
+    accounts: List[BrownieAccount],
+) -> BrownieContract:
+    """TST6_1 token deployed on the local chain, with 6
+    decimals; each account will have 1000 of each token"""
+    deploy_token(
+        Token,
+        accounts,
+        f"Test token 1 (6 decimals)",
+        f"TST6_1",
+        6,
+        10**21,
+        True,
+    )
 
 
 #  _   _           _
@@ -255,30 +273,43 @@ def uniswap_v2_router(
     accounts: List[BrownieAccount],
     UniswapV2Router02: BrownieContractContainer,
     uniswap_v2_factory: BrownieContract,
-    weth: BrownieContract,
+    WETH: BrownieContract,
 ) -> BrownieContract:
     """The Uniswap router contract, deployed on the local chain"""
-    return UniswapV2Router02.deploy(
-        uniswap_v2_factory.address, weth.address, {"from": accounts[0]}
-    )
+    return UniswapV2Router02.deploy(uniswap_v2_factory, WETH, {"from": accounts[0]})
 
 
 @pytest.fixture(scope="module")
-def uniswap_v2_pair_weth_tst(
+def uniswap_v2_pair_WETH_TST(
     accounts: List[BrownieAccount],
     uniswap_v2_factory: BrownieContract,
-    weth: BrownieContract,
-    token: BrownieContract,
+    WETH: BrownieContract,
+    TST: BrownieContract,
     UniswapV2Pair: BrownieContractContainer,
 ) -> BrownieContract:
-    """The Uniswap pair contract for WETH-TST, deployed on the
-    local chain, with no liquidity. The TST token is the one
-    whose contract is returned by the token fixture, and
-    the WETH token is the one whose contract is returned
-    by the weth fixture."""
+    """The Uniswap pair contract for tokens WETH-TST, deployed on the
+    local chain, with no liquidity."""
     return deploy_v2_pair(
         UniswapV2Pair,
         accounts[0],
         uniswap_v2_factory,
-        (weth, token),
+        (WETH, TST),
+    )
+
+
+@pytest.fixture(scope="module")
+def uniswap_v2_pair_TST_0_TST_1(
+    accounts: List[BrownieAccount],
+    uniswap_v2_factory: BrownieContract,
+    TST_0: BrownieContract,
+    TST_1: BrownieContract,
+    UniswapV2Pair: BrownieContractContainer,
+) -> BrownieContract:
+    """The Uniswap pair contract for tokens TST_0-TST_1, deployed on the
+    local chain, with no liquidity."""
+    return deploy_v2_pair(
+        UniswapV2Pair,
+        accounts[0],
+        uniswap_v2_factory,
+        (TST_0, TST_1),
     )
