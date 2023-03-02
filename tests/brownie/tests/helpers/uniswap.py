@@ -3,16 +3,15 @@
 
 from typing import Any, Tuple
 
+from brownie import UniswapV2Pair
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
-from brownie.network.contract import ContractContainer as BrownieContractContainer
 
 
 def deploy_v2_pair(
-    UniswapV2Pair: BrownieContractContainer,
     account: BrownieAccount,
-    uniswap_v2_factory: BrownieContract,
     tokens: Tuple[BrownieContract, BrownieContract],
+    uniswap_v2_factory: BrownieContract,
 ) -> BrownieContract:
     """Deply a liquidity pair for the given tokens. The pair will be deployed
     by the given account and returned as a contract object."""
@@ -71,7 +70,7 @@ def add_v2_liquidity_with_pair(
     account: BrownieAccount,
     tokens: Tuple[BrownieContract, BrownieContract],
     liquidity: Tuple[int, int],
-    pair: BrownieContract,
+    factory: BrownieContract,
 ) -> Any:
     """Add liquidity to the given pair of tokens, using the pair's contract.
 
@@ -85,12 +84,14 @@ def add_v2_liquidity_with_pair(
     tokens: A tuple of the two tokens to add liquidity for.
     liquidity: A tuple of the amount of liquidity to add to the pair.
         The amounts should be expressed in token units.
-    pair: The UniswapV2Pair brownie contract for the pair.
+    factory: The UniswapV2Factory contract, needed to find the pair.
 
     RETURNS
     _______
     The transaction receipt.
     """
+    # Get pair
+    pair = UniswapV2Pair.at(factory.getPair(tokens[0], tokens[1]))
     # Transfer the tokens to the pair
     raise_if_liquidity_too_small(liquidity[0], liquidity[1])
     tokens[0].transfer(pair, liquidity[0], {"from": account})

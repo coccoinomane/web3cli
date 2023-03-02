@@ -62,12 +62,12 @@ def seed_local_contract(
 ) -> Contract:
     """Create a contract in the DB for the given Brownie contract.
 
-    If you specify the contract type, the contract ABI will not be
-    stored in the DB."""
+    If you specify the contract type, that type's ABI will override
+    the ABI stored in the Brownie contract."""
     db_ready_or_raise(app)
     return Contract.create(
-        name=brownie_contract.symbol().lower(),
-        desc=brownie_contract.name(),
+        name=name,
+        desc=f"'{name}' contract imported from brownie",
         chain="local",
         address=brownie_contract.address,
         type=type,

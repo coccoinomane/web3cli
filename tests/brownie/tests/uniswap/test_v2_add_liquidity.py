@@ -2,9 +2,9 @@ from typing import Any, List
 
 import pytest
 
+from brownie import Token, UniswapV2Factory, UniswapV2Pair, UniswapV2Router02
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
-from brownie.network.contract import ContractContainer as BrownieContractContainer
 from tests.brownie.tests.helpers.uniswap import (
     add_v2_liquidity,
     add_v2_liquidity_with_pair,
@@ -38,10 +38,6 @@ def test_v2_add_liquidity_with_router(
 @pytest.mark.local
 def test_v2_add_liquidity_with_router_no_fixtures(
     accounts: List[BrownieAccount],
-    Token: BrownieContractContainer,
-    UniswapV2Factory: BrownieContractContainer,
-    UniswapV2Router02: BrownieContractContainer,
-    UniswapV2Pair: BrownieContractContainer,
     fn_isolation: Any,
 ) -> None:
     # Deploy tokens
@@ -49,16 +45,14 @@ def test_v2_add_liquidity_with_router_no_fixtures(
     tst1 = Token.deploy("TST_1", "TST_1", 18, 10**18, {"from": accounts[0]})
     weth = Token.deploy("WETH", "WETH", 18, 10**18, {"from": accounts[0]})
     # Deploy contracts
-    uniswap_v2_factory = UniswapV2Factory.deploy(accounts[0], {"from": accounts[0]})
-    uniswap_v2_router = UniswapV2Router02.deploy(
-        uniswap_v2_factory, weth, {"from": accounts[0]}
-    )
+    factory = UniswapV2Factory.deploy(accounts[0], {"from": accounts[0]})
+    router = UniswapV2Router02.deploy(factory, weth, {"from": accounts[0]})
     # Approve spender
     amount_0, amount_1 = 10**6, 10**6
-    tst0.approve(uniswap_v2_router, amount_0, {"from": accounts[0]})
-    tst1.approve(uniswap_v2_router, amount_1, {"from": accounts[0]})
+    tst0.approve(router, amount_0, {"from": accounts[0]})
+    tst1.approve(router, amount_1, {"from": accounts[0]})
     # Add liquidity with router (will create pair)
-    uniswap_v2_router.addLiquidity(
+    router.addLiquidity(
         tst0,
         tst1,
         amount_0,
@@ -70,7 +64,7 @@ def test_v2_add_liquidity_with_router_no_fixtures(
         {"from": accounts[0]},
     )
     # Get pair contract
-    pair_address = uniswap_v2_factory.getPair(tst0.address, tst1.address)
+    pair_address = factory.getPair(tst0.address, tst1.address)
     pair = UniswapV2Pair.at(pair_address)
     # Test
     reserves = pair.getReserves()
@@ -83,7 +77,7 @@ def test_v2_add_liquidity_with_pair(
     accounts: List[BrownieAccount],
     TST_0: BrownieContract,
     TST_1: BrownieContract,
-    uniswap_v2_pair_TST_0_TST_1: BrownieContract,
+    uniswap_v2_factory: BrownieContract,
     fn_isolation: Any,
 ) -> None:
     amount_0, amount_1 = 10**6, 10**6
@@ -91,10 +85,11 @@ def test_v2_add_liquidity_with_pair(
         accounts[0],
         (TST_0, TST_1),
         (amount_0, amount_1),
-        uniswap_v2_pair_TST_0_TST_1,
+        uniswap_v2_factory,
     )
     # Test
-    reserves = uniswap_v2_pair_TST_0_TST_1.getReserves()
+    pair = UniswapV2Pair.at(uniswap_v2_factory.getPair(TST_0, TST_1))
+    reserves = pair.getReserves()
     assert reserves[0] == amount_0
     assert reserves[1] == amount_1
 
@@ -102,18 +97,15 @@ def test_v2_add_liquidity_with_pair(
 @pytest.mark.local
 def test_v2_add_liquidity_with_pair_no_fixtures(
     accounts: List[BrownieAccount],
-    Token: BrownieContractContainer,
-    UniswapV2Factory: BrownieContractContainer,
-    UniswapV2Pair: BrownieContractContainer,
     fn_isolation: Any,
 ) -> None:
     # Deply tokens
     tst0 = Token.deploy("TST_0", "TST_0", 18, 10**21, {"from": accounts[0]})
     tst1 = Token.deploy("TST_1", "TST_1", 18, 10**21, {"from": accounts[0]})
-    uniswap_v2_factory = UniswapV2Factory.deploy(accounts[0], {"from": accounts[0]})
+    factory = UniswapV2Factory.deploy(accounts[0], {"from": accounts[0]})
     # Create pair
-    uniswap_v2_factory.createPair(tst0, tst1, {"from": accounts[0]})
-    pair_address = uniswap_v2_factory.getPair(tst0, tst1)
+    factory.createPair(tst0, tst1, {"from": accounts[0]})
+    pair_address = factory.getPair(tst0, tst1)
     pair = UniswapV2Pair.at(pair_address)
     # Add liquidity with mint
     amount_0, amount_1 = 10**6, 10**6
