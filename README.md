@@ -7,6 +7,25 @@
 
 Interact with blockchains and smart contracts using the command line: no coding needed!
 
+# Table of contents
+
+- [Features](#features)
+- [Install](#install)
+- [Simple examples](#simple-examples)
+- [Advanced examples](#advanced-examples)
+- [Smart Contract support](#smart-contract-support)
+    + [Read from a smart contract](#read-from-a-smart-contract)
+    + [Write to a smart contract](#write-to-a-smart-contract)
+- [Multichain support](#multichain-support)
+- [Add custom RPCs](#add-custom-rpcs)
+- [Add custom chains](#add-custom-chains)
+- [Address book](#address-book)
+- [Wallet management](#wallet-management)
+    + [Multiple signers](#multiple-signers)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+
 # Features
 
 - Interact with Ethereum and EVM-compatible chains via your terminal
