@@ -11,6 +11,8 @@ def isolate(fn_isolation):
     pass
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_sender_balance_decreases(accounts, TST):
     sender_balance = TST.balanceOf(accounts[0])
     amount = sender_balance // 4
@@ -20,6 +22,8 @@ def test_sender_balance_decreases(accounts, TST):
     assert TST.balanceOf(accounts[0]) == sender_balance - amount
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_receiver_balance_increases(accounts, TST):
     receiver_balance = TST.balanceOf(accounts[1])
     amount = TST.balanceOf(accounts[0]) // 4
@@ -29,6 +33,8 @@ def test_receiver_balance_increases(accounts, TST):
     assert TST.balanceOf(accounts[1]) == receiver_balance + amount
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_total_supply_not_affected(accounts, TST):
     total_supply = TST.totalSupply()
     amount = TST.balanceOf(accounts[0])
@@ -38,6 +44,8 @@ def test_total_supply_not_affected(accounts, TST):
     assert TST.totalSupply() == total_supply
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_returns_true(accounts, TST):
     amount = TST.balanceOf(accounts[0])
     tx = TST.transfer(accounts[1], amount, {"from": accounts[0]})
@@ -45,6 +53,8 @@ def test_returns_true(accounts, TST):
     assert tx.return_value is True
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_transfer_full_balance(accounts, TST):
     amount = TST.balanceOf(accounts[0])
     receiver_balance = TST.balanceOf(accounts[1])
@@ -55,6 +65,8 @@ def test_transfer_full_balance(accounts, TST):
     assert TST.balanceOf(accounts[1]) == receiver_balance + amount
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_transfer_zero_tokens(accounts, TST):
     sender_balance = TST.balanceOf(accounts[0])
     receiver_balance = TST.balanceOf(accounts[1])
@@ -65,6 +77,8 @@ def test_transfer_zero_tokens(accounts, TST):
     assert TST.balanceOf(accounts[1]) == receiver_balance
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_transfer_to_self(accounts, TST):
     sender_balance = TST.balanceOf(accounts[0])
     amount = sender_balance // 4
@@ -74,6 +88,8 @@ def test_transfer_to_self(accounts, TST):
     assert TST.balanceOf(accounts[0]) == sender_balance
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_insufficient_balance(accounts, TST):
     balance = TST.balanceOf(accounts[0])
 
@@ -81,6 +97,8 @@ def test_insufficient_balance(accounts, TST):
         TST.transfer(accounts[1], balance + 1, {"from": accounts[0]})
 
 
+@pytest.mark.local
+@pytest.mark.contracts
 def test_transfer_event_fires(accounts, TST):
     amount = TST.balanceOf(accounts[0])
     tx = TST.transfer(accounts[1], amount, {"from": accounts[0]})

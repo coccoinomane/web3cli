@@ -72,7 +72,7 @@ class MiscController(Controller):
     )
     def sign(self) -> None:
         signer_ready_or_raise(self.app)
-        signed_message = make_wallet(self.app).signMessage(self.app.pargs.msg)
+        signed_message = make_wallet(self.app).sign_message(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))
 
     @ex(

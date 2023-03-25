@@ -13,7 +13,7 @@ def send_contract_tx(
     app: App,
     client: BaseClient,
     function: ContractFunction,
-    valueInWei: Wei = None,
+    value_in_wei: Wei = None,
     nonce: Nonce = None,
     dry_run_dest: str = "dry_run",
     tx_return_dest: str = "return",
@@ -35,16 +35,16 @@ def send_contract_tx(
         "client": client,
         "function": function,
         "dry_run": dry_run,
-        "valueInWei": valueInWei,
+        "value_in_wei": value_in_wei,
         "nonce": nonce,
     }
     extra_args = {
         "call": tx_call,
         "fetch_data": True if tx_return in ["data", "all"] else False,
         "fetch_receipt": True if tx_return in ["receipt", "all"] else False,
-        "from_address": client.userAddress,
-        "gasLimit": tx_gas_limit,
-        "maxPriorityFeePerGasInGwei": app.priority_fee,
+        "from_address": client.user_address,
+        "gas_limit": tx_gas_limit,
+        "max_priority_fee_in_gwei": app.priority_fee,
     } | kwargs
     # Inform user
     if not dry_run:

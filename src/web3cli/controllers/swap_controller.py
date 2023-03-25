@@ -131,7 +131,7 @@ class SwapController(Controller):
             print(f"  From: {self.app.signer} ({signer.address})")
             if signer.address != to_address:
                 print(f"  Final recipient: {to_address}")
-            print(f"  Contract address: {router_client.contractAddress}")
+            print(f"  Contract address: {router_client.contract_address}")
             print(f"  Token in address: {token_in}")
             print(f"  Token out address: {token_out}")
             yes_or_exit(logger=self.app.log.info)
@@ -140,12 +140,12 @@ class SwapController(Controller):
             self.app.log.debug("Checking token allowance...")
             # Check allowance
             allowance = token_in_client.functions["allowance"](
-                signer.address, router_client.contractAddress
+                signer.address, router_client.contract_address
             ).call()
             # If allowance is not sufficient, approve
             if allowance < amount_in:
                 approve_function = token_in_client.functions["approve"](
-                    router_client.contractAddress, amount_in
+                    router_client.contract_address, amount_in
                 )
                 send_contract_tx(
                     self.app,

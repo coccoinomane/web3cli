@@ -21,11 +21,11 @@ def make_base_client(
         node_uri = chain.pick_rpc().url
     if logger:
         logger(f"Using chain {chain.name} with RPC {node_uri}")
-    client = base(nodeUri=node_uri, **client_args)
-    client.chainId = chain.chain_id
-    client.txType = chain.tx_type
+    client = base(node_uri=node_uri, **client_args)
+    client.chain_id = chain.chain_id
+    client.tx_type = chain.tx_type
     middlewares = chain.middlewares.split(",") if chain.middlewares else []
-    client.setMiddlewares([Chain.parse_middleware(m) for m in middlewares])
+    client.set_middlewares([Chain.parse_middleware(m) for m in middlewares])
     return client
 
 
@@ -45,7 +45,7 @@ def make_base_wallet(
     signer = Signer.get_by_name_or_raise(signer_name)
     if logger:
         logger(f"Using signer {signer_name}")
-    client.setAccount(decrypt_string(signer.key, password))
+    client.set_account(decrypt_string(signer.key, password))
     return client
 
 
@@ -62,7 +62,7 @@ def make_contract_client(
     if present, or from the contract's type, if not."""
     contract = Contract.get_by_name_and_chain_or_raise(contract_name, chain.name)
     client = make_base_client(chain, node_uri, base, logger, **client_args)
-    client.setContract(contract.address, contract.resolve_abi())
+    client.set_contract(contract.address, contract.resolve_abi())
     return client
 
 
@@ -83,5 +83,5 @@ def make_contract_wallet(
     client = make_base_wallet(
         chain, signer_name, password, node_uri, base, logger, **client_args
     )
-    client.setContract(contract.address, contract.resolve_abi())
+    client.set_contract(contract.address, contract.resolve_abi())
     return client

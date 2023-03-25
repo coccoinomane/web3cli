@@ -15,7 +15,7 @@ def test_make_client(chains: List[ChainFields]) -> None:
             seed_chains(chains)
             app.set_args(argv=["--chain", chain["name"], "version"]).run()
             client = make_client(app)
-            block = client.getLatestBlock()
+            block = client.get_latest_block()
             assert type(block.get("number")) is int
             assert block.get("number") >= 0
             assert type(block.get("size")) is int
@@ -42,5 +42,5 @@ def test_make_wallet(chains: List[ChainFields], signers: List[Dict[str, Any]]) -
                 ]
             ).run()
             # client = make_wallet(app)
-            # signed_message = client.signMessage(msg)
-            # assert client.isMessageSignedByMe(msg, signed_message) == True
+            # signed_message = client.sign_message(msg)
+            # assert client.is_message_signed_by_me(msg, signed_message) == True

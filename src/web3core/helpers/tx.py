@@ -16,10 +16,10 @@ def send_contract_tx(
     fetch_data: bool = False,
     fetch_receipt: bool = False,
     from_address: str = None,
-    valueInWei: Wei = None,
+    value_in_wei: Wei = None,
     nonce: Nonce = None,
-    gasLimit: int = None,
-    maxPriorityFeePerGasInGwei: int = None,
+    gas_limit: int = None,
+    max_priority_fee_in_gwei: int = None,
 ) -> TxLife:
     """Send a transaction to a contract function, and return its details
 
@@ -32,7 +32,7 @@ def send_contract_tx(
     - call (bool): If True, the contract function will be called with eth_call before
       sending the transaction. This is useful to check if the transaction
       will fail for any reason (e.g. insufficient gas) before sending it.
-      Please note that if you use --no-call you also need to provide a gasLimit,
+      Please note that if you use --no-call you also need to provide a gas_limit,
       lest web3.py will try to estimate the gas limit on-chain which another
       function call.
     - fetch_data (bool): If True, fetch the transaction data after sending the
@@ -42,10 +42,10 @@ def send_contract_tx(
       be mined. Ignored if dry_run is True.
     - from_address (str): The address to use as the sender of the transaction.
       If not provided, the signer's address in the client will be used.
-    - valueInWei (Wei): The value to send with the transaction.
+    - value_in_wei (Wei): The value to send with the transaction.
     - nonce (Nonce): The nonce to use for the transaction.
-    - gasLimit (int): The gas limit to use for the transaction.
-    - maxPriorityFeePerGasInGwei (int): The max priority fee per gas to use
+    - gas_limit (int): The gas limit to use for the transaction.
+    - max_priority_fee_in_gwei (int): The max priority fee per gas to use
       for the transaction.
 
     RETURNS
@@ -71,26 +71,26 @@ def send_contract_tx(
         "receipt": None,
     }
     # Build transaction
-    tx_life["params"] = client.buildContractTransaction(
+    tx_life["params"] = client.build_contract_tx(
         function,
-        valueInWei=valueInWei,
+        value_in_wei=value_in_wei,
         nonce=nonce,
-        gasLimit=gasLimit,
-        maxPriorityFeePerGasInGwei=maxPriorityFeePerGasInGwei,
+        gas_limit=gas_limit,
+        max_priority_fee_in_gwei=max_priority_fee_in_gwei,
     )
     # Sign transaction
-    signed_tx = client.signTransaction(tx_life["params"])
+    signed_tx = client.sign_tx(tx_life["params"])
     tx_life["sig"] = signed_tx._asdict()
     # Call function
     if call:
-        tx_life["output"] = function.call({"from": from_address or client.userAddress})
+        tx_life["output"] = function.call({"from": from_address or client.user_address})
     # Send transaction
     if not dry_run:
-        tx_life["hash"] = client.sendSignedTransaction(signed_tx)
+        tx_life["hash"] = client.send_signed_tx(signed_tx)
         if fetch_data:
             tx_life["data"] = poll_transaction(client, tx_life["hash"])
         if fetch_receipt:
-            tx_life["receipt"] = client.getTransactionReceipt(tx_life["hash"])
+            tx_life["receipt"] = client.get_tx_receipt(tx_life["hash"])
     else:
         tx_life["hash"] = signed_tx.hash.hex()
     return tx_life
@@ -118,12 +118,12 @@ def poll_transaction(
     TxData: The transaction data.
     """
     if poll_interval is None:
-        return client.getTransaction(tx_hash)
+        return client.get_tx(tx_hash)
 
     start_time = time.time()
     while True:
         try:
-            return client.getTransaction(tx_hash)
+            return client.get_tx(tx_hash)
         except TransactionNotFound:
             time.sleep(poll_interval)
             if time.time() - start_time > poll_timeout:
