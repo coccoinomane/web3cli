@@ -2,6 +2,10 @@
 
 ### Top priority
 
+- Test: replace ganache with anvil or eth_tester?
+- Test: replace Brownie with Ape?
+- Test: use web3-ethereum-defi for testing?
+- Test: enable uniswap router (https://github.com/Uniswap/v2-core/issues/102 + https://docs.uniswap.org/contracts/v2/guides/smart-contract-integration/quick-start + https://stackoverflow.com/a/70927106/2972183)
 - Brownie: test add liq + swap
 - Swap: refactor in web3core + test
 - Token: test approve

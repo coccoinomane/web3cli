@@ -71,7 +71,7 @@ def seed_local_contract(
         chain="local",
         address=brownie_contract.address,
         type=type,
-        abi=None if type else brownie_contract.abi,
+        abi=brownie_contract.abi,
     )
 
 

@@ -9,7 +9,7 @@ from typing import Any, Iterator, List
 import pytest
 from web3.types import ABI
 
-from brownie import ZERO_ADDRESS, Token, UniswapV2Factory, UniswapV2Router02
+from brownie import WETH9, ZERO_ADDRESS, Token, UniswapV2Factory, UniswapV2Router02
 from brownie.network import Chain as BrownieChain
 from brownie.network.account import Account as BrownieAccount
 from brownie.network.contract import Contract as BrownieContract
@@ -132,17 +132,8 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 @pytest.fixture(scope="module")
 def WETH(accounts: List[BrownieAccount]) -> BrownieContract:
     """A token deployed on the local chain, with 18 decimals, that
-    we will use as if it were WETH. Supply of 1000 tokens, shared between
-    all accounts."""
-    return deploy_token(
-        Token,
-        accounts,
-        f"Wrapper Ether",
-        f"WETH",
-        18,
-        10**21,
-        True,
-    )
+    we will use as if it were WETH."""
+    return WETH9.deploy({"from": accounts[0]})
 
 
 @pytest.fixture(scope="module")

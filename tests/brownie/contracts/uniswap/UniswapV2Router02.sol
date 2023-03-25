@@ -653,6 +653,15 @@ contract UniswapV2Router02 is Router_IUniswapV2Router02 {
         return Router_UniswapV2Library.getAmountsOut(factory, amountIn, path);
     }
 
+    function getAmountsOutNoPath(uint amountIn, address token1, address token2)
+        public
+        view
+        virtual
+        returns (uint[] memory amounts)
+    {
+        return Router_UniswapV2Library.getAmountsOutNoPath(factory, amountIn, token1, token2);
+    }
+
     function getAmountsIn(uint amountOut, address[] memory path)
         public
         view
@@ -697,7 +706,7 @@ library Router_UniswapV2Library {
                 hex'ff',
                 factory,
                 keccak256(abi.encodePacked(token0, token1)),
-                hex'96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f' // init code hash
+                hex'' // init code hash
             ))));
     }
 
@@ -705,6 +714,7 @@ library Router_UniswapV2Library {
     function getReserves(address factory, address tokenA, address tokenB) internal view returns (uint reserveA, uint reserveB) {
         (address token0,) = sortTokens(tokenA, tokenB);
         (uint reserve0, uint reserve1,) = Router_IUniswapV2Pair(pairFor(factory, tokenA, tokenB)).getReserves();
+                            revert("PIPPO");
         (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
     }
 
@@ -743,6 +753,14 @@ library Router_UniswapV2Library {
             (uint reserveIn, uint reserveOut) = getReserves(factory, path[i], path[i + 1]);
             amounts[i + 1] = getAmountOut(amounts[i], reserveIn, reserveOut);
         }
+    }
+
+    // performs chained getAmountOut calculations on any number of pairs
+    function getAmountsOutNoPath(address factory, uint amountIn, address token1, address token2) internal view returns (uint[] memory amounts) {
+        amounts = new uint[](2);
+        amounts[0] = amountIn;
+        (uint reserveIn, uint reserveOut) = getReserves(factory, token1, token2);
+        amounts[1] = getAmountOut(amounts[0], reserveIn, reserveOut);
     }
 
     // performs chained getAmountIn calculations on any number of pairs
