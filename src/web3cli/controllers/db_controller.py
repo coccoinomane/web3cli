@@ -6,7 +6,7 @@ from web3cli.helpers.database import delete_db_file, get_db_filepath
 from web3core.helpers.misc import yes_or_exit
 
 
-class DbBaseController(Controller):
+class DbController(Controller):
     """Base controller for the `w3 db` command"""
 
     class Meta:
@@ -34,6 +34,6 @@ class DbBaseController(Controller):
         else:
             self.app.log.info(f"Database not found at {db_path}")
 
-    @ex(help="show the path of the db file")
+    @ex(help="show the path of the database file")
     def where(self) -> None:
         self.app.print(get_db_filepath(self.app))

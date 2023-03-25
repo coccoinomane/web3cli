@@ -67,7 +67,8 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 - Save addresses with easy-to-rember tags:
    ```
-   w3 db address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
+   w3 address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
+   w3 address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
    ```
    then use the tag in any command:
    ```
@@ -116,17 +117,22 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 `web3cli` comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
 
-See the available contracts with `w3 db contract list`:
+See the available contracts with `w3 contract list`:
+See the available contracts with `w3 contract list`:
 
 ```
-w3 db contract list              # contracts on Ethereum
-w3 --chain bnb db contract list  # contracts on BNB chain
+w3 contract list              # contracts on Ethereum
+w3 contract list              # contracts on Ethereum
+w3 --chain bnb contract list  # contracts on BNB chain
+w3 --chain bnb contract list  # contracts on BNB chain
 ```
 
-You can also add custom contracts with `w3 db contract add`:
+You can also add custom contracts with `w3 contract add`:
+You can also add custom contracts with `w3 contract add`:
 
 ```
-w3 db contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
+w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
+w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 ```
 
 See available functions and events on a contract with `w3 abi functions` and `w3 abi events`:
@@ -203,20 +209,24 @@ w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
 
 # Add custom RPCs
 
-Add custom RPCs to any existing chain with `w3 db rpc add`:
+Add custom RPCs to any existing chain with `w3 rpc add`:
+Add custom RPCs to any existing chain with `w3 rpc add`:
 
 ```
-w3 db rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
+w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
+w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
 ```
 
-List existing RPCs with `w3 db rpc list`, and delete them with `w3 db rpc delete`.
+List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
+List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
+List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
 
 # Add custom chains
 
-Add new chains with `w3 db chain add`:
+Add new chains with `w3 chain add`:
 
 ```
-w3 db chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
+w3 chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
 ```
 
 Use the custom chain with `--chain`:
@@ -225,7 +235,7 @@ Use the custom chain with `--chain`:
 w3 --chain cronos balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7
 ```
 
-List existing chains with `w3 db chain list`, and delete them with `w3 db chain delete`.
+List existing chains with `w3 chain list`, and delete them with `w3 chain delete`.
 
 
 # Address book
@@ -233,8 +243,8 @@ List existing chains with `w3 db chain list`, and delete them with `w3 db chain 
 `w3` can store tags just like you would do on etherscan.io or bscscan.com:
 
 ```bash
-w3 db address add ethereum_foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
-w3 db address add binance_hot_wallet 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
+w3 address add ethereum_foundation 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
+w3 address add binance_hot_wallet 0x8894e0a0c962cb723c1976a4421c95949be2d4e3
 ```
 
 You can use these tags instead of the actual addresses:
@@ -244,14 +254,14 @@ w3 balance ethereum_foundation
 w3 --chain bnb balance binance_hot_wallet
 ```
 
-To see the list of saved addresses, run `w3 db address list`, to delete an address use `w3 db address delete`.
+To see the list of saved addresses, run `w3 address list`, to delete an address use `w3 address delete`.
 
 # Wallet management
 
 Commands such as `w3 send` and `w3 sign` require that you add a signer first:
 
 ```bash
-w3 db signer add my_signer
+w3 signer add my_signer
 ```
 
 You will be prompted to insert a private key, which will be encrypted and stored in the database.
@@ -259,12 +269,12 @@ You will be prompted to insert a private key, which will be encrypted and stored
 You can also create a brand new wallet on the go, without the need to provide a key:
 
 ```
-w3 db signer add my-wallet --create
+w3 signer add my-wallet --create
 ```
 
 ### Multiple signers
 
-Add more signers with `w3 db signer add` and select which one to use with the `--signer` flag:
+Add more signers with `w3 signer add` and select which one to use with the `--signer` flag:
 
 ```bash
 w3 --signer my_signer <command>

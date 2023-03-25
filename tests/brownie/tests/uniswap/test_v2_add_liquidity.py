@@ -13,6 +13,7 @@ from tests.brownie.tests.helpers.uniswap import (
 
 @pytest.mark.xfail
 @pytest.mark.local
+@pytest.mark.contracts
 def test_v2_add_liquidity_with_router(
     accounts: List[BrownieAccount],
     TST_0: BrownieContract,
@@ -36,6 +37,7 @@ def test_v2_add_liquidity_with_router(
 
 @pytest.mark.xfail
 @pytest.mark.local
+@pytest.mark.contracts
 def test_v2_add_liquidity_with_router_no_fixtures(
     accounts: List[BrownieAccount],
     fn_isolation: Any,
@@ -73,6 +75,7 @@ def test_v2_add_liquidity_with_router_no_fixtures(
 
 
 @pytest.mark.local
+@pytest.mark.contracts
 def test_v2_add_liquidity_with_pair(
     accounts: List[BrownieAccount],
     TST_0: BrownieContract,
@@ -95,6 +98,7 @@ def test_v2_add_liquidity_with_pair(
 
 
 @pytest.mark.local
+@pytest.mark.contracts
 def test_v2_add_liquidity_with_pair_no_fixtures(
     accounts: List[BrownieAccount],
     fn_isolation: Any,

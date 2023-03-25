@@ -7,7 +7,9 @@
             "request": "launch",
             "module": "pytest",
             "justMyCode": true,
-            "args": ["tests"]
+            "args": [
+                "tests"
+            ]
         },
         {
             "name": "tests - only db",
@@ -15,7 +17,11 @@
             "request": "launch",
             "module": "pytest",
             "justMyCode": true,
-            "args": ["tests", "-k", "test_db_base"]
+            "args": [
+                "tests",
+                "-k",
+                "test_db_base"
+            ]
         },
         {
             "name": "tests - only transact",
@@ -23,7 +29,11 @@
             "request": "launch",
             "module": "pytest",
             "justMyCode": true,
-            "args": ["tests", "-k", "test_transact"]
+            "args": [
+                "tests",
+                "-k",
+                "test_transact"
+            ]
         },
         {
             "name": "w3 block",
@@ -31,31 +41,42 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["block"]
+            "args": [
+                "block"
+            ]
         },
         {
-            "name": "w3 db chain get",
+            "name": "w3 chain get",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["db", "chain", "get"]
+            "args": [
+                "chain",
+                "get"
+            ]
         },
         {
-            "name": "w3 db chain list",
+            "name": "w3 chain list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["db", "chain", "list"]
+            "args": [
+                "chain",
+                "list"
+            ]
         },
         {
-            "name": "w3 db signer list",
+            "name": "w3 signer list",
             "type": "python",
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": true,
-            "args": ["db", "signer", "list"]
+            "args": [
+                "signer",
+                "list"
+            ]
         },
         {
             "name": "getAmountsOut",
@@ -63,7 +84,13 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": false,
-            "args": ["call", "uniswap_v2", "getAmountsOut", "100e6", "usdc,usdt"]
+            "args": [
+                "call",
+                "uniswap_v2",
+                "getAmountsOut",
+                "100e6",
+                "usdc,usdt"
+            ]
         },
         {
             "name": "getAmountsOut",
@@ -71,7 +98,13 @@
             "request": "launch",
             "module": "web3cli.main",
             "justMyCode": false,
-            "args": ["call", "uniswap_v2", "getAmountsOut", "100e6", "usdc,usdt"]
+            "args": [
+                "call",
+                "uniswap_v2",
+                "getAmountsOut",
+                "100e6",
+                "usdc,usdt"
+            ]
         }
     ]
 }

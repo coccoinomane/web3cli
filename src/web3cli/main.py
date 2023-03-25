@@ -10,13 +10,13 @@ from web3cli.controllers.abi_controller import AbiController
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.call_controller import CallController
 from web3cli.controllers.config_controller import ConfigController
-from web3cli.controllers.db.db_address_controller import DbAddressController
-from web3cli.controllers.db.db_base_controller import DbBaseController
-from web3cli.controllers.db.db_chain_controller import DbChainController
-from web3cli.controllers.db.db_contract_controller import DbContractController
-from web3cli.controllers.db.db_rpc_controller import DbRpcController
-from web3cli.controllers.db.db_signer_controller import DbSignerController
-from web3cli.controllers.db.db_tx_controller import DbTxController
+from web3cli.controllers.crud.address_controller import AddressController
+from web3cli.controllers.crud.chain_controller import ChainController
+from web3cli.controllers.crud.contract_controller import ContractController
+from web3cli.controllers.crud.history_controller import HistoryController
+from web3cli.controllers.crud.rpc_controller import RpcController
+from web3cli.controllers.crud.signer_controller import SignerController
+from web3cli.controllers.db_controller import DbController
 from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
@@ -90,13 +90,13 @@ class Web3Cli(App):
         handlers = [
             BaseController,
             ConfigController,
-            DbBaseController,
-            DbChainController,
-            DbRpcController,
-            DbSignerController,
-            DbAddressController,
-            DbTxController,
-            DbContractController,
+            DbController,
+            ChainController,
+            RpcController,
+            SignerController,
+            AddressController,
+            HistoryController,
+            ContractController,
             KeyController,
             MiscController,
             SendController,

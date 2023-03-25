@@ -22,7 +22,7 @@ def test_contract_list(
             seed_chains(chains)
             seed_contracts(contracts)
             chain_contracts = [c for c in contracts if c["chain"] == chain["name"]]
-            app.set_args(["-c", chain["name"], "db", "contract", "list"]).run()
+            app.set_args(["-c", chain["name"], "contract", "list"]).run()
             data, output = app.last_rendered
             for i in range(0, len(chain_contracts)):
                 assert data[i][0] == chain_contracts[i]["name"]
@@ -47,9 +47,7 @@ def test_contract_list_with_type(
                 for c in contracts
                 if c["chain"] == chain["name"] and c["type"] == contract_type
             ]
-            app.set_args(
-                ["-c", chain["name"], "db", "contract", "list", contract_type]
-            ).run()
+            app.set_args(["-c", chain["name"], "contract", "list", contract_type]).run()
             data, output = app.last_rendered
             for i in range(0, len(chain_contracts)):
                 assert data[i][0] == chain_contracts[i]["name"]
@@ -66,7 +64,6 @@ def test_contract_get(contracts: List[ContractFields]) -> None:
                 [
                     "--chain",
                     c["chain"],
-                    "db",
                     "contract",
                     "get",
                     c["name"],
@@ -86,7 +83,6 @@ def test_contract_add(contracts: List[ContractFields]) -> None:
                 [
                     "--chain",
                     c["chain"],
-                    "db",
                     "contract",
                     "add",
                     c["name"],
@@ -114,7 +110,6 @@ def test_contract_add_without_abi_and_type(contracts: List[ContractFields]) -> N
                 [
                     "--chain",
                     c["chain"],
-                    "db",
                     "contract",
                     "add",
                     c["name"],
@@ -135,7 +130,6 @@ def test_contract_add_with_abi_string(
             [
                 "--chain",
                 c["chain"],
-                "db",
                 "contract",
                 "add",
                 c["name"],
@@ -165,7 +159,6 @@ def test_contract_add_with_abi_file(
             [
                 "--chain",
                 c["chain"],
-                "db",
                 "contract",
                 "add",
                 c["name"],
@@ -194,7 +187,6 @@ def test_contract_update(contracts: List[ContractFields]) -> None:
             argv=[
                 "--chain",
                 contracts[0]["chain"],
-                "db",
                 "contract",
                 "add",
                 contracts[0]["name"],
@@ -222,7 +214,6 @@ def test_contract_delete(contracts: List[ContractFields]) -> None:
                 [
                     "--chain",
                     c["chain"],
-                    "db",
                     "contract",
                     "delete",
                     c["name"],

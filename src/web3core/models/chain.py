@@ -80,7 +80,7 @@ class Chain(BaseModel):
                 return dict_to_model(Chain, c, True)
 
         raise ChainNotResolved(
-            f"Could not find chain '{name}', add it with `w3 db chain add`"
+            f"Could not find chain '{name}', add it with `w3 chain add`"
         )
 
     def add_rpc(self, rpc_url: str, logger: Logger = lambda msg: None) -> Rpc:

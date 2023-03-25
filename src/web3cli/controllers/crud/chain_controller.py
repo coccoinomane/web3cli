@@ -8,14 +8,14 @@ from web3core.models.chain import Chain
 from web3core.seeds import chain_seeds
 
 
-class DbChainController(Controller):
-    """Handler of the `w3 db chain` commands"""
+class ChainController(Controller):
+    """Handler of the `w3 chain` CRUD commands"""
 
     class Meta:
         label = "chain"
         help = "add, list or delete chains"
         stacked_type = "nested"
-        stacked_on = "db"
+        stacked_on = "base"
 
     @ex(
         help="add a new chain",
@@ -118,5 +118,5 @@ class DbChainController(Controller):
     def seed(self) -> None:
         chains = Chain.seed(chain_seeds.all, self.app.log.info)
         self.app.log.info(
-            f"Imported {len(chains)} chains, run `w3 db chain list` to show them"
+            f"Imported {len(chains)} chains, run `w3 chain list` to show them"
         )

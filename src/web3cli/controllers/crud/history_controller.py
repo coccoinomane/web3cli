@@ -8,17 +8,16 @@ from web3core.helpers.format import cut
 from web3core.models.tx import Tx
 
 
-class DbTxController(Controller):
-    """Handler of the `w3 db tx` commands"""
+class HistoryController(Controller):
+    """Handler of the `w3 history` CRUD commands"""
 
     class Meta:
-        label = "trx"  # trx instead of tx to avoid conflict with TxController
-        help = "add, list or delete transactions"
+        label = "history"
+        help = "add, list or delete transactions to the transaction history"
         stacked_type = "nested"
-        stacked_on = "db"
-        aliases = ["tx"]
+        stacked_on = "base"
 
-    @ex(help="list transactions")
+    @ex(help="list transactions in the history")
     def list(self) -> None:
         render_table(
             self.app,
@@ -31,7 +30,7 @@ class DbTxController(Controller):
         )
 
     @ex(
-        help="show details of the given transaction",
+        help="show details of the given transaction in the history",
         arguments=[
             (["hash"], {"help": "hash of the transaction"}),
         ],
@@ -41,7 +40,7 @@ class DbTxController(Controller):
         self.app.render(model_to_dict(tx), indent=4, handler="json")
 
     @ex(
-        help="add a new transaction to the database",
+        help="add a new transaction to the history",
         arguments=[
             (["hash"], {"help": "hash of the transaction"}),
             (
@@ -80,7 +79,7 @@ class DbTxController(Controller):
             )
 
     @ex(
-        help="delete a transaction",
+        help="delete a transaction from the history",
         arguments=[
             (["hash"], {"help": "hash of the tx to delete"}),
         ],

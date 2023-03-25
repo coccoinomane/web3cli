@@ -68,10 +68,10 @@ The rule is simple: `pdm w3` runs against your working `web3cli` folder, while `
 If you want to have a separate DB for your working `web3cli` folder, run:
 
 ```bash
-pdm w3 config set db_file db --no-global
+pdm w3 config set db_file newdb --no-global
 ```
 
-This will create a `db` file in the current folder, which will be used by `web3cli` instead of the global one.
+This will create a `newdb` file in the current folder, which will be used by `web3cli` instead of the global one.
 
 # 5. Run tests
 

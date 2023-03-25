@@ -30,7 +30,7 @@ def make_wallet(app: App, log: bool = False, **client_args: Any) -> BaseClient:
     """Client suitable to read from and write to the blockchain"""
     if app.signer is None:
         raise Web3CliError(
-            "Cannot create a contract wallet without a signer: please add one with `w3 db signer add`"
+            "Cannot create a contract wallet without a signer: please add one with `w3 signer add`"
         )
     return make_base_wallet(
         chain=app.chain,
@@ -67,7 +67,7 @@ def make_contract_wallet(
     """Client suitable to interact with the given smart contract"""
     if app.signer is None:
         raise Web3CliError(
-            "Cannot create a contract wallet without a signer: please add one with `w3 db signer add`"
+            "Cannot create a contract wallet without a signer: please add one with `w3 signer add`"
         )
     return make_contract_wallet_(
         contract_name=contract_name,

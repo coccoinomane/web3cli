@@ -10,14 +10,14 @@ from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
 
 
-class DbContractController(Controller):
-    """Handler of the `w3 db contract` commands"""
+class ContractController(Controller):
+    """Handler of the `w3 contract` CRUD commands"""
 
     class Meta:
         label = "contract"
         help = "add, list or delete contracts"
         stacked_type = "nested"
-        stacked_on = "db"
+        stacked_on = "base"
 
     @ex(
         help="list contracts",
@@ -138,5 +138,5 @@ class DbContractController(Controller):
     def seed(self) -> None:
         seed_contracts(contract_seeds.all)
         self.app.log.info(
-            f"Imported {len(contract_seeds.all)} contracts, run `w3 db contract list` to show them"
+            f"Imported {len(contract_seeds.all)} contracts, run `w3 contract list` to show them"
         )

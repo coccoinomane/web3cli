@@ -13,7 +13,7 @@ from web3core.models.types import ChainFields
 def test_chain_list(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)
-        app.set_args(["db", "chain", "list"]).run()
+        app.set_args(["chain", "list"]).run()
         data, output = app.last_rendered
         for c in chains:
             assert c["name"] in output
@@ -24,7 +24,6 @@ def test_chain_add(chains: List[ChainFields]) -> None:
     for c in chains:
         # Add the chain > ok!
         argv = [
-            "db",
             "chain",
             "add",
             c["name"],
@@ -51,13 +50,13 @@ def test_chain_add(chains: List[ChainFields]) -> None:
         # Add the chain again with --update option > ok!
         with Web3CliTest(delete_db=False) as app:
             updated_argv = argv + ["--update"]
-            updated_argv[5] = f"{c['coin']}_UPDATED"
+            updated_argv[4] = f"{c['coin']}_UPDATED"
             print(updated_argv)
             app.set_args(updated_argv).run()
             assert Chain.select().count() == 1
             updated_chain: Chain = Chain.get_by_name(c["name"])
             assert updated_chain.chain_id == c["chain_id"]
-            assert updated_chain.coin == updated_argv[5]
+            assert updated_chain.coin == updated_argv[4]
 
 
 def test_chain_get(chains: List[ChainFields]) -> None:
@@ -65,7 +64,7 @@ def test_chain_get(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(["--chain", chain["name"], "db", "chain", "get"]).run()
+            app.set_args(["--chain", chain["name"], "chain", "get"]).run()
             data, output = app.last_rendered
             assert data["out"] == chain["name"]
 
@@ -76,7 +75,7 @@ def test_chain_get_no_args(chains: List[ChainFields]) -> None:
         with Web3CliTest() as app:
             seed_chains(chains)
             app.config.set("web3cli", "default_chain", chain["name"])
-            app.set_args(["db", "chain", "get"]).run()
+            app.set_args(["chain", "get"]).run()
             data, output = app.last_rendered
             assert data["out"] == chain["name"]
 
@@ -87,7 +86,6 @@ def test_chain_delete(chains: List[ChainFields]) -> None:
             seed_chains(chains)
             app.set_args(
                 [
-                    "db",
                     "chain",
                     "delete",
                     c["name"],

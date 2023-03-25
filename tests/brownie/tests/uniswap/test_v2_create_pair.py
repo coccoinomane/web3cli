@@ -4,6 +4,7 @@ from brownie.network.contract import Contract as BrownieContract
 
 
 @pytest.mark.local
+@pytest.mark.contracts
 def test_v2_pair(
     uniswap_v2_pair_WETH_TST: BrownieContract,
     WETH: BrownieContract,

@@ -6,14 +6,14 @@ from web3cli.helpers.render import render_table
 from web3core.models.address import Address
 
 
-class DbAddressController(Controller):
-    """Handler of the `w3 db address` commands"""
+class AddressController(Controller):
+    """Handler of the `w3 address` CRUD commands"""
 
     class Meta:
         label = "address"
-        help = "add, list or delete addresses"
+        help = "add, edit, list or delete addresses"
         stacked_type = "nested"
-        stacked_on = "db"
+        stacked_on = "base"
 
     @ex(help="list address")
     def list(self) -> None:

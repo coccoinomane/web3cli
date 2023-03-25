@@ -52,16 +52,16 @@
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible
-- Use memory db for dev environment
+- Use memory DB for dev environment
 - Test ABI controller
 - Make contract.type a foreign key to ContractType?
 - Launch local block explorer after tests
-- Enforce lowercase for all model names (at the db level?)
+- Enforce lowercase for all model names (at the DB level?)
 - Reset local chain between tests
-- Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 db chain list` or `WEB3CLI_POPULATE_DB=false w3 db chain list` should work as intended
-- Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 db chain add`
+- Fix setting boolean variables via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 chain list` or `WEB3CLI_POPULATE_DB=false w3 chain list` should work as intended
+- Define command shortcuts using argparse aliases, e.g. `w3 add-chain` instead of `w3 chain add`
 - Tests: use london hardfork instead of istanbul?
 - Config: non-string support in `config set`
 - Record all transactions in Txs table
 - Fix usage message (still refers to `web3cli`)
-- Make alphabetical order case insensitive for `w3 db contract list`
+- Make alphabetical order case insensitive for `w3 contract list`

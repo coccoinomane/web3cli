@@ -16,7 +16,7 @@ def test_signer_list(signers: List[Dict[str, Any]]) -> None:
     signers = sorted(signers, key=lambda s: s["name"])
     with Web3CliTest() as app:
         seed_signers(signers, app.app_key)
-        app.set_args(["db", "signer", "list"]).run()
+        app.set_args(["signer", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(signers)):
             assert data[i][0] == signers[i]["name"]
@@ -29,7 +29,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
             seed_signers(signers, app.app_key)
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "get",
                     s["name"],
@@ -46,7 +45,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
                 [
                     "--signer",
                     s["name"],
-                    "db",
                     "signer",
                     "get",
                 ]
@@ -61,7 +59,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
         app.config.set("web3cli", "default_signer", s["name"])
         app.set_args(
             [
-                "db",
                 "signer",
                 "get",
             ]
@@ -75,7 +72,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
         seed_signers([s], app.app_key)
         app.set_args(
             [
-                "db",
                 "signer",
                 "get",
             ]
@@ -89,7 +85,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
         with pytest.raises(SignerNotFound):
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "get",
                 ]
@@ -101,7 +96,6 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
         with pytest.raises(SignerNotFound):
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "get",
                 ]
@@ -113,7 +107,6 @@ def test_signer_add(signers: List[Dict[str, Any]]) -> None:
         with Web3CliTest() as app:
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "add",
                     s["name"],
@@ -128,7 +121,7 @@ def test_signer_add(signers: List[Dict[str, Any]]) -> None:
 
 
 def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
-    """Test `w3 db signer add <name> --create`"""
+    """Test `w3 signer add <name> --create`"""
     names = ["name_1", "name_2", "name_3"]
     for i, s_name in enumerate(names):
         with Web3CliTest(delete_db=False) as app:
@@ -136,7 +129,6 @@ def test_signer_add_create(signers: List[Dict[str, Any]]) -> None:
                 truncate_tables(app)
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "add",
                     s_name,
@@ -152,7 +144,6 @@ def test_signer_delete(signers: List[Dict[str, Any]]) -> None:
             seed_signers(signers, app.app_key)
             app.set_args(
                 [
-                    "db",
                     "signer",
                     "delete",
                     s["name"],

@@ -17,8 +17,8 @@ def test_address_list(addresses: List[AddressFields]) -> None:
     with Web3CliTest() as app:
         # Add the addresses
         seed_addresses(addresses)
-        # Run `w3 db address list`
-        app.set_args(["db", "address", "list"]).run()
+        # Run `w3 address list`
+        app.set_args(["address", "list"]).run()
         # Catpure output
         data, output = app.last_rendered
         # Test
@@ -33,7 +33,6 @@ def test_address_get(addresses: List[AddressFields]) -> None:
             seed_addresses(addresses)
             app.set_args(
                 [
-                    "db",
                     "address",
                     "get",
                     a["name"],
@@ -48,7 +47,6 @@ def test_address_add(addresses: List[AddressFields]) -> None:
         with Web3CliTest() as app:
             app.set_args(
                 [
-                    "db",
                     "address",
                     "add",
                     a["name"],
@@ -76,7 +74,6 @@ def test_address_add_validation(invalid_address: str) -> None:
         with pytest.raises(AddressIsInvalid):
             app.set_args(
                 [
-                    "db",
                     "address",
                     "add",
                     "foo",
@@ -92,7 +89,6 @@ def test_address_update(addresses: List[AddressFields]) -> None:
         seed_addresses([addresses[0]])
         app.set_args(
             argv=[
-                "db",
                 "address",
                 "add",
                 addresses[0]["name"],
@@ -113,7 +109,6 @@ def test_address_delete(addresses: List[AddressFields]) -> None:
             seed_addresses(addresses)
             app.set_args(
                 [
-                    "db",
                     "address",
                     "delete",
                     a["name"],

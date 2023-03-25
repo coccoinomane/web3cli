@@ -9,26 +9,25 @@ from web3core.models.tx import Tx
 from web3core.models.types import TxFields
 
 
-def test_tx_list(txs: List[TxFields]) -> None:
+def test_history_list(txs: List[TxFields]) -> None:
     """Add txs and check that they are listed from oldest to newest"""
     txs = sorted(txs, key=lambda t: t["created_at"], reverse=True)
     with Web3CliTest() as app:
         seed_txs(txs)
-        app.set_args(["db", "trx", "list"]).run()
+        app.set_args(["history", "list"]).run()
         data, output = app.last_rendered
         for i in range(0, len(txs)):
             assert data[i][0] == txs[i]["hash"]
             assert data[i][1] == str(txs[i]["chain"])
 
 
-def test_tx_get(txs: List[TxFields]) -> None:
+def test_history_get(txs: List[TxFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
             seed_txs(txs)
             app.set_args(
                 [
-                    "db",
-                    "trx",
+                    "history",
                     "get",
                     t["hash"],
                 ]
@@ -39,13 +38,12 @@ def test_tx_get(txs: List[TxFields]) -> None:
             assert t["gas_price"] in output
 
 
-def test_tx_add(txs: List[TxFields]) -> None:
+def test_history_add(txs: List[TxFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
             app.set_args(
                 [
-                    "db",
-                    "trx",
+                    "history",
                     "add",
                     t["hash"],
                     t["from_"],
@@ -58,15 +56,14 @@ def test_tx_add(txs: List[TxFields]) -> None:
             assert tx.to == t["to"]
 
 
-def test_tx_update(txs: List[TxFields]) -> None:
+def test_history_update(txs: List[TxFields]) -> None:
     """Create tx 0, then update it with the data of tx 1,
     while keeping the same hash"""
     with Web3CliTest() as app:
         seed_txs([txs[0]])
         app.set_args(
             argv=[
-                "db",
-                "trx",
+                "history",
                 "add",
                 txs[0]["hash"],
                 txs[1]["from_"],
@@ -79,14 +76,13 @@ def test_tx_update(txs: List[TxFields]) -> None:
         assert tx.to == txs[1]["to"]
 
 
-def test_tx_delete(txs: List[TxFields]) -> None:
+def test_history_delete(txs: List[TxFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
             seed_txs(txs)
             app.set_args(
                 [
-                    "db",
-                    "trx",
+                    "history",
                     "delete",
                     t["hash"],
                 ]

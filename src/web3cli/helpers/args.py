@@ -37,7 +37,7 @@ def parse_global_args(app: App) -> None:
 
 def get_command(app: App) -> str:
     """Return the command passed to the CLI, using dot notation.
-    For example, if the CLI is invoked as `w3 db chain list` the
+    For example, if the CLI is invoked as `w3 chain list` the
     function will return the string `chain.list`.
 
     Return None if the CLI was invoked without a command"""
@@ -276,7 +276,7 @@ def swap_dex(**kwargs: Any) -> dict[str, Any]:
             "help": """
                 Decentralized Exchange to use for the swap.
                 Only Uniswap V2 clones supported for now.
-                To see full list: `w3 db contract list uniswap_v2`.
+                To see full list: `w3 contract list uniswap_v2`.
             """,
         }
         | kwargs
