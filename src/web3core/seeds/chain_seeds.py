@@ -92,6 +92,21 @@ arb: ChainFields = {
     ],
 }
 
+# Arbitrum One chain
+era: ChainFields = {
+    "name": "era",
+    "desc": "zkSync Era",
+    "chain_id": 324,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://mainnet.era.zksync.io",
+        },
+    ],
+}
+
 
 # Local chain (e.g. ganache or hardhat network)
 local: ChainFields = {
@@ -108,4 +123,4 @@ local: ChainFields = {
     ],
 }
 
-all: List[ChainFields] = [eth, arb, bnb, avax, matic, cro, local]
+all: List[ChainFields] = [eth, bnb, avax, matic, cro, arb, era, local]

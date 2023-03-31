@@ -210,3 +210,13 @@ def w3matic() -> None:
 def w3cro() -> None:
     """Shorthand command w3eth that uses cro chain"""
     main(lambda a: override_arg(a, "chain", "cro"))
+
+
+def w3arb() -> None:
+    """Shorthand command w3eth that uses arb chain"""
+    main(lambda a: override_arg(a, "chain", "arb"))
+
+
+def w3era() -> None:
+    """Shorthand command w3eth that uses zkSync Era chain"""
+    main(lambda a: override_arg(a, "chain", "era"))

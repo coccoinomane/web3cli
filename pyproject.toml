@@ -36,11 +36,13 @@ dev = [
 
 [tool.pdm.scripts]
 w3 = {cmd = "w3", help = "Run the CLI in dev mode"}
-w3eth = {cmd = "w3eth", help = "Run the CLI in dev mode, on eth chain"}
-w3bnb = {cmd = "w3bnb", help = "Run the CLI in dev mode, on bnb chain"}
-w3avax = {cmd = "w3avax", help = "Run the CLI in dev mode, on avax chain"}
-w3matic = {cmd = "w3matic", help = "Run the CLI in dev mode, on matic chain"}
-w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on cro chain"}
+w3eth = {cmd = "w3eth", help = "Run the CLI in dev mode, on Ethereum"}
+w3bnb = {cmd = "w3bnb", help = "Run the CLI in dev mode, on BNB chain"}
+w3avax = {cmd = "w3avax", help = "Run the CLI in dev mode, on Avalanche chain"}
+w3matic = {cmd = "w3matic", help = "Run the CLI in dev mode, on Polygon POS chain"}
+w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on Cronos chain"}
+w3arb = {cmd = "w3arb", help = "Run the CLI in dev mode, on Arbitrum One chain"}
+w3era = {cmd = "w3era", help = "Run the CLI in dev mode, on zkSync Era chain"}
 
 test = "brownie test tests"
 test_verbose = "brownie test tests -s"
@@ -61,6 +63,8 @@ w3bnb = "web3cli.main:w3bnb"
 w3avax = "web3cli.main:w3avax"
 w3matic = "web3cli.main:w3matic"
 w3cro = "web3cli.main:w3cro"
+w3arb = "web3cli.main:w3arb"
+w3era = "web3cli.main:w3era"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"
