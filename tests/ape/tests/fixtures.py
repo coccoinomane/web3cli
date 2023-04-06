@@ -4,13 +4,12 @@ PyTest Fixtures.
 
 import json
 from pathlib import Path
-from typing import Any, Iterator, List
+from typing import Iterator, List
 
 import pytest
 from web3.types import ABI
 
 import ape
-from ape import Token, UniswapV2Factory, UniswapV2Router02
 from tests.ape.tests.helpers.token import deploy_token
 from tests.ape.tests.helpers.uniswap import add_v2_liquidity_with_pair, deploy_v2_pair
 
@@ -30,11 +29,10 @@ def ape_chain(
     return chain
 
 
-@pytest.fixture(scope="function", autouse=True)
-def isolate(fn_isolation: Any) -> None:
-    """Reset the local blockchain before each single test.
-    https://eth-brownie.readthedocs.io/en/stable/tests-pytest-intro.html"""
-    pass
+# @pytest.fixture(scope="function", autouse=True)
+# def isolate(fn_isolation: Any) -> None:
+#     """Reset the local blockchain before each single test"""
+#     pass
 
 
 #     _                                            _
@@ -58,20 +56,21 @@ def bob(accounts: ape.managers.accounts.AccountManager) -> ape.api.AccountAPI:
 
 @pytest.fixture(scope="session")
 def accounts_keys() -> Iterator[List[str]]:
-    """Private keys of the local accounts created by brownie.
-    There are just the keys from the mnemonic phrase 'brownie'
+    """Private keys of the local accounts created by ape.
+    There are just the keys from the mnemonic phrase
+    'test test test test test test test test test test test junk'
     following the standard path m/44'/60'/0'/0/{account_index}"""
     yield [
-        "bbfbee4961061d506ffbb11dfea64eba16355cbf1d9c29613126ba7fec0aed5d",
-        "804365e293b9fab9bd11bddd39082396d56d30779efbb3ffb0a6089027902c4a",
-        "1f52464c2fb44e9b7e0808f2c5fe56d87b73eb3bca0e72c66f9f74d7c6c9a81f",
-        "905e216d8acdabbd095f11162327c5e6e80cc59a51283732cd4fe1299b33b7a6",
-        "e21bbdc4c57125bec3e05467423dfc3da8754d862140550fc7b3d2833ad1bdeb",
-        "b591fb79dd7065964210e7e527c87f97523da07ef8d16794f09750d5eef959b5",
-        "fe613f76efbfd03a16624ed8d96777966770f353e83d6f7611c11fdfcdfa48d1",
-        "52f94fdeaaf7c8551bda5924f2b52ff438125b9b5170c04ea2e268bd945ff155",
-        "a26ebb1df46424945009db72c7a7ba034027450784b93f34000169b35fd3adaa",
-        "3ff6c8dfd3ab60a14f2a2d4650387f71fe736b519d990073e650092faaa621fa",
+        "0xdd23ca549a97cb330b011aebb674730df8b14acaee42d211ab45692699ab8ba5",
+        "0xf1aa5a7966c3863ccde3047f6a1e266cdc0c76b399e256b8fede92b1c69e4f4e",
+        "0x43f149de89d64bf9a9099be19e1b1f7a4db784af8fa07caf6f08dc86ba65636b",
+        "0xb0ff29f0f33edc39aaf8789ea9637c360f9e479b8755f4565652b2594f8835df",
+        "0x6789ede33b84cbd4e735e12924d07e48b15df0ded10de3c206eeac585852ab22",
+        "0xefba7c0fc77822d0e13b0c36249b129628abff7be84c6b86d8d3444f14618361",
+        "0xcbd4d57ea225a831c496b5305d542579222ebdef58a02ea61d55ec1ebecdeb3a",
+        "0xb08786f38934aac966d10f0bc79a72f15067896d3b3beba721b5c235ffc5cc5f",
+        "0x4a354f72d8069e05fa0a19218ef561dde1db5f78c3d46f2005f9706706171d94",
+        "0x16dd30d52297ff9973cbbd5f35c0fef37309fbbfd5b540615b255fbeb8c1283d",
     ]
 
 
@@ -119,6 +118,33 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
     yield json.loads(erc20_abi_string)
 
 
+#   ____                   _             _
+#  / ___|   ___    _ __   | |_    __ _  (_)  _ __     ___   _ __   ___
+# | |      / _ \  | '_ \  | __|  / _` | | | | '_ \   / _ \ | '__| / __|
+# | |___  | (_) | | | | | | |_  | (_| | | | | | | | |  __/ | |    \__ \
+#  \____|  \___/  |_| |_|  \__|  \__,_| |_| |_| |_|  \___| |_|    |___/
+
+
+@pytest.fixture(scope="module")
+def Token() -> ape.contracts.ContractContainer:
+    return ape.project.get_contract("Token")
+
+
+@pytest.fixture(scope="module")
+def UniswapV2Factory() -> ape.contracts.ContractContainer:
+    return ape.project.get_contract("UniswapV2Factory")
+
+
+@pytest.fixture(scope="module")
+def UniswapV2Router02() -> ape.contracts.ContractContainer:
+    return ape.project.get_contract("UniswapV2Router02")
+
+
+@pytest.fixture(scope="module")
+def UniswapV2Pair() -> ape.contracts.ContractContainer:
+    return ape.project.get_contract("UniswapV2Pair")
+
+
 #  _____           _
 # |_   _|   ___   | | __   ___   _ __    ___
 #   | |    / _ \  | |/ /  / _ \ | '_ \  / __|
@@ -129,17 +155,18 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 @pytest.fixture(scope="module")
 def WETH(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """A token deployed on the local chain, with 18 decimals, that
-    we will use as if it were WETH. Supply of 1000 tokens, shared between
+    we will use as if it were WETH. Supply of 1 billion tokens, shared between
     all accounts."""
     return deploy_token(
         Token,
         accounts,
-        f"Wrapper Ether",
+        f"WrappedEther",
         f"WETH",
         18,
-        10**21,
+        10**9 * 10**18,
         True,
     )
 
@@ -147,16 +174,17 @@ def WETH(
 @pytest.fixture(scope="module")
 def TST(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST token deployed on the local chain, with 18 decimals.
-    Supply of 1000 tokens, shared between all accounts."""
+    Supply of 1 billion tokens, shared between all accounts."""
     return deploy_token(
         Token,
         accounts,
         f"Test token (18 decimals)",
         f"TST",
         18,
-        10**21,
+        10**9 * 10**18,
         True,
     )
 
@@ -164,16 +192,17 @@ def TST(
 @pytest.fixture(scope="module")
 def TST_0(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST_0 token deployed on the local chain, with 18 decimals.
-    Supply of 1000 tokens, shared between all accounts."""
+    Supply of 1 billion tokens, shared between all accounts."""
     return deploy_token(
         Token,
         accounts,
         f"Test token 0 (18 decimals)",
         f"TST_0",
         18,
-        10**21,
+        10**9 * 10**18,
         True,
     )
 
@@ -181,16 +210,17 @@ def TST_0(
 @pytest.fixture(scope="module")
 def TST_1(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST_1 token deployed on the local chain, with 18 decimals.
-    Supply of 1000 tokens, shared between all accounts."""
+    Supply of 1 billion tokens, shared between all accounts."""
     return deploy_token(
         Token,
         accounts,
         f"Test token 1 (18 decimals)",
         f"TST_1",
         18,
-        10**21,
+        10**9 * 10**18,
         True,
     )
 
@@ -198,9 +228,10 @@ def TST_1(
 @pytest.fixture(scope="module")
 def TST6(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST6 token deployed on the local chain, with 6 decimals.
-    Supply of 1000 tokens, shared between all accounts"""
+    Supply of 1 billion tokens, shared between all accounts"""
     return deploy_token(
         Token,
         accounts,
@@ -215,6 +246,7 @@ def TST6(
 @pytest.fixture(scope="module")
 def TST6_0(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST6_0 token deployed on the local chain, with 6
     decimals; each account will have 1000 of each token"""
@@ -232,6 +264,7 @@ def TST6_0(
 @pytest.fixture(scope="module")
 def TST6_1(
     accounts: ape.managers.accounts.AccountManager,
+    Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST6_1 token deployed on the local chain, with 6
     decimals; each account will have 1000 of each token"""
@@ -241,7 +274,7 @@ def TST6_1(
         f"Test token 1 (6 decimals)",
         f"TST6_1",
         6,
-        10**21,
+        10**9 * 10**18,
         True,
     )
 
@@ -257,6 +290,7 @@ def TST6_1(
 @pytest.fixture(scope="module")
 def uniswap_v2_factory(
     accounts: ape.managers.accounts.AccountManager,
+    UniswapV2Factory: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """The Uniswap factory contract, deployed on the local chain"""
     return UniswapV2Factory.deploy(ape.utils.ZERO_ADDRESS, sender=accounts[0])
@@ -267,6 +301,7 @@ def uniswap_v2_router(
     accounts: ape.managers.accounts.AccountManager,
     uniswap_v2_factory: ape.contracts.ContractInstance,
     WETH: ape.contracts.ContractInstance,
+    UniswapV2Router02: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """The Uniswap router contract, deployed on the local chain"""
     return UniswapV2Router02.deploy(uniswap_v2_factory, WETH, sender=accounts[0])
@@ -278,14 +313,11 @@ def uniswap_v2_pair_WETH_TST(
     uniswap_v2_factory: ape.contracts.ContractInstance,
     WETH: ape.contracts.ContractInstance,
     TST: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens WETH-TST, deployed on the
     local chain, with no liquidity."""
-    return deploy_v2_pair(
-        accounts[0],
-        (WETH, TST),
-        uniswap_v2_factory,
-    )
+    return deploy_v2_pair(accounts[0], (WETH, TST), uniswap_v2_factory, UniswapV2Pair)
 
 
 @pytest.fixture(scope="module")
@@ -294,13 +326,12 @@ def uniswap_v2_pair_TST_0_TST_1(
     uniswap_v2_factory: ape.contracts.ContractInstance,
     TST_0: ape.contracts.ContractInstance,
     TST_1: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens TST_0-TST_1, deployed on the
     local chain, with no liquidity."""
     return deploy_v2_pair(
-        accounts[0],
-        (TST_0, TST_1),
-        uniswap_v2_factory,
+        accounts[0], (TST_0, TST_1), uniswap_v2_factory, UniswapV2Pair
     )
 
 
@@ -311,10 +342,15 @@ def uniswap_v2_pair_TST_0_TST_1_with_liquidity(
     TST_1: ape.contracts.ContractInstance,
     uniswap_v2_pair_TST_0_TST_1: ape.contracts.ContractInstance,
     uniswap_v2_factory: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens TST_0-TST_1, deployed on the
     local chain, with 1 TST_0 and 1 TST_1 of reserves."""
     add_v2_liquidity_with_pair(
-        accounts[0], (TST_0, TST_1), (10**18, 10**18), uniswap_v2_factory
+        accounts[0],
+        (TST_0, TST_1),
+        (10**18, 10**18),
+        uniswap_v2_factory,
+        UniswapV2Pair,
     )
     return uniswap_v2_pair_TST_0_TST_1

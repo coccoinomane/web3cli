@@ -38,7 +38,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Transfer tokens via their ticker
 - Concatenate commands to build powerful scripts
 - Use as many signers as you wish
-- Thoroughly tested using [*brownie*](https://github.com/eth-brownie/brownie/)'s testing framework
+- Thoroughly tested using the [Ape Framework](https://github.com/ApeWorX/ape)'s testing framework
 - [Windows compatible](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 
 Soon:
@@ -304,4 +304,4 @@ All contributions are welcome! To start improving `web3cli`, please refer to our
 
 # Acknowledgements
 
-Thank you very much to the communities behind [web3.py](https://github.com/ethereum/web3.py) and [`brownie`](https://github.com/eth-brownie/brownie): `web3cli` would not exist without your efforts!
+Thank you very much to the communities behind [web3.py](https://github.com/ethereum/web3.py) and the [Ape Framework](https://github.com/ApeWorX/ape): `web3cli` would not exist without your efforts!

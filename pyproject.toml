@@ -43,9 +43,9 @@ w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on Cronos chain"}
 w3arb = {cmd = "w3arb", help = "Run the CLI in dev mode, on Arbitrum One chain"}
 w3era = {cmd = "w3era", help = "Run the CLI in dev mode, on zkSync Era chain"}
 
-test = "ape test tests"
-test_verbose = "ape test tests -s"
-test_fast = "ape test tests -m 'not remote'"
+test = "ape test tests --network ::foundry"
+test_verbose = "ape test tests -s --network ::foundry"
+test_fast = "ape test tests -m 'not remote' --network ::foundry"
 
 db_open = "open -a TablePlus $HOME/.web3cli/database/web3cli.sqlite"
 db_open_test = "open -a TablePlus $HOME/.web3cli/database/web3cli_test.sqlite"
@@ -102,7 +102,7 @@ exclude = [
 filterwarnings = "ignore::DeprecationWarning"
 markers = [
     "remote: tests that need an internet connection (deselect with '-m \"not remote\"')",
-    "local: tests that require a local blockchain to be run, e.g. ganache or hardhat network (deselect with '-m \"not local\"')",
+    "local: tests that require a local blockchain to be run, e.g. ganache, anvil or hardhat network (deselect with '-m \"not local\"')",
     "contracts: tests of the ape contracts",
 ]
 

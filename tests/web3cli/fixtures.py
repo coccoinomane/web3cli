@@ -35,13 +35,13 @@ def app(
     accounts: ape.managers.accounts.AccountManager,
     accounts_keys: List[str],
 ) -> Iterator[Web3CliTest]:
-    """An app instance that can be used for tests on the local ganache
-    network.
+    """An app instance that can be used for tests on the local
+    network (e.g. ganache, anvil or hardhat).
 
     It has Brownie's accounts preloaded as signers.
 
-    It depends on the accounts fixture of brownie, which in
-    turn depends on devnetwork fixture, which activates ganache"""
+    It depends on the accounts fixture of ape, which in turn depends on devnetwork
+    fixture, which activates the local chain"""
     seed_local_chain(base_app)
     seed_local_accounts(base_app, accounts, accounts_keys)
     yield base_app

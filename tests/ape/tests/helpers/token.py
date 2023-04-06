@@ -20,5 +20,9 @@ def deploy_token(
     )
     if distribute:
         for account in accounts[1:]:
-            token.transfer(account, 1000 * 10**decimals, sender=accounts[0])
+            token.transfer(
+                account,
+                int(initial_supply / len(accounts)) * 10**decimals,
+                sender=accounts[0],
+            )
     return token

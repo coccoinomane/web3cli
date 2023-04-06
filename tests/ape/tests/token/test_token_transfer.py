@@ -5,10 +5,9 @@ import pytest
 
 import ape
 
-
-@pytest.fixture(scope="function", autouse=True)
-def isolate(fn_isolation):
-    pass
+# @pytest.fixture(scope="function", autouse=True)
+# def isolate(fn_isolation):
+#     pass
 
 
 @pytest.mark.local
@@ -104,4 +103,6 @@ def test_transfer_event_fires(accounts, TST):
     tx = TST.transfer(accounts[1], amount, sender=accounts[0])
 
     assert len(tx.events) == 1
-    assert tx.events["Transfer"].values() == [accounts[0], accounts[1], amount]
+    assert tx.events[0].get("from") == accounts[0]
+    assert tx.events[0].to == accounts[1]
+    assert tx.events[0].value == amount

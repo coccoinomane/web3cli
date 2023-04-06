@@ -108,7 +108,7 @@ era: ChainFields = {
 }
 
 
-# Local chain (e.g. ganache or hardhat network)
+# Local chain (e.g. anvil, ganache or hardhat network)
 local: ChainFields = {
     "name": "local",
     "desc": "Local chain",

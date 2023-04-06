@@ -1,9 +1,6 @@
-from typing import Any
-
 import pytest
 
 import ape
-from ape import Token, UniswapV2Factory, UniswapV2Pair, UniswapV2Router02
 from tests.ape.tests.helpers.uniswap import add_v2_liquidity, add_v2_liquidity_with_pair
 
 
@@ -16,7 +13,7 @@ def test_v2_add_liquidity_with_router(
     TST_1: ape.contracts.ContractInstance,
     uniswap_v2_router: ape.contracts.ContractInstance,
     uniswap_v2_pair_TST_0_TST_1: ape.contracts.ContractInstance,
-    fn_isolation: Any,
+    # fn_isolation: Any,
 ) -> None:
     amount_0, amount_1 = 10**6, 10**6
     add_v2_liquidity(
@@ -36,7 +33,11 @@ def test_v2_add_liquidity_with_router(
 @pytest.mark.contracts
 def test_v2_add_liquidity_with_router_no_fixtures(
     accounts: ape.managers.accounts.AccountManager,
-    fn_isolation: Any,
+    # fn_isolation: Any,
+    Token: ape.contracts.ContractContainer,
+    UniswapV2Factory: ape.contracts.ContractContainer,
+    UniswapV2Router02: ape.contracts.ContractContainer,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> None:
     # Deploy tokens
     tst0 = Token.deploy("TST_0", "TST_0", 18, 10**18, sender=accounts[0])
@@ -77,7 +78,9 @@ def test_v2_add_liquidity_with_pair(
     TST_0: ape.contracts.ContractInstance,
     TST_1: ape.contracts.ContractInstance,
     uniswap_v2_factory: ape.contracts.ContractInstance,
-    fn_isolation: Any,
+    uniswap_v2_pair_TST_0_TST_1: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
+    # fn_isolation: Any,
 ) -> None:
     amount_0, amount_1 = 10**6, 10**6
     add_v2_liquidity_with_pair(
@@ -85,6 +88,7 @@ def test_v2_add_liquidity_with_pair(
         (TST_0, TST_1),
         (amount_0, amount_1),
         uniswap_v2_factory,
+        UniswapV2Pair,
     )
     # Test
     pair = UniswapV2Pair.at(uniswap_v2_factory.getPair(TST_0, TST_1))
@@ -97,7 +101,10 @@ def test_v2_add_liquidity_with_pair(
 @pytest.mark.contracts
 def test_v2_add_liquidity_with_pair_no_fixtures(
     accounts: ape.managers.accounts.AccountManager,
-    fn_isolation: Any,
+    # fn_isolation: Any,
+    Token: ape.contracts.ContractContainer,
+    UniswapV2Factory: ape.contracts.ContractContainer,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> None:
     # Deply tokens
     tst0 = Token.deploy("TST_0", "TST_0", 18, 10**21, sender=accounts[0])

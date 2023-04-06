@@ -28,7 +28,7 @@ def seed_local_accounts(
     accounts_keys: List[str],
     default_signer: str = None,
 ) -> ape.managers.accounts.AccountManager:
-    """Create a signer for each of the given brownie accounts,
+    """Create a signer for each of the given ape accounts,
     with numeric names: s0, s1, s2, etc.
 
     Accounts 0 and 1 will be added a second time with names 'alice'
@@ -49,7 +49,7 @@ def seed_local_accounts(
         )
         # Verify signer addresses
         if signer.address != account.address:
-            raise Web3CliError("Mismatch between brownie accounts and signers")
+            raise Web3CliError("Mismatch between ape accounts and signers")
     # Optionally set default signer
     if default_signer:
         app.config.set("web3cli", "default_signer", default_signer)
@@ -59,7 +59,7 @@ def seed_local_accounts(
 def seed_local_contract(
     app: Web3Cli,
     name: str,
-    brownie_contract: ape.contracts.ContractInstance,
+    ape_contract: ape.contracts.ContractInstance,
     type: str = None,
 ) -> Contract:
     """Create a contract in the DB for the given Brownie contract.
@@ -71,9 +71,9 @@ def seed_local_contract(
         name=name,
         desc=f"'{name}' contract imported from ape",
         chain="local",
-        address=brownie_contract.address,
+        address=ape_contract.address,
         type=type,
-        abi=None if type else brownie_contract.abi,
+        abi=None if type else ape_contract.abi,
     )
 
 

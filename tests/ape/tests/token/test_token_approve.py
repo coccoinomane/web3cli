@@ -3,10 +3,9 @@
 
 import pytest
 
-
-@pytest.fixture(scope="function", autouse=True)
-def isolate(fn_isolation):
-    pass
+# @pytest.fixture(scope="function", autouse=True)
+# def isolate(fn_isolation):
+#     pass
 
 
 @pytest.mark.local
@@ -72,4 +71,6 @@ def test_approval_event_fires(accounts, TST):
     tx = TST.approve(accounts[1], 10**19, sender=accounts[0])
 
     assert len(tx.events) == 1
-    assert tx.events["Approval"].values() == [accounts[0], accounts[1], 10**19]
+    assert tx.events[0].owner == accounts[0]
+    assert tx.events[0].spender == accounts[1]
+    assert tx.events[0].value == 10**19

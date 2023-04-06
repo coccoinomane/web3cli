@@ -20,7 +20,7 @@
 
 ### Docs
 
-- README badges: web3.py, brownie, PDM, cement
+- README badges: web3.py, ape, PDM, cement
 
 ### Address book
 

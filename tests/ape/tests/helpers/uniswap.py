@@ -10,12 +10,13 @@ def deploy_v2_pair(
     account: ape.api.AccountAPI,
     tokens: Tuple[ape.contracts.ContractInstance, ape.contracts.ContractInstance],
     uniswap_v2_factory: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """Deply a liquidity pair for the given tokens. The pair will be deployed
     by the given account and returned as a contract object."""
     uniswap_v2_factory.createPair(tokens[0].address, tokens[1].address, sender=account)
     address = uniswap_v2_factory.getPair(tokens[0].address, tokens[1].address)
-    return ape.UniswapV2Pair.at(address)
+    return UniswapV2Pair.at(address)
 
 
 def add_v2_liquidity(
@@ -38,7 +39,7 @@ def add_v2_liquidity(
     tokens: A tuple of the two tokens to add liquidity for.
     liquidity: A tuple of the amount of liquidity to add to the pair.
         The amounts should be expressed in token units.
-    router: The UniswapV2Router brownie contract.
+    router: The UniswapV2Router ape contract.
 
     RETURNS
     _______
@@ -67,12 +68,11 @@ def add_v2_liquidity_with_pair(
     tokens: Tuple[ape.contracts.ContractInstance, ape.contracts.ContractInstance],
     liquidity: Tuple[int, int],
     factory: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> Any:
     """Add liquidity to the given pair of tokens, using the pair's contract.
 
-    Please note that the pair's contract does not allow you to add liquidity
-    if the pair does not exist yet. In this case, you should use the router
-    to create the pair and add liquidity in the same transaction.
+    Raises an exception if the pair does not exist yet.
 
     ARGUMENTS
     _________
@@ -87,7 +87,10 @@ def add_v2_liquidity_with_pair(
     The transaction receipt.
     """
     # Get pair
-    pair = ape.UniswapV2Pair.at(factory.getPair(tokens[0], tokens[1]))
+    pair_address = factory.getPair(tokens[0], tokens[1])
+    if pair_address == ape.utils.ZERO_ADDRESS:
+        raise ValueError("Pair does not exist yet")
+    pair = UniswapV2Pair.at(pair_address)
     # Transfer the tokens to the pair
     raise_if_liquidity_too_small(liquidity[0], liquidity[1])
     tokens[0].transfer(pair, liquidity[0], sender=account)

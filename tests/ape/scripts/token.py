@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from ape import Token, accounts
+from ape import accounts, project
 
 
 def main(name: str = "Test Token", symbol: str = "TST") -> None:
-    return Token.deploy(name, symbol, 18, 1e9 * 1e18, sender=accounts[0])
+    project.Token.deploy(name, symbol, 18, 10**9 * 10**18, sender=accounts[0])

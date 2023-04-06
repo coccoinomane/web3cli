@@ -1,7 +1,7 @@
 from typing import Any
 
 from cement import App
-from web3.contract import ContractFunction
+from web3.contract.contract import ContractFunction
 from web3.types import Nonce, Wei
 from web3client.base_client import BaseClient
 
