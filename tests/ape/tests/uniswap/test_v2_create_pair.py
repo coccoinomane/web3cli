@@ -1,15 +1,15 @@
 import pytest
 
-from brownie.network.contract import Contract as BrownieContract
+import ape
 
 
 @pytest.mark.local
 @pytest.mark.contracts
 def test_v2_pair(
-    uniswap_v2_pair_WETH_TST: BrownieContract,
-    WETH: BrownieContract,
-    TST: BrownieContract,
-    uniswap_v2_factory: BrownieContract,
+    uniswap_v2_pair_WETH_TST: ape.contracts.ContractInstance,
+    WETH: ape.contracts.ContractInstance,
+    TST: ape.contracts.ContractInstance,
+    uniswap_v2_factory: ape.contracts.ContractInstance,
 ) -> None:
     reserves = uniswap_v2_pair_WETH_TST.getReserves()
     assert reserves[0] == 0

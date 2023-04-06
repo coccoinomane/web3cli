@@ -2,8 +2,7 @@ from typing import List
 
 import pytest
 
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
+import ape
 from tests.seed import seed_local_token
 from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
@@ -14,7 +13,9 @@ from web3core.models.types import ChainFields, ContractFields
 @pytest.mark.local
 # Test that calling a non existing function fails with a Web3CliError
 # exception containing the string "Function must be one..."
-def test_call_non_existing_function(app: Web3CliTest, TST: BrownieContract) -> None:
+def test_call_non_existing_function(
+    app: Web3CliTest, TST: ape.contracts.ContractInstance
+) -> None:
     seed_local_token(app, TST)
     with pytest.raises(Web3CliError, match="Function must be one of"):
         app.set_args(
@@ -30,9 +31,9 @@ def test_call_non_existing_function(app: Web3CliTest, TST: BrownieContract) -> N
 # Test that calling a function with the wrong number of arguments fails
 def test_call_wrong_number_of_arguments(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
@@ -52,9 +53,9 @@ def test_call_wrong_number_of_arguments(
 # Test that calling a function with the wrong type of arguments fails
 def test_call_wrong_type_of_arguments(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     with pytest.raises(ValueError):
@@ -75,9 +76,9 @@ def test_call_wrong_type_of_arguments(
 # Test that calling a write function without neither a signer nor a from address fails
 def test_call_local_token_transfer_without_signer_without_from(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     TST.balanceOf(bob.address)
@@ -100,9 +101,9 @@ def test_call_local_token_transfer_without_signer_without_from(
 # works
 def test_call_local_token_transfer_without_signer_with_from(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     TST.balanceOf(bob.address)
@@ -125,9 +126,9 @@ def test_call_local_token_transfer_without_signer_with_from(
 # Test calling the 'trasfer' function on the TST token on the local chain
 def test_call_local_token_transfer(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     TST.balanceOf(bob.address)

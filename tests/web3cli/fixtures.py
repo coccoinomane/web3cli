@@ -7,7 +7,7 @@ from typing import Iterator, List
 
 import pytest
 
-from brownie.network.account import Account as BrownieAccount
+import ape
 from tests.seed import seed_local_accounts, seed_local_chain
 from tests.web3cli.main import Web3CliTest
 
@@ -31,7 +31,9 @@ def base_app(app_key: bytes) -> Iterator[Web3CliTest]:
 
 @pytest.fixture()
 def app(
-    base_app: Web3CliTest, accounts: List[BrownieAccount], accounts_keys: List[str]
+    base_app: Web3CliTest,
+    accounts: ape.managers.accounts.AccountManager,
+    accounts_keys: List[str],
 ) -> Iterator[Web3CliTest]:
     """An app instance that can be used for tests on the local ganache
     network.

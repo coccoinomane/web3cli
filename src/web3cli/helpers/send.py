@@ -64,7 +64,7 @@ def send_native_coin(
     """Send a native coin to the given address"""
     return make_wallet(app).send_eth_in_wei(
         to=resolve_address(to, [Address, Signer]),
-        value_in_wei=Web3.toWei(amount, unit if unit else "ether"),
+        value_in_wei=Web3.to_wei(amount, unit if unit else "ether"),
         max_priority_fee_in_gwei=app.priority_fee,
     )
 

@@ -1,13 +1,14 @@
 import pytest
 
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
+import ape
 from tests.seed import seed_local_token
 from tests.web3cli.main import Web3CliTest
 
 
 @pytest.mark.local
-def test_send_eth(app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount) -> None:
+def test_send_eth(
+    app: Web3CliTest, alice: ape.api.AccountAPI, bob: ape.api.AccountAPI
+) -> None:
     bob_balance = bob.balance()
     app.set_args(
         ["--signer", "alice", "send", bob.address, "1", "ETH", "--force"]
@@ -17,7 +18,7 @@ def test_send_eth(app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount) 
 
 @pytest.mark.local
 def test_send_eth_using_address_tag(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
+    app: Web3CliTest, alice: ape.api.AccountAPI, bob: ape.api.AccountAPI
 ) -> None:
     bob_balance = bob.balance()
     app.set_args(["--signer", "alice", "send", "bob", "1", "ETH", "--force"]).run()
@@ -26,7 +27,7 @@ def test_send_eth_using_address_tag(
 
 @pytest.mark.local
 def test_send_eth_wei(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
+    app: Web3CliTest, alice: ape.api.AccountAPI, bob: ape.api.AccountAPI
 ) -> None:
     bob_balance = bob.balance()
     app.set_args(
@@ -38,9 +39,9 @@ def test_send_eth_wei(
 @pytest.mark.local
 def test_send_token(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    TST: BrownieContract,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST: ape.contracts.ContractInstance,
 ) -> None:
     bob_balance = TST.balanceOf(bob.address)
     seed_local_token(app, TST)
@@ -53,9 +54,9 @@ def test_send_token(
 @pytest.mark.local
 def test_send_token_with_alias(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    TST: BrownieContract,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST: ape.contracts.ContractInstance,
 ) -> None:
     bob_balance = TST.balanceOf(bob.address)
     seed_local_token(app, TST)
@@ -68,9 +69,9 @@ def test_send_token_with_alias(
 @pytest.mark.local
 def test_send_token_smallest(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    TST: BrownieContract,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST: ape.contracts.ContractInstance,
 ) -> None:
     bob_balance = TST.balanceOf(bob.address)
     seed_local_token(app, TST)
@@ -92,9 +93,9 @@ def test_send_token_smallest(
 @pytest.mark.local
 def test_send_token6(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    TST6: BrownieContract,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST6: ape.contracts.ContractInstance,
 ) -> None:
     bob_balance = TST6.balanceOf(bob.address)
     seed_local_token(app, TST6)
@@ -107,9 +108,9 @@ def test_send_token6(
 @pytest.mark.local
 def test_send_token6_smallest(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    TST6: BrownieContract,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST6: ape.contracts.ContractInstance,
 ) -> None:
     bob_balance = TST6.balanceOf(bob.address)
     seed_local_token(app, TST6)

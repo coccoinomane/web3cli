@@ -1,0 +1,9 @@
+contracts_folder: tests/ape/contracts
+plugins:
+- name: solidity
+- name: anvil
+
+# compiler:
+#     solc:
+#         remappings:
+#           - "@uniswap=tests/ape/contracts/uniswap"

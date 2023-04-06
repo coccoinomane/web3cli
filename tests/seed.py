@@ -2,8 +2,7 @@
 
 from typing import List
 
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
+import ape
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.database import db_ready_or_raise
 from web3cli.main import Web3Cli
@@ -25,10 +24,10 @@ def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
 
 def seed_local_accounts(
     app: Web3Cli,
-    accounts: List[BrownieAccount],
+    accounts: ape.managers.accounts.AccountManager,
     accounts_keys: List[str],
     default_signer: str = None,
-) -> List[BrownieAccount]:
+) -> ape.managers.accounts.AccountManager:
     """Create a signer for each of the given brownie accounts,
     with numeric names: s0, s1, s2, etc.
 
@@ -58,7 +57,10 @@ def seed_local_accounts(
 
 
 def seed_local_contract(
-    app: Web3Cli, name: str, brownie_contract: BrownieContract, type: str = None
+    app: Web3Cli,
+    name: str,
+    brownie_contract: ape.contracts.ContractInstance,
+    type: str = None,
 ) -> Contract:
     """Create a contract in the DB for the given Brownie contract.
 
@@ -67,7 +69,7 @@ def seed_local_contract(
     db_ready_or_raise(app)
     return Contract.create(
         name=name,
-        desc=f"'{name}' contract imported from brownie",
+        desc=f"'{name}' contract imported from ape",
         chain="local",
         address=brownie_contract.address,
         type=type,
@@ -75,7 +77,7 @@ def seed_local_contract(
     )
 
 
-def seed_local_token(app: Web3Cli, token: BrownieContract) -> Contract:
+def seed_local_token(app: Web3Cli, token: ape.contracts.ContractInstance) -> Contract:
     """Create a contract in the DB for the given Brownie token"""
     db_ready_or_raise(app)
     return Contract.create(

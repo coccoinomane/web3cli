@@ -2,8 +2,7 @@ from typing import Any, List
 
 import pytest
 
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
+import ape
 from tests.seed import seed_local_token
 from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
@@ -61,9 +60,9 @@ from web3cli.exceptions import Web3CliError
 # wrong args to an existing function fails
 def test_transact_invalid_input(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     args: List[str],
     error: Any,
     error_message: Any,
@@ -86,9 +85,9 @@ def test_transact_invalid_input(
 # with and without the --dry-run flag
 def test_transact(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     dry_run: bool,
 ) -> None:
     seed_local_token(app, TST)
@@ -111,9 +110,9 @@ def test_transact(
 # Test that the confirmation prompt works as intended
 def test_transact_with_confirm(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     monkeypatch: pytest.MonkeyPatch,
     answer: str,
 ) -> None:
@@ -196,9 +195,9 @@ def test_transact_with_confirm(
 # Test that varying the --return parameter the output varies
 def test_transact_return(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     return_: str,
     has_keys: List[str],
 ) -> None:
@@ -231,9 +230,9 @@ def test_transact_return(
 # regardless of whether we are in dry-run mode or not
 def test_transact_return_output(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     dry_run: bool,
 ) -> None:
     seed_local_token(app, TST)
@@ -263,9 +262,9 @@ def test_transact_return_output(
 # is used in a dry run
 def test_transact_output_receipt_dry_run(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     return_type: str,
 ) -> None:
     seed_local_token(app, TST)
@@ -298,9 +297,9 @@ def test_transact_output_receipt_dry_run(
 # is --call
 def test_transact_call(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
     call: bool,
 ) -> None:
     seed_local_token(app, TST)
@@ -341,9 +340,9 @@ def test_transact_call(
 # Test that the gas_limit is correctly passed to the transaction
 def test_transact_call_with_gas_limit(
     app: Web3CliTest,
-    TST: BrownieContract,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
     seed_local_token(app, TST)
     bob_balance = TST.balanceOf(bob.address)

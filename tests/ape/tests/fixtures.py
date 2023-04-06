@@ -9,15 +9,10 @@ from typing import Any, Iterator, List
 import pytest
 from web3.types import ABI
 
-from brownie import ZERO_ADDRESS, Token, UniswapV2Factory, UniswapV2Router02
-from brownie.network import Chain as BrownieChain
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
-from tests.brownie.tests.helpers.token import deploy_token
-from tests.brownie.tests.helpers.uniswap import (
-    add_v2_liquidity_with_pair,
-    deploy_v2_pair,
-)
+import ape
+from ape import Token, UniswapV2Factory, UniswapV2Router02
+from tests.ape.tests.helpers.token import deploy_token
+from tests.ape.tests.helpers.uniswap import add_v2_liquidity_with_pair, deploy_v2_pair
 
 #   ____   _               _
 #  / ___| | |__     __ _  (_)  _ __
@@ -27,7 +22,9 @@ from tests.brownie.tests.helpers.uniswap import (
 
 
 @pytest.fixture(scope="session")
-def ganache(chain: BrownieChain) -> BrownieChain:
+def ape_chain(
+    chain: ape.managers.chain.ChainManager,
+) -> ape.managers.chain.ChainManager:
     """Alias for the 'chain' fixture of Brownie, to avoid naming
     conflicts with the Chain model of web3core."""
     return chain
@@ -48,15 +45,15 @@ def isolate(fn_isolation: Any) -> None:
 
 
 @pytest.fixture(scope="session")
-def alice(accounts: List[BrownieAccount]) -> BrownieAccount:
+def alice(accounts: ape.managers.accounts.AccountManager) -> ape.api.AccountAPI:
     """A Brownie account preloaded in the local chain"""
-    yield accounts[0]
+    return accounts[0]
 
 
 @pytest.fixture(scope="session")
-def bob(accounts: List[BrownieAccount]) -> BrownieAccount:
+def bob(accounts: ape.managers.accounts.AccountManager) -> ape.api.AccountAPI:
     """A Brownie account preloaded in the local chain"""
-    yield accounts[1]
+    return accounts[1]
 
 
 @pytest.fixture(scope="session")
@@ -130,7 +127,9 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 
 
 @pytest.fixture(scope="module")
-def WETH(accounts: List[BrownieAccount]) -> BrownieContract:
+def WETH(
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """A token deployed on the local chain, with 18 decimals, that
     we will use as if it were WETH. Supply of 1000 tokens, shared between
     all accounts."""
@@ -146,7 +145,9 @@ def WETH(accounts: List[BrownieAccount]) -> BrownieContract:
 
 
 @pytest.fixture(scope="module")
-def TST(accounts: List[BrownieAccount]) -> BrownieContract:
+def TST(
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST token deployed on the local chain, with 18 decimals.
     Supply of 1000 tokens, shared between all accounts."""
     return deploy_token(
@@ -162,8 +163,8 @@ def TST(accounts: List[BrownieAccount]) -> BrownieContract:
 
 @pytest.fixture(scope="module")
 def TST_0(
-    accounts: List[BrownieAccount],
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST_0 token deployed on the local chain, with 18 decimals.
     Supply of 1000 tokens, shared between all accounts."""
     return deploy_token(
@@ -179,8 +180,8 @@ def TST_0(
 
 @pytest.fixture(scope="module")
 def TST_1(
-    accounts: List[BrownieAccount],
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST_1 token deployed on the local chain, with 18 decimals.
     Supply of 1000 tokens, shared between all accounts."""
     return deploy_token(
@@ -195,7 +196,9 @@ def TST_1(
 
 
 @pytest.fixture(scope="module")
-def TST6(accounts: List[BrownieAccount]) -> BrownieContract:
+def TST6(
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST6 token deployed on the local chain, with 6 decimals.
     Supply of 1000 tokens, shared between all accounts"""
     return deploy_token(
@@ -211,11 +214,11 @@ def TST6(accounts: List[BrownieAccount]) -> BrownieContract:
 
 @pytest.fixture(scope="module")
 def TST6_0(
-    accounts: List[BrownieAccount],
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST6_0 token deployed on the local chain, with 6
     decimals; each account will have 1000 of each token"""
-    deploy_token(
+    return deploy_token(
         Token,
         accounts,
         f"Test token 0 (6 decimals)",
@@ -228,11 +231,11 @@ def TST6_0(
 
 @pytest.fixture(scope="module")
 def TST6_1(
-    accounts: List[BrownieAccount],
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """TST6_1 token deployed on the local chain, with 6
     decimals; each account will have 1000 of each token"""
-    deploy_token(
+    return deploy_token(
         Token,
         accounts,
         f"Test token 1 (6 decimals)",
@@ -252,28 +255,30 @@ def TST6_1(
 
 
 @pytest.fixture(scope="module")
-def uniswap_v2_factory(accounts: List[BrownieAccount]) -> BrownieContract:
+def uniswap_v2_factory(
+    accounts: ape.managers.accounts.AccountManager,
+) -> ape.contracts.ContractInstance:
     """The Uniswap factory contract, deployed on the local chain"""
-    return UniswapV2Factory.deploy(ZERO_ADDRESS, {"from": accounts[0]})
+    return UniswapV2Factory.deploy(ape.utils.ZERO_ADDRESS, sender=accounts[0])
 
 
 @pytest.fixture(scope="module")
 def uniswap_v2_router(
-    accounts: List[BrownieAccount],
-    uniswap_v2_factory: BrownieContract,
-    WETH: BrownieContract,
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+    uniswap_v2_factory: ape.contracts.ContractInstance,
+    WETH: ape.contracts.ContractInstance,
+) -> ape.contracts.ContractInstance:
     """The Uniswap router contract, deployed on the local chain"""
-    return UniswapV2Router02.deploy(uniswap_v2_factory, WETH, {"from": accounts[0]})
+    return UniswapV2Router02.deploy(uniswap_v2_factory, WETH, sender=accounts[0])
 
 
 @pytest.fixture(scope="module")
 def uniswap_v2_pair_WETH_TST(
-    accounts: List[BrownieAccount],
-    uniswap_v2_factory: BrownieContract,
-    WETH: BrownieContract,
-    TST: BrownieContract,
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+    uniswap_v2_factory: ape.contracts.ContractInstance,
+    WETH: ape.contracts.ContractInstance,
+    TST: ape.contracts.ContractInstance,
+) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens WETH-TST, deployed on the
     local chain, with no liquidity."""
     return deploy_v2_pair(
@@ -285,11 +290,11 @@ def uniswap_v2_pair_WETH_TST(
 
 @pytest.fixture(scope="module")
 def uniswap_v2_pair_TST_0_TST_1(
-    accounts: List[BrownieAccount],
-    uniswap_v2_factory: BrownieContract,
-    TST_0: BrownieContract,
-    TST_1: BrownieContract,
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+    uniswap_v2_factory: ape.contracts.ContractInstance,
+    TST_0: ape.contracts.ContractInstance,
+    TST_1: ape.contracts.ContractInstance,
+) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens TST_0-TST_1, deployed on the
     local chain, with no liquidity."""
     return deploy_v2_pair(
@@ -301,12 +306,12 @@ def uniswap_v2_pair_TST_0_TST_1(
 
 @pytest.fixture(scope="module")
 def uniswap_v2_pair_TST_0_TST_1_with_liquidity(
-    accounts: List[BrownieAccount],
-    TST_0: BrownieContract,
-    TST_1: BrownieContract,
-    uniswap_v2_pair_TST_0_TST_1: BrownieContract,
-    uniswap_v2_factory: BrownieContract,
-) -> BrownieContract:
+    accounts: ape.managers.accounts.AccountManager,
+    TST_0: ape.contracts.ContractInstance,
+    TST_1: ape.contracts.ContractInstance,
+    uniswap_v2_pair_TST_0_TST_1: ape.contracts.ContractInstance,
+    uniswap_v2_factory: ape.contracts.ContractInstance,
+) -> ape.contracts.ContractInstance:
     """The Uniswap pair contract for tokens TST_0-TST_1, deployed on the
     local chain, with 1 TST_0 and 1 TST_1 of reserves."""
     add_v2_liquidity_with_pair(
