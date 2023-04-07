@@ -99,7 +99,7 @@ def test_transact(
     if dry_run:
         assert TST.balanceOf(bob.address) == bob_balance
     else:
-        assert TST.balanceOf(bob.address) == bob_balance + 1e18
+        assert TST.balanceOf(bob.address) == bob_balance + 10**18
     data, output = app.last_rendered
     assert type(data) is str
     assert data.startswith("0x")
@@ -130,7 +130,7 @@ def test_transact_with_confirm(
     monkeypatch.setattr("builtins.input", lambda _: answer)
     if answer == "yes":
         app.set_args(args).run()
-        assert TST.balanceOf(bob.address) == bob_balance + 1e18
+        assert TST.balanceOf(bob.address) == bob_balance + 10**18
     else:
         with pytest.raises(SystemExit):
             app.set_args(args).run()
@@ -217,7 +217,7 @@ def test_transact_return(
             "--force",
         ]
     ).run()
-    assert TST.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 10**18
     data, output = app.last_rendered
     assert type(data) is dict
     for key in has_keys:
@@ -319,7 +319,7 @@ def test_transact_call(
         ]
         + (["--no-call", "--gas-limit", "300000"] if not call else [])
     ).run()
-    assert TST.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 10**18
     data, output = app.last_rendered
     assert "output" in data
     if call:
@@ -363,7 +363,7 @@ def test_transact_call_with_gas_limit(
             "--force",
         ]
     ).run()
-    assert TST.balanceOf(bob.address) == bob_balance + 1e18
+    assert TST.balanceOf(bob.address) == bob_balance + 10**18
     data, output = app.last_rendered
     assert "gas" in data
     assert type(data["gas"]) is int

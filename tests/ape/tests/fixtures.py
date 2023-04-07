@@ -168,7 +168,7 @@ def UniswapV2Pair() -> ape.contracts.ContractContainer:
 #   |_|    \___/  |_|\_\  \___| |_| |_| |___/
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def WETH(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
@@ -182,7 +182,7 @@ def WETH(
         f"WrappedEther",
         f"WETH",
         18,
-        10**9 * 10**18,
+        10**9,
         True,
     )
 
@@ -200,12 +200,12 @@ def TST(
         f"Test token (18 decimals)",
         f"TST",
         18,
-        10**9 * 10**18,
+        10**9,
         True,
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST_0(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
@@ -218,12 +218,12 @@ def TST_0(
         f"Test token 0 (18 decimals)",
         f"TST_0",
         18,
-        10**9 * 10**18,
+        10**9,
         True,
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST_1(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
@@ -236,12 +236,12 @@ def TST_1(
         f"Test token 1 (18 decimals)",
         f"TST_1",
         18,
-        10**9 * 10**18,
+        10**9,
         True,
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST6(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
@@ -259,13 +259,13 @@ def TST6(
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST6_0(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST6_0 token deployed on the local chain, with 6
-    decimals; each account will have 1000 of each token"""
+    decimals; each account will have a billion tokens"""
     return deploy_token(
         Token,
         accounts,
@@ -277,20 +277,20 @@ def TST6_0(
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST6_1(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,
 ) -> ape.contracts.ContractInstance:
     """TST6_1 token deployed on the local chain, with 6
-    decimals; each account will have 1000 of each token"""
+    decimals; each account will have a billion tokens"""
     return deploy_token(
         Token,
         accounts,
         f"Test token 1 (6 decimals)",
         f"TST6_1",
         6,
-        10**9 * 10**18,
+        10**9,
         True,
     )
 
