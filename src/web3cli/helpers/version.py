@@ -3,7 +3,7 @@ from typing import Tuple
 from cement.utils.version import get_version as cement_get_version
 from cement.utils.version import get_version_banner
 
-VERSION = (0, 18, 1, "alpha", 0)
+VERSION = (0, 19, 0, "alpha", 0)
 
 
 def get_version_number(version: Tuple[int, int, int, str, int] = VERSION) -> str:
