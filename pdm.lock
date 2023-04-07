@@ -1409,7 +1409,7 @@ dependencies = [
 
 [[package]]
 name = "web3client"
-version = "1.1.1"
+version = "1.1.2"
 requires_python = ">=3.9,<3.11"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
@@ -3285,9 +3285,9 @@ content_hash = "sha256:0c987e9f7ac49fdb3f44ce7f9c5cd20fe284c0ec9e3a8fa94f7373cb9
     {url = "https://files.pythonhosted.org/packages/a2/07/916bb3a83f8971793448ca8bce36000cd68b89fb1b48071ae3ff0aa32817/web3-6.1.0.tar.gz", hash = "sha256:55e58f2b8705f0911db5a395343b158d5e4edae9973f5dcb349512ae5a349af5"},
     {url = "https://files.pythonhosted.org/packages/e4/a5/b8753ffbe225cfa79c40c517f54df0e9023d13b96103c6cb86882c6bb783/web3-6.1.0-py3-none-any.whl", hash = "sha256:31b079fccf6fd0f7e71080b77dc84347fff280f5c197793d973048755358fac4"},
 ]
-"web3client 1.1.1" = [
-    {url = "https://files.pythonhosted.org/packages/0e/48/fb34fe4a1fd5f4e0001847105c530f99e98c56b28294ccd94c5a9de355d3/web3client-1.1.1.tar.gz", hash = "sha256:bb29bb99ff729fb0a26b875e7037513f93fbd40b2f820b0e2d63966d9c093207"},
-    {url = "https://files.pythonhosted.org/packages/b1/82/7db82c69ed068ff7c0556f497fba2714fbc81605d4583b38c18fbb693e1d/web3client-1.1.1-py3-none-any.whl", hash = "sha256:e51925308e101defa6aacfd1f3a9706066d307f65b77360d845cd5c90e18b252"},
+"web3client 1.1.2" = [
+    {url = "https://files.pythonhosted.org/packages/01/ba/669de55f01cdcf35f6cf6d997209185de7535225393b3e46872941063007/web3client-1.1.2-py3-none-any.whl", hash = "sha256:95f835fae0e0786fbfaf4f1fdc8d7a0ed5cd9e5917f83b70de5ac2dcfa9d468c"},
+    {url = "https://files.pythonhosted.org/packages/ef/f5/e618471b951b3f4fa91c6e1d38f832cb5e3e25dd7bad79a006d35a8da89a/web3client-1.1.2.tar.gz", hash = "sha256:5bc67cb69c05d876bb85df9d4bd948aa2799b66c167d8b8c612b8a98e2639a23"},
 ]
 "websockets 11.0.1" = [
     {url = "https://files.pythonhosted.org/packages/03/4c/3a31d65a0f54879b9e9b84d51f84decf512735bf5ec21f79cf2e92118c14/websockets-11.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:e2654e94c705ce9b768441d8e3a387a84951ca1056efdc4a26a4a6ee723c01b6"},
