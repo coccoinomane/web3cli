@@ -141,22 +141,22 @@ def erc20_abi(erc20_abi_string: str) -> Iterator[ABI]:
 #  \____|  \___/  |_| |_|  \__|  \__,_| |_| |_| |_|  \___| |_|    |___/
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def Token() -> ape.contracts.ContractContainer:
     return ape.project.get_contract("Token")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def UniswapV2Factory() -> ape.contracts.ContractContainer:
     return ape.project.get_contract("UniswapV2Factory")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def UniswapV2Router02() -> ape.contracts.ContractContainer:
     return ape.project.get_contract("UniswapV2Router02")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def UniswapV2Pair() -> ape.contracts.ContractContainer:
     return ape.project.get_contract("UniswapV2Pair")
 
@@ -303,7 +303,7 @@ def TST6_1(
 #                                              |_|
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def uniswap_v2_factory(
     accounts: ape.managers.accounts.AccountManager,
     UniswapV2Factory: ape.contracts.ContractContainer,
@@ -312,7 +312,7 @@ def uniswap_v2_factory(
     return UniswapV2Factory.deploy(ape.utils.ZERO_ADDRESS, sender=accounts[0])
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def uniswap_v2_router(
     accounts: ape.managers.accounts.AccountManager,
     uniswap_v2_factory: ape.contracts.ContractInstance,
@@ -323,7 +323,7 @@ def uniswap_v2_router(
     return UniswapV2Router02.deploy(uniswap_v2_factory, WETH, sender=accounts[0])
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def uniswap_v2_pair_WETH_TST(
     accounts: ape.managers.accounts.AccountManager,
     uniswap_v2_factory: ape.contracts.ContractInstance,
@@ -336,7 +336,7 @@ def uniswap_v2_pair_WETH_TST(
     return deploy_v2_pair(accounts[0], (WETH, TST), uniswap_v2_factory, UniswapV2Pair)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def uniswap_v2_pair_TST_0_TST_1(
     accounts: ape.managers.accounts.AccountManager,
     uniswap_v2_factory: ape.contracts.ContractInstance,
@@ -351,7 +351,7 @@ def uniswap_v2_pair_TST_0_TST_1(
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def uniswap_v2_pair_TST_0_TST_1_with_liquidity(
     accounts: ape.managers.accounts.AccountManager,
     TST_0: ape.contracts.ContractInstance,
