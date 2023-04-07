@@ -60,6 +60,7 @@ def seed_local_contract(
     name: str,
     ape_contract: ape.contracts.ContractInstance,
     type: str = None,
+    chain_name: str = None,
 ) -> Contract:
     """Create a contract in the DB for the given Brownie contract.
 
@@ -69,20 +70,22 @@ def seed_local_contract(
     return Contract.create(
         name=name,
         desc=f"'{name}' contract imported from ape",
-        chain=app.chain_name,
+        chain=chain_name or app.config.get("web3cli", "default_chain"),
         address=ape_contract.address,
         type=type,
         abi=None if type else ape_contract.contract_type.dict()["abi"],
     )
 
 
-def seed_local_token(app: Web3Cli, token: ape.contracts.ContractInstance) -> Contract:
+def seed_local_token(
+    app: Web3Cli, token: ape.contracts.ContractInstance, chain_name: str = None
+) -> Contract:
     """Create a contract in the DB for the given Brownie token"""
     db_ready_or_raise(app)
     return Contract.create(
         name=token.symbol().lower(),
         desc=token.name(),
-        chain=app.chain_name,
+        chain=chain_name or app.config.get("web3cli", "default_chain"),
         address=token.address,
         type="erc20",
         abi=token.contract_type.dict()["abi"],
