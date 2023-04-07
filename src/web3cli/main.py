@@ -158,8 +158,6 @@ def main(filter_app: Callable[[App], App] = None) -> None:
             web3.exceptions.NoABIEventsFound,
             web3.exceptions.InsufficientData,
             web3.exceptions.TimeExhausted,
-            web3.exceptions.PMError,
-            web3.exceptions.ManifestValidationError,
             web3.exceptions.TransactionNotFound,
             web3.exceptions.BlockNotFound,
             web3.exceptions.LogTopicError,

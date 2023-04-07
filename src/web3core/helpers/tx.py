@@ -1,6 +1,6 @@
 import time
 
-from web3.contract import ContractFunction
+from web3.contract.contract import ContractFunction
 from web3.exceptions import TransactionNotFound
 from web3.types import Nonce, TxData, Wei
 from web3client.base_client import BaseClient

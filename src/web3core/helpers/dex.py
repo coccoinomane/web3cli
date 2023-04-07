@@ -1,5 +1,5 @@
 import web3
-from web3.contract import ContractFunction
+from web3.contract.contract import ContractFunction
 from web3client.base_client import BaseClient
 
 from web3core.constants import ZERO_ADDRESS

@@ -27,7 +27,7 @@ def resolve_address(
 
     def format(address: str) -> str:
         if to_checksum:
-            return Web3.toChecksumAddress(address)
+            return Web3.to_checksum_address(address)
         return address
 
     if is_valid_address(address_or_name):

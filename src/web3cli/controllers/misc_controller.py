@@ -41,10 +41,10 @@ class MiscController(Controller):
         chain_ready_or_raise(self.app)
         address = resolve_address(self.app.pargs.address, chain=self.app.chain_name)
         balance = make_client(self.app).w3.eth.get_balance(
-            Web3.toChecksumAddress(address)
+            Web3.to_checksum_address(address)
         )
         if self.app.pargs.unit != "wei":
-            balance = Web3.fromWei(balance, self.app.pargs.unit)
+            balance = Web3.from_wei(balance, self.app.pargs.unit)
         self.app.render(
             {
                 "amount": balance,
@@ -63,7 +63,7 @@ class MiscController(Controller):
         chain_ready_or_raise(self.app)
         block_identifier = parse_block(self.app, "block_identifier")
         block = make_client(self.app).w3.eth.get_block(block_identifier)
-        block_as_dict = json.loads(Web3.toJSON(block))
+        block_as_dict = json.loads(Web3.to_json(block))
         self.app.render(block_as_dict, indent=4, handler="json")
 
     @ex(
@@ -81,8 +81,8 @@ class MiscController(Controller):
     def gas_price(self) -> None:
         chain_ready_or_raise(self.app)
         gas_price_in_wei = make_client(self.app).w3.eth.gas_price
-        gas_price_in_gwei = Web3.fromWei(gas_price_in_wei, "gwei")
-        self.app.print(str(gas_price_in_gwei))
+        gas_price_in_gwei = Web3.from_wei(gas_price_in_wei, "gwei")
+        self.app.render(gas_price_in_gwei)
 
     @ex(
         help="Get the base fee in gwei of the last block. Will error for non-EIP1559 chains.",
@@ -97,5 +97,5 @@ class MiscController(Controller):
             raise Web3CliError(
                 f"Could not find base fee. Please check that chain '{self.app.chain_name}' is EIP-1599 compatible."
             )
-        base_fee_in_gwei = Web3.fromWei(base_fee_in_wei, "gwei")
-        self.app.render(str(base_fee_in_gwei))
+        base_fee_in_gwei = Web3.from_wei(base_fee_in_wei, "gwei")
+        self.app.render(base_fee_in_gwei)

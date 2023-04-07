@@ -147,7 +147,7 @@ def parse_abi_value(
     elif is_address_type(abi_type):
         value = resolve_address_fn(string_value)
         if checksum_addresses:
-            value = web3.Web3.toChecksumAddress(value)
+            value = web3.Web3.to_checksum_address(value)
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
         csv_reader = csv.reader([string_value], skipinitialspace=True)

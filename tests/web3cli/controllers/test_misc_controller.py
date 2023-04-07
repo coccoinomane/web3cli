@@ -5,11 +5,8 @@ from typing import Any, Dict, List
 import pytest
 from web3 import Web3
 
-from brownie.network import Chain as BrownieChain
-from brownie.network.account import Account as BrownieAccount
+import ape
 from tests.web3cli.main import Web3CliTest
-from web3cli.exceptions import Web3CliError
-from web3core.helpers.misc import to_number
 from web3core.helpers.seed import seed_chains, seed_signers
 from web3core.models.types import ChainFields
 
@@ -17,45 +14,45 @@ from web3core.models.types import ChainFields
 @pytest.mark.local
 def test_balance(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
-    alice_balance = alice.balance()
-    alice.transfer(bob, 1e18)
+    alice_balance = alice.balance
+    bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address]).run()
     data, output = app.last_rendered
     assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.fromWei(alice_balance - 1e18, "ether")
+    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "ether")
     assert data["ticker"] == app.chain.coin
 
 
 @pytest.mark.local
 def test_balance_with_alias(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
-    alice_balance = alice.balance()
-    alice.transfer(bob, 1e18)
+    alice_balance = alice.balance
+    bob.transfer(alice, 10**18)
     app.set_args(["balance", "alice"]).run()  # use the alias
     data, output = app.last_rendered
     assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.fromWei(alice_balance - 1e18, "ether")
+    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "ether")
     assert data["ticker"] == app.chain.coin
 
 
 @pytest.mark.local
 def test_balance_with_unit_gwei(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
-    alice_balance = alice.balance()
-    alice.transfer(bob, 1e18)
+    alice_balance = alice.balance
+    bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address, "gwei"]).run()
     data, output = app.last_rendered
     assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.fromWei(alice_balance - 1e18, "gwei")
+    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "gwei")
     assert data["ticker"] == app.chain.coin
     assert data["unit"] == "gwei"
 
@@ -63,15 +60,15 @@ def test_balance_with_unit_gwei(
 @pytest.mark.local
 def test_balance_with_unit_wei(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
 ) -> None:
-    alice_balance = alice.balance()
-    alice.transfer(bob, 1e18)
+    alice_balance = alice.balance
+    bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address, "wei"]).run()
     data, output = app.last_rendered
     assert type(data["amount"]) is int
-    assert data["amount"] == alice_balance - 1e18
+    assert data["amount"] == alice_balance + 10**18
     assert data["ticker"] == app.chain.coin
     assert data["unit"] == "wei"
 
@@ -101,7 +98,7 @@ def test_sign(
 
 @pytest.mark.local
 def test_block_latest(
-    app: Web3CliTest, alice: BrownieAccount, bob: BrownieAccount
+    app: Web3CliTest, alice: ape.api.AccountAPI, bob: ape.api.AccountAPI
 ) -> None:
     tx = alice.transfer(bob, 10000)
     app.set_args(["block", "latest"]).run()
@@ -109,58 +106,64 @@ def test_block_latest(
     block: dict[str, Any] = json.loads(output)
     assert type(block.get("transactions")) == list
     assert len(block["transactions"]) == 1
-    assert block["transactions"][0] == tx.txid
+    assert block["transactions"][0] == tx.txn_hash
 
 
 @pytest.mark.local
 def test_block_number(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    ganache: BrownieChain,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    ape_chain: ape.managers.chain.ChainManager,
 ) -> None:
-    initial_height = ganache.height
+    initial_height = ape_chain.blocks.height
     tx = alice.transfer(bob, 10000)
-    ganache.mine()
+    ape_chain.mine()
     app.set_args(["block", str(initial_height + 1)]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
     assert type(block.get("transactions")) == list
     assert len(block["transactions"]) == 1
-    assert block["transactions"][0] == tx.txid
+    assert block["transactions"][0] == tx.txn_hash
 
 
 @pytest.mark.local
 def test_block_hash(
     app: Web3CliTest,
-    alice: BrownieAccount,
-    bob: BrownieAccount,
-    ganache: BrownieChain,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    ape_chain: ape.managers.chain.ChainManager,
 ) -> None:
     # Make a transaction (+1 height) then mine a block (+1 height)
-    initial_height = ganache.height
+    initial_height = ape_chain.blocks.height
     tx = alice.transfer(bob, 10000)
-    ganache.mine()
+    ape_chain.mine()
     # Retrieve hash of transaction block
-    hash = ganache[initial_height + 1].hash.hex()
+    hash = ape_chain.blocks[initial_height + 1].hash.hex()
     # Retrieve transaction block by hash using the CLI
     app.set_args(["block", hash]).run()
     data, output = app.last_rendered
     block: dict[str, Any] = json.loads(output)
     assert type(block.get("transactions")) == list
     assert len(block["transactions"]) == 1
-    assert block["transactions"][0] == tx.txid
+    assert block["transactions"][0] == tx.txn_hash
 
 
 @pytest.mark.local
-def test_gas_price(app: Web3CliTest) -> None:
+def test_gas_price(app: Web3CliTest, is_eip1559: bool) -> None:
+    if is_eip1559:
+        pytest.skip("Local chain does not have gas price")
     app.set_args(["gas-price"]).run()
     data, output = app.last_rendered
-    assert type(to_number(output)) in [float, int]
-    assert to_number(output) > 0
+    assert type(data) is Decimal
+    assert data > 0
 
 
 @pytest.mark.local
-def test_base_fee(app: Web3CliTest) -> None:
-    with pytest.raises(Web3CliError, match="Could not find base fee"):
-        app.set_args(["base-fee"]).run()
+def test_base_fee(app: Web3CliTest, is_eip1559: bool) -> None:
+    if not is_eip1559:
+        pytest.skip("Local chain does not have base fee")
+    app.set_args(["base-fee"]).run()
+    data, output = app.last_rendered
+    assert type(data) is Decimal
+    assert data > 0

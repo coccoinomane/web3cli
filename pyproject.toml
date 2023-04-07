@@ -8,14 +8,15 @@ authors = [
 readme = "README.md"
 keywords = ["web3", "w3", "cli", "evm", "blockchain", "ethereum", "binance", "avalanche"]
 license = {text = "MIT"}
-requires-python = ">=3.7.2,<3.11"
+requires-python = ">=3.9,<3.11"
 dependencies = [
     "cement>=3.0.8",
     "cement[colorlog]>=3.0.8",
     "cement[jinja2]>=3.0.8",
     "cement[yaml]>=3.0.8",
     "cement[tabulate]>=3.0.8",
-    "web3client>=1.0.1",
+    "web3>=6.0.0",
+    "web3client>=1.1.1",
     "peewee>=3.15.3",
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
@@ -24,12 +25,10 @@ dependencies = [
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "pytest>=6.2.5",
     "mypy>=0.982",
-    "eth-brownie>=1.19.2",
+    "eth-ape[recommended-plugins]>=0.6.0",
     "isort>=5.11.3",
     "pre-commit>=2.20.0",
-    "brownie-token-tester>=0.3.2",
     "autoflake>=2.0.0",
     "black>=22.10",
 ]
@@ -44,9 +43,9 @@ w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on Cronos chain"}
 w3arb = {cmd = "w3arb", help = "Run the CLI in dev mode, on Arbitrum One chain"}
 w3era = {cmd = "w3era", help = "Run the CLI in dev mode, on zkSync Era chain"}
 
-test = "brownie test tests"
-test_verbose = "brownie test tests -s"
-test_fast = "brownie test tests -m 'not remote'"
+test = "ape test tests --network ::foundry"
+test_verbose = "ape test tests -s --network ::foundry"
+test_fast = "ape test tests -m 'not remote' --network ::foundry"
 
 db_open = "open -a TablePlus $HOME/.web3cli/database/web3cli.sqlite"
 db_open_test = "open -a TablePlus $HOME/.web3cli/database/web3cli_test.sqlite"
@@ -103,8 +102,8 @@ exclude = [
 filterwarnings = "ignore::DeprecationWarning"
 markers = [
     "remote: tests that need an internet connection (deselect with '-m \"not remote\"')",
-    "local: tests that require a local blockchain to be run, e.g. ganache or hardhat network (deselect with '-m \"not local\"')",
-    "contracts: tests of the brownie contracts",
+    "local: tests that require a local blockchain to be run, e.g. ganache, anvil or hardhat network (deselect with '-m \"not local\"')",
+    "contracts: tests of the ape contracts",
 ]
 
 [tool.isort]

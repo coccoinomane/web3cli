@@ -3,30 +3,27 @@
 
 from typing import Any, Tuple
 
-from brownie import UniswapV2Pair
-from brownie.network.account import Account as BrownieAccount
-from brownie.network.contract import Contract as BrownieContract
+import ape
 
 
 def deploy_v2_pair(
-    account: BrownieAccount,
-    tokens: Tuple[BrownieContract, BrownieContract],
-    uniswap_v2_factory: BrownieContract,
-) -> BrownieContract:
+    account: ape.api.AccountAPI,
+    tokens: Tuple[ape.contracts.ContractInstance, ape.contracts.ContractInstance],
+    uniswap_v2_factory: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
+) -> ape.contracts.ContractInstance:
     """Deply a liquidity pair for the given tokens. The pair will be deployed
     by the given account and returned as a contract object."""
-    uniswap_v2_factory.createPair(
-        tokens[0].address, tokens[1].address, {"from": account}
-    )
+    uniswap_v2_factory.createPair(tokens[0].address, tokens[1].address, sender=account)
     address = uniswap_v2_factory.getPair(tokens[0].address, tokens[1].address)
     return UniswapV2Pair.at(address)
 
 
 def add_v2_liquidity(
-    account: BrownieAccount,
-    tokens: Tuple[BrownieContract, BrownieContract],
+    account: ape.api.AccountAPI,
+    tokens: Tuple[ape.contracts.ContractInstance, ape.contracts.ContractInstance],
     liquidity: Tuple[int, int],
-    router: BrownieContract,
+    router: ape.contracts.ContractInstance,
 ) -> Any:
     """Add liquidity to the given pair of tokens, using the router.
 
@@ -42,7 +39,7 @@ def add_v2_liquidity(
     tokens: A tuple of the two tokens to add liquidity for.
     liquidity: A tuple of the amount of liquidity to add to the pair.
         The amounts should be expressed in token units.
-    router: The UniswapV2Router brownie contract.
+    router: The UniswapV2Router ape contract.
 
     RETURNS
     _______
@@ -50,8 +47,8 @@ def add_v2_liquidity(
     """
     # Approve the router to spend the tokens
     raise_if_liquidity_too_small(liquidity[0], liquidity[1])
-    tokens[0].approve(router, liquidity[0], {"from": account})
-    tokens[1].approve(router, liquidity[1], {"from": account})
+    tokens[0].approve(router, liquidity[0], sender=account)
+    tokens[1].approve(router, liquidity[1], sender=account)
     # Add liquidity
     return router.addLiquidity(
         tokens[0],
@@ -62,21 +59,20 @@ def add_v2_liquidity(
         0,
         account,
         2**256 - 1,
-        {"from": account},
+        sender=account,
     )
 
 
 def add_v2_liquidity_with_pair(
-    account: BrownieAccount,
-    tokens: Tuple[BrownieContract, BrownieContract],
+    account: ape.api.AccountAPI,
+    tokens: Tuple[ape.contracts.ContractInstance, ape.contracts.ContractInstance],
     liquidity: Tuple[int, int],
-    factory: BrownieContract,
+    factory: ape.contracts.ContractInstance,
+    UniswapV2Pair: ape.contracts.ContractContainer,
 ) -> Any:
     """Add liquidity to the given pair of tokens, using the pair's contract.
 
-    Please note that the pair's contract does not allow you to add liquidity
-    if the pair does not exist yet. In this case, you should use the router
-    to create the pair and add liquidity in the same transaction.
+    Raises an exception if the pair does not exist yet.
 
     ARGUMENTS
     _________
@@ -91,13 +87,16 @@ def add_v2_liquidity_with_pair(
     The transaction receipt.
     """
     # Get pair
-    pair = UniswapV2Pair.at(factory.getPair(tokens[0], tokens[1]))
+    pair_address = factory.getPair(tokens[0], tokens[1])
+    if pair_address == ape.utils.ZERO_ADDRESS:
+        raise ValueError("Pair does not exist yet")
+    pair = UniswapV2Pair.at(pair_address)
     # Transfer the tokens to the pair
     raise_if_liquidity_too_small(liquidity[0], liquidity[1])
-    tokens[0].transfer(pair, liquidity[0], {"from": account})
-    tokens[1].transfer(pair, liquidity[1], {"from": account})
+    tokens[0].transfer(pair, liquidity[0], sender=account)
+    tokens[1].transfer(pair, liquidity[1], sender=account)
     # Add liquidity
-    return pair.mint(account, {"from": account})
+    return pair.mint(account, sender=account)
 
 
 def raise_if_liquidity_too_small(amount_0: int, amount_1: int) -> None:

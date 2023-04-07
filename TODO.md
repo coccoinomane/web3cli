@@ -5,6 +5,7 @@
 - Brownie: test add liq + swap
 - Swap: refactor in web3core + test
 - Token: test approve
+- Tests: Why scope of TST fixture must be function?
 
 ### Commands 
 
@@ -20,7 +21,7 @@
 
 ### Docs
 
-- README badges: web3.py, brownie, PDM, cement
+- README badges: web3.py, ape, PDM, cement
 
 ### Address book
 
