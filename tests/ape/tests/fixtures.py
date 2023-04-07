@@ -29,10 +29,26 @@ def ape_chain(
     return chain
 
 
-# @pytest.fixture(scope="function", autouse=True)
-# def isolate(fn_isolation: Any) -> None:
-#     """Reset the local blockchain before each single test"""
-#     pass
+@pytest.fixture(scope="session")
+def is_eip1559(
+    chain: ape.managers.chain.ChainManager,
+) -> bool:
+    """Return True if the local chain supports eip1599 (type 2 transactions)."""
+    return hasattr(chain.blocks[0], "base_fee") or hasattr(
+        chain.blocks[0], "base_fee_per_gas"
+    )
+
+
+@pytest.fixture(scope="session")
+def ape_chain_name(
+    chain: ape.managers.chain.ChainManager,
+) -> str:
+    """Return whether we are running tests on ganache or anvil."""
+    if chain.chain_id == 1337:
+        return "ganache"
+    elif chain.chain_id == 31337:
+        return "anvil"
+    raise ValueError(f"Unknown chain type '{chain.chain_id}'")
 
 
 #     _                                            _
@@ -171,7 +187,7 @@ def WETH(
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def TST(
     accounts: ape.managers.accounts.AccountManager,
     Token: ape.contracts.ContractContainer,

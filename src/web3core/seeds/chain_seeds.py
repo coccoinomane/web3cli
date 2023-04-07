@@ -108,10 +108,10 @@ era: ChainFields = {
 }
 
 
-# Local chain (e.g. anvil, ganache or hardhat network)
-local: ChainFields = {
-    "name": "local",
-    "desc": "Local chain",
+# Ganache local chain
+ganache: ChainFields = {
+    "name": "ganache",
+    "desc": "Ganache local chain",
     "chain_id": 1337,
     "coin": "ETH",
     "tx_type": 1,
@@ -123,4 +123,29 @@ local: ChainFields = {
     ],
 }
 
-all: List[ChainFields] = [eth, bnb, avax, matic, cro, arb, era, local]
+# Anvil local chain
+anvil: ChainFields = {
+    "name": "anvil",
+    "desc": "Anvil local chain",
+    "chain_id": 31337,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "http://127.0.0.1:8545",
+        }
+    ],
+}
+
+all: List[ChainFields] = [
+    eth,
+    bnb,
+    avax,
+    matic,
+    cro,
+    arb,
+    era,
+    ganache,
+    anvil,
+]

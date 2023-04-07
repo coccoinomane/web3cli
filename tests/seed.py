@@ -13,10 +13,9 @@ from web3core.models.signer import Signer
 from web3core.seeds import chain_seeds
 
 
-def seed_local_chain(app: Web3Cli, make_default: bool = True) -> Chain:
-    """Add the local network as a chain, with name 'local' and
-    make it the default network"""
-    chain = seed_chain(chain_seeds.local)
+def seed_local_chain(app: Web3Cli, chain_name: str, make_default: bool = True) -> Chain:
+    """Add the given local chain to the DB and make it the default network"""
+    chain = seed_chain(getattr(chain_seeds, f"{chain_name}"))
     if make_default:
         app.config.set("web3cli", "default_chain", chain.name)
     return chain
@@ -70,10 +69,10 @@ def seed_local_contract(
     return Contract.create(
         name=name,
         desc=f"'{name}' contract imported from ape",
-        chain="local",
+        chain=app.chain_name,
         address=ape_contract.address,
         type=type,
-        abi=None if type else ape_contract.abi,
+        abi=None if type else ape_contract.contract_type.dict()["abi"],
     )
 
 
@@ -83,8 +82,8 @@ def seed_local_token(app: Web3Cli, token: ape.contracts.ContractInstance) -> Con
     return Contract.create(
         name=token.symbol().lower(),
         desc=token.name(),
-        chain="local",
+        chain=app.chain_name,
         address=token.address,
         type="erc20",
-        abi=token.abi,
+        abi=token.contract_type.dict()["abi"],
     )

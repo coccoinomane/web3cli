@@ -34,6 +34,7 @@ def app(
     base_app: Web3CliTest,
     accounts: ape.managers.accounts.AccountManager,
     accounts_keys: List[str],
+    ape_chain_name: str,
 ) -> Iterator[Web3CliTest]:
     """An app instance that can be used for tests on the local
     network (e.g. ganache, anvil or hardhat).
@@ -42,6 +43,6 @@ def app(
 
     It depends on the accounts fixture of ape, which in turn depends on devnetwork
     fixture, which activates the local chain"""
-    seed_local_chain(base_app)
+    seed_local_chain(base_app, ape_chain_name)
     seed_local_accounts(base_app, accounts, accounts_keys)
     yield base_app

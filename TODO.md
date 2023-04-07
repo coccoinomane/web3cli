@@ -5,6 +5,7 @@
 - Brownie: test add liq + swap
 - Swap: refactor in web3core + test
 - Token: test approve
+- Tests: Why scope of TST fixture must be function?
 
 ### Commands 
 

@@ -27,7 +27,7 @@ class TxController(Controller):
         chain_ready_or_raise(self.app)
         client = make_client(self.app)
         tx = client.w3.eth.get_transaction(self.app.pargs.hash)
-        tx_as_dict = json.loads(Web3.toJSON(tx))
+        tx_as_dict = json.loads(Web3.to_json(tx))
         self.app.render(tx_as_dict, indent=4, handler="json")
 
     @ex(
@@ -41,5 +41,5 @@ class TxController(Controller):
         chain_ready_or_raise(self.app)
         client = make_client(self.app)
         receipt = client.w3.eth.wait_for_transaction_receipt(self.app.pargs.hash)
-        receipt_as_dict = json.loads(Web3.toJSON(receipt))
+        receipt_as_dict = json.loads(Web3.to_json(receipt))
         self.app.render(receipt_as_dict, indent=4, handler="json")

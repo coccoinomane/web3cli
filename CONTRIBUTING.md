@@ -77,7 +77,7 @@ This will create a `newdb` file in the current folder, which will be used by `we
 
 Plese run `pdm test` before every commit, to make sure your edits did not mess with the pre-existing code.
 
-Some tests require a local blockchain: we recommend installing [anvil](https://github.com/foundry-rs/foundry/blob/master/README.md#installation).
+Some tests require a local blockchain: we recommend installing [anvil](https://github.com/foundry-rs/foundry/blob/master/README.md#installation). You can also use [ganache](https://github.com/trufflesuite/ganache) but but a couple of tests will fail because tests are thought for EIP-1559 compatible chains.
 
 To create a new test, feel free to copy and customize an existing one: all tests are in the [`tests`](./tests) folder.
 
