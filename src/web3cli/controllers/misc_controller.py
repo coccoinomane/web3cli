@@ -27,11 +27,11 @@ class MiscController(Controller):
         help="Get the balance of the given address in the blockchain coin (ETH, BNB, AVAX, etc)",
         arguments=[
             (["address"], {"action": "store"}),
+            (["-b", "--block"], args.block()),
             (
-                ["unit"],
+                ["-u", "--unit"],
                 {
                     "help": "optionally specify the unit to use to show the balance (wei, gwei, etc). If you need exact comparisons, use wei.",
-                    "nargs": "?",
                     "default": "ether",
                 },
             ),
@@ -41,7 +41,8 @@ class MiscController(Controller):
         chain_ready_or_raise(self.app)
         address = resolve_address(self.app.pargs.address, chain=self.app.chain_name)
         balance = make_client(self.app).w3.eth.get_balance(
-            Web3.to_checksum_address(address)
+            Web3.to_checksum_address(address),
+            block_identifier=parse_block(self.app, "block"),
         )
         if self.app.pargs.unit != "wei":
             balance = Web3.from_wei(balance, self.app.pargs.unit)
