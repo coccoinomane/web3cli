@@ -49,7 +49,7 @@ def test_balance_with_unit_gwei(
 ) -> None:
     alice_balance = alice.balance
     bob.transfer(alice, 10**18)
-    app.set_args(["balance", alice.address, "gwei"]).run()
+    app.set_args(["balance", alice.address, "-u", "gwei"]).run()
     data, output = app.last_rendered
     assert type(data["amount"]) is Decimal
     assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "gwei")
@@ -65,7 +65,7 @@ def test_balance_with_unit_wei(
 ) -> None:
     alice_balance = alice.balance
     bob.transfer(alice, 10**18)
-    app.set_args(["balance", alice.address, "wei"]).run()
+    app.set_args(["balance", alice.address, "-u", "wei"]).run()
     data, output = app.last_rendered
     assert type(data["amount"]) is int
     assert data["amount"] == alice_balance + 10**18
