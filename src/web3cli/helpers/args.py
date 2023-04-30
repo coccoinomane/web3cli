@@ -344,6 +344,32 @@ def contract_abi(**kwargs: Any) -> dict[str, Any]:
     } | kwargs
 
 
+def rpc(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "use this RPC url no matter what, ignoring whatever values were added previously"
+    } | kwargs
+
+
+def priority_fee(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
+        "type": int,
+        "default": 1,
+    } | kwargs
+
+
+def signer(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
+    } | kwargs
+
+
+def chain(**kwargs: Any) -> dict[str, Any]:
+    return {
+        "help": "blockchain to use",
+    } | kwargs
+
+
 #  _   _   _     _   _
 # | | | | | |_  (_) | |  ___
 # | | | | | __| | | | | / __|

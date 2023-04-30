@@ -24,32 +24,10 @@ class BaseController(Controller):
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
             ),
-            (
-                ["-c", "--chain"],
-                {
-                    "help": "blockchain to use",
-                },
-            ),
-            (
-                ["-s", "--signer"],
-                {
-                    "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
-                },
-            ),
-            (
-                ["--priority-fee", "--tip"],
-                {
-                    "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
-                    "type": int,
-                    "default": 1,
-                },
-            ),
-            (
-                ["--rpc"],
-                {
-                    "help": "use this RPC url no matter what, ignoring whatever values were added previously"
-                },
-            ),
+            (["-c", "--chain"], args.chain()),
+            (["-s", "--signer"], args.signer()),
+            (["--priority-fee", "--tip"], args.priority_fee()),
+            (["--rpc"], args.rpc()),
         ]
 
     @ex(help="Show the version of web3cli")
