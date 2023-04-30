@@ -27,7 +27,7 @@ class MiscController(Controller):
         help="Get the balance of the given address in the blockchain coin (ETH, BNB, AVAX, etc)",
         arguments=[
             (["address"], {"action": "store"}),
-            (["-b", "--block"], args.block()),
+            args.block(),
             (
                 ["-u", "--unit"],
                 {
@@ -58,7 +58,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
-        arguments=[(["block_identifier"], args.block(nargs="?"))],
+        arguments=[args.block("block_identifier", nargs="?")],
     )
     def block(self) -> None:
         chain_ready_or_raise(self.app)

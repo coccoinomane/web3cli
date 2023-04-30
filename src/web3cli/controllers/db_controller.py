@@ -17,7 +17,7 @@ class DbController(Controller):
 
     @ex(
         help="delete the entire db: signers, addresses, chains, etc",
-        arguments=[(["--force"], args.force())],
+        arguments=[args.force()],
     )
     def delete(self) -> None:
         if not self.app.pargs.force:

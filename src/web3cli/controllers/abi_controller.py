@@ -36,11 +36,8 @@ class AbiController(Controller):
                     "nargs": "?",
                 },
             ),
-            (
-                ["--abi"],
-                args.contract_abi(
-                    help="Pass the ABI of the contract instead, as a string or file"
-                ),
+            args.contract_abi(
+                help="Pass the ABI of the contract instead, as a string or file"
             ),
             (
                 ["--full", "-f"],
@@ -72,11 +69,8 @@ class AbiController(Controller):
                     "nargs": "?",
                 },
             ),
-            (
-                ["--abi"],
-                args.contract_abi(
-                    help="Pass the ABI of the contract instead, as a string or file"
-                ),
+            args.contract_abi(
+                help="Pass the ABI of the contract instead, as a string or file"
             ),
             (
                 ["--full", "-f"],

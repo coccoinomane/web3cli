@@ -30,11 +30,10 @@ class CallController(Controller):
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
-            (["-b", "--block"], args.block()),
+            args.block(),
             (
                 ["--from"],
                 {
-                    "action": "store",
                     "dest": "from_",
                     "help": "When simulating write operations a 'from' address is needed. If a signer is found, its address will be used, otherwise you need to specify a 'from' address with this option.",
                 },

@@ -79,16 +79,12 @@ class ContractController(Controller):
                     "action": "store_true",
                 },
             ),
-            (
-                ["--abi"],
-                args.contract_abi(
-                    help="Contract's ABI, as a string or file. Required, unless --type is provided.",
-                ),
+            args.contract_abi(
+                help="Contract's ABI, as a string or file. Required, unless --type is provided.",
             ),
         ],
     )
     def add(self) -> None:
-
         # Parse ABI file
         abi = None
         if self.app.pargs.abi:

@@ -41,7 +41,7 @@ class SendController(Controller):
                     "nargs": "?",
                 },
             ),
-            (["-f", "--force"], args.force()),
+            args.force(),
         ],
     )
     def send(self) -> None:

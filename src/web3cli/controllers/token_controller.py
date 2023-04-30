@@ -43,11 +43,11 @@ class TokenController(Controller):
                     "action": "store_true",
                 },
             ),
-            (["--return"], args.tx_return()),
-            (["--dry-run"], args.tx_dry_run()),
-            (["--call"], args.tx_call()),
-            (["--gas-limit"], args.tx_gas_limit()),
-            (["-f", "--force"], args.force()),
+            args.tx_return(),
+            args.tx_dry_run(),
+            args.tx_call(),
+            args.tx_gas_limit(),
+            args.force(),
         ],
     )
     def approve(self) -> None:

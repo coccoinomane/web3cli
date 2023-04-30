@@ -1,7 +1,7 @@
 import argparse
 import json
 import os
-from typing import Any, Literal, Tuple, Union
+from typing import Any, List, Literal, Tuple, Union
 
 from cement import App
 from web3.types import ABI
@@ -198,26 +198,35 @@ def parse_contract_abi(app: App) -> ABI:
 #                   |___/
 
 
-def block(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
-        + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
-        "action": "store",
-        "default": "latest",
-    } | kwargs
-
-
-def force(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "proceed without asking for confirmation",
-        "action": "store_true",
-    } | kwargs
-
-
-def tx_return(**kwargs: Any) -> dict[str, Any]:
+def block(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     return (
+        list(name_or_flags) or ["-b", "--block"],
         {
-            "help": """Requested output, defaults to 'hash'. Can be one of:
+            "help": "Block identifier. Can be an integer, an hex string, or one beetween: "
+            + ", ".join(BLOCK_PREDEFINED_IDENTIFIERS),
+            "default": "latest",
+        }
+        | kwargs,
+    )
+
+
+def force(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--force"],
+        {
+            "help": "proceed without asking for confirmation",
+            "action": "store_true",
+        }
+        | kwargs,
+    )
+
+
+def tx_return(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--return"],
+        (
+            {
+                "help": """Requested output, defaults to 'hash'. Can be one of:
                 'hash' will print the transaction hash;
                 'params' will print the tx sent to the blockchain;
                 'sig' will print the signed transaction object;
@@ -226,148 +235,232 @@ def tx_return(**kwargs: Any) -> dict[str, Any]:
                 'receipt' will wait for the tx receipt and print it;
                 'all' will print all the above.
             """,
-            "choices": TX_LIFE_PROPERTIES + ["all"],
-            "default": "hash",
-        }
-        | kwargs
+                "choices": TX_LIFE_PROPERTIES + ["all"],
+                "default": "hash",
+            }
+            | kwargs
+        ),
     )
 
 
-def tx_dry_run(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Stop before sending the transaction to the blockchain",
-        "action": argparse.BooleanOptionalAction,
-        "default": False,
-    } | kwargs
-
-
-def tx_call(**kwargs: Any) -> dict[str, Any]:
+def tx_dry_run(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     return (
+        list(name_or_flags) or ["--dry-run"],
         {
-            "help": """
+            "help": "Stop before sending the transaction to the blockchain",
+            "action": argparse.BooleanOptionalAction,
+            "default": False,
+        }
+        | kwargs,
+    )
+
+
+def tx_call(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--call"],
+        (
+            {
+                "help": """
                 Call the contract function with eth_call, before sending it.
                 Useful to test the tx without spending gas
             """,
-            "action": argparse.BooleanOptionalAction,
-            "default": True,
-        }
-        | kwargs
+                "action": argparse.BooleanOptionalAction,
+                "default": True,
+            }
+            | kwargs
+        ),
     )
 
 
-def tx_gas_limit(**kwargs: Any) -> dict[str, Any]:
+def tx_gas_limit(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
     return (
-        {
-            "help": """
+        list(name_or_flags) or ["--gas-limit"],
+        (
+            {
+                "help": """
                 Gas limit to use for the transaction. If not specified, it will
                 be estimated by simulating a function call. Usually, you need to
                 specify the gas limit only if in conjunction with the --no-call
                 option.
             """,
-            "type": int,
-        }
-        | kwargs
+                "type": int,
+            }
+            | kwargs
+        ),
     )
 
 
-def swap_dex(**kwargs: Any) -> dict[str, Any]:
+def swap_dex(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     return (
-        {
-            "help": """
+        list(name_or_flags) or ["dex"],
+        (
+            {
+                "help": """
                 Decentralized Exchange to use for the swap.
                 Only Uniswap V2 clones supported for now.
                 To see full list: `w3 contract list uniswap_v2`.
             """,
-        }
-        | kwargs
+            }
+            | kwargs
+        ),
     )
 
 
-def swap_token_in(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Ticker or Address of the token to swap from, e.g. USDC.",
-    } | kwargs
+def swap_token_in(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["token_in"],
+        {
+            "help": "Ticker or Address of the token to swap from, e.g. USDC.",
+        }
+        | kwargs,
+    )
 
 
-def swap_amount(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Amount of tokens to swap, e.g. 100.",
-        "type": float,
-    } | kwargs
+def swap_amount(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["amount"],
+        {
+            "help": "Amount of tokens to swap, e.g. 100.",
+            "type": float,
+        }
+        | kwargs,
+    )
 
 
-def swap_token_out(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Ticker or Address of the token to swap to, e.g. WETH.",
-    } | kwargs
+def swap_token_out(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["token_out"],
+        {
+            "help": "Ticker or Address of the token to swap to, e.g. WETH.",
+        }
+        | kwargs,
+    )
 
 
-def swap_slippage(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Slippage tolerance for the swap, as a percentage. Must be between 0 and 100, defaults to 2.",
-        "type": float,
-        "default": 2,
-    } | kwargs
+def swap_slippage(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--slippage"],
+        {
+            "help": "Slippage tolerance for the swap, as a percentage. Must be between 0 and 100, defaults to 2.",
+            "type": float,
+            "default": 2,
+        }
+        | kwargs,
+    )
 
 
-def swap_min_out(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Minimum amount of tokens to receive. If the swap would result in less tokens, the swap will fail.",
-        "type": float,
-    } | kwargs
+def swap_min_out(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--min-out"],
+        {
+            "help": "Minimum amount of tokens to receive. If the swap would result in less tokens, the swap will fail.",
+            "type": float,
+        }
+        | kwargs,
+    )
 
 
-def swap_to(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Address to send the output tokens to. Defaults to the address of the signer.",
-    } | kwargs
+def swap_to(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--to"],
+        {
+            "help": "Address to send the output tokens to. Defaults to the address of the signer.",
+        }
+        | kwargs,
+    )
 
 
-def swap_approve(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Whether to approve the DEX to spend the input token",
-        "action": argparse.BooleanOptionalAction,
-        "default": True,
-    } | kwargs
+def swap_approve(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--approve"],
+        {
+            "help": "Whether to approve the DEX to spend the input token",
+            "action": argparse.BooleanOptionalAction,
+            "default": True,
+        }
+        | kwargs,
+    )
 
 
-def swap_deadline(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes.",
-        "default": 15 * 60,
-    } | kwargs
+def swap_deadline(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--deadline"],
+        {
+            "help": "Deadline for the swap, in seconds. If the swap is not executed before the deadline, it will fail. Defaults to 15 minutes.",
+            "default": 15 * 60,
+        }
+        | kwargs,
+    )
 
 
-def contract_abi(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "ABI of the contract. Can be a path to a file, or a JSON string.",
-    } | kwargs
+def contract_abi(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--abi"],
+        {
+            "help": "ABI of the contract. Can be a path to a file, or a JSON string.",
+        }
+        | kwargs,
+    )
 
 
-def rpc(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "use this RPC url no matter what, ignoring whatever values were added previously"
-    } | kwargs
+def rpc(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--rpc"],
+        {
+            "help": "use this RPC url no matter what, ignoring whatever values were added previously"
+        }
+        | kwargs,
+    )
 
 
-def priority_fee(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
-        "type": int,
-        "default": 1,
-    } | kwargs
+def priority_fee(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--priority-fee", "--tip"],
+        {
+            "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
+            "type": int,
+            "default": 1,
+        }
+        | kwargs,
+    )
 
 
-def signer(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
-    } | kwargs
+def signer(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["-s", "--signer"],
+        {
+            "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
+        }
+        | kwargs,
+    )
 
 
-def chain(**kwargs: Any) -> dict[str, Any]:
-    return {
-        "help": "blockchain to use",
-    } | kwargs
+def chain(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["-c", "--chain"],
+        {
+            "help": "blockchain to use",
+        }
+        | kwargs,
+    )
 
 
 #  _   _   _     _   _

@@ -24,10 +24,10 @@ class BaseController(Controller):
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
             ),
-            (["-c", "--chain"], args.chain()),
-            (["-s", "--signer"], args.signer()),
-            (["--priority-fee", "--tip"], args.priority_fee()),
-            (["--rpc"], args.rpc()),
+            args.chain(),
+            args.signer(),
+            args.priority_fee(),
+            args.rpc(),
         ]
 
     @ex(help="Show the version of web3cli")

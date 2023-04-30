@@ -20,12 +20,9 @@ class KeyController(Controller):
     @ex(
         help="generate a new random password and set it as the app key",
         arguments=[
-            (
-                ["-f", "--force"],
-                args.force(
-                    help="replace the key if it already exists; all signers will need to be recreated"
-                ),
-            )
+            args.force(
+                help="replace the key if it already exists; all signers will need to be recreated"
+            ),
         ],
     )
     def create(self) -> None:
