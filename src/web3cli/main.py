@@ -18,6 +18,7 @@ from web3cli.controllers.crud.history_controller import HistoryController
 from web3cli.controllers.crud.rpc_controller import RpcController
 from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
+from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
 from web3cli.controllers.swap_controller import SwapController
@@ -106,6 +107,7 @@ class Web3Cli(App):
             TransactController,
             SwapController,
             TokenController,
+            KeyfileController,
         ]
 
         # extend the app with cement hook system

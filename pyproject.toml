@@ -21,6 +21,7 @@ dependencies = [
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
     "typing-extensions>=4.4.0",
+    "eth-keyfile>=0.6.1",
 ]
 
 [tool.pdm.dev-dependencies]
