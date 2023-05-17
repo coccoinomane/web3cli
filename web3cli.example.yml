@@ -12,7 +12,7 @@
 
 web3cli:
   ### Application key. You neede one to add a signer; generate
-  ### it with `w3 key generate`
+  ### it with `w3 app-key generate`
   app_key: null
   ### Toggle application level debug
   debug: false

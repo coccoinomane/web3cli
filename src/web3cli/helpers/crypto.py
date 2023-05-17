@@ -24,6 +24,6 @@ def get_app_key_or_raise(app: App) -> bytes:
     app_key = app.config.get("web3cli", "app_key")
     if not app_key:
         raise InvalidConfig(
-            "Application key not defined; use `w3 key create` to generate one"
+            "Application key not defined; use `w3 app-key create` to generate one"
         )
     return ast.literal_eval(app_key)

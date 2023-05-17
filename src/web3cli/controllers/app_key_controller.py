@@ -8,12 +8,12 @@ from web3cli.helpers import args
 from web3cli.helpers.config import update_setting_in_config_file
 
 
-class KeyController(Controller):
-    """Handler of the `w3 key` commands"""
+class AppKeyController(Controller):
+    """Handler of the `w3 app-key` commands"""
 
     class Meta:
-        label = "key"
-        help = "handle passwords and application keys"
+        label = "app-key"
+        help = "create the application key"
         stacked_type = "nested"
         stacked_on = "base"
 
@@ -30,7 +30,7 @@ class KeyController(Controller):
         key_exists = True if self.get_option("web3cli.app_key") else False
         if key_exists and not self.app.pargs.force:
             self.app.log.error(
-                "App key already exists, run `w3 key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."
+                "App key already exists, run `w3 app-key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."
             )
             self.app.exit_code = 0
             sys.exit()

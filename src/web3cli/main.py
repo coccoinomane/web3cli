@@ -7,6 +7,7 @@ from cement.core.exc import CaughtSignal
 
 from web3cli import hooks
 from web3cli.controllers.abi_controller import AbiController
+from web3cli.controllers.app_key_controller import AppKeyController
 from web3cli.controllers.base_controller import BaseController
 from web3cli.controllers.call_controller import CallController
 from web3cli.controllers.config_controller import ConfigController
@@ -17,7 +18,6 @@ from web3cli.controllers.crud.history_controller import HistoryController
 from web3cli.controllers.crud.rpc_controller import RpcController
 from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
-from web3cli.controllers.key_controller import KeyController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.send_controller import SendController
 from web3cli.controllers.swap_controller import SwapController
@@ -97,7 +97,7 @@ class Web3Cli(App):
             AddressController,
             HistoryController,
             ContractController,
-            KeyController,
+            AppKeyController,
             MiscController,
             SendController,
             TxController,
