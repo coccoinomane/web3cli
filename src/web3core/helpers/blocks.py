@@ -20,3 +20,12 @@ def get_block_type(block_identifier: Union[str, int]) -> str:
     return select_method_for_block_identifier(
         block_identifier, if_hash="hash", if_number="number", if_predefined="predefined"
     )
+
+
+def is_valid_block_identifier(block_identifier: Union[str, int]) -> bool:
+    """Return True if the given block identifier is valid."""
+    try:
+        get_block_type(block_identifier)
+        return True
+    except ValueError:
+        return False
