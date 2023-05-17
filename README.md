@@ -120,20 +120,15 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 `web3cli` comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
 
 See the available contracts with `w3 contract list`:
-See the available contracts with `w3 contract list`:
 
 ```
 w3 contract list              # contracts on Ethereum
-w3 contract list              # contracts on Ethereum
-w3 --chain bnb contract list  # contracts on BNB chain
 w3 --chain bnb contract list  # contracts on BNB chain
 ```
 
 You can also add custom contracts with `w3 contract add`:
-You can also add custom contracts with `w3 contract add`:
 
 ```
-w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 ```
 
@@ -185,7 +180,7 @@ w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver ad
 
 # Multichain support
 
-`web3cli` comes with out-of-the-box support for [many chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains), including Binance Chain, Avalanche and Polygon.
+`web3cli` comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
 
 Pass the chain name as an optional argument:
 
@@ -194,7 +189,7 @@ w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
 w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
 ```
 
-or use one of the provided aliases:
+You can also use one of the provided aliases, like `w3bnb`:
 
 ```
 w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
@@ -212,15 +207,11 @@ w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
 # Add custom RPCs
 
 Add custom RPCs to any existing chain with `w3 rpc add`:
-Add custom RPCs to any existing chain with `w3 rpc add`:
 
 ```
 w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
-w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
 ```
 
-List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
-List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
 List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
 
 # Add custom chains
@@ -293,7 +284,7 @@ w3 config set default_signer my_signer
 Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wiki/). In particular:
 
 - [🫡 List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands)
-- [⛓ Supported chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains)
+- [⛓ All supported chains](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains)
 - [📝 Configuration](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%9D-Configuration)
 - [🪟 Run web3cli on Windows](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)
 - [↪️ Output processing](https://github.com/coccoinomane/web3cli/wiki/%E2%86%AA%EF%B8%8F-Output-processing)
