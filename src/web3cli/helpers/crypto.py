@@ -1,8 +1,12 @@
 import ast
+import getpass
+import json
+from typing import Any
 
 from cement import App
+from eth_account import Account
 
-from web3cli.exceptions import InvalidConfig
+from web3cli.exceptions import InvalidConfig, Web3CliError
 from web3core.helpers.crypto import decrypt_string, encrypt_string
 
 
@@ -27,3 +31,23 @@ def get_app_key_or_raise(app: App) -> bytes:
             "Application key not defined; use `w3 app-key create` to generate one"
         )
     return ast.literal_eval(app_key)
+
+
+def decrypt_keyfile(path: str) -> str:
+    """Return the private key of the given keyfile; ask for the password"""
+    with open(path) as f:
+        keyfile_json = json.load(f)
+    password = getpass.getpass("Keyfile password: ")
+    try:
+        private_key = Account.decrypt(keyfile_json, password)
+    except ValueError as e:
+        raise Web3CliError(f"Could not decrypt keyfile: {e}")
+    return private_key.hex()
+
+
+def encrypt_to_keyfile(kdf: str = None, iterations: int = None) -> dict[str, Any]:
+    """Return a keyfile dict obtained from the given private key; ask for the password"""
+    private_key = getpass.getpass("Private key without leading 0x: ")
+    password = getpass.getpass("Keyfile password: ")
+    keyfile_json = Account.encrypt(private_key, password, kdf, iterations)
+    return keyfile_json

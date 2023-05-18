@@ -1,11 +1,9 @@
-import getpass
 import json
 
 from cement import ex
-from eth_account import Account
 
 from web3cli.controllers.controller import Controller
-from web3cli.exceptions import Web3CliError
+from web3cli.helpers.crypto import decrypt_keyfile, encrypt_to_keyfile
 
 
 class KeyfileController(Controller):
@@ -25,14 +23,8 @@ class KeyfileController(Controller):
         aliases=["decrypt"],
     )
     def decode(self) -> None:
-        with open(self.app.pargs.path) as f:
-            keyfile_json = json.load(f)
-        password = getpass.getpass("Enter password to decrypt keyfile: ")
-        try:
-            private_key = Account.decrypt(keyfile_json, password)
-        except ValueError as e:
-            raise Web3CliError(f"Could not decrypt keyfile: {e}")
-        self.app.print(str(private_key.hex()[2:]))
+        key = decrypt_keyfile(self.app.pargs.path)
+        self.app.print(key.replace("0x", ""))
 
     @ex(
         help="Create a new keyfile from a private key",
@@ -40,11 +32,9 @@ class KeyfileController(Controller):
         arguments=[
             (["path"], {"help": "path of output keyfile"}),
         ],
-        aliases=["encrypt"],
+        aliases=["encode", "encrypt"],
     )
     def import_(self) -> None:
-        private_key = getpass.getpass("Enter the private key, without the leading 0x: ")
-        password = getpass.getpass("Enter a password to encrypt the keyfile: ")
-        keyfile_json = Account.encrypt(private_key=private_key, password=password)
+        keyfile_json = encrypt_to_keyfile()
         json.dump(keyfile_json, open(self.app.pargs.path, "w"))
         self.app.log.info(f"Keyfile saved to {self.app.pargs.path}")
