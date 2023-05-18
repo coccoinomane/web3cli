@@ -5,9 +5,10 @@ from eth_account import Account
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
-from web3cli.helpers.crypto import encrypt_string_with_app_key
+from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
 from web3cli.helpers.render import render_table
 from web3core.exceptions import KeyIsInvalid, SignerNotFound
+from web3core.helpers.misc import are_mutually_exclusive
 from web3core.models.signer import Signer
 
 
@@ -68,6 +69,12 @@ class SignerController(Controller):
                     "help": "optionally, provide the private key directly; if you do so, make sure you clean your command history afterwards",
                 },
             ),
+            (
+                ["--keyfile"],
+                {
+                    "help": "optionally, provide the path to a keyfile to import the private key from"
+                },
+            ),
         ],
     )
     def add(self) -> None:
@@ -77,9 +84,13 @@ class SignerController(Controller):
                 f"Signer with name '{self.app.pargs.name}' already exists; to delete it, use `w3 signer delete {self.app.pargs.name}`"
             )
         # Validate optional args
-        if self.app.pargs.create and self.app.pargs.private_key:
+        if not are_mutually_exclusive(
+            self.app.pargs.create,
+            bool(self.app.pargs.keyfile),
+            bool(self.app.pargs.private_key),
+        ):
             raise Web3CliError(
-                "Arguments --create and --private-key are mutually exclusive"
+                "Arguments --create, --private-key and --keyfile cannot coexist"
             )
         # Case 1: private key passed via argument
         if self.app.pargs.private_key:
@@ -87,7 +98,10 @@ class SignerController(Controller):
         # Case 2: generate private key from scratch
         elif self.app.pargs.create:
             key = Account.create(self.app.app_key).key.hex()
-        # Case 3: let the user input the key (default)
+        # Case 3: json keyfile passed via argument
+        elif self.app.pargs.keyfile:
+            key = decrypt_keyfile(self.app.pargs.keyfile)
+        # Case 4: let the user input the key (default)
         else:
             key = getpass.getpass("Private key: ")
         # Verify key

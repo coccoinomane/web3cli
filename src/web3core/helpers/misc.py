@@ -76,3 +76,8 @@ def to_bool(s: str) -> bool:
         return True
     else:
         raise ValueError(f"Cannot cast {s} to bool")
+
+
+def are_mutually_exclusive(*args: bool) -> bool:
+    """Check that maximum one of the arguments is True."""
+    return sum(args) <= 1
