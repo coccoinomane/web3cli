@@ -48,7 +48,7 @@ def decrypt_keyfile_dict(keyfile_dict: dict[str, Any]) -> str:
         private_key = Account.decrypt(keyfile_dict, password)
     except ValueError as e:
         raise Web3CliError(f"Could not decrypt keyfile: {e}")
-    return private_key.hex()
+    return private_key.hex().replace("0x", "")
 
 
 def encrypt_to_keyfile(kdf: str = None, iterations: int = None) -> dict[str, Any]:

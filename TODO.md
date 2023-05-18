@@ -2,8 +2,9 @@
 
 ### Top priority
 
-- Test keyfile controller
-- Test signer from keyfile
+- Test get_signer() switch function
+- Refactor code to use get_signer() switch function
+- Do we really need both app.chain_name and app.chain?
 - Define function that parses chain and signer args, creates objects, extends app object.  Call this function in each command, rather than in args.py, and make it replace all the calls to chain_ready_or_raise and signer_ready_or_rise
 
 ### Commands 

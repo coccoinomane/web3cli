@@ -29,11 +29,20 @@ class KeyfileController(Controller):
     @ex(
         help="Create a new keyfile from a private key",
         arguments=[
-            (["path"], {"help": "path of output keyfile"}),
+            (
+                ["path"],
+                {
+                    "help": "path of output keyfile; omit to print to screen",
+                    "nargs": "?",
+                },
+            ),
         ],
         aliases=["encode", "encrypt"],
     )
     def create(self) -> None:
         keyfile_dict = encrypt_to_keyfile()
-        json.dump(keyfile_dict, open(self.app.pargs.path, "w"))
-        self.app.log.info(f"Keyfile saved to {self.app.pargs.path}")
+        if self.app.pargs.path:
+            json.dump(keyfile_dict, open(self.app.pargs.path, "w"))
+            self.app.log.info(f"Keyfile saved to {self.app.pargs.path}")
+        else:
+            self.app.print(json.dumps(keyfile_dict))
