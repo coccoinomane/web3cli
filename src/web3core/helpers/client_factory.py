@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any, Type, Union
 
 from web3client.base_client import BaseClient
 
@@ -31,7 +31,7 @@ def make_base_client(
 
 def make_base_wallet(
     chain: Chain,
-    signer_name: str,
+    signer: Union[Signer, str],
     password: bytes,
     node_uri: str = None,
     base: Type[BaseClient] = BaseClient,
@@ -39,12 +39,16 @@ def make_base_wallet(
     **client_args: Any,
 ) -> BaseClient:
     """Return a brand new client configured for the given blockchain,
-    with signing support. You need to provide the name of the signer
-    from the DB, and a password to decrypt the signer's key."""
+    with signing support.
+
+    You need to provide the signer (either its name in the DB or an
+    already initialized signer object) and a password to decrypt the
+    signer's key."""
     client = make_base_client(chain, node_uri, base, **client_args)
-    signer = Signer.get_by_name_or_raise(signer_name)
+    if isinstance(signer, str):
+        signer = Signer.get_by_name_or_raise(signer)
     if logger:
-        logger(f"Using signer {signer_name}")
+        logger(f"Using signer '{signer.name}' with address {signer.address}")
     client.set_account(decrypt_string(signer.key, password))
     return client
 
@@ -69,7 +73,7 @@ def make_contract_client(
 def make_contract_wallet(
     contract_name: str,
     chain: Chain,
-    signer_name: str,
+    signer: Union[Signer, str],
     password: bytes,
     node_uri: str = None,
     base: Type[BaseClient] = BaseClient,
@@ -81,7 +85,7 @@ def make_contract_wallet(
     if present, or from the contract's type, if not."""
     contract = Contract.get_by_name_and_chain_or_raise(contract_name, chain.name)
     client = make_base_wallet(
-        chain, signer_name, password, node_uri, base, logger, **client_args
+        chain, signer, password, node_uri, base, logger, **client_args
     )
     client.set_contract(contract.address, contract.resolve_abi())
     return client

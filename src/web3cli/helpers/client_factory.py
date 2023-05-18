@@ -4,6 +4,7 @@ from cement import App
 from web3client.base_client import BaseClient
 
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers.signer import get_signer
 from web3core.helpers.client_factory import make_base_client, make_base_wallet
 from web3core.helpers.client_factory import (
     make_contract_client as make_contract_client_,
@@ -34,7 +35,7 @@ def make_wallet(app: App, log: bool = False, **client_args: Any) -> BaseClient:
         )
     return make_base_wallet(
         chain=app.chain,
-        signer_name=app.signer,
+        signer=get_signer(app, app.signer),
         password=app.app_key,
         node_uri=app.rpc,
         logger=app.log.info if log else app.log.info if log else None,
@@ -72,7 +73,7 @@ def make_contract_wallet(
     return make_contract_wallet_(
         contract_name=contract_name,
         chain=app.chain,
-        signer_name=app.signer,
+        signer=get_signer(app, app.signer),
         password=app.app_key,
         node_uri=app.rpc,
         logger=app.log.info if log else app.log.info if log else None,
