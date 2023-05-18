@@ -2,13 +2,15 @@
 
 ### Top priority
 
-- Brownie: test add liq + swap
-- Swap: refactor in web3core + test
-- Token: test approve
-- Tests: Why scope of TST fixture must be function?
+- Test keyfile controller
+- Test signer from keyfile
+- Define function that parses chain and signer args, creates objects, extends app object.  Call this function in each command, rather than in args.py, and make it replace all the calls to chain_ready_or_raise and signer_ready_or_rise
 
 ### Commands 
 
+- Tests: test add liq + swap
+- Swap: refactor in web3core + test
+- Token: test approve
 - Get tokens balance
 - w3 ls to see ETH balances of all signers
 - Token: Approve and allowance commands

@@ -7,6 +7,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
 from web3cli.helpers.render import render_table
+from web3cli.helpers.signer import get_signer
 from web3core.exceptions import KeyIsInvalid, SignerNotFound
 from web3core.helpers.misc import are_mutually_exclusive
 from web3core.models.signer import Signer
@@ -46,7 +47,7 @@ class SignerController(Controller):
     )
     def get(self) -> None:
         if self.app.pargs.name:
-            self.app.print(Signer.get_address(self.app.pargs.name))
+            self.app.print(get_signer(self.app, self.app.pargs.name).address)
         elif self.app.signer:
             self.app.print(self.app.signer)
         else:

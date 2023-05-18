@@ -34,20 +34,27 @@ def get_app_key_or_raise(app: App) -> bytes:
 
 
 def decrypt_keyfile(path: str) -> str:
-    """Return the private key of the given keyfile; ask for the password"""
+    """Return the private key of the given keyfile file; the user will be asked
+    for the password"""
     with open(path) as f:
-        keyfile_json = json.load(f)
+        keyfile_dict = json.load(f)
+    return decrypt_keyfile_dict(keyfile_dict)
+
+
+def decrypt_keyfile_dict(keyfile_dict: dict[str, Any]) -> str:
+    """Return the private key of the given keyfile dict; the user will be asked"""
     password = getpass.getpass("Keyfile password: ")
     try:
-        private_key = Account.decrypt(keyfile_json, password)
+        private_key = Account.decrypt(keyfile_dict, password)
     except ValueError as e:
         raise Web3CliError(f"Could not decrypt keyfile: {e}")
     return private_key.hex()
 
 
 def encrypt_to_keyfile(kdf: str = None, iterations: int = None) -> dict[str, Any]:
-    """Return a keyfile dict obtained from the given private key; ask for the password"""
-    private_key = getpass.getpass("Private key without leading 0x: ")
+    """Return a keyfile dict obtained from the given private key; the
+    user will be asked for the password"""
+    private_key = getpass.getpass("Private key: ")
     password = getpass.getpass("Keyfile password: ")
-    keyfile_json = Account.encrypt(private_key, password, kdf, iterations)
-    return keyfile_json
+    keyfile_dict = Account.encrypt(private_key, password, kdf, iterations)
+    return keyfile_dict
