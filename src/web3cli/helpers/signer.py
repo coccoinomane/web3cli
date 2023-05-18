@@ -26,7 +26,14 @@ def get_signer_from_keyfile_dict(
     return Signer.instantiate_encrypt(name, key, app.app_key)
 
 
-def get_signer(app: App, signer_identifier: str) -> Signer:
+def get_signer(app: App, signer_identifier: str = None) -> Signer:
+    """Return a Signer object from the given identifier (name, address, private key
+    or path to keyfile)"""
+
+    # By default, use the signer specified in the app
+    if signer_identifier is None:
+        signer_identifier = app.signer
+
     # Case 1: signer_identifier is the name of a registered signer
     try:
         signer = Signer.get_by_name_or_raise(signer_identifier)

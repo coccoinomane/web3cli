@@ -35,7 +35,7 @@ def make_wallet(app: App, log: bool = False, **client_args: Any) -> BaseClient:
         )
     return make_base_wallet(
         chain=app.chain,
-        signer=get_signer(app, app.signer),
+        signer=get_signer(app),
         password=app.app_key,
         node_uri=app.rpc,
         logger=app.log.info if log else app.log.info if log else None,
@@ -73,7 +73,7 @@ def make_contract_wallet(
     return make_contract_wallet_(
         contract_name=contract_name,
         chain=app.chain,
-        signer=get_signer(app, app.signer),
+        signer=get_signer(app),
         password=app.app_key,
         node_uri=app.rpc,
         logger=app.log.info if log else app.log.info if log else None,

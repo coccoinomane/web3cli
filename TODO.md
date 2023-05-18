@@ -3,12 +3,13 @@
 ### Top priority
 
 - Test get_signer() switch function
-- Refactor code to use get_signer() switch function
 - Do we really need both app.chain_name and app.chain?
+- Autosign when loading signer from keyfiles, or pre-store the signer object
 - Define function that parses chain and signer args, creates objects, extends app object.  Call this function in each command, rather than in args.py, and make it replace all the calls to chain_ready_or_raise and signer_ready_or_rise
 
 ### Commands 
 
+- Find a way to screen app.signer when it is a private key
 - Tests: test add liq + swap
 - Swap: refactor in web3core + test
 - Token: test approve
