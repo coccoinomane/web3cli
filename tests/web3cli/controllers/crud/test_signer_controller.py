@@ -43,10 +43,10 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
             seed_signers(signers, app.app_key)
             app.set_args(
                 [
-                    "--signer",
-                    s["name"],
                     "signer",
                     "get",
+                    "--signer",
+                    s["name"],
                 ]
             ).run()
             data, output = app.last_rendered

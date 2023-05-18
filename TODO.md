@@ -2,15 +2,12 @@
 
 ### Top priority
 
-- Autosign keyfiles after first time the password is given (or pre-store the signer object).
-- Once autosign is ready, check that swap, send, token approve do not ask the password multiple times
-- Once autosign is ready, never print app.signer but use get_signer().address instead, to avoid exposing the private key
+- Implement attach_chain following attach_signer's example
 - Test get_signer() switch function
+
 
 ### Commands 
 
-- Do we really need both app.chain_name and app.chain?
-- Define function that parses chain and signer args, creates objects, extends app object.  Call this function in each command, rather than in args.py, and make it replace all the calls to chain_ready_or_raise and signer_ready_or_rise
 - Tests: test add liq + swap
 - Swap: refactor in web3core + test
 - Token: test approve

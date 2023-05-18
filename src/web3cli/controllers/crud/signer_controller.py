@@ -5,6 +5,7 @@ from eth_account import Account
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
 from web3cli.helpers.render import render_table
 from web3cli.helpers.signer import get_signer
@@ -43,13 +44,14 @@ class SignerController(Controller):
                     "nargs": "?",
                 },
             ),
+            args.signer(),
         ],
     )
     def get(self) -> None:
         if self.app.pargs.name:
             self.app.print(get_signer(self.app, self.app.pargs.name).address)
-        elif self.app.signer:
-            self.app.print(self.app.signer)
+        elif args.parse_signer(self.app):
+            self.app.print(args.attach_signer(self.app).name)
         else:
             raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
 

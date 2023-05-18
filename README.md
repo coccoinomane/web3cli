@@ -255,7 +255,7 @@ To see the list of saved addresses, run `w3 address list`, to delete an address 
 Commands such as `w3 send` and `w3 swap` require that you specify who is going to sign the transactions.  You can specify the signer with the `--signer` or `-s` flag:
 
 ```bash
-w3 --signer my-signer <command>
+w3 <command> --signer my-signer
 ```
 
 Here, `my_signer` can be any of these things:

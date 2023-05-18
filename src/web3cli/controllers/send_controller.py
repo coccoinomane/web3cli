@@ -40,12 +40,14 @@ class SendController(Controller):
                     "nargs": "?",
                 },
             ),
+            args.signer(),
             args.force(),
         ],
     )
     def send(self) -> None:
         chain_ready_or_raise(self.app)
         # Parse arguments
+        signer = args.attach_signer(self.app)
         to_address = resolve_address(self.app.pargs.to, [Address, Signer])
         amount = to_number(self.app.pargs.amount)
         ticker = self.app.pargs.ticker.lower()
@@ -54,7 +56,7 @@ class SendController(Controller):
             if self.app.pargs.unit:
                 what = f"{amount} {self.app.pargs.unit} unit(s) of {ticker}"
             print(
-                f"You are about to send {what} on the {self.app.chain.name} chain from signer {self.app.signer} to {to_address}."
+                f"You are about to send {what} on the {self.app.chain.name} chain from {signer.address} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
         # Send

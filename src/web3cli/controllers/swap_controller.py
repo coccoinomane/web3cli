@@ -10,7 +10,6 @@ from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
-from web3cli.helpers.signer import get_signer
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers import dex
 from web3core.helpers.misc import yes_or_exit
@@ -45,13 +44,14 @@ class SwapController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            args.signer(),
             args.force(),
         ],
     )
     def swap(self) -> None:
         chain_ready_or_raise(self.app)
-        signer = get_signer(self.app)
         # Parse arguments
+        signer = args.attach_signer(self.app)
         to = self.app.pargs.to if self.app.pargs.to else signer.address
         to_address = resolve_address(to, [Address, Signer])
         amount_in_token_units = decimal.Decimal(self.app.pargs.amount)

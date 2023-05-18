@@ -7,6 +7,7 @@ from cement import App
 from web3.types import ABI
 
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers.signer import get_signer
 from web3core.exceptions import RpcIsInvalid
 from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
@@ -28,7 +29,6 @@ def parse_global_args(app: App) -> None:
     """Extend the app object with global arguments. Must be
     run post argument parsing"""
 
-    app.extend("signer", parse_signer(app))
     app.extend("priority_fee", parse_priority_fee(app))
     app.extend("rpc", parse_rpc(app))
     app.extend("chain_name", parse_chain(app))
@@ -93,9 +93,7 @@ def parse_signer(app: App) -> str:
     - If there's only one signer in the DB, use it
 
     Otherwise, return None, and leave to the app the
-    responsibility to raise an error. We do not raise
-    it here because we don't know yet whether the command
-    invoked by the user really needs a signer.
+    responsibility to raise an error.
     """
     if app.pargs.signer:
         signer = app.pargs.signer
@@ -105,6 +103,22 @@ def parse_signer(app: App) -> str:
         signer = Signer.select().get().name
     else:
         signer = None
+    return signer
+
+
+def attach_signer(app: App) -> Signer:
+    """Parse the signer argument and conver it to a Signer object, then
+    attach the object to the app"""
+    # Parse signer argument
+    signer_identifier = parse_signer(app)
+    if signer_identifier is None:
+        raise Web3CliError(
+            "Could not find a signer, make sure to specify one with --signer"
+        )
+    # Get signer object
+    signer = get_signer(app, signer_identifier)
+    # Attach signer to app
+    app.extend("signer", signer)
     return signer
 
 
@@ -447,7 +461,7 @@ def signer(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any
     return (
         list(name_or_flags) or ["-s", "--signer"],
         {
-            "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
+            "help": "who is going to sign the transaction: a registered signer, a private key, or a keyfile json",
         }
         | kwargs,
     )

@@ -39,12 +39,12 @@ def test_call_wrong_number_of_arguments(
     with pytest.raises(Web3CliError, match="Function transfer expects 2 arguments"):
         app.set_args(
             [
-                "--signer",
-                "alice",
                 "call",
                 "tst",
                 "transfer",
                 "0x123",
+                "--signer",
+                "alice",
             ]
         ).run()
 
@@ -61,13 +61,13 @@ def test_call_wrong_type_of_arguments(
     with pytest.raises(ValueError):
         app.set_args(
             [
-                "--signer",
-                "alice",
                 "call",
                 "tst",
                 "transfer",
                 "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                 "should_be_an_int",
+                "--signer",
+                "alice",
             ]
         ).run()
 
@@ -134,13 +134,13 @@ def test_call_local_token_transfer(
     TST.balanceOf(bob.address)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "call",
             "tst",
             "transfer",
             "bob",
             "1e18",
+            "--signer",
+            "alice",
         ]
     ).run()
     data, output = app.last_rendered

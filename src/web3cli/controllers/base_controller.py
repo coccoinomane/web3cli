@@ -25,7 +25,6 @@ class BaseController(Controller):
                 {"action": "version", "version": get_version_message()},
             ),
             args.chain(),
-            args.signer(),
             args.priority_fee(),
             args.rpc(),
         ]

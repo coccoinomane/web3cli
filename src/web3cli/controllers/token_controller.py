@@ -7,7 +7,6 @@ from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
-from web3cli.helpers.signer import get_signer
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -46,12 +45,13 @@ class TokenController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            args.signer(),
             args.force(),
         ],
     )
     def approve(self) -> None:
         chain_ready_or_raise(self.app)
-        signer = get_signer(self.app)
+        signer = args.attach_signer(self.app)
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain_name)
         # Initialize client
