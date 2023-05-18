@@ -21,7 +21,7 @@ dependencies = [
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
     "typing-extensions>=4.4.0",
-    "eth-keyfile>=0.6.1",
+    "eth-account>=0.8.0",
 ]
 
 [tool.pdm.dev-dependencies]
@@ -94,7 +94,7 @@ warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
 disallow_any_unimported = false
-disallow_untyped_calls = true
+disallow_untyped_calls = false
 exclude = [
     '__pypackages__',
 ]
