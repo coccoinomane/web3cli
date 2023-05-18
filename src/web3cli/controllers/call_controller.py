@@ -7,13 +7,13 @@ from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
+from web3cli.helpers.signer import get_signer
 from web3core.helpers.abi import (
     does_function_write_to_state,
     get_function_abis,
     parse_abi_values,
 )
 from web3core.helpers.resolve import resolve_address
-from web3core.models.signer import Signer
 
 
 class CallController(Controller):
@@ -59,9 +59,9 @@ class CallController(Controller):
         ]  # TODO: overloaded functions?
         if does_function_write_to_state(function_abi):
             if self.app.pargs.from_ is None:
-                if self.app.signer is not None:
-                    from_address = Signer.get_address(self.app.signer)
-                else:
+                try:
+                    from_address = get_signer(self.app).address
+                except:
                     raise Web3CliError(
                         "Cannot call a write operation without a from address: please specify one with either the --from <address> option or the --signer <signer> option."
                     )

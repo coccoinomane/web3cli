@@ -7,7 +7,6 @@ from web3cli.helpers import args
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
-from web3cli.helpers.signer import signer_ready_or_raise
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.abi import parse_abi_values
 from web3core.helpers.misc import yes_or_exit
@@ -41,7 +40,6 @@ class TransactController(Controller):
     )
     def transact(self) -> None:
         chain_ready_or_raise(self.app)
-        signer_ready_or_raise(self.app)
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions

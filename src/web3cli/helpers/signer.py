@@ -14,7 +14,8 @@ def signer_ready_or_raise(app: App) -> None:
         raise Web3CliError(
             "No signer given. Specify one with the `w3 --signer` flag or, if you don't have any yet, add one with `w3 signer add`."
         )
-    Signer.get_by_name_or_raise(app.signer)
+
+    get_signer(app.signer)
 
 
 def get_signer_from_keyfile_dict(
@@ -27,11 +28,17 @@ def get_signer_from_keyfile_dict(
 
 
 def get_signer(app: App, signer_identifier: str = None) -> Signer:
-    """Return a Signer object from the given identifier (name, address, private key
-    or path to keyfile)"""
+    """Return a Signer object from the given identifier (name, address,
+    private key or path to keyfile).
+
+    In case of a keyfile, the user will be asked for the password."""
 
     # By default, use the signer specified in the app
     if signer_identifier is None:
+        if app.signer is None:
+            raise Web3CliError(
+                "Could not find a signer, make sure to specify one with --signer"
+            )
         signer_identifier = app.signer
 
     # Case 1: signer_identifier is the name of a registered signer
