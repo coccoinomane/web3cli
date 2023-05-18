@@ -7,7 +7,7 @@ from tests import helper
 from tests.web3cli.main import Web3CliTest
 
 
-def test_key_create() -> None:
+def test_appkey_create() -> None:
     with Web3CliTest() as app:
         # Delete config file and unset app_key
         helper.delete_test_config_file(app)
@@ -31,7 +31,7 @@ def test_key_create() -> None:
         assert type(ast.literal_eval(app_key)) is bytes
 
 
-def test_key_update() -> None:
+def test_appkey_update() -> None:
     with Web3CliTest() as app:
         # Take note of the app_key before it is updated
         old_key = app.config.get("web3cli", "app_key")
