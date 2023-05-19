@@ -51,7 +51,7 @@ class SignerController(Controller):
         if self.app.pargs.name:
             self.app.print(get_signer(self.app, self.app.pargs.name).address)
         elif args.parse_signer(self.app):
-            self.app.print(args.attach_signer(self.app).name)
+            self.app.print(args.load_signer(self.app).name)
         else:
             raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
 

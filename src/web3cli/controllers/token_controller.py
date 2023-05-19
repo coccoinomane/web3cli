@@ -51,7 +51,7 @@ class TokenController(Controller):
     )
     def approve(self) -> None:
         chain_ready_or_raise(self.app)
-        signer = args.attach_signer(self.app)
+        signer = args.load_signer(self.app)
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain_name)
         # Initialize client

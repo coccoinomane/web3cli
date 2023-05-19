@@ -47,7 +47,7 @@ class SendController(Controller):
     def send(self) -> None:
         chain_ready_or_raise(self.app)
         # Parse arguments
-        signer = args.attach_signer(self.app)
+        signer = args.load_signer(self.app)
         to_address = resolve_address(self.app.pargs.to, [Address, Signer])
         amount = to_number(self.app.pargs.amount)
         ticker = self.app.pargs.ticker.lower()

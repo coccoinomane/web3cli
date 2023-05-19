@@ -4,7 +4,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.args import attach_signer, parse_block, parse_signer
+from web3cli.helpers.args import load_signer, parse_block, parse_signer
 from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
 from web3core.helpers.abi import (
@@ -63,7 +63,7 @@ class CallController(Controller):
                     raise Web3CliError(
                         "Cannot call a write operation without a from address: please specify one with either the --from <address> option or the --signer <signer> option."
                     )
-                from_address = attach_signer(self.app).address
+                from_address = load_signer(self.app).address
             else:
                 from_address = resolve_address(self.app.pargs.from_)
 

@@ -51,7 +51,7 @@ class SwapController(Controller):
     def swap(self) -> None:
         chain_ready_or_raise(self.app)
         # Parse arguments
-        signer = args.attach_signer(self.app)
+        signer = args.load_signer(self.app)
         to = self.app.pargs.to if self.app.pargs.to else signer.address
         to_address = resolve_address(to, [Address, Signer])
         amount_in_token_units = decimal.Decimal(self.app.pargs.amount)

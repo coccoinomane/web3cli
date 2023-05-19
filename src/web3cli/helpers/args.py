@@ -106,7 +106,7 @@ def parse_signer(app: App) -> str:
     return signer
 
 
-def attach_signer(app: App) -> Signer:
+def load_signer(app: App) -> Signer:
     """Parse the signer argument and conver it to a Signer object, then
     attach the object to the app"""
     # Parse signer argument

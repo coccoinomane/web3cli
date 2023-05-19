@@ -2,7 +2,7 @@
 
 ### Top priority
 
-- Implement attach_chain following attach_signer's example
+- Implement attach_chain following load_signer's example
 - Test get_signer() switch function
 
 
