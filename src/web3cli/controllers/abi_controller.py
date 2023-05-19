@@ -47,6 +47,7 @@ class AbiController(Controller):
                     "default": True,
                 },
             ),
+            args.chain(),
         ],
         aliases=["fns", "fn", "f"],
     )
@@ -115,7 +116,7 @@ class AbiController(Controller):
         if self.app.pargs.contract:
             # Try to retrieve ABI from contracts table
             contract = Contract.get_by_name_and_chain(
-                self.app.pargs.contract, self.app.chain_name
+                self.app.pargs.contract, self.app.chain.name
             )
             if contract:
                 return contract.resolve_abi()

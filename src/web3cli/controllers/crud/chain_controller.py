@@ -2,6 +2,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.render import render_table
 from web3core.exceptions import ChainNotFound
 from web3core.models.chain import Chain
@@ -95,7 +96,7 @@ class ChainController(Controller):
             ],
         )
 
-    @ex(help="get current chain")
+    @ex(help="get current chain", arguments=[args.chain()])
     def get(self) -> None:
         self.app.print(self.app.chain.name)
 

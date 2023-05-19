@@ -4,7 +4,6 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.tx import send_contract_tx
@@ -45,15 +44,15 @@ class TokenController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            args.chain(),
             args.signer(),
             args.force(),
         ],
     )
     def approve(self) -> None:
-        chain_ready_or_raise(self.app)
         signer = args.load_signer(self.app)
         # Parse arguments
-        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain_name)
+        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         # Initialize client
         client = make_contract_wallet(self.app, self.app.pargs.token)
         # Compute amount in
@@ -71,7 +70,7 @@ class TokenController(Controller):
                 + self.app.pargs.token
             )
             print(
-                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain_name} to spend {what} in your name"
+                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain.name} to spend {what} in your name"
             )
             yes_or_exit(logger=self.app.log.info)
         # Approve

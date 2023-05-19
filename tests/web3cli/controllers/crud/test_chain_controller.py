@@ -64,7 +64,7 @@ def test_chain_get(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(["--chain", chain["name"], "chain", "get"]).run()
+            app.set_args(["chain", "get", "-c", chain["name"]]).run()
             data, output = app.last_rendered
             assert data["out"] == chain["name"]
 

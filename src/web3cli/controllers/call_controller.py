@@ -5,7 +5,6 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import load_signer, parse_block, parse_signer
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
 from web3core.helpers.abi import (
     does_function_write_to_state,
@@ -37,12 +36,12 @@ class CallController(Controller):
                     "help": "When simulating write operations a 'from' address is needed. If a signer is found, its address will be used, otherwise you need to specify a 'from' address with this option.",
                 },
             ),
+            args.chain(),
             args.signer(),
         ],
     )
     def call(self) -> None:
         # Get client to interact with the chain
-        chain_ready_or_raise(self.app)
         client = make_contract_client(self.app, self.app.pargs.contract)
 
         # Try to fetch the function from the ABI
@@ -76,7 +75,7 @@ class CallController(Controller):
             client.contract.abi,
             self.app.pargs.function,
             checksum_addresses=True,
-            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
+            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain.name),
             allow_exp_notation=True,
         )
 

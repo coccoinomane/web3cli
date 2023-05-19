@@ -6,8 +6,9 @@ from web3cli.helpers.version import get_version_message
 
 
 class BaseController(Controller):
-    """Base controller; it handles global arguments such as --chain
-    and --signer"""
+    """Base controller, soon to be deprecated.  It was used to
+    implement global arguments, but now they are implemented
+    directly in the commands."""
 
     class Meta:
         label = "base"
@@ -24,7 +25,6 @@ class BaseController(Controller):
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
             ),
-            args.chain(),
             args.priority_fee(),
             args.rpc(),
         ]

@@ -124,7 +124,7 @@ See the available contracts with `w3 contract list`:
 
 ```
 w3 contract list              # contracts on Ethereum
-w3 --chain bnb contract list  # contracts on BNB chain
+w3 contract list --chain bnb  # contracts on BNB chain
 ```
 
 You can also add custom contracts with `w3 contract add`:
@@ -183,14 +183,14 @@ w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver ad
 
 `web3cli` comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
 
-Pass the chain name as an optional argument:
+Pass the chain name using the flag `--chain` or the shorthand `-c`:
 
 ```
-w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
-w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain bnb  # bnb chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain avax # avax chain
 ```
 
-You can also use one of the provided aliases, like `w3bnb`:
+You can also use one of the provided aliases, like `w3bnb`, `w3avax`, or `w3arb`:
 
 ```
 w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
@@ -202,7 +202,7 @@ If you are focussing on a specific chain, set it as the default:
 ```
 w3 config set default_chain bnb
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3             # bnb chain
-w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain eth # eth chain
 ```
 
 # Add custom RPCs
@@ -226,7 +226,7 @@ w3 chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
 Use the custom chain with `--chain`:
 
 ```
-w3 --chain cronos balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7
+w3 balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7 --chain cronos
 ```
 
 List existing chains with `w3 chain list`, and delete them with `w3 chain delete`.
@@ -245,7 +245,7 @@ You can use these tags instead of the actual addresses:
 
 ```bash
 w3 balance ethereum_foundation
-w3 --chain bnb balance binance_hot_wallet
+w3 balance binance_hot_wallet --chain bnb
 ```
 
 To see the list of saved addresses, run `w3 address list`, to delete an address use `w3 address delete`.

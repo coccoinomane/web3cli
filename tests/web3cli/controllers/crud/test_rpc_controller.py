@@ -28,20 +28,20 @@ def test_rpc_add(chains: List[ChainFields]) -> None:
     test_rpcs = ["https://www.example-1.com", "https://www.example-2.com"]
     with Web3CliTest() as app:
         chain = Chain.create(name=c["name"], chain_id=c["chain_id"], coin=c["coin"])
-        app.set_args(["rpc", "add", chain.name] + test_rpcs).run()
+        app.set_args(["rpc", "add", "--chain", chain.name] + test_rpcs).run()
         created_rpcs = chain.get_rpcs()
         assert len(created_rpcs) == len(test_rpcs)
         for i, rpc in enumerate(created_rpcs):
             assert rpc.url == test_rpcs[i]
     # Add the same RPCs again > they should not be added to the db
     with Web3CliTest(delete_db=False) as app:
-        app.set_args(["rpc", "add", chain.name] + test_rpcs).run()
+        app.set_args(["rpc", "add", "--chain", chain.name] + test_rpcs).run()
         assert len(chain.get_rpcs()) == len(test_rpcs)
     # Add an RPC with a wrong URL > it should raise
     with Web3CliTest() as app:
         chain = Chain.create(name=c["name"], chain_id=c["chain_id"], coin=c["coin"])
         with pytest.raises(RpcIsInvalid):
-            app.set_args(["rpc", "add", chain.name, "not a URI"]).run()
+            app.set_args(["rpc", "add", "not a URI", "--chain", chain.name]).run()
 
 
 def test_rpc_get_with_id_argument(chains: List[ChainFields]) -> None:
@@ -61,6 +61,7 @@ def test_rpc_get_with_rpc_argument(chains: List[ChainFields]) -> None:
     test_rpcs = ["https://www.example-1.com", "https://www.example-2.com"]
     for rpc_url in test_rpcs:
         with Web3CliTest() as app:
+            seed_chains(chains)
             app.set_args(["--rpc", rpc_url, "rpc", "get"]).run()
             data, output = app.last_rendered
             assert data["out"] == rpc_url
@@ -71,7 +72,7 @@ def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
     for c in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(["--chain", c["name"], "rpc", "get"]).run()
+            app.set_args(["rpc", "get", "--chain", c["name"]]).run()
             data, output = app.last_rendered
             chain: Chain = Chain.select().where(Chain.name == c["name"]).get()
             assert data["out"] in [r.url for r in chain.get_rpcs()]

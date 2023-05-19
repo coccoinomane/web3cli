@@ -3,6 +3,7 @@ from playhouse.shortcuts import model_to_dict
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.render import render_table
 from web3core.helpers.format import cut
 from web3core.models.tx import Tx
@@ -58,6 +59,7 @@ class HistoryController(Controller):
                     "action": "store_true",
                 },
             ),
+            args.chain(),
         ],
     )
     def add(self) -> None:
@@ -66,7 +68,7 @@ class HistoryController(Controller):
             Tx.upsert(
                 {
                     "hash": self.app.pargs.hash,
-                    "chain": self.app.chain_name,
+                    "chain": self.app.chain.name,
                     "from_": getattr(self.app.pargs, "from"),
                     "to": self.app.pargs.to,
                     "desc": self.app.pargs.desc,

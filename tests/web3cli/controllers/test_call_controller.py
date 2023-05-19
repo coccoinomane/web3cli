@@ -158,13 +158,13 @@ def test_call_eth_uniswap_v2_get_amounts_out(
         seed_contracts(contracts)
         app.set_args(
             [
-                "-c",
-                "eth",
                 "call",
                 "uniswap_v2",
                 "getAmountsOut",
                 "100e6",
                 "usdc,usdt",
+                "--chain",
+                "eth",
             ]
         ).run()
         data, output = app.last_rendered
@@ -187,11 +187,11 @@ def test_call_eth_weth_total_supply(
         seed_contracts(contracts)
         app.set_args(
             [
-                "-c",
-                "eth",
                 "call",
                 "weth",
                 "totalSupply",
+                "--chain",
+                "eth",
             ]
         ).run()
         data, output = app.last_rendered
@@ -209,10 +209,10 @@ def test_call_eth_weth_total_supply_two_blocks_ago(
         seed_chains(chains)
         app.set_args(
             [
-                "-c",
-                "eth",
                 "block",
                 "latest",
+                "--chain",
+                "eth",
             ]
         ).run()
         data, output = app.last_rendered
@@ -223,13 +223,13 @@ def test_call_eth_weth_total_supply_two_blocks_ago(
         seed_contracts(contracts)
         app.set_args(
             [
-                "-c",
-                "eth",
                 "call",
                 "weth",
                 "totalSupply",
                 "--block",
                 str(latest - 2),
+                "--chain",
+                "eth",
             ]
         ).run()
         data, output = app.last_rendered
@@ -250,12 +250,12 @@ def test_call_eth_weth_transfer_without_from_address(
         ):
             app.set_args(
                 [
-                    "-c",
-                    "eth",
                     "call",
                     "weth",
                     "transfer",
                     "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                     "1e18",
+                    "--chain",
+                    "eth",
                 ]
             ).run()

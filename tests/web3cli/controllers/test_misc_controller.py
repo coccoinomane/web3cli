@@ -7,8 +7,7 @@ from web3 import Web3
 
 import ape
 from tests.web3cli.main import Web3CliTest
-from web3core.helpers.seed import seed_chains, seed_signers
-from web3core.models.types import ChainFields
+from web3core.helpers.seed import seed_signers
 
 
 @pytest.mark.local
@@ -81,11 +80,8 @@ def test_balance_with_unit_wei(
         "I will copiously donate to coccoinomane",
     ],
 )
-def test_sign(
-    msg: str, signers: List[Dict[str, Any]], chains: List[ChainFields]
-) -> None:
+def test_sign(msg: str, signers: List[Dict[str, Any]]) -> None:
     with Web3CliTest() as app:
-        seed_chains(chains)
         seed_signers([signers[0]], app.app_key)
         app.set_args(["sign", msg]).run()
         data, output = app.last_rendered

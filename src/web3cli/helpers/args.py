@@ -31,8 +31,14 @@ def parse_global_args(app: App) -> None:
 
     app.extend("priority_fee", parse_priority_fee(app))
     app.extend("rpc", parse_rpc(app))
-    app.extend("chain_name", parse_chain(app))
-    app.extend("chain", Chain.get_by_name(app.chain_name))
+
+    # If the command requires a chain, load the chain object
+    try:
+        parse_chain(app)
+    except:
+        pass
+    else:
+        load_chain(app)
 
 
 def get_command(app: App) -> str:
@@ -68,6 +74,20 @@ def parse_chain(app: App) -> str:
         raise Web3CliError(
             "Could not infer the chain you want to use. Try specifying it with the --chain argument."
         )
+    return chain
+
+
+def load_chain(app: App) -> Chain:
+    """Parse the --chain argument and convert it to a Chain object
+    on the app object."""
+    # Parse chain argument
+    chain_name = parse_chain(app)
+    # Get chain object
+    chain = Chain.get_by_name(chain_name)
+    if not chain:
+        raise Web3CliError(f"Could not find chain with name '{chain_name}'")
+    # Attach chain to app
+    app.extend("chain", chain)
     return chain
 
 
@@ -461,7 +481,7 @@ def signer(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any
     return (
         list(name_or_flags) or ["-s", "--signer"],
         {
-            "help": "who is going to sign the transaction: a registered signer, a private key, or a keyfile json",
+            "help": "who is going to sign the transaction: a registered signer, a private key, or a keyfile json. Will use the default signer if not specified",
         }
         | kwargs,
     )
@@ -471,7 +491,7 @@ def chain(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]
     return (
         list(name_or_flags) or ["-c", "--chain"],
         {
-            "help": "blockchain to use",
+            "help": "chain to use, will use the default chain if not specified",
         }
         | kwargs,
     )
