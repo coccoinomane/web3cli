@@ -35,8 +35,8 @@ class TransactController(Controller):
             args.tx_call(),
             args.tx_gas_limit(),
             *args.chain_and_rpc(),
+            *args.signer_and_gas(),
             args.force(),
-            args.signer(),
         ],
     )
     def transact(self) -> None:

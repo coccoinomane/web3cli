@@ -71,11 +71,7 @@ class MiscController(Controller):
     )
     def sign(self) -> None:
         wallet = make_base_wallet(
-            chain=None,
-            signer=self.app.signer,
-            password=self.app.app_key,
-            node_uri=None,
-            logger=self.app.log.info,
+            chain=None, signer=self.app.signer, password=self.app.app_key, node_uri=None
         )
         signed_message = wallet.sign_message(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))

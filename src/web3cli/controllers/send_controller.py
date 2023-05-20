@@ -40,7 +40,7 @@ class SendController(Controller):
                 },
             ),
             *args.chain_and_rpc(),
-            args.signer(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )

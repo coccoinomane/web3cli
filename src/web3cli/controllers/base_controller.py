@@ -22,8 +22,7 @@ class BaseController(Controller):
             (
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
-            ),
-            args.priority_fee(),
+            )
         ]
 
     @ex(help="Show the version of web3cli")

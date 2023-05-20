@@ -45,7 +45,7 @@ class TokenController(Controller):
             args.tx_call(),
             args.tx_gas_limit(),
             *args.chain_and_rpc(),
-            args.signer(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )

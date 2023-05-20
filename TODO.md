@@ -2,14 +2,13 @@
 
 ### Top priority
 
-- Test get_signer() switch function
-
+- Tests: test get_signer() switch function
+- Tests: test add liq + swap
+- Tests: test token approve
 
 ### Commands 
 
-- Tests: test add liq + swap
 - Swap: refactor in web3core + test
-- Token: test approve
 - Get tokens balance
 - w3 ls to see ETH balances of all signers
 - Token: Approve and allowance commands

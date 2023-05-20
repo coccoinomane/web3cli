@@ -104,7 +104,10 @@ def send_erc20_token_in_decimals(
     decimals.
 
     For example, if the token has 6 decimals, and you specify amount=1, the
-    actual amount is 0.000001 in token units."""
+    actual amount is 0.000001 in token units.
+
+    TODO: This should use send_contract_tx, to have gas settings + output
+    management."""
     client = make_erc20_wallet(app, ticker)
     return client.transact(
         client.functions.transfer(resolve_address(to, [Address, Signer]), amount)

@@ -29,8 +29,6 @@ def pre_parse_args(app: App) -> None:
     """Extend the app object with global arguments. Must be
     run post argument parsing"""
 
-    app.extend("priority_fee", parse_priority_fee(app))
-
     # If the command requires a chain, save it on the app object
     if hasattr(app.pargs, "chain"):
         app.extend("chain", parse_chain(app))
@@ -43,6 +41,10 @@ def pre_parse_args(app: App) -> None:
     # If the command requires an rpc, save it on the app object
     if hasattr(app.pargs, "rpc"):
         app.extend("rpc", parse_rpc(app))
+
+    # If the command requires a priority fee, save it on the app object
+    if hasattr(app.pargs, "priority_fee"):
+        app.extend("priority_fee", parse_priority_fee(app))
 
 
 def get_command(app: App) -> str:
@@ -479,7 +481,13 @@ def rpc(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     )
 
 
+def signer_and_gas() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands accepting both signer and gas arguments"""
+    return [signer(), priority_fee()]
+
+
 def chain_and_rpc() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands accepting both chain and rpc arguments"""
     return [chain(), rpc()]
 
 
