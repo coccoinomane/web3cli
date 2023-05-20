@@ -4,7 +4,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.args import load_signer, parse_block, parse_signer
+from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_contract_client
 from web3core.helpers.abi import (
     does_function_write_to_state,
@@ -33,11 +33,10 @@ class CallController(Controller):
                 ["--from"],
                 {
                     "dest": "from_",
-                    "help": "When simulating write operations a 'from' address is needed. If a signer is found, its address will be used, otherwise you need to specify a 'from' address with this option.",
+                    "help": "From address.  Needed when simulating write operations, e.g. a swap or a token transfer.",
                 },
             ),
-            args.chain(),
-            args.signer(),
+            *args.chain_and_rpc(),
         ],
     )
     def call(self) -> None:
@@ -53,16 +52,10 @@ class CallController(Controller):
 
         # If the function is a write operation, we need a from address
         from_address = None
-        function_abi = get_function_abis(client.contract.abi, self.app.pargs.function)[
-            0
-        ]
-        if does_function_write_to_state(function_abi):
+        fn_abi = get_function_abis(client.contract.abi, self.app.pargs.function)[0]
+        if does_function_write_to_state(fn_abi):
             if self.app.pargs.from_ is None:
-                if parse_signer(self.app) is None:
-                    raise Web3CliError(
-                        "Cannot call a write operation without a from address: please specify one with either the --from <address> option or the --signer <signer> option."
-                    )
-                from_address = load_signer(self.app).address
+                raise Web3CliError("Please specify a from address with --from")
             else:
                 from_address = resolve_address(self.app.pargs.from_)
 

@@ -34,7 +34,7 @@ class TransactController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
-            args.chain(),
+            *args.chain_and_rpc(),
             args.force(),
             args.signer(),
         ],

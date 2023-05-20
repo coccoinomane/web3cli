@@ -21,7 +21,7 @@ class TxController(Controller):
         help="fetch the given transaction from the blockchain",
         arguments=[
             (["hash"], {"help": "hash of the transaction"}),
-            args.chain(),
+            *args.chain_and_rpc(),
         ],
     )
     def get(self) -> None:
@@ -34,7 +34,7 @@ class TxController(Controller):
         help="fetch the receipt of the given transaction from the blockchain",
         arguments=[
             (["hash"], {"help": "hash of the transaction"}),
-            args.chain(),
+            *args.chain_and_rpc(),
         ],
         aliases=["rc"],
     )

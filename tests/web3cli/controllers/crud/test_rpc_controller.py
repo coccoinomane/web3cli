@@ -62,7 +62,7 @@ def test_rpc_get_with_rpc_argument(chains: List[ChainFields]) -> None:
     for rpc_url in test_rpcs:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(["--rpc", rpc_url, "rpc", "get"]).run()
+            app.set_args(["rpc", "get", "--rpc", rpc_url]).run()
             data, output = app.last_rendered
             assert data["out"] == rpc_url
 

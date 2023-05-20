@@ -6,9 +6,7 @@ from web3cli.helpers.version import get_version_message
 
 
 class BaseController(Controller):
-    """Base controller, soon to be deprecated.  It was used to
-    implement global arguments, but now they are implemented
-    directly in the commands."""
+    """Base controller. Can be used to implement global arguments"""
 
     class Meta:
         label = "base"
@@ -19,14 +17,13 @@ class BaseController(Controller):
 
         # Arguments set in the base controller will be global and
         # recognized by all subcommands, as long as they are given
-        # right after the web3cli command
+        # right after `w3`
         arguments = [
             (
                 ["-v", "--version"],
                 {"action": "version", "version": get_version_message()},
             ),
             args.priority_fee(),
-            args.rpc(),
         ]
 
     @ex(help="Show the version of web3cli")
@@ -41,4 +38,4 @@ class BaseController(Controller):
         if not args.get_command(self.app):
             return
 
-        args.parse_global_args(self.app)
+        args.pre_parse_args(self.app)

@@ -43,14 +43,14 @@ class SwapController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
-            args.chain(),
+            *args.chain_and_rpc(),
             args.signer(),
             args.force(),
         ],
     )
     def swap(self) -> None:
         # Parse arguments
-        signer = args.load_signer(self.app)
+        signer = self.app.signer
         to = self.app.pargs.to if self.app.pargs.to else signer.address
         to_address = resolve_address(to, [Address, Signer])
         amount_in_token_units = decimal.Decimal(self.app.pargs.amount)

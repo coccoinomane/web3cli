@@ -35,25 +35,37 @@ class SignerController(Controller):
         )
 
     @ex(
-        help="show the address of a signer by its name; without arguments, show the name of the active signer",
+        help="show the address of the given signer",
         arguments=[
             (
                 ["name"],
                 {
-                    "help": "name of the signer to show",
-                    "nargs": "?",
+                    "help": "the signer to look up; can be either a name, private key or keyfile"
+                },
+            )
+        ],
+    )
+    def get(self) -> None:
+        self.app.print(get_signer(self.app, self.app.pargs.name).address)
+
+    @ex(
+        help="show the active signer's address",
+        arguments=[
+            (
+                ["--show-name"],
+                {
+                    "help": "show the name of the active signer, instead",
+                    "action": "store_true",
                 },
             ),
             args.signer(),
         ],
     )
-    def get(self) -> None:
-        if self.app.pargs.name:
-            self.app.print(get_signer(self.app, self.app.pargs.name).address)
-        elif args.parse_signer(self.app):
-            self.app.print(args.load_signer(self.app).name)
+    def active(self) -> None:
+        if self.app.pargs.show_name:
+            self.app.print(self.app.signer.name)
         else:
-            raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
+            self.app.print(self.app.signer.address)
 
     @ex(
         help="add a new signer; you will be asked for the private key",

@@ -1,3 +1,4 @@
+import configparser
 import os
 from typing import Callable
 
@@ -27,6 +28,7 @@ from web3cli.controllers.transact_controller import TransactController
 from web3cli.controllers.tx_controller import TxController
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers.args import override_arg
+from web3core.exceptions import Web3CoreError
 
 # Configuration defaults
 CONFIG = init_defaults("web3cli")
@@ -133,8 +135,8 @@ def main(filter_app: Callable[[App], App] = None) -> None:
 
                 traceback.print_exc()
 
-        except Web3CliError as e:
-            print("Web3CliError > %s" % e.args[0])
+        except (Web3CliError, Web3CoreError, configparser.NoOptionError) as e:
+            print("Web3CliError > %s" % e)
             app.exit_code = 1
 
             if app.debug is True:

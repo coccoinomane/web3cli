@@ -44,13 +44,12 @@ class TokenController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
-            args.chain(),
+            *args.chain_and_rpc(),
             args.signer(),
             args.force(),
         ],
     )
     def approve(self) -> None:
-        signer = args.load_signer(self.app)
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         # Initialize client
@@ -76,7 +75,9 @@ class TokenController(Controller):
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
-            allowance = client.functions["allowance"](signer.address, spender).call()
+            allowance = client.functions["allowance"](
+                self.app.signer.address, spender
+            ).call()
             # If allowance is not sufficient, approve
             if allowance >= amount:
                 self.app.log.info(

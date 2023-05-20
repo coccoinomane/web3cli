@@ -43,7 +43,7 @@ def test_call_wrong_number_of_arguments(
                 "tst",
                 "transfer",
                 "0x123",
-                "--signer",
+                "--from",
                 "alice",
             ]
         ).run()
@@ -66,15 +66,15 @@ def test_call_wrong_type_of_arguments(
                 "transfer",
                 "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
                 "should_be_an_int",
-                "--signer",
+                "--from",
                 "alice",
             ]
         ).run()
 
 
 @pytest.mark.local
-# Test that calling a write function without neither a signer nor a from address fails
-def test_call_local_token_transfer_without_signer_without_from(
+# Test that calling a write function without a from address fails
+def test_call_local_token_transfer_without_from(
     app: Web3CliTest,
     TST: ape.contracts.ContractInstance,
     alice: ape.api.AccountAPI,
@@ -82,9 +82,7 @@ def test_call_local_token_transfer_without_signer_without_from(
 ) -> None:
     seed_local_token(app, TST)
     TST.balanceOf(bob.address)
-    with pytest.raises(
-        Web3CliError, match="Cannot call a write operation without a from address"
-    ):
+    with pytest.raises(Web3CliError, match="Please specify a from address"):
         app.set_args(
             [
                 "call",
@@ -94,32 +92,6 @@ def test_call_local_token_transfer_without_signer_without_from(
                 "1e18",
             ]
         ).run()
-
-
-@pytest.mark.local
-# Test that calling a write function without a signer but with a from address
-# works
-def test_call_local_token_transfer_without_signer_with_from(
-    app: Web3CliTest,
-    TST: ape.contracts.ContractInstance,
-    alice: ape.api.AccountAPI,
-    bob: ape.api.AccountAPI,
-) -> None:
-    seed_local_token(app, TST)
-    TST.balanceOf(bob.address)
-    app.set_args(
-        [
-            "call",
-            "tst",
-            "transfer",
-            "bob",
-            "1e18",
-            "--from",
-            "alice",
-        ]
-    ).run()
-    data, output = app.last_rendered
-    assert output == "true"
 
 
 @pytest.mark.local
@@ -139,7 +111,7 @@ def test_call_local_token_transfer(
             "transfer",
             "bob",
             "1e18",
-            "--signer",
+            "--from",
             "alice",
         ]
     ).run()
@@ -245,9 +217,7 @@ def test_call_eth_weth_transfer_without_from_address(
     with Web3CliTest() as app:
         seed_chains(chains)
         seed_contracts(contracts)
-        with pytest.raises(
-            Web3CliError, match="Cannot call a write operation without a from address"
-        ):
+        with pytest.raises(Web3CliError, match="Please specify a from address"):
             app.set_args(
                 [
                     "call",

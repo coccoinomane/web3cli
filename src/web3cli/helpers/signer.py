@@ -3,7 +3,7 @@ from typing import Any
 
 from cement import App
 
-from web3cli.exceptions import Web3CliError
+from web3cli.exceptions import SignerNotResolved
 from web3cli.helpers.crypto import decrypt_keyfile_dict
 from web3core.models.signer import Signer
 
@@ -57,6 +57,6 @@ def get_signer(app: App, signer_identifier: str) -> Signer:
     except:
         pass
 
-    raise Web3CliError(
+    raise SignerNotResolved(
         f"Could not find signer with name, address, private key or keyfile '{signer_identifier}'"
     )

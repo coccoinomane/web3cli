@@ -7,7 +7,7 @@ from web3 import Web3
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.args import load_signer, parse_block
+from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
 from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
@@ -34,7 +34,7 @@ class MiscController(Controller):
                     "default": "ether",
                 },
             ),
-            args.chain(),
+            *args.chain_and_rpc(),
         ],
     )
     def balance(self) -> None:
@@ -57,10 +57,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
-        arguments=[
-            args.block("block_identifier", nargs="?"),
-            args.chain(),
-        ],
+        arguments=[args.block("block_identifier", nargs="?"), *args.chain_and_rpc()],
     )
     def block(self) -> None:
         block_identifier = parse_block(self.app, "block_identifier")
@@ -75,9 +72,9 @@ class MiscController(Controller):
     def sign(self) -> None:
         wallet = make_base_wallet(
             chain=None,
-            signer=load_signer(self.app),
+            signer=self.app.signer,
             password=self.app.app_key,
-            node_uri=self.app.rpc,
+            node_uri=None,
             logger=self.app.log.info,
         )
         signed_message = wallet.sign_message(self.app.pargs.msg)
@@ -85,7 +82,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the current gas price in gwei by calling the eth_gasPrice method. For EIP1559 chains, this should return the max priority fee per gas.",
-        arguments=[args.chain()],
+        arguments=[*args.chain_and_rpc()],
     )
     def gas_price(self) -> None:
         gas_price_in_wei = make_client(self.app).w3.eth.gas_price
@@ -94,7 +91,7 @@ class MiscController(Controller):
 
     @ex(
         help="Get the base fee in gwei of the last block. Will error for non-EIP1559 chains.",
-        arguments=[args.chain()],
+        arguments=[*args.chain_and_rpc()],
     )
     def base_fee(self) -> None:
         try:

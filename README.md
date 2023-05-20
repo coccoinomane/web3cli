@@ -205,15 +205,33 @@ w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3             # bnb chain
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain eth # eth chain
 ```
 
-# Add custom RPCs
+# Use custom RPC
 
-Add custom RPCs to any existing chain with `w3 rpc add`:
+By default, `web3cli` will connect to the blockchain using a pre-configured public node.  You can see the list of such nodes with the command `w3 rpc list`.
 
+To use a custom mode, please specify the `--rpc` flag.  For example, to use Ankr's node to Ethereum:
+
+```bash
+w3 block latest --rpc https://rpc.ankr.com/eth
 ```
-w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
-```
 
-List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
+Using a custom node is most useful in the following situations:
+
+1. You want to use a node from a node provider, e.g. Infura:
+   ```bash
+   w3 block --rpc https://eth-mainnet.g.alchemy.com/v2/{YOUR-API-KEY}
+   ```
+2. You want to use a private node:
+   ```bash
+   w3 block --rpc http://127.0.0.1:8545
+   w3 block --rpc ws://127.0.0.1:8546
+   ```
+3. You want to use a testnet chain:
+   ```bash
+   w3eth block --rpc https://rpc.ankr.com/eth_goerli
+   w3bnb block --rpc https://data-seed-prebsc-1-s1.binance.org:8545/
+   ```
+
 
 # Add custom chains
 

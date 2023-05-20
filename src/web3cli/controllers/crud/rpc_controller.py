@@ -1,7 +1,6 @@
 from cement import ex
 
 from web3cli.controllers.controller import Controller
-from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.render import render_table
 from web3core.models.chain import Rpc
@@ -73,23 +72,17 @@ class RpcController(Controller):
                     "type": int,
                 },
             ),
-            args.chain(),
+            *args.chain_and_rpc(),
         ],
     )
     def get(self) -> None:
         # Case 1: Show the URL of the RPC with the given ID
         if self.app.pargs.id:
-            rpc = Rpc.get_or_none(self.app.pargs.id)
-            if not rpc:
-                raise Web3CliError(f"RPC with ID {self.app.pargs.id} does not exist")
+            rpc = Rpc.get(self.app.pargs.id)
             self.app.print(rpc.url)
         # Case 2: RPC was forced via CLI argument
-        elif self.app.rpc:
-            self.app.print(self.app.rpc)
-        # Case 3: show RPC inferred by the app
         else:
-            rpc = self.app.chain.pick_rpc()
-            self.app.print(rpc.url)
+            self.app.print(self.app.rpc.url)
 
     @ex(
         help="delete one or more rpcs",
