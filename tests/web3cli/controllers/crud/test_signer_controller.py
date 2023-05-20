@@ -35,7 +35,9 @@ def test_signer_get(signers: List[Dict[str, Any]]) -> None:
                 ]
             ).run()
             data, output = app.last_rendered
-            assert data["out"] == s["address"]
+            assert data["name"] == s["name"]
+            assert data["address"] == s["address"]
+            assert data["key"] == "********"
 
 
 # Test with --signer argument > returns address of signer

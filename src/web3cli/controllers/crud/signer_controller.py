@@ -7,7 +7,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
-from web3cli.helpers.render import render_table
+from web3cli.helpers.render import render_json, render_table
 from web3cli.helpers.signer import get_signer
 from web3core.exceptions import KeyIsInvalid, SignerNotFound
 from web3core.helpers.misc import are_mutually_exclusive
@@ -35,18 +35,20 @@ class SignerController(Controller):
         )
 
     @ex(
-        help="show the address of the given signer",
+        help="show the details of the given signer",
         arguments=[
             (
                 ["name"],
                 {
-                    "help": "the signer to look up; can be either a name, private key or keyfile"
+                    "help": "the signer to show; can be either a name, address, private key or keyfile"
                 },
             )
         ],
     )
     def get(self) -> None:
-        self.app.print(get_signer(self.app, self.app.pargs.name).address)
+        signer = get_signer(self.app, self.app.pargs.name).as_dict()
+        signer["key"] = "********"
+        render_json(self.app, signer)
 
     @ex(
         help="show the active signer's address",
