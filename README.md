@@ -19,7 +19,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
     + [Read from a smart contract](#read-from-a-smart-contract)
     + [Write to a smart contract](#write-to-a-smart-contract)
 - [Multichain support](#multichain-support)
-- [Add custom RPCs](#add-custom-rpcs)
+- [Use custom RPC](#use-custom-rpc)
 - [Add custom chains](#add-custom-chains)
 - [Address book](#address-book)
 - [Wallet management](#wallet-management)
@@ -71,7 +71,6 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 - Save addresses with easy-to-rember tags:
    ```
    w3 address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
-   w3 address add unicef 0xa59b29d7dbc9794d1e7f45123c48b2b8d0a34636
    ```
    then use the tag in any command:
    ```
@@ -98,7 +97,7 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 - Sign messages:
    ```bash
-   w3 sign "Hello world!"
+   w3 sign 'Hello world!'
    ```
 
 # Advanced examples
@@ -175,7 +174,7 @@ w3 transact weth transfer <address> 1e18
 To swap 1 USDC for USDT on Uniswap, accepting no less than 0.9 USDT in return, run:
 
 ```
-w3 transact usdc approve uniswap_v2_usdc_usdt 1e6
+w3 transact usdc approve uniswap_v2 1e6
 w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver address> 9e9
 ```
 

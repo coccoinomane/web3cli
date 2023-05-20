@@ -81,6 +81,7 @@ class AbiController(Controller):
                     "default": True,
                 },
             ),
+            args.chain(),
         ],
         aliases=["evs", "ev", "e"],
     )
@@ -100,14 +101,19 @@ class AbiController(Controller):
                 ["contract"],
                 {"help": "Name of the contract or contract type in the database"},
             ),
-            (["name"], {"help": "Name of the function or event"}),
+            (["function_name"], {"help": "Name of the function or event"}),
+            args.chain(),
         ],
     )
     def get(self) -> None:
         abi = self.parse_abi()
-        obj = filter_abi_by_type_and_name(abi, type=None, name=self.app.pargs.name)
+        obj = filter_abi_by_type_and_name(
+            abi, type=None, name=self.app.pargs.function_name
+        )
         if not obj:
-            self.app.log.warning(f"Function or event '{self.app.pargs.name}' not found")
+            self.app.log.warning(
+                f"Function or event '{self.app.pargs.function_name}' not found"
+            )
         render_json(self.app, obj)
 
     def parse_abi(self) -> ABI:
