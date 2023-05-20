@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Type, TypeVar
 
 from peewee import Field
-from playhouse.shortcuts import update_model_from_dict
+from playhouse.shortcuts import model_to_dict, update_model_from_dict
 from playhouse.signals import Model
 
 from web3core.db import DB
@@ -17,6 +17,14 @@ Self = TypeVar("Self", bound="BaseModel")
 class BaseModel(Model):
     class Meta:
         database = DB
+
+    def as_dict(self) -> Dict[str, Any]:
+        return model_to_dict(self)
+
+    @classmethod
+    def get_as_dict(cls, expr: Any) -> Dict[str, Any]:
+        query = cls.select().where(expr).dicts()
+        return query.get()
 
     @classmethod
     def get_all_as_dicts(cls, order_by: Any = None) -> List[Dict[str, Any]]:

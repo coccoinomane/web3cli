@@ -16,7 +16,11 @@ def make_base_client(
     logger: Logger = lambda msg: None,
     **client_args: Any,
 ) -> BaseClient:
-    """Return a brand new client configured for the given blockchain"""
+    """Return a brand new client configured for the given blockchain.
+
+    Pass chain=None to get a generic client, not bound to any chain."""
+    if chain is None:
+        return base(node_uri=None, **client_args)
     if node_uri is None:
         node_uri = chain.pick_rpc().url
     if logger:
@@ -43,7 +47,9 @@ def make_base_wallet(
 
     You need to provide the signer (either its name in the DB or an
     already initialized signer object) and a password to decrypt the
-    signer's key."""
+    signer's key.
+
+    Pass chain=None to get a generic signer, not bound to any chain."""
     client = make_base_client(chain, node_uri, base, **client_args)
     if isinstance(signer, str):
         signer = Signer.get_by_name_or_raise(signer)

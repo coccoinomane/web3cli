@@ -4,9 +4,9 @@ import pytest
 
 from tests.web3cli.main import Web3CliTest
 from web3core.exceptions import TxNotFound
-from web3core.helpers.seed import seed_txs
+from web3core.helpers.seed import seed_chains, seed_txs
 from web3core.models.tx import Tx
-from web3core.models.types import TxFields
+from web3core.models.types import ChainFields, TxFields
 
 
 def test_history_list(txs: List[TxFields]) -> None:
@@ -38,9 +38,10 @@ def test_history_get(txs: List[TxFields]) -> None:
             assert t["gas_price"] in output
 
 
-def test_history_add(txs: List[TxFields]) -> None:
+def test_history_add(txs: List[TxFields], chains: List[ChainFields]) -> None:
     for t in txs:
         with Web3CliTest() as app:
+            seed_chains(chains)
             app.set_args(
                 [
                     "history",
@@ -56,10 +57,11 @@ def test_history_add(txs: List[TxFields]) -> None:
             assert tx.to == t["to"]
 
 
-def test_history_update(txs: List[TxFields]) -> None:
+def test_history_update(txs: List[TxFields], chains: List[ChainFields]) -> None:
     """Create tx 0, then update it with the data of tx 1,
     while keeping the same hash"""
     with Web3CliTest() as app:
+        seed_chains(chains)
         seed_txs([txs[0]])
         app.set_args(
             argv=[

@@ -124,7 +124,7 @@ See the available contracts with `w3 contract list`:
 
 ```
 w3 contract list              # contracts on Ethereum
-w3 --chain bnb contract list  # contracts on BNB chain
+w3 contract list --chain bnb  # contracts on BNB chain
 ```
 
 You can also add custom contracts with `w3 contract add`:
@@ -183,14 +183,14 @@ w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver ad
 
 `web3cli` comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
 
-Pass the chain name as an optional argument:
+Pass the chain name using the flag `--chain` or the shorthand `-c`:
 
 ```
-w3 --chain bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
-w3 --chain avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain bnb  # bnb chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain avax # avax chain
 ```
 
-You can also use one of the provided aliases, like `w3bnb`:
+You can also use one of the provided aliases, like `w3bnb`, `w3avax`, or `w3arb`:
 
 ```
 w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
@@ -202,18 +202,36 @@ If you are focussing on a specific chain, set it as the default:
 ```
 w3 config set default_chain bnb
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3             # bnb chain
-w3 --chain eth balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # eth chain
+w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain eth # eth chain
 ```
 
-# Add custom RPCs
+# Use custom RPC
 
-Add custom RPCs to any existing chain with `w3 rpc add`:
+By default, `web3cli` will connect to the blockchain using a pre-configured public node.  You can see the list of such nodes with the command `w3 rpc list`.
 
+To use a custom mode, please specify the `--rpc` flag.  For example, to use Ankr's node to Ethereum:
+
+```bash
+w3 block latest --rpc https://rpc.ankr.com/eth
 ```
-w3 rpc add eth https://eth-mainnet.g.alchemy.com/v2/{YOUR API KEY}
-```
 
-List existing RPCs with `w3 rpc list`, and delete them with `w3 rpc delete`.
+Using a custom node is most useful in the following situations:
+
+1. You want to use a node from a node provider, e.g. Infura:
+   ```bash
+   w3 block --rpc https://eth-mainnet.g.alchemy.com/v2/{YOUR-API-KEY}
+   ```
+2. You want to use a private node:
+   ```bash
+   w3 block --rpc http://127.0.0.1:8545
+   w3 block --rpc ws://127.0.0.1:8546
+   ```
+3. You want to use a testnet chain:
+   ```bash
+   w3eth block --rpc https://rpc.ankr.com/eth_goerli
+   w3bnb block --rpc https://data-seed-prebsc-1-s1.binance.org:8545/
+   ```
+
 
 # Add custom chains
 
@@ -226,7 +244,7 @@ w3 chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
 Use the custom chain with `--chain`:
 
 ```
-w3 --chain cronos balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7
+w3 balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7 --chain cronos
 ```
 
 List existing chains with `w3 chain list`, and delete them with `w3 chain delete`.
@@ -245,7 +263,7 @@ You can use these tags instead of the actual addresses:
 
 ```bash
 w3 balance ethereum_foundation
-w3 --chain bnb balance binance_hot_wallet
+w3 balance binance_hot_wallet --chain bnb
 ```
 
 To see the list of saved addresses, run `w3 address list`, to delete an address use `w3 address delete`.
@@ -255,7 +273,7 @@ To see the list of saved addresses, run `w3 address list`, to delete an address 
 Commands such as `w3 send` and `w3 swap` require that you specify who is going to sign the transactions.  You can specify the signer with the `--signer` or `-s` flag:
 
 ```bash
-w3 --signer my-signer <command>
+w3 <command> --signer my-signer
 ```
 
 Here, `my_signer` can be any of these things:

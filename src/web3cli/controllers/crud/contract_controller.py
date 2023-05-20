@@ -4,7 +4,7 @@ from playhouse.shortcuts import model_to_dict
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.render import render_table
+from web3cli.helpers.render import render_json, render_table
 from web3core.helpers.seed import seed_contracts
 from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
@@ -20,7 +20,7 @@ class ContractController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="list contracts",
+        help="list contracts on the current chain",
         arguments=[
             (
                 ["type"],
@@ -30,6 +30,7 @@ class ContractController(Controller):
                     "nargs": "?",
                 },
             ),
+            args.chain(),
         ],
     )
     def list(self) -> None:
@@ -38,7 +39,7 @@ class ContractController(Controller):
             data=[
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
                 for c in Contract.get_all(Contract.name)
-                if c.chain == self.app.chain_name
+                if c.chain == self.app.chain.name
                 and (self.app.pargs.type is None or self.app.pargs.type == c.type)
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
@@ -46,16 +47,17 @@ class ContractController(Controller):
         )
 
     @ex(
-        help="show details of the given contract",
+        help="show details of contract by name and optionally chain",
         arguments=[
             (["name"], {"help": "name of the contract"}),
+            args.chain(),
         ],
     )
     def get(self) -> None:
         contract = Contract.get_by_name_and_chain_or_raise(
-            self.app.pargs.name, self.app.chain_name
+            self.app.pargs.name, self.app.chain.name
         )
-        self.app.render(model_to_dict(contract), indent=4, handler="json")
+        render_json(self.app, model_to_dict(contract))
 
     @ex(
         help="add a new contract to the database",
@@ -82,6 +84,7 @@ class ContractController(Controller):
             args.contract_abi(
                 help="Contract's ABI, as a string or file. Required, unless --type is provided.",
             ),
+            args.chain(),
         ],
     )
     def add(self) -> None:
@@ -96,7 +99,7 @@ class ContractController(Controller):
 
         # Add or update contract
         contract = Contract.get_by_name_and_chain(
-            self.app.pargs.name, self.app.chain_name
+            self.app.pargs.name, self.app.chain.name
         )
         if not contract or self.app.pargs.update:
             Contract.upsert(
@@ -105,7 +108,7 @@ class ContractController(Controller):
                     "desc": self.app.pargs.desc,
                     "type": self.app.pargs.type,
                     "address": self.app.pargs.address,
-                    "chain": self.app.chain_name,
+                    "chain": self.app.chain.name,
                     "abi": abi,
                 },
                 logger=self.app.log.info,
@@ -119,15 +122,16 @@ class ContractController(Controller):
         help="delete a contract",
         arguments=[
             (["name"], {"help": "hash of the contract to delete"}),
+            args.chain(),
         ],
     )
     def delete(self) -> None:
         contract = Contract.get_by_name_and_chain_or_raise(
-            self.app.pargs.name, self.app.chain_name
+            self.app.pargs.name, self.app.chain.name
         )
         contract.delete_instance()
         self.app.log.info(
-            f"Contract '{self.app.pargs.name}' on chain '{self.app.chain_name}' deleted correctly"
+            f"Contract '{self.app.pargs.name}' on chain '{self.app.chain.name}' deleted correctly"
         )
 
     @ex(help="preload a few contracts and their chains")

@@ -2,7 +2,6 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.send import send_coin_or_token
 from web3core.helpers.misc import to_number, yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -40,11 +39,12 @@ class SendController(Controller):
                     "nargs": "?",
                 },
             ),
+            *args.chain_and_rpc(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )
     def send(self) -> None:
-        chain_ready_or_raise(self.app)
         # Parse arguments
         to_address = resolve_address(self.app.pargs.to, [Address, Signer])
         amount = to_number(self.app.pargs.amount)
@@ -54,7 +54,7 @@ class SendController(Controller):
             if self.app.pargs.unit:
                 what = f"{amount} {self.app.pargs.unit} unit(s) of {ticker}"
             print(
-                f"You are about to send {what} on the {self.app.chain.name} chain from signer {self.app.signer} to {to_address}."
+                f"You are about to send {what} on the {self.app.chain.name} chain from {self.app.signer.address} to {to_address}."
             )
             yes_or_exit(logger=self.app.log.info)
         # Send

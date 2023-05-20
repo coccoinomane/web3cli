@@ -39,7 +39,8 @@ def test_address_get(addresses: List[AddressFields]) -> None:
                 ]
             ).run()
             data, output = app.last_rendered
-            assert data["out"] == a["address"]
+            assert data["name"] == a["name"]
+            assert data["address"] == a["address"]
 
 
 def test_address_add(addresses: List[AddressFields]) -> None:

@@ -60,22 +60,25 @@ def test_chain_add(chains: List[ChainFields]) -> None:
 
 
 def test_chain_get(chains: List[ChainFields]) -> None:
-    """With explicit argument > return argument value"""
     for chain in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(["--chain", chain["name"], "chain", "get"]).run()
+            app.set_args(["chain", "get", chain["name"]]).run()
             data, output = app.last_rendered
-            assert data["out"] == chain["name"]
+            assert data["name"] == chain["name"]
+            assert data["chain_id"] == chain["chain_id"]
+            assert data["coin"] == chain["coin"]
+            assert data["tx_type"] == chain["tx_type"]
+            assert data["desc"] == chain["desc"]
+            assert data["middlewares"] == chain["middlewares"]
 
 
-def test_chain_get_no_args(chains: List[ChainFields]) -> None:
-    """Without any argument > return the default chain"""
+def test_chain_active(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
             app.config.set("web3cli", "default_chain", chain["name"])
-            app.set_args(["chain", "get"]).run()
+            app.set_args(["chain", "active"]).run()
             data, output = app.last_rendered
             assert data["out"] == chain["name"]
 

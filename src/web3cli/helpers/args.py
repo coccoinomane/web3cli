@@ -6,11 +6,12 @@ from typing import Any, List, Literal, Tuple, Union
 from cement import App
 from web3.types import ABI
 
-from web3cli.exceptions import Web3CliError
+from web3cli.exceptions import SignerNotResolved, Web3CliError
+from web3cli.helpers.signer import get_signer
 from web3core.exceptions import RpcIsInvalid
 from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type
 from web3core.helpers.rpc import is_rpc_uri_valid
-from web3core.models.chain import Chain
+from web3core.models.chain import Chain, Rpc
 from web3core.models.signer import Signer
 from web3core.types import TX_LIFE_PROPERTIES, TxLifeProperty
 
@@ -24,15 +25,26 @@ ReturnArg = Union[TxLifeProperty, Literal["all"]]
 # |_|      \__,_| |_|    |___/  \___|
 
 
-def parse_global_args(app: App) -> None:
+def pre_parse_args(app: App) -> None:
     """Extend the app object with global arguments. Must be
     run post argument parsing"""
 
-    app.extend("signer", parse_signer(app))
-    app.extend("priority_fee", parse_priority_fee(app))
-    app.extend("rpc", parse_rpc(app))
-    app.extend("chain_name", parse_chain(app))
-    app.extend("chain", Chain.get_by_name(app.chain_name))
+    # If the command requires a chain, save it on the app object
+    if hasattr(app.pargs, "chain"):
+        app.extend("chain", parse_chain(app))
+
+    # If the command requires a signer, save it on the app object
+    # Will ask for password if the signer is given as a keyfile.
+    if hasattr(app.pargs, "signer"):
+        app.extend("signer", parse_signer(app))
+
+    # If the command requires an rpc, save it on the app object
+    if hasattr(app.pargs, "rpc"):
+        app.extend("rpc", parse_rpc(app))
+
+    # If the command requires a priority fee, save it on the app object
+    if hasattr(app.pargs, "priority_fee"):
+        app.extend("priority_fee", parse_priority_fee(app))
 
 
 def get_command(app: App) -> str:
@@ -47,43 +59,51 @@ def get_command(app: App) -> str:
         return None
 
 
-def parse_chain(app: App) -> str:
-    """Try to infer which chain the user wants to use.
+def parse_chain(app: App) -> Chain:
+    """Try to infer which chain the user wants to use,
+    and return it as a Chain object.
 
     The following is the order in which the chain is
     discovered and loaded:
 
     - Argument --chain or -c passed to the CLI
     - Default chain from the config file
-    - If there's only one chain in the DB, use it
+    - If there's only one registered chain, use it
 
     Otherwise, raise a Web3CliError."""
     if app.pargs.chain:
-        chain = app.pargs.chain
-    elif Chain.select().count() == 1:
-        chain = Chain.select().get().name
+        chain_name = app.pargs.chain
     elif app.config.get("web3cli", "default_chain"):
-        chain = app.config.get("web3cli", "default_chain")
+        chain_name = app.config.get("web3cli", "default_chain")
+    elif Chain.select().count() == 1:
+        return Chain.select().get()
     else:
         raise Web3CliError(
             "Could not infer the chain you want to use. Try specifying it with the --chain argument."
         )
-    return chain
+    return Chain.get_by_name_or_raise(chain_name)
 
 
-def parse_rpc(app: App) -> str:
-    """If the argument --rpc was passed to the CLI, return it; otherwise,
-    return None, in which case the app will automatically determine the
-    best RPC to use based on the selected chain"""
+def parse_rpc(app: App) -> Rpc:
+    """Try to infer which RPC the user wants to use,
+    and return it as an RPC object.
+
+    The following is the order in which the chain is
+    discovered and loaded:
+
+    - Argument --rpc with the RPC url is passed to the CLI
+    - Use default RPC for the chain"""
     if not app.pargs.rpc:
-        return None
+        return app.chain.pick_rpc()
     if not is_rpc_uri_valid(app.pargs.rpc):
         raise RpcIsInvalid(f"Given RPC is not valid: {app.pargs.rpc}")
-    return app.pargs.rpc
+    return Rpc(url=app.pargs.rpc)
 
 
-def parse_signer(app: App) -> str:
-    """Try to infer which signer the user wants to use.
+def parse_signer(app: App) -> Signer:
+    """Try to infer which signer the user wants to use,
+    and return it as a Signer object; will ask for
+    password if the signer is given as a keyfile.
 
     The following is the order in which the signer is
     discovered and loaded:
@@ -92,20 +112,18 @@ def parse_signer(app: App) -> str:
     - Default signer from the config file
     - If there's only one signer in the DB, use it
 
-    Otherwise, return None, and leave to the app the
-    responsibility to raise an error. We do not raise
-    it here because we don't know yet whether the command
-    invoked by the user really needs a signer.
+    Otherwise, raise a Web3CliError.
     """
     if app.pargs.signer:
-        signer = app.pargs.signer
+        return get_signer(app, app.pargs.signer)
     elif app.config.get("web3cli", "default_signer"):
-        signer = app.config.get("web3cli", "default_signer")
+        return get_signer(app, app.config.get("web3cli", "default_signer"))
     elif Signer.select().count() == 1:
-        signer = Signer.select().get().name
+        return Signer.select().get()
     else:
-        signer = None
-    return signer
+        raise SignerNotResolved(
+            "Please specify a signer with --signer or set a default signer in the config file"
+        )
 
 
 def parse_priority_fee(app: App) -> int:
@@ -419,16 +437,6 @@ def contract_abi(
     )
 
 
-def rpc(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
-    return (
-        list(name_or_flags) or ["--rpc"],
-        {
-            "help": "use this RPC url no matter what, ignoring whatever values were added previously"
-        }
-        | kwargs,
-    )
-
-
 def priority_fee(
     *name_or_flags: str, **kwargs: Any
 ) -> Tuple[List[str], dict[str, Any]]:
@@ -447,7 +455,7 @@ def signer(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any
     return (
         list(name_or_flags) or ["-s", "--signer"],
         {
-            "help": "wallet that will sign transactions (e.g. send tokens, interact with contracts, etc)",
+            "help": "who is going to sign the transaction: a registered signer, a private key, or a keyfile json. Will use the default signer if not specified",
         }
         | kwargs,
     )
@@ -457,10 +465,30 @@ def chain(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]
     return (
         list(name_or_flags) or ["-c", "--chain"],
         {
-            "help": "blockchain to use",
+            "help": "chain to use, will use the default chain if not specified",
         }
         | kwargs,
     )
+
+
+def rpc(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--rpc"],
+        {
+            "help": "use this RPC url. If not specified, will use the default RPC for the chain ",
+        }
+        | kwargs,
+    )
+
+
+def signer_and_gas() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands accepting both signer and gas arguments"""
+    return [signer(), priority_fee()]
+
+
+def chain_and_rpc() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands accepting both chain and rpc arguments"""
+    return [chain(), rpc()]
 
 
 #  _   _   _     _   _

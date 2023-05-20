@@ -70,11 +70,11 @@ def test_transact_invalid_input(
     seed_local_token(app, TST)
     with pytest.raises(error, match=error_message):
         app.set_args(
-            [
+            args
+            + [
                 "--signer",
                 "alice",
             ]
-            + args
             + ["--force"]
         ).run()
 
@@ -93,7 +93,7 @@ def test_transact(
     seed_local_token(app, TST)
     bob_balance = TST.balanceOf(bob.address)
     app.set_args(
-        ["--signer", "alice", "transact", "tst", "transfer", "bob", "1e18", "--force"]
+        ["transact", "tst", "transfer", "bob", "1e18", "--signer", "alice", "--force"]
         + (["--dry-run"] if dry_run else [])
     ).run()
     if dry_run:
@@ -119,13 +119,13 @@ def test_transact_with_confirm(
     seed_local_token(app, TST)
     bob_balance = TST.balanceOf(bob.address)
     args = [
-        "--signer",
-        "alice",
         "transact",
         "tst",
         "transfer",
         "bob",
         "1e18",
+        "--signer",
+        "alice",
     ]
     monkeypatch.setattr("builtins.input", lambda _: answer)
     if answer == "yes":
@@ -205,8 +205,6 @@ def test_transact_return(
     bob_balance = TST.balanceOf(bob.address)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "transact",
             "tst",
             "transfer",
@@ -214,6 +212,8 @@ def test_transact_return(
             "1e18",
             "--return",
             return_,
+            "--signer",
+            "alice",
             "--force",
         ]
     ).run()
@@ -238,8 +238,6 @@ def test_transact_return_output(
     seed_local_token(app, TST)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "transact",
             "tst",
             "transfer",
@@ -247,6 +245,8 @@ def test_transact_return_output(
             "1e18",
             "--return",
             "output",
+            "--signer",
+            "alice",
             "--force",
         ]
         + (["--dry-run"] if dry_run else [])
@@ -273,8 +273,6 @@ def test_transact_output_receipt_dry_run(
     ):
         app.set_args(
             [
-                "--signer",
-                "alice",
                 "transact",
                 "tst",
                 "transfer",
@@ -282,6 +280,8 @@ def test_transact_output_receipt_dry_run(
                 "1e18",
                 "--return",
                 return_type,
+                "--signer",
+                "alice",
                 "--force",
                 "--dry-run",
             ]
@@ -306,8 +306,6 @@ def test_transact_call(
     bob_balance = TST.balanceOf(bob.address)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "transact",
             "tst",
             "transfer",
@@ -315,6 +313,8 @@ def test_transact_call(
             "1e18",
             "--return",
             "all",
+            "--signer",
+            "alice",
             "--force",
         ]
         + (["--no-call", "--gas-limit", "300000"] if not call else [])
@@ -349,8 +349,6 @@ def test_transact_call_with_gas_limit(
     gas_limit = 300000
     app.set_args(
         [
-            "--signer",
-            "alice",
             "transact",
             "tst",
             "transfer",
@@ -360,6 +358,8 @@ def test_transact_call_with_gas_limit(
             str(gas_limit),
             "--return",
             "data",
+            "--signer",
+            "alice",
             "--force",
         ]
     ).run()

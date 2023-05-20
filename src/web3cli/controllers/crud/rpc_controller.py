@@ -1,10 +1,9 @@
 from cement import ex
 
 from web3cli.controllers.controller import Controller
-from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.render import render_table
-from web3core.exceptions import ChainNotFound
-from web3core.models.chain import Chain, Rpc
+from web3core.models.chain import Rpc
 
 
 class RpcController(Controller):
@@ -17,9 +16,8 @@ class RpcController(Controller):
         stacked_on = "base"
 
     @ex(
-        help="add a new rpc to the given chain",
+        help="add a new rpc to the given chain or to the active chain",
         arguments=[
-            (["chain_name"], {"help": "name of the chain of the rpc"}),
             (
                 ["rpcs"],
                 {
@@ -27,17 +25,12 @@ class RpcController(Controller):
                     "nargs": "+",
                 },
             ),
+            args.chain(),
         ],
     )
     def add(self) -> None:
-        chain = Chain.get_by_name(self.app.pargs.chain_name)
-        if not chain:
-            raise ChainNotFound(
-                f"Chain '{self.app.pargs.chain_name}' does not exist, add it with `w3 chain add`"
-            )
-
         for rpc_url in self.app.pargs.rpcs:
-            chain.add_rpc(rpc_url, self.app.log.info)
+            self.app.chain.add_rpc(rpc_url, self.app.log.info)
 
     @ex(
         help="list available rpcs and their chains",
@@ -79,22 +72,17 @@ class RpcController(Controller):
                     "type": int,
                 },
             ),
+            *args.chain_and_rpc(),
         ],
     )
     def get(self) -> None:
         # Case 1: Show the URL of the RPC with the given ID
         if self.app.pargs.id:
-            rpc = Rpc.get_or_none(self.app.pargs.id)
-            if not rpc:
-                raise Web3CliError(f"RPC with ID {self.app.pargs.id} does not exist")
+            rpc = Rpc.get(self.app.pargs.id)
             self.app.print(rpc.url)
         # Case 2: RPC was forced via CLI argument
-        elif self.app.rpc:
-            self.app.print(self.app.rpc)
-        # Case 3: show RPC inferred by the app
         else:
-            rpc = self.app.chain.pick_rpc()
-            self.app.print(rpc.url)
+            self.app.print(self.app.rpc.url)
 
     @ex(
         help="delete one or more rpcs",

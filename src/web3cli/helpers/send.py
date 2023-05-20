@@ -49,7 +49,7 @@ def send_coin_or_token(
         return send_native_coin(app, to, amount, unit)
 
     # Try to send token but first check if a contract exist with name=ticker
-    token = Contract.get_by_name_and_chain(ticker, app.chain_name)
+    token = Contract.get_by_name_and_chain(ticker, app.chain.name)
     if not token or not token.type == "erc20":
         raise Web3CliError(f"No ERC20 contract with name {ticker} on {app.chain.name}")
     return send_erc20_token(app, ticker, to, amount, unit)
@@ -104,7 +104,10 @@ def send_erc20_token_in_decimals(
     decimals.
 
     For example, if the token has 6 decimals, and you specify amount=1, the
-    actual amount is 0.000001 in token units."""
+    actual amount is 0.000001 in token units.
+
+    TODO: This should use send_contract_tx, to have gas settings + output
+    management."""
     client = make_erc20_wallet(app, ticker)
     return client.transact(
         client.functions.transfer(resolve_address(to, [Address, Signer]), amount)

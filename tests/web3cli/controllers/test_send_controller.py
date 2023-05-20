@@ -11,7 +11,7 @@ def test_send_eth(
 ) -> None:
     bob_balance = bob.balance
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", "ETH", "--force"]
+        ["send", bob.address, "1", "ETH", "--force", "--signer", "alice"]
     ).run()
     assert bob.balance == bob_balance + 10**18
 
@@ -21,7 +21,7 @@ def test_send_eth_using_address_tag(
     app: Web3CliTest, alice: ape.api.AccountAPI, bob: ape.api.AccountAPI
 ) -> None:
     bob_balance = bob.balance
-    app.set_args(["--signer", "alice", "send", "bob", "1", "ETH", "--force"]).run()
+    app.set_args(["send", "bob", "1", "ETH", "--signer", "alice", "--force"]).run()
     assert bob.balance == bob_balance + 10**18
 
 
@@ -31,7 +31,7 @@ def test_send_eth_wei(
 ) -> None:
     bob_balance = bob.balance
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", "ETH", "wei", "--force"]
+        ["send", bob.address, "1", "ETH", "wei", "--signer", "alice", "--force"]
     ).run()
     assert bob.balance == bob_balance + 1
 
@@ -46,7 +46,7 @@ def test_send_token(
     bob_balance = TST.balanceOf(bob.address)
     seed_local_token(app, TST)
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", TST.symbol(), "--force"]
+        ["send", bob.address, "1", TST.symbol(), "--signer", "alice", "--force"]
     ).run()
     assert TST.balanceOf(bob.address) == bob_balance + 10**18
 
@@ -61,7 +61,7 @@ def test_send_token_with_alias(
     bob_balance = TST.balanceOf(bob.address)
     seed_local_token(app, TST)
     app.set_args(
-        ["--signer", "alice", "send", "bob", "1", TST.symbol(), "--force"]
+        ["send", "bob", "1", TST.symbol(), "--signer", "alice", "--force"]
     ).run()
     assert TST.balanceOf(bob.address) == bob_balance + 10**18
 
@@ -77,13 +77,13 @@ def test_send_token_smallest(
     seed_local_token(app, TST)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "send",
             bob.address,
             "1",
             TST.symbol(),
             "smallest",
+            "--signer",
+            "alice",
             "--force",
         ]
     ).run()
@@ -100,7 +100,7 @@ def test_send_token6(
     bob_balance = TST6.balanceOf(bob.address)
     seed_local_token(app, TST6)
     app.set_args(
-        ["--signer", "alice", "send", bob.address, "1", TST6.symbol(), "--force"]
+        ["send", bob.address, "1", TST6.symbol(), "--signer", "alice", "--force"]
     ).run()
     assert TST6.balanceOf(bob.address) == bob_balance + 10**6
 
@@ -116,13 +116,13 @@ def test_send_token6_smallest(
     seed_local_token(app, TST6)
     app.set_args(
         [
-            "--signer",
-            "alice",
             "send",
             bob.address,
             "1",
             TST6.symbol(),
             "smallest",
+            "--signer",
+            "alice",
             "--force",
         ]
     ).run()

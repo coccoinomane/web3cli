@@ -5,8 +5,9 @@ from eth_account import Account
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.helpers import args
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
-from web3cli.helpers.render import render_table
+from web3cli.helpers.render import render_json, render_table
 from web3cli.helpers.signer import get_signer
 from web3core.exceptions import KeyIsInvalid, SignerNotFound
 from web3core.helpers.misc import are_mutually_exclusive
@@ -34,24 +35,39 @@ class SignerController(Controller):
         )
 
     @ex(
-        help="show the address of a signer by its name; without arguments, show the name of the active signer",
+        help="show the details of the given signer",
         arguments=[
             (
                 ["name"],
                 {
-                    "help": "name of the signer to show",
-                    "nargs": "?",
+                    "help": "the signer to show; can be either a name, address, private key or keyfile"
                 },
-            ),
+            )
         ],
     )
     def get(self) -> None:
-        if self.app.pargs.name:
-            self.app.print(get_signer(self.app, self.app.pargs.name).address)
-        elif self.app.signer:
-            self.app.print(self.app.signer)
+        signer = get_signer(self.app, self.app.pargs.name).as_dict()
+        signer["key"] = "********"
+        render_json(self.app, signer)
+
+    @ex(
+        help="show the active signer's address",
+        arguments=[
+            (
+                ["--show-name"],
+                {
+                    "help": "show the name of the active signer, instead",
+                    "action": "store_true",
+                },
+            ),
+            args.signer(),
+        ],
+    )
+    def active(self) -> None:
+        if self.app.pargs.show_name:
+            self.app.print(self.app.signer.name)
         else:
-            raise SignerNotFound("Signer not set. Add one with `w3 signer add <name>`")
+            self.app.print(self.app.signer.address)
 
     @ex(
         help="add a new signer; you will be asked for the private key",

@@ -14,6 +14,7 @@ class ConfigController(Controller):
         help = "show, add or edit web3cli's setting values"
         stacked_type = "nested"
         stacked_on = "base"
+        aliases = ["option"]
 
     @ex(
         help="show the value of the given setting. If no setting is given, show all settings",

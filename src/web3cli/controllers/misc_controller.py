@@ -8,8 +8,8 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
-from web3cli.helpers.chain import chain_ready_or_raise
-from web3cli.helpers.client_factory import make_client, make_wallet
+from web3cli.helpers.client_factory import make_client
+from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
 
 
@@ -34,11 +34,11 @@ class MiscController(Controller):
                     "default": "ether",
                 },
             ),
+            *args.chain_and_rpc(),
         ],
     )
     def balance(self) -> None:
-        chain_ready_or_raise(self.app)
-        address = resolve_address(self.app.pargs.address, chain=self.app.chain_name)
+        address = resolve_address(self.app.pargs.address, chain=self.app.chain.name)
         balance = make_client(self.app).w3.eth.get_balance(
             Web3.to_checksum_address(address),
             block_identifier=parse_block(self.app, "block"),
@@ -57,10 +57,9 @@ class MiscController(Controller):
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
-        arguments=[args.block("block_identifier", nargs="?")],
+        arguments=[args.block("block_identifier", nargs="?"), *args.chain_and_rpc()],
     )
     def block(self) -> None:
-        chain_ready_or_raise(self.app)
         block_identifier = parse_block(self.app, "block_identifier")
         block = make_client(self.app).w3.eth.get_block(block_identifier)
         block_as_dict = json.loads(Web3.to_json(block))
@@ -68,33 +67,36 @@ class MiscController(Controller):
 
     @ex(
         help="Sign the given message and show the signed message, as returned by web3.py",
-        arguments=[(["msg"], {"action": "store"})],
+        arguments=[(["msg"], {"action": "store"}), args.signer()],
     )
     def sign(self) -> None:
-        signed_message = make_wallet(self.app).sign_message(self.app.pargs.msg)
+        wallet = make_base_wallet(
+            chain=None, signer=self.app.signer, password=self.app.app_key, node_uri=None
+        )
+        signed_message = wallet.sign_message(self.app.pargs.msg)
         self.app.print(pformat(signed_message._asdict()))
 
     @ex(
         help="Get the current gas price in gwei by calling the eth_gasPrice method. For EIP1559 chains, this should return the max priority fee per gas.",
+        arguments=[*args.chain_and_rpc()],
     )
     def gas_price(self) -> None:
-        chain_ready_or_raise(self.app)
         gas_price_in_wei = make_client(self.app).w3.eth.gas_price
         gas_price_in_gwei = Web3.from_wei(gas_price_in_wei, "gwei")
         self.app.render(gas_price_in_gwei)
 
     @ex(
         help="Get the base fee in gwei of the last block. Will error for non-EIP1559 chains.",
+        arguments=[*args.chain_and_rpc()],
     )
     def base_fee(self) -> None:
-        chain_ready_or_raise(self.app)
         try:
             base_fee_in_wei = make_client(self.app).w3.eth.get_block("latest")[
                 "baseFeePerGas"
             ]
         except KeyError:
             raise Web3CliError(
-                f"Could not find base fee. Please check that chain '{self.app.chain_name}' is EIP-1599 compatible."
+                f"Could not find base fee. Please check that chain '{self.app.chain.name}' is EIP-1599 compatible."
             )
         base_fee_in_gwei = Web3.from_wei(base_fee_in_wei, "gwei")
         self.app.render(base_fee_in_gwei)

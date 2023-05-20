@@ -7,10 +7,8 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
-from web3cli.helpers.signer import get_signer
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers import dex
 from web3core.helpers.misc import yes_or_exit
@@ -45,25 +43,26 @@ class SwapController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            *args.chain_and_rpc(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )
     def swap(self) -> None:
-        chain_ready_or_raise(self.app)
-        signer = get_signer(self.app)
         # Parse arguments
+        signer = self.app.signer
         to = self.app.pargs.to if self.app.pargs.to else signer.address
         to_address = resolve_address(to, [Address, Signer])
         amount_in_token_units = decimal.Decimal(self.app.pargs.amount)
         token_in = resolve_address(
-            self.app.pargs.token_in, [Contract], self.app.chain_name
+            self.app.pargs.token_in, [Contract], self.app.chain.name
         )
         token_out = resolve_address(
-            self.app.pargs.token_out, [Contract], self.app.chain_name
+            self.app.pargs.token_out, [Contract], self.app.chain.name
         )
         # Check if the DEX is supported
         Contract.get_by_name_chain_and_type_or_raise(
-            self.app.pargs.dex, self.app.chain_name, "uniswap_v2"
+            self.app.pargs.dex, self.app.chain.name, "uniswap_v2"
         )
         # Initialize clients
         router_client = make_contract_wallet(self.app, self.app.pargs.dex)
@@ -123,7 +122,7 @@ class SwapController(Controller):
             if self.app.pargs.dry_run:
                 print("  Dry run: yes")
             print(f"  Dex: {self.app.pargs.dex}")
-            print(f"  Chain: {self.app.chain_name}")
+            print(f"  Chain: {self.app.chain.name}")
             print(f"  From: {signer.name} ({signer.address})")
             if signer.address != to_address:
                 print(f"  Final recipient: {to_address}")

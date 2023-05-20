@@ -4,7 +4,6 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
 from web3cli.helpers.tx import send_contract_tx
@@ -35,11 +34,12 @@ class TransactController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            *args.chain_and_rpc(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )
     def transact(self) -> None:
-        chain_ready_or_raise(self.app)
         # Try to fetch the function from the ABI
         client = make_contract_wallet(self.app, self.app.pargs.contract)
         functions = client.functions
@@ -53,7 +53,7 @@ class TransactController(Controller):
             client.contract.abi,
             self.app.pargs.function,
             checksum_addresses=True,
-            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
+            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain.name),
             allow_exp_notation=True,
         )
         # Ask for confirmation

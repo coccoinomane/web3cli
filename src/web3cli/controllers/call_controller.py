@@ -5,9 +5,8 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_client
-from web3cli.helpers.signer import get_signer
+from web3cli.helpers.render import render_json
 from web3core.helpers.abi import (
     does_function_write_to_state,
     get_function_abis,
@@ -35,14 +34,14 @@ class CallController(Controller):
                 ["--from"],
                 {
                     "dest": "from_",
-                    "help": "When simulating write operations a 'from' address is needed. If a signer is found, its address will be used, otherwise you need to specify a 'from' address with this option.",
+                    "help": "From address.  Needed when simulating write operations, e.g. a swap or a token transfer.",
                 },
             ),
+            *args.chain_and_rpc(),
         ],
     )
     def call(self) -> None:
         # Get client to interact with the chain
-        chain_ready_or_raise(self.app)
         client = make_contract_client(self.app, self.app.pargs.contract)
 
         # Try to fetch the function from the ABI
@@ -54,17 +53,10 @@ class CallController(Controller):
 
         # If the function is a write operation, we need a from address
         from_address = None
-        function_abi = get_function_abis(client.contract.abi, self.app.pargs.function)[
-            0
-        ]  # TODO: overloaded functions?
-        if does_function_write_to_state(function_abi):
+        fn_abi = get_function_abis(client.contract.abi, self.app.pargs.function)[0]
+        if does_function_write_to_state(fn_abi):
             if self.app.pargs.from_ is None:
-                try:
-                    from_address = get_signer(self.app).address
-                except:
-                    raise Web3CliError(
-                        "Cannot call a write operation without a from address: please specify one with either the --from <address> option or the --signer <signer> option."
-                    )
+                raise Web3CliError("Please specify a from address with --from")
             else:
                 from_address = resolve_address(self.app.pargs.from_)
 
@@ -77,7 +69,7 @@ class CallController(Controller):
             client.contract.abi,
             self.app.pargs.function,
             checksum_addresses=True,
-            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain_name),
+            resolve_address_fn=lambda x: resolve_address(x, chain=self.app.chain.name),
             allow_exp_notation=True,
         )
 
@@ -88,4 +80,4 @@ class CallController(Controller):
             result = function(*function_args).call(
                 {"from": from_address}, block_identifier=block
             )
-        self.app.render(result, indent=4, handler="json")
+        render_json(self.app, result)

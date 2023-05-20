@@ -4,10 +4,8 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
-from web3cli.helpers.chain import chain_ready_or_raise
 from web3cli.helpers.client_factory import make_contract_wallet
 from web3cli.helpers.render import render_web3py
-from web3cli.helpers.signer import get_signer
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -46,14 +44,14 @@ class TokenController(Controller):
             args.tx_dry_run(),
             args.tx_call(),
             args.tx_gas_limit(),
+            *args.chain_and_rpc(),
+            *args.signer_and_gas(),
             args.force(),
         ],
     )
     def approve(self) -> None:
-        chain_ready_or_raise(self.app)
-        signer = get_signer(self.app)
         # Parse arguments
-        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain_name)
+        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         # Initialize client
         client = make_contract_wallet(self.app, self.app.pargs.token)
         # Compute amount in
@@ -71,13 +69,15 @@ class TokenController(Controller):
                 + self.app.pargs.token
             )
             print(
-                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain_name} to spend {what} in your name"
+                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain.name} to spend {what} in your name"
             )
             yes_or_exit(logger=self.app.log.info)
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
-            allowance = client.functions["allowance"](signer.address, spender).call()
+            allowance = client.functions["allowance"](
+                self.app.signer.address, spender
+            ).call()
             # If allowance is not sufficient, approve
             if allowance >= amount:
                 self.app.log.info(
