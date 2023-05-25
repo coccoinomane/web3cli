@@ -4,14 +4,13 @@
 
 - Tests: test get_signer() switch function
 - Tests: test add liq + swap
-- Tests: test token approve
+- Tests: test token approve, balance
 
 ### Commands 
 
 - Swap: refactor in web3core + test
-- Get tokens balance
+- Token: allowance + transfer commands
 - w3 ls to see ETH balances of all signers
-- Token: Approve and allowance commands
 - Add support for uniswap v3 (https://docs.traderjoexyz.com/, https://snowtrace.io/address/0xe3ffc583dc176575eea7fd9df2a7c65f7e23f4c3#code)
 - Command to swap tokens via Defi LLama token aggregator (https://twitter.com/DefiLlama/status/1609989799653285888)
 - Command to import chains from https://chainid.network/chains.json

@@ -5,8 +5,8 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
-from web3cli.helpers.client_factory import make_contract_wallet
-from web3cli.helpers.render import render_web3py
+from web3cli.helpers.client_factory import make_contract_client, make_contract_wallet
+from web3cli.helpers.render import render_number, render_web3py
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -94,3 +94,18 @@ class TokenController(Controller):
         )
         # Print output
         render_web3py(self.app, output)
+
+    @ex(
+        help="Show the balance of the given token for the given address",
+        arguments=[
+            (["token"], {"help": "Token to check, by name"}),
+            (["address"], {"help": "Address or name of the account to check"}),
+            *args.chain_and_rpc(),
+        ],
+    )
+    def balance(self) -> None:
+        address = resolve_address(self.app.pargs.address, chain=self.app.chain.name)
+        client = make_contract_client(self.app, self.app.pargs.token)
+        balance_in_wei = client.functions["balanceOf"](address).call()
+        balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
+        render_number(self.app, balance)
