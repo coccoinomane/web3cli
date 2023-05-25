@@ -1,3 +1,4 @@
+import argparse
 import decimal
 
 from cement import ex
@@ -36,8 +37,9 @@ class TokenController(Controller):
             (
                 ["--check"],
                 {
-                    "help": "Do not approve if the spender already has enough allowance",
-                    "action": "store_true",
+                    "help": "Do nothing if the spender already has enough allowance",
+                    "action": argparse.BooleanOptionalAction,
+                    "default": True,
                 },
             ),
             args.tx_return(),
@@ -61,17 +63,6 @@ class TokenController(Controller):
             amount_token_units = decimal.Decimal(self.app.pargs.amount)
             decimals = client.functions["decimals"]().call()
             amount = int(amount_token_units * 10**decimals)
-        # Confirm
-        if not self.app.pargs.force:
-            what = (
-                (str(self.app.pargs.amount) if self.app.pargs.amount else "infinite")
-                + " "
-                + self.app.pargs.token
-            )
-            print(
-                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain.name} to spend {what} in your name"
-            )
-            yes_or_exit(logger=self.app.log.info)
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
@@ -84,6 +75,17 @@ class TokenController(Controller):
                     "Not approving: token allowance is already sufficient"
                 )
                 return
+        # Confirm
+        if not self.app.pargs.force:
+            what = (
+                (str(self.app.pargs.amount) if self.app.pargs.amount else "infinite")
+                + " "
+                + self.app.pargs.token
+            )
+            print(
+                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain.name} to spend {what} in your name"
+            )
+            yes_or_exit(logger=self.app.log.info)
         self.app.log.debug("Approving DEX spender spend token...")
         output = send_contract_tx(
             self.app,
