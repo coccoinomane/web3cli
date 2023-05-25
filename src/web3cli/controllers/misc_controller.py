@@ -9,6 +9,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
+from web3cli.helpers.render import render_balance
 from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
 
@@ -45,15 +46,7 @@ class MiscController(Controller):
         )
         if self.app.pargs.unit != "wei":
             balance = Web3.from_wei(balance, self.app.pargs.unit)
-        self.app.render(
-            {
-                "amount": balance,
-                "ticker": self.app.chain.coin,
-                "unit": self.app.pargs.unit,
-            },
-            "balance.jinja2",
-            handler="jinja2",
-        )
+        render_balance(self.app, balance, self.app.chain.coin, self.app.pargs.unit)
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
