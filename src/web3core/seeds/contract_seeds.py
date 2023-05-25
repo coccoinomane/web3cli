@@ -5,6 +5,7 @@ from web3core.seeds.contracts import (
     arb_contract_seeds,
     avax_contract_seeds,
     bnb_contract_seeds,
+    era_contract_seeds,
     eth_contract_seeds,
 )
 
@@ -13,4 +14,5 @@ all: List[ContractFields] = (
     + bnb_contract_seeds.all
     + avax_contract_seeds.all
     + arb_contract_seeds.all
+    + era_contract_seeds.all
 )
