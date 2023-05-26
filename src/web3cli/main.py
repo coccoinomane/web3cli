@@ -190,35 +190,40 @@ if __name__ == "__main__":
 
 
 def w3eth() -> None:
-    """Shorthand command w3eth that uses eth chain"""
+    """Shorthand command to use ethereum chain"""
     main(lambda a: override_arg(a, "chain", "eth"))
 
 
 def w3bnb() -> None:
-    """Shorthand command that uses bnb chain"""
+    """Shorthand command to use binance chain"""
     main(lambda a: override_arg(a, "chain", "bnb"))
 
 
 def w3avax() -> None:
-    """Shorthand command w3eth that uses avax chain"""
+    """Shorthand command to use avalanche chain"""
     main(lambda a: override_arg(a, "chain", "avax"))
 
 
 def w3matic() -> None:
-    """Shorthand command w3eth that uses matic chain"""
+    """Shorthand command to use matic chain"""
     main(lambda a: override_arg(a, "chain", "matic"))
 
 
 def w3cro() -> None:
-    """Shorthand command w3eth that uses cro chain"""
+    """Shorthand command to use cronos chain"""
     main(lambda a: override_arg(a, "chain", "cro"))
 
 
 def w3arb() -> None:
-    """Shorthand command w3eth that uses arb chain"""
+    """Shorthand command to use arbitrum chain"""
     main(lambda a: override_arg(a, "chain", "arb"))
 
 
 def w3era() -> None:
-    """Shorthand command w3eth that uses zkSync Era chain"""
+    """Shorthand command to use zkSync Era chain"""
     main(lambda a: override_arg(a, "chain", "era"))
+
+
+def w3gno() -> None:
+    """Shorthand command to use gnosis chain"""
+    main(lambda a: override_arg(a, "chain", "gno"))

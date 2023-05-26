@@ -68,7 +68,7 @@ class ChainController(Controller):
                     "name": self.app.pargs.name,
                     "desc": self.app.pargs.desc,
                     "chain_id": self.app.pargs.chain_id,
-                    "coin": self.app.pargs.coin.upper(),
+                    "coin": self.app.pargs.coin,
                     "tx_type": self.app.pargs.tx_type,
                     "middlewares": None
                     if self.app.pargs.poa

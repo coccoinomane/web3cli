@@ -162,7 +162,7 @@ You can also do more complex stuff like:
 w3 call uniswap_v2 getAmountsOut 100e6 usdc,usdt | jq -r '.[1]' 
 ```
 
-### Write to a smart contract
+### Send a transaction to a smart contract
 
 To write to the blockchain, use `w3 transact`. For example, to transfer 1 ETH to 
 address, run:

@@ -43,6 +43,7 @@ w3matic = {cmd = "w3matic", help = "Run the CLI in dev mode, on Polygon POS chai
 w3cro = {cmd = "w3cro", help = "Run the CLI in dev mode, on Cronos chain"}
 w3arb = {cmd = "w3arb", help = "Run the CLI in dev mode, on Arbitrum One chain"}
 w3era = {cmd = "w3era", help = "Run the CLI in dev mode, on zkSync Era chain"}
+w3gno = {cmd = "w3gno", help = "Run the CLI in dev mode, on Gnosis (xDAI) chain"}
 
 test = "ape test tests --network ::foundry"
 test_verbose = "ape test tests -s --network ::foundry"
@@ -65,6 +66,7 @@ w3matic = "web3cli.main:w3matic"
 w3cro = "web3cli.main:w3cro"
 w3arb = "web3cli.main:w3arb"
 w3era = "web3cli.main:w3era"
+w3gno = "web3cli.main:w3gno"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

@@ -107,6 +107,27 @@ era: ChainFields = {
     ],
 }
 
+# Gnosis chain
+gno: ChainFields = {
+    "name": "gno",
+    "desc": "Gnosis",
+    "chain_id": 100,
+    "coin": "xDAI",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://rpc.gnosischain.com/",
+        },
+        {
+            "url": "https://rpc.gnosis.gateway.fm",
+        },
+        {
+            "url": "https://rpc.ankr.com/gnosis",
+        },
+    ],
+}
+
 
 # Ganache local chain
 ganache: ChainFields = {
@@ -146,6 +167,7 @@ all: List[ChainFields] = [
     cro,
     arb,
     era,
+    gno,
     ganache,
     anvil,
 ]
