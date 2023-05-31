@@ -9,7 +9,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
-from web3cli.helpers.render import render_balance
+from web3cli.helpers.render import render_balance, render_number
 from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
 
@@ -47,6 +47,23 @@ class MiscController(Controller):
         if self.app.pargs.unit != "wei":
             balance = Web3.from_wei(balance, self.app.pargs.unit)
         render_balance(self.app, balance, self.app.chain.coin, self.app.pargs.unit)
+
+    @ex(
+        help="Get the number of transactions made by the given address",
+        arguments=[
+            (["address"], {"action": "store"}),
+            args.block(),
+            *args.chain_and_rpc(),
+        ],
+        aliases=["nonce"],
+    )
+    def tx_count(self) -> None:
+        address = resolve_address(self.app.pargs.address, chain=self.app.chain.name)
+        nonce = make_client(self.app).w3.eth.get_transaction_count(
+            Web3.to_checksum_address(address),
+            block_identifier=parse_block(self.app, "block"),
+        )
+        render_number(self.app, nonce)
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",

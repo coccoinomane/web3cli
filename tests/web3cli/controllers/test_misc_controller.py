@@ -72,6 +72,22 @@ def test_balance_with_unit_wei(
     assert data["unit"] == "wei"
 
 
+@pytest.mark.local
+def test_tx_count(
+    app: Web3CliTest,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    ape_chain: ape.managers.chain.ChainManager,
+) -> None:
+    alice.transfer(bob, 10000)
+    alice.transfer(bob, 20000)
+    ape_chain.mine()
+    alice.transfer(bob, 30000)
+    app.set_args(["tx-count", "alice"]).run()
+    data, output = app.last_rendered
+    assert int(data["out"]) == 3
+
+
 @pytest.mark.parametrize(
     "msg",
     [
