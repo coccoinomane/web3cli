@@ -74,7 +74,7 @@ class Contract(BaseModel):
             )
         except cls.DoesNotExist:
             raise ContractNotFound(
-                f"Could not find a '{type}' contract with '{name}' on chain '{chain}'"
+                f"Could not find the '{name}' contract with type '{name}' on chain '{chain}'"
             )
 
     @classmethod

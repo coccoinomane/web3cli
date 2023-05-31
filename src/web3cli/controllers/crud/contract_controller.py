@@ -121,7 +121,7 @@ class ContractController(Controller):
     @ex(
         help="delete a contract",
         arguments=[
-            (["name"], {"help": "hash of the contract to delete"}),
+            (["name"], {"help": "name of the contract to delete"}),
             args.chain(),
         ],
     )

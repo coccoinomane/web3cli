@@ -122,14 +122,24 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 See the available contracts with `w3 contract list`:
 
 ```
-w3 contract list              # contracts on Ethereum
-w3 contract list --chain bnb  # contracts on BNB chain
+w3 contract list               # contracts on Ethereum
+w3 contract list --chain bnb   # contracts on BNB chain
+w3 contract list --type erc20  # tokens on Ethereum
 ```
 
 You can also add custom contracts with `w3 contract add`:
 
 ```
 w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
+w3 contract add sushi 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F --type uniswap_v2
+```
+
+To add or list new tokens, you can use the `w3 token` shorthand:
+
+```
+w3 token add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+w3 token list
+w3 token delete weth
 ```
 
 See available functions and events on a contract with `w3 abi functions` and `w3 abi events`:
