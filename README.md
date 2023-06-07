@@ -118,8 +118,8 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 - Replay a given transactions on the blockchain:
    ```
-   tx=`w3arb send unicef 1 USDC --force` # send 1 USDC to Unicef
-   w3 replay $tx                         # re-send 1 USDC to Unicef
+   tx=`w3 send unicef 1 USDC --force` # send 1 USDC to Unicef
+   w3 replay $tx                      # re-send 1 USDC to Unicef
    ```
 
 # Smart Contract support
