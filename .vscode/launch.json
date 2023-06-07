@@ -12,18 +12,6 @@
             ]
         },
         {
-            "name": "tests - only db",
-            "type": "python",
-            "request": "launch",
-            "module": "pytest",
-            "justMyCode": true,
-            "args": [
-                "tests",
-                "-k",
-                "test_db_base"
-            ]
-        },
-        {
             "name": "tests - only transact",
             "type": "python",
             "request": "launch",
@@ -76,6 +64,27 @@
             "args": [
                 "signer",
                 "list"
+            ]
+        },
+        {
+            "name": "w3 transact",
+            "type": "python",
+            "request": "launch",
+            "module": "web3cli.main",
+            "justMyCode": false,
+            "args": [
+                "transact",
+                "sushi_v2",
+                "swapExactTokensForTokens",
+                "1e6",
+                "0.95e6",
+                "usdt,usdc",
+                "arbitrum",
+                "1e19",
+                "-s",
+                "arbitrum",
+                "-c",
+                "arb"
             ]
         },
         {
