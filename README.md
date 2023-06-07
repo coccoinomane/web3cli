@@ -37,6 +37,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Label addresses, tokens and contracts for ease of use
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Transfer tokens via their ticker
+- Replay transactions just with the tx hash
 - Concatenate commands to build powerful scripts
 - Import signers via private key or keyfile
 - Thoroughly tested using the [Ape Framework](https://github.com/ApeWorX/ape)'s testing framework
@@ -113,6 +114,12 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    ```
    w3 swap uniswap_v2 1 usdc usdt     # swap 1 USDC for USDT on Uniswap
    w3avax swap traderjoe 1 usdc wavax # swap 1 USDC for WAVAX on TraderJoe
+   ```
+
+- Replay a given transactions on the blockchain:
+   ```
+   tx=`w3arb send unicef 1 USDC --force` # send 1 USDC to Unicef
+   w3 replay $tx                         # re-send 1 USDC to Unicef
    ```
 
 # Smart Contract support
