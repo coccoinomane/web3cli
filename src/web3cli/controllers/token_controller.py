@@ -1,5 +1,4 @@
 import argparse
-import decimal
 
 from cement import ex
 
@@ -31,15 +30,15 @@ class TokenController(Controller):
             (
                 ["amount"],
                 {
-                    "help": "Amount of tokens to approve, in wei. Leave empty to approve the maximum amount",
-                    "type": int,
+                    "help": "Amount of tokens to approve. Leave empty to approve the maximum amount",
+                    "type": float,
                     "nargs": "?",
                 },
             ),
             (
                 ["--check"],
                 {
-                    "help": "Do nothing if the spender already has enough allowance",
+                    "help": "Whether to stop if the spender already has enough allowance",
                     "action": argparse.BooleanOptionalAction,
                     "default": True,
                 },
@@ -57,24 +56,23 @@ class TokenController(Controller):
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         # Initialize client
-        client = make_contract_wallet(self.app, self.app.pargs.token)
+        signer = make_contract_wallet(self.app, self.app.pargs.token)
         # Compute amount in
         if not self.app.pargs.amount:
-            amount = 2**256 - 1
+            amount_in_wei = 2**256 - 1
         else:
-            amount_token_units = decimal.Decimal(self.app.pargs.amount)
-            decimals = client.functions["decimals"]().call()
-            amount = int(amount_token_units * 10**decimals)
+            decimals = signer.functions["decimals"]().call()
+            amount_in_wei = int(self.app.pargs.amount * 10**decimals)
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
-            allowance = client.functions["allowance"](
+            allowance = signer.functions["allowance"](
                 self.app.signer.address, spender
             ).call()
             # If allowance is not sufficient, approve
-            if allowance >= amount:
+            if allowance >= amount_in_wei:
                 self.app.log.info(
-                    "Not approving: token allowance is already sufficient"
+                    f"Token allowance already sufficient {allowance} >= {amount_in_wei}"
                 )
                 return
         # Confirm
@@ -85,14 +83,14 @@ class TokenController(Controller):
                 + self.app.pargs.token
             )
             print(
-                f"You are about to approve {self.app.pargs.spender} on chain {self.app.chain.name} to spend {what} in your name"
+                f"You are about to approve {spender} on chain {self.app.chain.name} to spend {what} on behalf of {signer.user_address}"
             )
             yes_or_exit(logger=self.app.log.info)
         self.app.log.debug("Approving DEX spender spend token...")
         output = send_contract_tx(
             self.app,
-            client,
-            client.functions["approve"](spender, amount),
+            signer,
+            signer.functions["approve"](spender, amount_in_wei),
         )
         # Print output
         render_web3py(self.app, output)
