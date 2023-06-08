@@ -226,6 +226,11 @@ def w3era() -> None:
     main(lambda a: override_arg(a, "chain", "era"))
 
 
+def w3erat() -> None:
+    """Shorthand command to use zkSync Era testnet chain"""
+    main(lambda a: override_arg(a, "chain", "erat"))
+
+
 def w3gno() -> None:
     """Shorthand command to use gnosis chain"""
     main(lambda a: override_arg(a, "chain", "gno"))

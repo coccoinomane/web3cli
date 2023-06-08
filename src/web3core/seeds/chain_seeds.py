@@ -2,7 +2,6 @@ from typing import List
 
 from web3core.models.types import ChainFields
 
-# Ethereum
 eth: ChainFields = {
     "name": "eth",
     "desc": "Ethereum Mainnet",
@@ -17,7 +16,6 @@ eth: ChainFields = {
     ],
 }
 
-# BNB Chain
 bnb: ChainFields = {
     "name": "bnb",
     "desc": "Binance Smart Chain Mainnet",
@@ -32,7 +30,6 @@ bnb: ChainFields = {
     ],
 }
 
-# Avalanche C Chian
 avax: ChainFields = {
     "name": "avax",
     "desc": "Avalanche C-Chain",
@@ -47,7 +44,6 @@ avax: ChainFields = {
     ],
 }
 
-# Polygon chain
 matic: ChainFields = {
     "name": "matic",
     "desc": "Polygon Mainnet",
@@ -62,7 +58,6 @@ matic: ChainFields = {
     ],
 }
 
-# Cronos chain
 cro: ChainFields = {
     "name": "cro",
     "desc": "Cronos Mainnet Beta",
@@ -77,7 +72,6 @@ cro: ChainFields = {
     ],
 }
 
-# Arbitrum One chain
 arb: ChainFields = {
     "name": "arb",
     "desc": "Arbitrum One",
@@ -92,7 +86,6 @@ arb: ChainFields = {
     ],
 }
 
-# Arbitrum One chain
 era: ChainFields = {
     "name": "era",
     "desc": "zkSync Era",
@@ -107,7 +100,21 @@ era: ChainFields = {
     ],
 }
 
-# Gnosis chain
+erat: ChainFields = {
+    "name": "erat",
+    "desc": "zkSync Era Testnet",
+    "chain_id": 280,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://testnet.era.zksync.dev",
+        },
+    ],
+}
+
+
 gno: ChainFields = {
     "name": "gno",
     "desc": "Gnosis",
@@ -129,7 +136,6 @@ gno: ChainFields = {
 }
 
 
-# Ganache local chain
 ganache: ChainFields = {
     "name": "ganache",
     "desc": "Ganache local chain",
@@ -144,7 +150,6 @@ ganache: ChainFields = {
     ],
 }
 
-# Anvil local chain
 anvil: ChainFields = {
     "name": "anvil",
     "desc": "Anvil local chain",
@@ -167,6 +172,7 @@ all: List[ChainFields] = [
     cro,
     arb,
     era,
+    erat,
     gno,
     ganache,
     anvil,
