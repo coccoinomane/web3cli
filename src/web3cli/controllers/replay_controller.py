@@ -43,6 +43,10 @@ class ReplayController(Controller):
                 ["--type"],
                 {"help": "Override the type of the original tx", "type": int},
             ),
+            (
+                ["--data", "--input"],
+                {"help": "Override the input data of the original tx"},
+            ),
             args.force(),
         ],
     )
@@ -87,6 +91,9 @@ class ReplayController(Controller):
         # Optionally override type field
         if self.app.pargs.type is not None:
             tx["type"] = self.app.pargs.type
+        # Optionally override data field
+        if self.app.pargs.data is not None:
+            tx["data"] = self.app.pargs.data
         # Ask for confirmation
         if not self.app.pargs.force:
             self.app.log.info(f"Replaying the following transaction:")
