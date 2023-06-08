@@ -26,6 +26,21 @@ def test_token_balance(
     assert float(data["out"]) == bob_balance + amount / 10**18
 
 
+def test_token_balance_wei(
+    app: Web3CliTest,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST: ape.contracts.ContractInstance,
+) -> None:
+    amount = 10**18
+    bob_balance = TST.balanceOf(bob)
+    TST.transfer(bob, amount, sender=alice)
+    seed_local_token(app, TST)
+    app.set_args(["token", "balance", "tst", "bob", "--wei"]).run()
+    data, output = app.last_rendered
+    assert int(data["out"]) == bob_balance + amount
+
+
 def test_token_approve(
     app: Web3CliTest,
     alice: ape.api.AccountAPI,

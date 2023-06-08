@@ -100,6 +100,7 @@ class TokenController(Controller):
         arguments=[
             (["token"], {"help": "Token to check, by name"}),
             (["address"], {"help": "Address or name of the account to check"}),
+            (["--wei"], {"help": "Print the output in wei", "action": "store_true"}),
             *args.chain_and_rpc(),
         ],
     )
@@ -107,8 +108,11 @@ class TokenController(Controller):
         address = resolve_address(self.app.pargs.address, chain=self.app.chain.name)
         client = make_contract_client(self.app, self.app.pargs.token)
         balance_in_wei = client.functions["balanceOf"](address).call()
-        balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
-        render_number(self.app, balance)
+        if self.app.pargs.wei:
+            render_number(self.app, balance_in_wei)
+        else:
+            balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
+            render_number(self.app, balance)
 
     @ex(
         help="Return the allowance of the given spender to spend the given token for the given address",
