@@ -4,12 +4,12 @@
 
 - Tests: test get_signer() switch function
 - Tests: test add liq + swap
-- Tests: test token approve, balance
+- Ignore case in contract names, including tokens
 
 ### Commands 
 
-- Swap: refactor in web3core + test
-- Token: allowance + transfer commands
+- Token: transfer command + tests
+- Swap: refactor in web3core + tests
 - w3 ls to see ETH balances of all signers
 - Add support for uniswap v3 (https://docs.traderjoexyz.com/, https://snowtrace.io/address/0xe3ffc583dc176575eea7fd9df2a7c65f7e23f4c3#code)
 - Command to swap tokens via Defi LLama token aggregator (https://twitter.com/DefiLlama/status/1609989799653285888)
@@ -50,6 +50,7 @@
 ### Misc
 
 - Support multi-hop swaps
+- Fix
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible

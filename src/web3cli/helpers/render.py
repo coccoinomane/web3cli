@@ -64,4 +64,4 @@ def render_balance(
 
 def render_number(app: App, n: Union[int, float]) -> None:
     """Print a number"""
-    app.print(f"{n:g}")
+    app.print(f"{n:.18g}")
