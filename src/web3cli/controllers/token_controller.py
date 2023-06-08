@@ -110,6 +110,26 @@ class TokenController(Controller):
         balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
         render_number(self.app, balance)
 
+    @ex(
+        help="Return the allowance of the given spender to spend the given token for the given address",
+        arguments=[
+            (["token"], {"help": "Token to check, by name"}),
+            (["owner"], {"help": "Address or name of the account to check"}),
+            (["spender"], {"help": "Address or name of the spender to check"}),
+            *args.chain_and_rpc(),
+        ],
+    )
+    def allowance(self) -> None:
+        # Parse arguments
+        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
+        owner = resolve_address(self.app.pargs.owner, chain=self.app.chain.name)
+        # Initialize client
+        client = make_contract_client(self.app, self.app.pargs.token)
+        decimals = client.functions["decimals"]().call()
+        allowance_in_wei = client.functions["allowance"](owner, spender).call()
+        allowance = allowance_in_wei / 10**decimals
+        self.app.print(str(allowance))
+
     #    ____                      _
     #   / ___|  _ __   _   _    __| |
     #  | |     | '__| | | | |  / _` |
