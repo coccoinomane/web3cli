@@ -2,12 +2,13 @@
 
 ### Top priority
 
+- Tests: subscribe controller
 - Tests: test get_signer() switch function
 - Tests: test add liq + swap
-- Ignore case in contract names, including tokens
 
 ### Commands 
 
+- Ignore case in contract names, including tokens
 - Token: transfer command + tests
 - Swap: refactor in web3core + tests
 - w3 ls to see ETH balances of all signers

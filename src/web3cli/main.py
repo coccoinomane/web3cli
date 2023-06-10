@@ -23,6 +23,7 @@ from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.replay_controller import ReplayController
 from web3cli.controllers.send_controller import SendController
+from web3cli.controllers.subscribe_controller import SubscribeController
 from web3cli.controllers.swap_controller import SwapController
 from web3cli.controllers.token_controller import TokenController
 from web3cli.controllers.transact_controller import TransactController
@@ -112,6 +113,7 @@ class Web3Cli(App):
             TokenController,
             KeyfileController,
             ReplayController,
+            SubscribeController,
         ]
 
         # extend the app with cement hook system
