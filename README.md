@@ -37,6 +37,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Label addresses, tokens and contracts for ease of use
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Transfer tokens via their ticker
+- Stream pending transactions, new blocks and contract events
 - Replay transactions just with the tx hash
 - Concatenate commands to build powerful scripts
 - Import signers via private key or keyfile
@@ -45,6 +46,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 
 Soon:
 
+- React to pending transactions, new blocks and contract events
 - Set up scheduled buys and sells (DCA)
 - Automatically buy when slippage is low enough
 - Get notified on Telegram when a pair is liquid enough, or unbalanced
@@ -114,6 +116,22 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    ```
    w3 swap uniswap_v2 1 usdc usdt     # swap 1 USDC for USDT on Uniswap
    w3avax swap traderjoe 1 usdc wavax # swap 1 USDC for WAVAX on TraderJoe
+   ```
+
+- Stream blocks, transactions and contract events as they happen in realtime:
+   ```
+   w3 subscribe blocks   # stream blocks as they are mined
+   w3 subscribe pending  # stream pending transactions
+   w3 subscribe events   # stream all contract events
+   ```
+  Streaming requires a websocket connection: specify one with the `--rpc wss://...` flag.
+
+- Listen to events from specific contracts with specific topics:
+   ```bash
+   # Stream all events from USDC token
+   w3 subscribe events --contracts usdc 
+   # Stream only transfer events
+   w3 subscribe events --contracts usdc --topics 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
    ```
 
 - Replay a given transactions on the blockchain:

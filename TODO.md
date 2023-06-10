@@ -8,6 +8,7 @@
 
 ### Commands 
 
+- Subscribe: callback class + email, telegram subclasses
 - Ignore case in contract names, including tokens
 - Token: transfer command + tests
 - Swap: refactor in web3core + tests

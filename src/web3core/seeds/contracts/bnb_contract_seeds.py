@@ -8,6 +8,22 @@ busd: ContractFields = {
     "chain": "bnb",
 }
 
+usdt: ContractFields = {
+    "name": "usdt",
+    "desc": "Binance-Peg USDT Token",
+    "type": "erc20",
+    "address": "0x55d398326f99059ff775485246999027b3197955",
+    "chain": "bnb",
+}
+
+btcb: ContractFields = {
+    "name": "btcb",
+    "desc": "Binance-Peg BTC Token",
+    "type": "erc20",
+    "address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+    "chain": "bnb",
+}
+
 pancakeswap_v2: ContractFields = {
     "name": "pancakeswap_v2",
     "desc": "PancakeSwap: Router v2",
@@ -16,4 +32,4 @@ pancakeswap_v2: ContractFields = {
     "chain": "bnb",
 }
 
-all = [busd, pancakeswap_v2]
+all = [busd, usdt, btcb, pancakeswap_v2]

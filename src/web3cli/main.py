@@ -139,7 +139,12 @@ def main(filter_app: Callable[[App], App] = None) -> None:
 
                 traceback.print_exc()
 
-        except (Web3CliError, Web3CoreError, configparser.NoOptionError) as e:
+        except (
+            Web3CliError,
+            Web3CoreError,
+            configparser.NoOptionError,
+            NotImplementedError,
+        ) as e:
             print("Web3CliError > %s" % e)
             app.exit_code = 1
 

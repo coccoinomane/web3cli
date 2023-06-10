@@ -39,7 +39,7 @@ def resolve_address(
                 if chain is not None:
                     return format(model.get(name=address_or_name, chain=chain).address)
                 raise ValueError(
-                    f"Chain must be specified for {model.__name__} model, but was not"
+                    f"Chain argument must be specified for {model.__name__} model, but was not"
                 )
             else:
                 return format(model.get(name=address_or_name).address)

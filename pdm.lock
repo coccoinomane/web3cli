@@ -1409,7 +1409,7 @@ dependencies = [
 
 [[package]]
 name = "web3client"
-version = "1.1.9"
+version = "1.1.10"
 requires_python = ">=3.9,<3.11"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
@@ -3124,9 +3124,10 @@ content_hash = "sha256:a29a7189e0d051eb4c100ee8994fc7ad2df1c79d0a6cee78e3cbc6947
     {url = "https://files.pythonhosted.org/packages/da/f4/928e950925fe1b9eb048ddab8eef073a52e9ae01afd06f98f1daf743e355/ruamel.yaml.clib-0.2.7-cp37-cp37m-win_amd64.whl", hash = "sha256:be2a7ad8fd8f7442b24323d24ba0b56c51219513cfa45b9ada3b87b76c374d4b"},
     {url = "https://files.pythonhosted.org/packages/dd/76/730425e8e1ded9383256e2b13dccbf92f3dcf814c1b4a65f8cc839116faf/ruamel.yaml.clib-0.2.7-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:4b3a93bb9bc662fc1f99c5c3ea8e623d8b23ad22f861eb6fce9377ac07ad6072"},
     {url = "https://files.pythonhosted.org/packages/e4/80/73660f96b7f7191406da9a10c317145c86f54a4e1f7dba08cb0eac793fcc/ruamel.yaml.clib-0.2.7-cp36-cp36m-win_amd64.whl", hash = "sha256:f34019dced51047d6f70cb9383b2ae2853b7fc4dce65129a5acd49f4f9256646"},
+    {url = "https://files.pythonhosted.org/packages/f3/1d/291c1d38b0e6b9cbaacfdea24448453456a42f580d70b60e9c9e3dd35f9d/ruamel.yaml.clib-0.2.7-cp311-cp311-manylinux2014_aarch64.whl", hash = "sha256:9c7617df90c1365638916b98cdd9be833d31d337dbcd722485597b43c4a215bf"},
+    {url = "https://files.pythonhosted.org/packages/f5/23/b8ff333e40fa194678b01b66c1aced9dc5ecbc16a043b0d09beb6a37377c/ruamel.yaml.clib-0.2.7-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:1a6391a7cabb7641c32517539ca42cf84b87b667bad38b78d4d42dd23e957c81"},
     {url = "https://files.pythonhosted.org/packages/f5/ac/dda2d23d652bc2f6db886496ad632957af82e33d22c1088cc0ac87c496b5/ruamel.yaml.clib-0.2.7-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:5bc0667c1eb8f83a3752b71b9c4ba55ef7c7058ae57022dd9b29065186a113d9"},
     {url = "https://files.pythonhosted.org/packages/fb/c0/de69d49a6d0a346fb27ddf3114d807380b08a40d8e22e0fbaf19be8b6044/ruamel.yaml.clib-0.2.7-cp37-cp37m-macosx_12_0_arm64.whl", hash = "sha256:f01da5790e95815eb5a8a138508c01c758e5f5bc0ce4286c4f7028b8dd7ac3d0"},
-    {url = "https://files.pythonhosted.org/packages/fc/47/a8e865b6097969e162c2e9efcfed8ded0582ea18305b09426dd648a6b2d4/ruamel.yaml.clib-0.2.7-cp311-cp311-macosx_12_6_arm64.whl", hash = "sha256:721bc4ba4525f53f6a611ec0967bdcee61b31df5a56801281027a3a6d1c2daf5"},
     {url = "https://files.pythonhosted.org/packages/ff/66/4c05485243e24c6db5d7305063304c410b5539577becc89e4539d2897e41/ruamel.yaml.clib-0.2.7-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:bf9a6bc4a0221538b1a7de3ed7bca4c93c02346853f44e1cd764be0023cd3640"},
 ]
 "safe-pysha3 1.0.3" = [
@@ -3287,9 +3288,9 @@ content_hash = "sha256:a29a7189e0d051eb4c100ee8994fc7ad2df1c79d0a6cee78e3cbc6947
     {url = "https://files.pythonhosted.org/packages/a2/07/916bb3a83f8971793448ca8bce36000cd68b89fb1b48071ae3ff0aa32817/web3-6.1.0.tar.gz", hash = "sha256:55e58f2b8705f0911db5a395343b158d5e4edae9973f5dcb349512ae5a349af5"},
     {url = "https://files.pythonhosted.org/packages/e4/a5/b8753ffbe225cfa79c40c517f54df0e9023d13b96103c6cb86882c6bb783/web3-6.1.0-py3-none-any.whl", hash = "sha256:31b079fccf6fd0f7e71080b77dc84347fff280f5c197793d973048755358fac4"},
 ]
-"web3client 1.1.9" = [
-    {url = "https://files.pythonhosted.org/packages/38/6c/3687cbaf318e05cfb4a422e1c62a95bfc1dafe77c06f1416240eb386bd11/web3client-1.1.9-py3-none-any.whl", hash = "sha256:038a24ed07b5b2c91db29fc521e6dacc53d15022b8a7b9a8941e54e8211894a1"},
-    {url = "https://files.pythonhosted.org/packages/7f/7f/4e0ff47d8a5473c01285a5aa69dd923bfe444e5dd6758f8fb0ac33b3d7e8/web3client-1.1.9.tar.gz", hash = "sha256:6d581e718ec413292ccbc54237885bc0a3c1aae3d7e358b9e88d488586ac036b"},
+"web3client 1.1.10" = [
+    {url = "https://files.pythonhosted.org/packages/01/9b/cadf6865b915a2262e318cc8c7ed9dc8791b6ff24c43634032fbdf105945/web3client-1.1.10.tar.gz", hash = "sha256:4520ff0df5e4a1052a902632a0e7cc9e9d861eb6e6e012cd797ad00e934ca75d"},
+    {url = "https://files.pythonhosted.org/packages/5f/9d/9b295696848a560e90e8a17eb08b6f34ef195ba3e819bc43692901a51661/web3client-1.1.10-py3-none-any.whl", hash = "sha256:3ce995294b4c5d91887f51388fb84fadc0a416d8c177d58f442629211a1a672c"},
 ]
 "websockets 11.0.1" = [
     {url = "https://files.pythonhosted.org/packages/03/4c/3a31d65a0f54879b9e9b84d51f84decf512735bf5ec21f79cf2e92118c14/websockets-11.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:e2654e94c705ce9b768441d8e3a387a84951ca1056efdc4a26a4a6ee723c01b6"},
