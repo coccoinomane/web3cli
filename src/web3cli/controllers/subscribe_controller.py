@@ -53,7 +53,7 @@ class SubscribeController(Controller):
         help="Show contact events as they are emitted.  Uses the 'logs' subscription.",
         arguments=[
             (
-                ["--addresses"],
+                ["--addresses", "--contracts"],
                 {
                     "help": "only show events from these addresses",
                     "nargs": "+",
