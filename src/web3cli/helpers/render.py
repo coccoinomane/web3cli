@@ -1,5 +1,5 @@
 import json
-from typing import Any, List, Union
+from typing import Any, List
 
 from cement import App
 from web3 import Web3
@@ -46,21 +46,6 @@ def render_yaml(app: App, data: Any) -> None:
 def render_web3py(app: App, data: Any, indent: int = 4) -> None:
     """Print AttributeDicts from Web3.py as a json"""
     render_json(app, json.loads(Web3.to_json(data)), indent=indent)
-
-
-def render_balance(
-    app: App, balance: Union[int, float], ticker: str, unit: str = None
-) -> None:
-    """Print a balance"""
-    app.render(
-        {
-            "amount": balance,
-            "ticker": ticker,
-            "unit": unit,
-        },
-        "balance.jinja2",
-        handler="jinja2",
-    )
 
 
 def render(app: App, data: Any) -> None:

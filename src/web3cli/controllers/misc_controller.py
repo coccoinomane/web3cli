@@ -8,7 +8,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
-from web3cli.helpers.render import render, render_balance
+from web3cli.helpers.render import render
 from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
 
@@ -45,7 +45,7 @@ class MiscController(Controller):
         )
         if self.app.pargs.unit != "wei":
             balance = Web3.from_wei(balance, self.app.pargs.unit)
-        render_balance(self.app, balance, self.app.chain.coin, self.app.pargs.unit)
+        render(self.app, balance)
 
     @ex(
         help="Get the number of transactions made by the given address",
