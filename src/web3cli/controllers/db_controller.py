@@ -3,6 +3,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.database import delete_db_file, get_db_filepath
+from web3cli.helpers.render import render
 from web3core.helpers.misc import yes_or_exit
 
 
@@ -36,4 +37,4 @@ class DbController(Controller):
 
     @ex(help="show the path of the database file")
     def where(self) -> None:
-        self.app.print(get_db_filepath(self.app))
+        render(self.app, get_db_filepath(self.app))

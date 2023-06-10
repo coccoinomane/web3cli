@@ -167,8 +167,8 @@ def test_gas_price(app: Web3CliTest, is_eip1559: bool) -> None:
         pytest.skip("Local chain does not have gas price")
     app.set_args(["gas-price"]).run()
     data, output = app.last_rendered
-    assert type(data) is Decimal
-    assert data > 0
+    assert type(float(data["out"])) is float
+    assert float(data["out"]) > 0
 
 
 @pytest.mark.local
@@ -177,5 +177,7 @@ def test_base_fee(app: Web3CliTest, is_eip1559: bool) -> None:
         pytest.skip("Local chain does not have base fee")
     app.set_args(["base-fee"]).run()
     data, output = app.last_rendered
-    assert type(data) is Decimal
-    assert data > 0
+    print("data")
+    print(data)
+    assert type(float(data["out"])) is float
+    assert float(data["out"]) > 0

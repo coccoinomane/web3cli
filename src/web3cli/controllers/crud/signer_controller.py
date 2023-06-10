@@ -7,7 +7,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
-from web3cli.helpers.render import render_json, render_table
+from web3cli.helpers.render import render, render_table
 from web3cli.helpers.signer import get_signer
 from web3core.exceptions import KeyIsInvalid, SignerNotFound
 from web3core.helpers.misc import are_mutually_exclusive
@@ -48,7 +48,7 @@ class SignerController(Controller):
     def get(self) -> None:
         signer = get_signer(self.app, self.app.pargs.name).as_dict()
         signer["key"] = "********"
-        render_json(self.app, signer)
+        render(self.app, signer)
 
     @ex(
         help="show the active signer's address",
@@ -65,9 +65,9 @@ class SignerController(Controller):
     )
     def active(self) -> None:
         if self.app.pargs.show_name:
-            self.app.print(self.app.signer.name)
+            render(self.app, self.app.signer.name)
         else:
-            self.app.print(self.app.signer.address)
+            render(self.app, self.app.signer.address)
 
     @ex(
         help="add a new signer; you will be asked for the private key",
@@ -139,7 +139,7 @@ class SignerController(Controller):
         )
         if self.app.pargs.create:
             # Print private key
-            self.app.print(key)
+            render(self.app, key)
 
     @ex(
         help="delete a signer",

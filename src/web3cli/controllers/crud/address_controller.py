@@ -2,7 +2,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
-from web3cli.helpers.render import render_json, render_table
+from web3cli.helpers.render import render, render_table
 from web3core.models.address import Address
 
 
@@ -34,7 +34,7 @@ class AddressController(Controller):
         ],
     )
     def get(self) -> None:
-        render_json(self.app, Address.get_as_dict(Address.name == self.app.pargs.name))
+        render(self.app, Address.get_as_dict(Address.name == self.app.pargs.name))
 
     @ex(
         help="add a new address",

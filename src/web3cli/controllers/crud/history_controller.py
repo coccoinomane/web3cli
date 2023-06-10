@@ -4,7 +4,7 @@ from playhouse.shortcuts import model_to_dict
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.render import render_table
+from web3cli.helpers.render import render, render_table
 from web3core.helpers.format import cut
 from web3core.models.tx import Tx
 
@@ -38,7 +38,7 @@ class HistoryController(Controller):
     )
     def get(self) -> None:
         tx = Tx.get_by_hash_or_raise(self.app.pargs.hash)
-        self.app.render(model_to_dict(tx), indent=4, handler="json")
+        render(self.app, model_to_dict(tx))
 
     @ex(
         help="add a new transaction to the history",

@@ -6,7 +6,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_contract_client
-from web3cli.helpers.render import render_json
+from web3cli.helpers.render import render
 from web3core.helpers.abi import (
     does_function_write_to_state,
     get_function_abis,
@@ -80,4 +80,4 @@ class CallController(Controller):
             result = function(*function_args).call(
                 {"from": from_address}, block_identifier=block
             )
-        render_json(self.app, result)
+        render(self.app, result)

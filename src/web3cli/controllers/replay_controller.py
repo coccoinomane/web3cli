@@ -4,7 +4,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_client, make_wallet
-from web3cli.helpers.render import render_web3py
+from web3cli.helpers.render import render, render_web3py
 from web3core.helpers.misc import yes_or_exit
 
 
@@ -111,4 +111,4 @@ class ReplayController(Controller):
                 f"Failed to send transaction: {e}. "
                 f"Try using the flag --type {self.app.chain.tx_type} to prevent type-related errors."
             )
-        self.app.print(tx_hash)
+        render(self.app, tx_hash)

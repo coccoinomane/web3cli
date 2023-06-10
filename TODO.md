@@ -36,23 +36,17 @@
 - resolve_contract: return a contract from ethPM or etherscan
 - Swap should support native coins too
 - Transact: Warn before sending tx if gas price is too high
-- Handle decimal output (e.g. w3 balance)
-- Group contract and ABI functions: contract add, contract list, contract call,
-  contract abi...
-- Add trailing newline to json output
-- Harmonize JSON/YAML CLI output
 - Hide stack trace from errors unless --debug is passed
 - Retry transactions until gas fee goes below x gwei
 - Autocomplete commands
 - Autocomplete addresses, signers and contracts
 - Swap: retry until slippage is met
 - Option to wait for receipt
-- Dry-run: Print tx instead of sending it, via global argument/setting
 
 ### Misc
 
+- Rewrite app.print so that it can be used in tests without `data["out"]` (maybe make your own render extension?)
 - Support multi-hop swaps
-- Fix
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database
 - Make web3cli extensible

@@ -1,11 +1,9 @@
-import json
-
 from cement import ex
-from web3 import Web3
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_client
+from web3cli.helpers.render import render
 
 
 class TxController(Controller):
@@ -27,8 +25,7 @@ class TxController(Controller):
     def get(self) -> None:
         client = make_client(self.app)
         tx = client.w3.eth.get_transaction(self.app.pargs.hash)
-        tx_as_dict = json.loads(Web3.to_json(tx))
-        self.app.render(tx_as_dict, indent=4, handler="json")
+        render(self.app, tx)
 
     @ex(
         help="fetch the receipt of the given transaction from the blockchain",
@@ -41,5 +38,4 @@ class TxController(Controller):
     def get_receipt(self) -> None:
         client = make_client(self.app)
         receipt = client.w3.eth.wait_for_transaction_receipt(self.app.pargs.hash)
-        receipt_as_dict = json.loads(Web3.to_json(receipt))
-        self.app.render(receipt_as_dict, indent=4, handler="json")
+        render(self.app, receipt)

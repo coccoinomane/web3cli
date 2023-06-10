@@ -2,6 +2,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
+from web3cli.helpers.render import render
 from web3cli.helpers.send import send_coin_or_token
 from web3core.helpers.misc import to_number, yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -65,4 +66,4 @@ class SendController(Controller):
             amount=amount,
             unit=self.app.pargs.unit,
         )
-        self.app.print(tx_hash)
+        render(self.app, tx_hash)

@@ -4,7 +4,7 @@ from playhouse.shortcuts import model_to_dict
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.render import render_json, render_table
+from web3cli.helpers.render import render, render_table
 from web3core.helpers.seed import seed_contracts
 from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
@@ -57,7 +57,7 @@ class ContractController(Controller):
         contract = Contract.get_by_name_and_chain_or_raise(
             self.app.pargs.name, self.app.chain.name
         )
-        render_json(self.app, model_to_dict(contract))
+        render(self.app, model_to_dict(contract))
 
     @ex(
         help="add a new contract to the database",

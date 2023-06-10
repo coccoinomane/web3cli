@@ -4,6 +4,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.config import update_setting_in_config_file
+from web3cli.helpers.render import render, render_yaml
 
 
 class ConfigController(Controller):
@@ -30,13 +31,13 @@ class ConfigController(Controller):
     )
     def get(self) -> None:
         if self.app.pargs.setting:
-            self.app.print(self.app.config.get("web3cli", self.app.pargs.setting))
+            render(self.app, self.app.config.get("web3cli", self.app.pargs.setting))
         else:
             output = {}
             all_config = self.app.config.get_dict()
             for section in ["web3cli"]:
                 output[section] = all_config[section]
-            self.app.render(output, handler="yaml")
+            render_yaml(self.app, output)
 
     @ex(
         help="set the value of a setting. IMPORTANT: supports only string settings!",
@@ -75,4 +76,4 @@ class ConfigController(Controller):
 
     @ex(help="show the location of the configuration files")
     def where(self) -> None:
-        self.app.print("\n".join(self.app.Meta.config_files))
+        render(self.app, "\n".join(self.app.Meta.config_files))

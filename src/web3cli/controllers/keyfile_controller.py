@@ -4,6 +4,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_to_keyfile
+from web3cli.helpers.render import render
 
 
 class KeyfileController(Controller):
@@ -24,7 +25,7 @@ class KeyfileController(Controller):
     )
     def decode(self) -> None:
         key = decrypt_keyfile(self.app.pargs.path)
-        self.app.print(key.replace("0x", ""))
+        render(self.app, key.replace("0x", ""))
 
     @ex(
         help="Create a new keyfile from a private key",
@@ -45,4 +46,4 @@ class KeyfileController(Controller):
             json.dump(keyfile_dict, open(self.app.pargs.path, "w"))
             self.app.log.info(f"Keyfile saved to {self.app.pargs.path}")
         else:
-            self.app.print(json.dumps(keyfile_dict))
+            render(self.app, json.dumps(keyfile_dict))

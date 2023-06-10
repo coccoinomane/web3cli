@@ -6,7 +6,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_contract_client, make_contract_wallet
-from web3cli.helpers.render import render_number, render_table, render_web3py
+from web3cli.helpers.render import render, render_number, render_table, render_web3py
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -132,7 +132,7 @@ class TokenController(Controller):
         decimals = client.functions["decimals"]().call()
         allowance_in_wei = client.functions["allowance"](owner, spender).call()
         allowance = allowance_in_wei / 10**decimals
-        self.app.print(str(allowance))
+        render(self.app, allowance)
 
     #    ____                      _
     #   / ___|  _ __   _   _    __| |

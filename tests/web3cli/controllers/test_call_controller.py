@@ -116,7 +116,7 @@ def test_call_local_token_transfer(
         ]
     ).run()
     data, output = app.last_rendered
-    assert output == "true"
+    assert data["out"] == "True"
 
 
 @pytest.mark.remote
@@ -167,8 +167,8 @@ def test_call_eth_weth_total_supply(
             ]
         ).run()
         data, output = app.last_rendered
-        assert type(data) is int
-        assert data > 1e18
+        assert type(int(data["out"])) is int
+        assert int(data["out"]) > 10**18
 
 
 @pytest.mark.remote
@@ -205,8 +205,8 @@ def test_call_eth_weth_total_supply_two_blocks_ago(
             ]
         ).run()
         data, output = app.last_rendered
-        assert type(data) is int
-        assert data > 1e18
+        assert type(int(data["out"])) is int
+        assert int(data["out"]) > 1e18
 
 
 @pytest.mark.remote

@@ -6,6 +6,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.config import update_setting_in_config_file
+from web3cli.helpers.render import render
 
 
 class AppKeyController(Controller):
@@ -56,4 +57,4 @@ class AppKeyController(Controller):
     )
     def generate(self) -> None:
         key = secrets.token_bytes(32)
-        self.app.print(str(key))
+        render(self.app, str(key))

@@ -3,7 +3,7 @@ from cement import ex
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.render import render_json, render_table
+from web3cli.helpers.render import render, render_table
 from web3core.exceptions import ChainNotFound
 from web3core.models.chain import Chain
 from web3core.seeds import chain_seeds
@@ -101,11 +101,11 @@ class ChainController(Controller):
         arguments=[(["name"], {"help": "the name of the chain to look up"})],
     )
     def get(self) -> None:
-        render_json(self.app, Chain.get_as_dict(Chain.name == self.app.pargs.name))
+        render(self.app, Chain.get_as_dict(Chain.name == self.app.pargs.name))
 
     @ex(help="get the active chain's name", arguments=[args.chain()])
     def active(self) -> None:
-        self.app.print(self.app.chain.name)
+        render(self.app, self.app.chain.name)
 
     @ex(
         help="delete a chain",

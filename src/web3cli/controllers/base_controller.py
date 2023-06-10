@@ -2,6 +2,7 @@ from cement import ex
 
 from web3cli.controllers.controller import Controller
 from web3cli.helpers import args
+from web3cli.helpers.render import render
 from web3cli.helpers.version import get_version_message
 
 
@@ -27,7 +28,7 @@ class BaseController(Controller):
 
     @ex(help="Show the version of web3cli")
     def version(self) -> None:
-        self.app.print(get_version_message())
+        render(self.app, get_version_message())
 
     def _post_argument_parsing(self) -> None:
         """Parse global arguments"""

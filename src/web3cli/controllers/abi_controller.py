@@ -6,7 +6,7 @@ from web3.types import ABI
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
-from web3cli.helpers.render import render_json
+from web3cli.helpers.render import render
 from web3core.helpers.abi import (
     filter_abi_by_type_and_name,
     get_event_full_signatures,
@@ -58,7 +58,7 @@ class AbiController(Controller):
             if self.app.pargs.full
             else get_function_signatures(abi)
         )
-        render_json(self.app, sorted(functions, key=str.lower))
+        render(self.app, sorted(functions, key=str.lower))
 
     @ex(
         help="List the events in the given contract, contract type or ABI string, with signatures",
@@ -92,7 +92,7 @@ class AbiController(Controller):
             if self.app.pargs.full
             else get_event_signatures(abi)
         )
-        render_json(self.app, sorted(events, key=str.lower))
+        render(self.app, sorted(events, key=str.lower))
 
     @ex(
         help="Show the ABI of a specific contract function or event",
@@ -114,7 +114,7 @@ class AbiController(Controller):
             self.app.log.warning(
                 f"Function or event '{self.app.pargs.function_name}' not found"
             )
-        render_json(self.app, obj)
+        render(self.app, obj)
 
     def parse_abi(self) -> ABI:
         """Parse the 'contract' and '--abi' arguments and return the ABI"""
