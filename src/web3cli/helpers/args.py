@@ -481,6 +481,17 @@ def rpc(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     )
 
 
+def callback(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--callback"],
+        {
+            "help": "function to call when stuff happens. For now, only 'print' is available",
+            "default": "print",
+        }
+        | kwargs,
+    )
+
+
 def signer_and_gas() -> List[Tuple[List[str], dict[str, Any]]]:
     """Shortcut for commands accepting both signer and gas arguments"""
     return [signer(), priority_fee()]
