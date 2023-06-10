@@ -6,7 +6,7 @@ from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_contract_client, make_contract_wallet
-from web3cli.helpers.render import render, render_number, render_table, render_web3py
+from web3cli.helpers.render import render, render_table, render_web3py
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -109,10 +109,10 @@ class TokenController(Controller):
         client = make_contract_client(self.app, self.app.pargs.token)
         balance_in_wei = client.functions["balanceOf"](address).call()
         if self.app.pargs.wei:
-            render_number(self.app, balance_in_wei)
+            render(self.app, balance_in_wei)
         else:
             balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
-            render_number(self.app, balance)
+            render(self.app, balance)
 
     @ex(
         help="Return the allowance of the given spender to spend the given token for the given address",

@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -19,7 +18,7 @@ def test_keyfile_create(
             app.set_args(["keyfile", "create"]).run()
             data, output = app.last_rendered
             # Decrypt the keyfile to get again the private key
-            keyfile_dict = json.loads(data["out"])
+            keyfile_dict = data
             monkeypatch.setattr("getpass.getpass", lambda _: s["keyfile_password"])
             decoded_private_key = decrypt_keyfile_dict(keyfile_dict)
             # Test that the private key is the same
@@ -40,4 +39,4 @@ def test_keyfile_decode(
             monkeypatch.setattr("getpass.getpass", lambda _: next(responses))
             app.set_args(["keyfile", "decrypt", keyfile]).run()
             data, output = app.last_rendered
-            assert data["out"] == s["private_key"]
+            assert data == s["private_key"]

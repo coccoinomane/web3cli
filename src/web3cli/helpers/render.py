@@ -1,4 +1,3 @@
-import decimal
 import json
 from typing import Any, List, Union
 
@@ -64,30 +63,17 @@ def render_balance(
     )
 
 
-def render_number(app: App, n: Union[int, float, decimal.Decimal]) -> None:
-    """Print a number"""
-    if isinstance(n, int):
-        app.print(f"{n}")
-    else:
-        app.print(f"{n:.18g}")
-
-
 def render(app: App, data: Any) -> None:
     """Print the given variable to screen.
 
     Dictionaries, lists and web3py AttributeDicts are printed as
     JSON.
 
-    All the rest is converted to string and printed with
-    app.print().
-
-    Please note that to use the printed value in tests, you need to access
-    it via app.last_rendered and then use data["out"]."""
-    if type(data) in [float, int, decimal.Decimal]:
-        render_number(app, data)
-    elif type(data).__name__ == "AttributeDict":
+    All the rest is converted to string by app.print() and printed
+    to screen (see ext_print.py)"""
+    if type(data).__name__ == "AttributeDict":
         render_web3py(app, data)
     elif type(data) in [dict, list]:
         render_json(app, data)
     else:  # strings, booleans and everything else
-        app.print(str(data))
+        app.print(data)

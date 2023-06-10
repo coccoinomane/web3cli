@@ -47,7 +47,7 @@ def test_signer_active(signers: List[Dict[str, Any]]) -> None:
             seed_signers(signers, app.app_key)
             app.set_args(["signer", "active", "--signer", s["name"]]).run()
             data, output = app.last_rendered
-            assert data["out"] == s["address"]
+            assert data == s["address"]
 
 
 # Test without arguments > returns whatever is written in config file
@@ -58,7 +58,7 @@ def test_signer_active_with_default_signer(signers: List[Dict[str, Any]]) -> Non
         app.config.set("web3cli", "default_signer", s["name"])
         app.set_args(["signer", "active"]).run()
         data, output = app.last_rendered
-        assert data["out"] == s["address"]
+        assert data == s["address"]
 
 
 # Test without arguments, without config file, but there's one signer in the DB > returns that one signer
@@ -68,7 +68,7 @@ def test_signer_active_with_one_signer(signers: List[Dict[str, Any]]) -> None:
         seed_signers([s], app.app_key)
         app.set_args(["signer", "active"]).run()
         data, output = app.last_rendered
-        assert data["out"] == s["address"]
+        assert data == s["address"]
 
 
 # Test without arguments, without config file, but there are multiple signers in the DB > raise error

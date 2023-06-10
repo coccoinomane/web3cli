@@ -1,3 +1,4 @@
+import decimal
 import json
 from decimal import Decimal
 from typing import Any, Dict, List
@@ -85,7 +86,8 @@ def test_tx_count(
     alice.transfer(bob, 30000)
     app.set_args(["tx-count", "alice"]).run()
     data, output = app.last_rendered
-    assert int(data["out"]) == 3
+    assert type(data) is int
+    assert data == 3
 
 
 @pytest.mark.parametrize(
@@ -101,11 +103,11 @@ def test_sign(msg: str, signers: List[Dict[str, Any]]) -> None:
         seed_signers([signers[0]], app.app_key)
         app.set_args(["sign", msg]).run()
         data, output = app.last_rendered
-        assert "messageHash" in data["out"]
-        assert "r" in data["out"]
-        assert "s" in data["out"]
-        assert "v" in data["out"]
-        assert "signature" in data["out"]
+        assert "messageHash" in data
+        assert "r" in data
+        assert "s" in data
+        assert "v" in data
+        assert "signature" in data
 
 
 @pytest.mark.local
@@ -167,8 +169,8 @@ def test_gas_price(app: Web3CliTest, is_eip1559: bool) -> None:
         pytest.skip("Local chain does not have gas price")
     app.set_args(["gas-price"]).run()
     data, output = app.last_rendered
-    assert type(float(data["out"])) is float
-    assert float(data["out"]) > 0
+    assert type(data) is float
+    assert data > 0
 
 
 @pytest.mark.local
@@ -177,7 +179,5 @@ def test_base_fee(app: Web3CliTest, is_eip1559: bool) -> None:
         pytest.skip("Local chain does not have base fee")
     app.set_args(["base-fee"]).run()
     data, output = app.last_rendered
-    print("data")
-    print(data)
-    assert type(float(data["out"])) is float
-    assert float(data["out"]) > 0
+    assert type(data) is decimal.Decimal
+    assert data > 0

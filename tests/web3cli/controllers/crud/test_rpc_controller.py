@@ -53,7 +53,7 @@ def test_rpc_get_with_id_argument(chains: List[ChainFields]) -> None:
         with Web3CliTest(delete_db=False) as app:
             app.set_args(["rpc", "get", str(rpc.id)]).run()
             data, output = app.last_rendered
-            assert data["out"] == rpc.url
+            assert data == rpc.url
 
 
 def test_rpc_get_with_rpc_argument(chains: List[ChainFields]) -> None:
@@ -64,7 +64,7 @@ def test_rpc_get_with_rpc_argument(chains: List[ChainFields]) -> None:
             seed_chains(chains)
             app.set_args(["rpc", "get", "--rpc", rpc_url]).run()
             data, output = app.last_rendered
-            assert data["out"] == rpc_url
+            assert data == rpc_url
 
 
 def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
@@ -75,7 +75,7 @@ def test_rpc_get_with_no_args(chains: List[ChainFields]) -> None:
             app.set_args(["rpc", "get", "--chain", c["name"]]).run()
             data, output = app.last_rendered
             chain: Chain = Chain.select().where(Chain.name == c["name"]).get()
-            assert data["out"] in [r.url for r in chain.get_rpcs()]
+            assert data in [r.url for r in chain.get_rpcs()]
 
 
 def test_rpc_delete(chains: List[ChainFields]) -> None:

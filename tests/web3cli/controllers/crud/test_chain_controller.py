@@ -80,7 +80,7 @@ def test_chain_active(chains: List[ChainFields]) -> None:
             app.config.set("web3cli", "default_chain", chain["name"])
             app.set_args(["chain", "active"]).run()
             data, output = app.last_rendered
-            assert data["out"] == chain["name"]
+            assert data == chain["name"]
 
 
 def test_chain_delete(chains: List[ChainFields]) -> None:

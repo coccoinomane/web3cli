@@ -10,14 +10,14 @@ def test_db_where(tmp: fs.Tmp) -> None:
     with Web3CliTest() as app:
         app.set_args(["db", "where"]).run()
         data, output = app.last_rendered
-        assert data["out"] == CONFIG["web3cli"]["db_file"]
+        assert data == CONFIG["web3cli"]["db_file"]
 
     # Test with custom path
     CONFIG["web3cli"]["db_file"] = f"{tmp.dir}/web3cli.sqlite"
     with Web3CliTest() as app:
         app.set_args(["db", "where"]).run()
         data, output = app.last_rendered
-        assert data["out"] == f"{tmp.dir}/web3cli.sqlite"
+        assert data == f"{tmp.dir}/web3cli.sqlite"
 
 
 def test_db_delete(tmp: fs.Tmp) -> None:

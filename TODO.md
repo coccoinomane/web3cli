@@ -45,7 +45,6 @@
 
 ### Misc
 
-- Rewrite app.print so that it can be used in tests without `data["out"]` (maybe make your own render extension?)
 - Support multi-hop swaps
 - Use pipx to install web3cli (https://pypa.github.io/pipx/)
 - Should be able to run `config get` and `config set` without a database

@@ -23,7 +23,8 @@ def test_token_balance(
     seed_local_token(app, TST)
     app.set_args(["token", "balance", "tst", "bob"]).run()
     data, output = app.last_rendered
-    assert float(data["out"]) == bob_balance + amount / 10**18
+    assert type(data) is float
+    assert data == bob_balance + amount / 10**18
 
 
 def test_token_balance_wei(
@@ -38,7 +39,8 @@ def test_token_balance_wei(
     seed_local_token(app, TST)
     app.set_args(["token", "balance", "tst", "bob", "--wei"]).run()
     data, output = app.last_rendered
-    assert int(data["out"]) == bob_balance + amount
+    assert type(data) is int
+    assert data == bob_balance + amount
 
 
 def test_token_approve(
@@ -119,7 +121,8 @@ def test_token_allowance(
     seed_local_token(app, TST)
     app.set_args(["token", "allowance", "tst", "alice", "bob"]).run()
     data, output = app.last_rendered
-    assert float(data["out"]) == 2.0
+    assert type(data) is float
+    assert data == 2.0
 
 
 def test_token_list(contracts: List[ContractFields], chains: List[ChainFields]) -> None:

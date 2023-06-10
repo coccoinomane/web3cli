@@ -67,7 +67,7 @@ class Web3Cli(App):
             "json",
             "colorlog",
             "jinja2",
-            "print",
+            "web3cli.framework.ext_print",
             "tabulate",
         ]
 

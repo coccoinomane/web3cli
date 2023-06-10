@@ -8,7 +8,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
-from web3cli.helpers.render import render, render_balance, render_number
+from web3cli.helpers.render import render, render_balance
 from web3core.helpers.client_factory import make_base_wallet
 from web3core.helpers.resolve import resolve_address
 
@@ -62,7 +62,7 @@ class MiscController(Controller):
             Web3.to_checksum_address(address),
             block_identifier=parse_block(self.app, "block"),
         )
-        render_number(self.app, nonce)
+        render(self.app, nonce)
 
     @ex(
         help="Get the latest block, or the block corresponding to the given identifier",
