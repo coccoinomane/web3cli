@@ -35,6 +35,7 @@ def prepare_for_table(app: App, value: Any, wrap: int = None) -> str:
 def render_json(app: App, data: Any, indent: int = 4) -> None:
     """Print data as a JSON"""
     app.render(data, handler="json", indent=indent)
+    print()
 
 
 def render_yaml(app: App, data: Any) -> None:
@@ -43,7 +44,7 @@ def render_yaml(app: App, data: Any) -> None:
 
 
 def render_web3py(app: App, data: Any, indent: int = 4) -> None:
-    """Print output from Web3.py as a Python dict"""
+    """Print AttributeDicts from Web3.py as a json"""
     render_json(app, json.loads(Web3.to_json(data)), indent=indent)
 
 
@@ -68,3 +69,15 @@ def render_number(app: App, n: Union[int, float]) -> None:
         app.print(f"{n}")
     else:
         app.print(f"{n:.18g}")
+
+
+def render(app: App, data: Any) -> None:
+    """Print the given variable using the best suited format"""
+    if isinstance(data, str):
+        app.print(data)
+    elif isinstance(data, int) or isinstance(data, float):
+        render_number(app, data)
+    elif type(data).__name__ == "AttributeDict":
+        render_web3py(app, data)
+    else:
+        render_json(app, data)
