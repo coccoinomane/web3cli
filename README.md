@@ -37,7 +37,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - Label addresses, tokens and contracts for ease of use
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
 - Transfer tokens via their ticker
-- Stream pending transactions, new blocks and contract events
+- Set Telegram alerts based on pending transactions, new blocks and contract events
 - Replay transactions just with the tx hash
 - Concatenate commands to build powerful scripts
 - Import signers via private key or keyfile
@@ -126,16 +126,18 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    ```
   Streaming requires a websocket connection: specify one with the `--rpc wss://...` flag.
 
-- Listen to events from specific contracts with specific topics:
+- Set a Telegram alert for when a specific event is emitted:
    ```bash
-   # Stream all events from USDC token
-   w3 subscribe events --contracts usdc 
-   # Stream only transfer events
-   w3 subscribe events --contracts usdc --topics 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+   # Get notified on Telegram when USDC is transferred
+   transfer=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+   w3 subscribe events --telegram --contracts usdc --topics $transfer
+   # Send a post notification when USDC is transferred
+   w3 subscribe events --post https://www.example.com/ --contracts usdc --topics $transfer
    ```
+  Telegram alerts require setting up a Telegram bot, please find instructions [in the Wiki](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%93%AD-Telegram-alerts).
 
 - Replay a given transactions on the blockchain:
-   ```
+   ```bash
    tx=`w3 send unicef 1 USDC --force` # send 1 USDC to Unicef
    w3 replay $tx                      # re-send 1 USDC to Unicef
    ```
