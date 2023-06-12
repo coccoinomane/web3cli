@@ -19,6 +19,7 @@ from web3cli.controllers.crud.history_controller import HistoryController
 from web3cli.controllers.crud.rpc_controller import RpcController
 from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
+from web3cli.controllers.debug_controller import DebugController
 from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.replay_controller import ReplayController
@@ -43,9 +44,13 @@ CONFIG["web3cli"] = {
     "db_file": os.path.join(
         os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
     ),
+    "populate_db": True,
     "output_table_format": "fancy_grid",
     "output_table_wrap": 33,
-    "populate_db": True,
+    "telegram_api_key": "",
+    "telegram_chat_id": "",
+    "telegram_send_timeout": 5,
+    "post_callback_timeout": 5,
 }
 
 
@@ -114,6 +119,7 @@ class Web3Cli(App):
             KeyfileController,
             ReplayController,
             SubscribeController,
+            DebugController,
         ]
 
         # extend the app with cement hook system

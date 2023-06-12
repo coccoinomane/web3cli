@@ -1326,6 +1326,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "types-requests"
+version = "2.31.0.1"
+summary = "Typing stubs for requests"
+dependencies = [
+    "types-urllib3",
+]
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.13"
+summary = "Typing stubs for urllib3"
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 requires_python = ">=3.7"
@@ -3230,6 +3243,14 @@ content_hash = "sha256:a29a7189e0d051eb4c100ee8994fc7ad2df1c79d0a6cee78e3cbc6947
 "trie 2.1.0" = [
     {url = "https://files.pythonhosted.org/packages/ac/c2/8174f6597208d80415b3dfcdb915425827d68635f1a0deb5a2d5196eb559/trie-2.1.0-py3-none-any.whl", hash = "sha256:e3f3691e1d48006b466c9b4cd0ee586c32e0f54d13b2497f263688188c77b0fe"},
     {url = "https://files.pythonhosted.org/packages/cf/aa/4e4af1a1ebf7438f25628e13d50715003e10d24f66c90630fda4a836b181/trie-2.1.0.tar.gz", hash = "sha256:0729a159ddef4bfa4c05478017b93a7a1af4e65e8a7b7628676bad13199ffe39"},
+]
+"types-requests 2.31.0.1" = [
+    {url = "https://files.pythonhosted.org/packages/20/8e/2f846f4295021703d4f12aebf504dd5e47b7750d104ee0a8fd253f601d02/types-requests-2.31.0.1.tar.gz", hash = "sha256:3de667cffa123ce698591de0ad7db034a5317457a596eb0b4944e5a9d9e8d1ac"},
+    {url = "https://files.pythonhosted.org/packages/c7/09/d89e773735e444828f8d5a4b11f8a940e314ae05c6ccedfc94e44861e97e/types_requests-2.31.0.1-py3-none-any.whl", hash = "sha256:afb06ef8f25ba83d59a1d424bd7a5a939082f94b94e90ab5e6116bd2559deaa3"},
+]
+"types-urllib3 1.26.25.13" = [
+    {url = "https://files.pythonhosted.org/packages/08/6d/98b51f9776747e1e270919aa02298ce6a7d2d4d78a3349b47666deb61c4c/types_urllib3-1.26.25.13-py3-none-any.whl", hash = "sha256:5dbd1d2bef14efee43f5318b5d36d805a489f6600252bb53626d4bfafd95e27c"},
+    {url = "https://files.pythonhosted.org/packages/27/2a/cb418a2a03a31b8e0daea5e13edcc4ef1408ebb457f2cc833f1c3f30a0fa/types-urllib3-1.26.25.13.tar.gz", hash = "sha256:3300538c9dc11dad32eae4827ac313f5d986b8b21494801f1bf97a1ac6c03ae5"},
 ]
 "typing-extensions 4.5.0" = [
     {url = "https://files.pythonhosted.org/packages/31/25/5abcd82372d3d4a3932e1fa8c3dbf9efac10cc7c0d16e78467460571b404/typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},

@@ -485,11 +485,57 @@ def callback(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, A
     return (
         list(name_or_flags) or ["--callback"],
         {
-            "help": "function to call when stuff happens. For now, only 'print' is available",
+            "help": "Function to call when stuff happens. Available callbacks: print, telegram",
             "default": "print",
         }
         | kwargs,
     )
+
+
+def subscribe_telegram(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--telegram", "--tg"],
+        {
+            "help": "Send notifications via Telegram to the given chat ID.  Leave the chat ID blank to use the one defined in the config.  More details in the Github wiki.",
+            "nargs": "?",
+            "const": "config",
+        }
+        | kwargs,
+    )
+
+
+def subscribe_post(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--post"],
+        {"help": "Send post notifications to this URL", "nargs": 1} | kwargs,
+    )
+
+
+def subscribe_print(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--print"],
+        {
+            "help": "Print notifications to screen",
+            "action": argparse.BooleanOptionalAction,
+            "default": True,
+        }
+        | kwargs,
+    )
+
+
+def subscribe_actions() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands that trigger actions"""
+    return [
+        subscribe_telegram(),
+        subscribe_post(),
+        subscribe_print(),
+    ]
 
 
 def signer_and_gas() -> List[Tuple[List[str], dict[str, Any]]]:
