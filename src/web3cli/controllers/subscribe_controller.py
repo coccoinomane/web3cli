@@ -1,6 +1,8 @@
 import asyncio
+import json
 from typing import Any, Awaitable, Callable
 
+import requests
 from cement import ex
 
 from web3cli.controllers.controller import Controller
@@ -8,8 +10,10 @@ from web3cli.exceptions import Web3CliError
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_client
 from web3cli.helpers.render import render
+from web3cli.helpers.telegram import send_tg_message
 from web3core.helpers.resolve import resolve_address
 from web3core.helpers.rpc import check_ws_or_raise
+from web3core.helpers.validation import is_valid_url
 
 
 class SubscribeController(Controller):
@@ -23,39 +27,39 @@ class SubscribeController(Controller):
 
     @ex(
         help="Show new blocks as they are mined.  Uses the 'newHeads' subscription.",
-        arguments=[args.callback(), *args.chain_and_rpc()],
+        arguments=[*args.subscribe_actions(), *args.chain_and_rpc()],
         aliases=["block", "headers"],
     )
     def blocks(self) -> None:
         check_ws_or_raise(self.app.rpc.url)
         asyncio.run(
             make_client(self.app).async_subscribe(
-                on_notification=self.resolve_callback(self.app.pargs.callback),
+                on_notification=self.get_callback(),
                 subscription_type="newHeads",
             )
         )
 
     @ex(
         help="Show new transactions before they are mined.  Uses the 'newPendingTransactions' subscription, which is supported only by chains with a mempool.",
-        arguments=[args.callback(), *args.chain_and_rpc()],
+        arguments=[*args.subscribe_actions(), *args.chain_and_rpc()],
         aliases=["pending_txs", "txs"],
     )
     def pending(self) -> None:
         check_ws_or_raise(self.app.rpc.url)
         asyncio.run(
             make_client(self.app).async_subscribe(
-                on_notification=self.resolve_callback(self.app.pargs.callback),
+                on_notification=self.get_callback(),
                 subscription_type="newPendingTransactions",
             )
         )
 
     @ex(
-        help="Show contact events as they are emitted.  Uses the 'logs' subscription.",
+        help="Show contract events as they are emitted.  Uses the 'logs' subscription.",
         arguments=[
             (
                 ["--addresses", "--contracts"],
                 {
-                    "help": "only show events from these addresses",
+                    "help": "Only show events from these addresses",
                     "nargs": "+",
                     "type": str,
                     "default": [],
@@ -64,13 +68,13 @@ class SubscribeController(Controller):
             (
                 ["--topics"],
                 {
-                    "help": "only show events with these topics",
+                    "help": "Only show events with these topics",
                     "nargs": "+",
                     "type": str,
                     "default": [],
                 },
             ),
-            args.callback(),
+            *args.subscribe_actions(),
             *args.chain_and_rpc(),
         ],
         aliases=["logs"],
@@ -79,7 +83,7 @@ class SubscribeController(Controller):
         check_ws_or_raise(self.app.rpc.url)
         asyncio.run(
             make_client(self.app).async_subscribe(
-                on_notification=self.resolve_callback(self.app.pargs.callback),
+                on_notification=self.get_callback(),
                 subscription_type="logs",
                 logs_addresses=[
                     resolve_address(a, chain=self.app.chain.name)
@@ -89,16 +93,33 @@ class SubscribeController(Controller):
             )
         )
 
-    def resolve_callback(self, callback: str) -> Callable[[Any], Awaitable[None]]:
-        """Get a callback function by its name.
-        TODO: Replace with a class, where each subclass is a callback type."""
-        if callback == "print":
-            return self.callback_print
-        elif callback in ["store", "post", "telegram", "email"]:
-            raise NotImplementedError(f"Callback {callback} not implemented yet")
-        else:
-            raise Web3CliError(f"Unknown callback: {callback}")
+    def get_callback(self) -> Callable[[Any], Awaitable[None]]:
+        """Return the callback to invoke when a notification is received,
+        based on the command arguments."""
 
-    async def callback_print(self, data: Any) -> None:
-        """Print whatever comes from the subscription"""
-        render(self.app, data)
+        async def callback(data: Any) -> None:
+            # PRINT CALLBACK
+            if self.app.pargs.print:
+                render(self.app, data)
+            # TELEGRAM CALLBACK
+            if self.app.pargs.telegram:
+                send_tg_message(
+                    self.app,
+                    body=json.dumps(data, indent=4),
+                    chat_id=self.app.pargs.telegram
+                    if self.app.pargs.telegram != "config"
+                    else None,
+                )
+            if self.app.pargs.post:
+                # POST CALLBACK
+                url = self.app.pargs.post[0]
+                if not is_valid_url(url):
+                    raise Web3CliError(f"Invalid URL: {url}")
+                requests.post(
+                    url=url,
+                    data=json.dumps(data),
+                    headers={"Content-Type": "application/json"},
+                    timeout=self.app.config.get("web3cli", "post_callback_timeout"),
+                )
+
+        return callback
