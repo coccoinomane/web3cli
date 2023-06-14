@@ -19,7 +19,7 @@ repos:
     rev: v1.0.1
     hooks:
     -   id: mypy
-        additional_dependencies: [types-setuptools]
+        additional_dependencies: [types-setuptools, types-requests]
 
 -   repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.10.1

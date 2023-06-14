@@ -24,6 +24,7 @@ class SubscribeController(Controller):
         help = "Subscribe to stuff happening on the blockchain. Requires a websocket connection.  It uses the 'eth_subscribe' RPC method, which is not supported by all chains and nodes.  More details here > https://geth.ethereum.org/docs/interacting-with-geth/rpc/pubsub"
         stacked_type = "nested"
         stacked_on = "base"
+        aliases = ["sub"]
 
     @ex(
         help="Show new blocks as they are mined.  Uses the 'newHeads' subscription.",
@@ -32,6 +33,7 @@ class SubscribeController(Controller):
     )
     def blocks(self) -> None:
         check_ws_or_raise(self.app.rpc.url)
+        self.app.log.info("Subscribing to new blocks, press Ctrl+C to stop...")
         asyncio.run(
             make_client(self.app).async_subscribe(
                 on_notification=self.get_callback(),
@@ -41,15 +43,27 @@ class SubscribeController(Controller):
 
     @ex(
         help="Show new transactions before they are mined.  Uses the 'newPendingTransactions' subscription, which is supported only by chains with a mempool.",
-        arguments=[*args.subscribe_actions(), *args.chain_and_rpc()],
+        arguments=[
+            args.subscribe_senders(),
+            *args.subscribe_actions(),
+            *args.chain_and_rpc(),
+        ],
         aliases=["pending_txs", "txs"],
     )
     def pending(self) -> None:
         check_ws_or_raise(self.app.rpc.url)
+        self.app.log.info(
+            "Subscribing to new pending transactions, press Ctrl+C to stop..."
+        )
         asyncio.run(
             make_client(self.app).async_subscribe(
                 on_notification=self.get_callback(),
                 subscription_type="newPendingTransactions",
+                tx_from=[
+                    resolve_address(a, chain=self.app.chain.name)
+                    for a in self.app.pargs.senders
+                ],
+                tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
             )
         )
 
@@ -57,23 +71,22 @@ class SubscribeController(Controller):
         help="Show contract events as they are emitted.  Uses the 'logs' subscription.",
         arguments=[
             (
-                ["--addresses", "--contracts"],
+                ["--contracts"],
                 {
-                    "help": "Only show events from these addresses",
+                    "help": "Consider only events emitted by these smart contracts",
                     "nargs": "+",
-                    "type": str,
                     "default": [],
                 },
             ),
             (
                 ["--topics"],
                 {
-                    "help": "Only show events with these topics",
+                    "help": "Consider only events with these topics",
                     "nargs": "+",
-                    "type": str,
                     "default": [],
                 },
             ),
+            args.subscribe_senders(),
             *args.subscribe_actions(),
             *args.chain_and_rpc(),
         ],
@@ -81,15 +94,21 @@ class SubscribeController(Controller):
     )
     def events(self) -> None:
         check_ws_or_raise(self.app.rpc.url)
+        self.app.log.info("Subscribing to new events, press Ctrl+C to stop...")
         asyncio.run(
             make_client(self.app).async_subscribe(
                 on_notification=self.get_callback(),
                 subscription_type="logs",
                 logs_addresses=[
                     resolve_address(a, chain=self.app.chain.name)
-                    for a in self.app.pargs.addresses
+                    for a in self.app.pargs.contracts
                 ],
                 logs_topics=self.app.pargs.topics,
+                tx_from=[
+                    resolve_address(a, chain=self.app.chain.name)
+                    for a in self.app.pargs.senders
+                ],
+                tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
             )
         )
 
@@ -110,8 +129,8 @@ class SubscribeController(Controller):
                     if self.app.pargs.telegram != "config"
                     else None,
                 )
+            # POST CALLBACK
             if self.app.pargs.post:
-                # POST CALLBACK
                 url = self.app.pargs.post[0]
                 if not is_valid_url(url):
                     raise Web3CliError(f"Invalid URL: {url}")

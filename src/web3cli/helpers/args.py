@@ -529,6 +529,20 @@ def subscribe_print(
     )
 
 
+def subscribe_senders(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--senders", "--from"],
+        {
+            "help": "Consider only transactions initiated by these addresses.  Will result in many requests to the node.",
+            "nargs": "+",
+            "default": [],
+        }
+        | kwargs,
+    )
+
+
 def subscribe_actions() -> List[Tuple[List[str], dict[str, Any]]]:
     """Shortcut for commands that trigger actions"""
     return [
