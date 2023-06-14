@@ -21,9 +21,8 @@ def test_balance(
     bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address]).run()
     data, output = app.last_rendered
-    assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "ether")
-    assert data["ticker"] == app.chain.coin
+    assert type(data) is Decimal
+    assert data == Web3.from_wei(alice_balance + 10**18, "ether")
 
 
 @pytest.mark.local
@@ -36,9 +35,8 @@ def test_balance_with_alias(
     bob.transfer(alice, 10**18)
     app.set_args(["balance", "alice"]).run()  # use the alias
     data, output = app.last_rendered
-    assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "ether")
-    assert data["ticker"] == app.chain.coin
+    assert type(data) is Decimal
+    assert data == Web3.from_wei(alice_balance + 10**18, "ether")
 
 
 @pytest.mark.local
@@ -51,10 +49,8 @@ def test_balance_with_unit_gwei(
     bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address, "-u", "gwei"]).run()
     data, output = app.last_rendered
-    assert type(data["amount"]) is Decimal
-    assert data["amount"] == Web3.from_wei(alice_balance + 10**18, "gwei")
-    assert data["ticker"] == app.chain.coin
-    assert data["unit"] == "gwei"
+    assert type(data) is Decimal
+    assert data == Web3.from_wei(alice_balance + 10**18, "gwei")
 
 
 @pytest.mark.local
@@ -67,10 +63,8 @@ def test_balance_with_unit_wei(
     bob.transfer(alice, 10**18)
     app.set_args(["balance", alice.address, "-u", "wei"]).run()
     data, output = app.last_rendered
-    assert type(data["amount"]) is int
-    assert data["amount"] == alice_balance + 10**18
-    assert data["ticker"] == app.chain.coin
-    assert data["unit"] == "wei"
+    assert type(data) is int
+    assert data == alice_balance + 10**18
 
 
 @pytest.mark.local
