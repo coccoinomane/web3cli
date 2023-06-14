@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 import requests
 
@@ -9,6 +10,8 @@ def send_tg_message(
     chat_id: str,
     disable_notifications: bool = True,
     timeout: int = 1,
+    parse_mode: str = "markdown",
+    **kwargs: Any,
 ) -> bool:
     """
     Send a Telegram message using the REST api.
@@ -19,9 +22,9 @@ def send_tg_message(
     data = {
         "chat_id": chat_id,
         "text": body,
-        "parse_mode": "HTML",
+        "parse_mode": parse_mode,
         "disable_notification": disable_notifications,
-    }
+    } | kwargs
 
     url = f"https://api.telegram.org/bot{api_key}/sendMessage"
 

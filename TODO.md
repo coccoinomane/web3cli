@@ -2,12 +2,19 @@
 
 ### Top priority
 
-- Tests: subscribe controller
-- Tests: test get_signer() switch function
-- Tests: test add liq + swap
+- Subscribe: custom callbacks
+- Subscribe: merge tags in Telegram message
+- Subscribe: keepalive ws connection
+- Subscribe: cache tx for logs subscription (and possibly use it in callback)
+- Subscribe: immediate exit on ctrl-c
+- Subscribe: add --once option
+- Subscribe: handle merge tags expansion in callback based on subscription type
 
 ### Commands 
 
+- Tests: subscribe controller
+- Tests: test get_signer() switch function
+- Tests: test add liq + swap
 - Subscribe: callback class + email, telegram subclasses
 - Ignore case in contract names, including tokens
 - Token: transfer command + tests

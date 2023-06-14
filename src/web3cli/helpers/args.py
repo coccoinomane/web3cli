@@ -543,6 +543,19 @@ def subscribe_senders(
     )
 
 
+def subscribe_message(
+    *name_or_flags: str, **kwargs: Any
+) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--message"],
+        {
+            "help": "Message to send to the Telegram chat.  Use {data} to place the notification data in the message.",
+            "default": "🚨 *New notification from web3cli:*\n\n{data}",
+        }
+        | kwargs,
+    )
+
+
 def subscribe_actions() -> List[Tuple[List[str], dict[str, Any]]]:
     """Shortcut for commands that trigger actions"""
     return [

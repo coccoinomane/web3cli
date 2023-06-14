@@ -1,6 +1,8 @@
+import codecs
 import decimal
+import re
 import sys
-from typing import Union
+from typing import Any, Dict, Union
 
 from web3core.types import Logger
 
@@ -81,3 +83,36 @@ def to_bool(s: str) -> bool:
 def are_mutually_exclusive(*args: bool) -> bool:
     """Check that maximum one of the arguments is True."""
     return sum(args) <= 1
+
+
+def decode_escapes(s: str) -> str:
+    """Decode escape sequences in a string, for example
+    \\n > \n, \\u00e9 > é, etc.
+
+    Source: https://stackoverflow.com/a/24519338/2972183"""
+
+    def decode_match(match: Any) -> str:
+        return codecs.decode(match.group(0), "unicode-escape")
+
+    ESCAPE_SEQUENCE_RE = re.compile(
+        r"""
+        ( \\U........      # 8-digit hex escapes
+        | \\u....          # 4-digit hex escapes
+        | \\x..            # 2-digit hex escapes
+        | \\[0-7]{1,3}     # Octal escapes
+        | \\N\{[^}]+\}     # Unicode characters by name
+        | \\[\\'"abfnrtv]  # Single-character escapes
+        )""",
+        re.UNICODE | re.VERBOSE,
+    )
+
+    return ESCAPE_SEQUENCE_RE.sub(decode_match, s)
+
+
+def replace_all(text: str, dic: Dict[str, Any]) -> str:
+    """Replace substrings in a string, based on a dictionary.
+
+    Source: https://stackoverflow.com/a/6117042/2972183"""
+    for i, j in dic.items():
+        text = text.replace(i, str(j))
+    return text

@@ -11,6 +11,7 @@ from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_client
 from web3cli.helpers.render import render
 from web3cli.helpers.telegram import send_tg_message
+from web3core.helpers.misc import decode_escapes, replace_all
 from web3core.helpers.resolve import resolve_address
 from web3core.helpers.rpc import check_ws_or_raise
 from web3core.helpers.validation import is_valid_url
@@ -28,7 +29,11 @@ class SubscribeController(Controller):
 
     @ex(
         help="Show new blocks as they are mined.  Uses the 'newHeads' subscription.",
-        arguments=[*args.subscribe_actions(), *args.chain_and_rpc()],
+        arguments=[
+            *args.subscribe_actions(),
+            args.subscribe_message(),
+            *args.chain_and_rpc(),
+        ],
         aliases=["block", "headers"],
     )
     def blocks(self) -> None:
@@ -46,6 +51,7 @@ class SubscribeController(Controller):
         arguments=[
             args.subscribe_senders(),
             *args.subscribe_actions(),
+            args.subscribe_message(),
             *args.chain_and_rpc(),
         ],
         aliases=["pending_txs", "txs"],
@@ -91,6 +97,7 @@ class SubscribeController(Controller):
             ),
             args.subscribe_senders(),
             *args.subscribe_actions(),
+            args.subscribe_message(),
             *args.chain_and_rpc(),
         ],
         aliases=["logs"],
@@ -128,12 +135,35 @@ class SubscribeController(Controller):
                 render(self.app, data)
             # TELEGRAM CALLBACK
             if self.app.pargs.telegram:
+                # Find block number
+                try:
+                    block = int(
+                        data.get("blockNumber", None) or data.get("number", None), 16
+                    )
+                except:
+                    block = None
+                # Find tx hash
+                try:
+                    tx = data.get("transactionHash", None)
+                except:
+                    tx = data if type(data) is str else None
+                # Replace placeholders in the message
+                msg = replace_all(
+                    self.app.pargs.message,
+                    {
+                        "{data}": json.dumps(data, indent=4),
+                        "{tx}": tx,
+                        "{block}": block,
+                    },
+                )
+                # Send the message
                 send_tg_message(
                     self.app,
-                    body=json.dumps(data, indent=4),
+                    body=decode_escapes(msg),
                     chat_id=self.app.pargs.telegram
                     if self.app.pargs.telegram != "config"
                     else None,
+                    disable_web_page_preview=True,
                 )
             # POST CALLBACK
             if self.app.pargs.post:

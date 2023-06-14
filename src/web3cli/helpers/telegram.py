@@ -1,3 +1,5 @@
+from typing import Any
+
 from cement import App
 
 import web3core.helpers.telegram
@@ -5,7 +7,7 @@ from web3cli.exceptions import Web3CliError
 
 
 def send_tg_message(
-    app: App, body: str, chat_id: str = None, silent: bool = False
+    app: App, body: str, chat_id: str = None, silent: bool = False, **kwargs: Any
 ) -> bool:
     """
     Send a telegram message to the given chat ID.
@@ -38,6 +40,7 @@ def send_tg_message(
             chat_id=chat_id,
             timeout=timeout,
             disable_notifications=silent,
+            **kwargs,
         )
     except Exception as e:
         app.log.error(f"Failed to send Telegram notification: {e}")
