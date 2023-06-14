@@ -63,6 +63,9 @@ class SubscribeController(Controller):
                     resolve_address(a, chain=self.app.chain.name)
                     for a in self.app.pargs.senders
                 ],
+                tx_on_fetch=lambda tx, data: self.app.log.debug(
+                    f"Fetched tx {tx['hash'].hex()} from {tx['from']}"
+                ),
                 tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
             )
         )
@@ -108,6 +111,9 @@ class SubscribeController(Controller):
                     resolve_address(a, chain=self.app.chain.name)
                     for a in self.app.pargs.senders
                 ],
+                tx_on_fetch=lambda tx, data: self.app.log.debug(
+                    f"Fetched tx {tx['hash'].hex()} from {tx['from']}"
+                ),
                 tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
             )
         )
