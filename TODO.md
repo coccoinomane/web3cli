@@ -4,7 +4,7 @@
 
 - Subscribe: custom callbacks
 - Subscribe: merge tags in Telegram message
-- Subscribe: keepalive ws connection
+- Subscribe: keepalive ws connection / reconnect on error at the db level?
 - Subscribe: cache tx for logs subscription (and possibly use it in callback)
 - Subscribe: immediate exit on ctrl-c
 - Subscribe: add --once option

@@ -4,6 +4,7 @@ from typing import Any, Awaitable, Callable
 
 import requests
 from cement import ex
+from web3client.types import SubscriptionType
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
@@ -125,11 +126,11 @@ class SubscribeController(Controller):
             )
         )
 
-    def get_callback(self) -> Callable[[Any], Awaitable[None]]:
+    def get_callback(self) -> Callable[[Any, SubscriptionType], Awaitable[None]]:
         """Return the callback to invoke when a notification is received,
         based on the command arguments."""
 
-        async def callback(data: Any) -> None:
+        async def callback(data: Any, sub_type: SubscriptionType) -> None:
             # PRINT CALLBACK
             if self.app.pargs.print:
                 render(self.app, data)
