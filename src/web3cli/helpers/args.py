@@ -543,9 +543,7 @@ def subscribe_senders(
     )
 
 
-def subscribe_message(
-    *name_or_flags: str, **kwargs: Any
-) -> Tuple[List[str], dict[str, Any]]:
+def tg_message(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
     return (
         list(name_or_flags) or ["--message"],
         {
@@ -554,6 +552,22 @@ def subscribe_message(
         }
         | kwargs,
     )
+
+
+def tg_silent(*name_or_flags: str, **kwargs: Any) -> Tuple[List[str], dict[str, Any]]:
+    return (
+        list(name_or_flags) or ["--silent"],
+        {
+            "help": "Whether the Telegram notification should produce sound or vibration.",
+            "action": "store_true",
+        }
+        | kwargs,
+    )
+
+
+def tg_args() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands that send Telegram notifications"""
+    return [tg_message(), tg_silent()]
 
 
 def subscribe_actions() -> List[Tuple[List[str], dict[str, Any]]]:

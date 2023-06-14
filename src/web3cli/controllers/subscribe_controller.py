@@ -31,7 +31,7 @@ class SubscribeController(Controller):
         help="Show new blocks as they are mined.  Uses the 'newHeads' subscription.",
         arguments=[
             *args.subscribe_actions(),
-            args.subscribe_message(),
+            *args.tg_args(),
             *args.chain_and_rpc(),
         ],
         aliases=["block", "headers"],
@@ -51,7 +51,7 @@ class SubscribeController(Controller):
         arguments=[
             args.subscribe_senders(),
             *args.subscribe_actions(),
-            args.subscribe_message(),
+            *args.tg_args(),
             *args.chain_and_rpc(),
         ],
         aliases=["pending_txs", "txs"],
@@ -97,7 +97,7 @@ class SubscribeController(Controller):
             ),
             args.subscribe_senders(),
             *args.subscribe_actions(),
-            args.subscribe_message(),
+            *args.tg_args(),
             *args.chain_and_rpc(),
         ],
         aliases=["logs"],
@@ -164,6 +164,7 @@ class SubscribeController(Controller):
                     if self.app.pargs.telegram != "config"
                     else None,
                     disable_web_page_preview=True,
+                    silent=self.app.pargs.silent,
                 )
             # POST CALLBACK
             if self.app.pargs.post:
