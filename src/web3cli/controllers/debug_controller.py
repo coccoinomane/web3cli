@@ -17,10 +17,16 @@ class DebugController(Controller):
 
     @ex(
         help="Send a Telegram message to the configured chat.  Useful for testing notifications.",
-        arguments=[(["--message"], {"default": "Hello world 🤗"})],
+        arguments=[
+            (["--message"], {"default": "Hello world 🤗"}),
+            (["--chat"], {"action": "store"}),
+        ],
     )
     def telegram(self) -> None:
-        if send_tg_message(self.app, self.app.pargs.message):
+        chat_id = self.app.pargs.chat or self.app.config.get(
+            "web3cli", "telegram_chat_id"
+        )
+        if send_tg_message(self.app, self.app.pargs.message, chat_id):
             render(self.app, "Ok ✅")
         else:
             render(self.app, "Error ❌")
