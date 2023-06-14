@@ -1422,7 +1422,7 @@ dependencies = [
 
 [[package]]
 name = "web3client"
-version = "1.1.10"
+version = "1.1.11"
 requires_python = ">=3.9,<3.11"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
@@ -1466,7 +1466,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:a29a7189e0d051eb4c100ee8994fc7ad2df1c79d0a6cee78e3cbc6947853e307"
+content_hash = "sha256:26fe814f79d53b0d1e1fe575ac0a0997a6dd64dafb6f23be9fb4363b6660c899"
 
 [metadata.files]
 "aiohttp 3.8.4" = [
@@ -3309,9 +3309,9 @@ content_hash = "sha256:a29a7189e0d051eb4c100ee8994fc7ad2df1c79d0a6cee78e3cbc6947
     {url = "https://files.pythonhosted.org/packages/a2/07/916bb3a83f8971793448ca8bce36000cd68b89fb1b48071ae3ff0aa32817/web3-6.1.0.tar.gz", hash = "sha256:55e58f2b8705f0911db5a395343b158d5e4edae9973f5dcb349512ae5a349af5"},
     {url = "https://files.pythonhosted.org/packages/e4/a5/b8753ffbe225cfa79c40c517f54df0e9023d13b96103c6cb86882c6bb783/web3-6.1.0-py3-none-any.whl", hash = "sha256:31b079fccf6fd0f7e71080b77dc84347fff280f5c197793d973048755358fac4"},
 ]
-"web3client 1.1.10" = [
-    {url = "https://files.pythonhosted.org/packages/01/9b/cadf6865b915a2262e318cc8c7ed9dc8791b6ff24c43634032fbdf105945/web3client-1.1.10.tar.gz", hash = "sha256:4520ff0df5e4a1052a902632a0e7cc9e9d861eb6e6e012cd797ad00e934ca75d"},
-    {url = "https://files.pythonhosted.org/packages/5f/9d/9b295696848a560e90e8a17eb08b6f34ef195ba3e819bc43692901a51661/web3client-1.1.10-py3-none-any.whl", hash = "sha256:3ce995294b4c5d91887f51388fb84fadc0a416d8c177d58f442629211a1a672c"},
+"web3client 1.1.11" = [
+    {url = "https://files.pythonhosted.org/packages/32/56/6cba81871fca7af81c4280e2b4bd5b5afa7b0185c3d9c2772b0261ed8f81/web3client-1.1.11.tar.gz", hash = "sha256:cc8e9915569375f0b6395d25b6c11d5d5a50d7e16af95f4bf93923946575a01a"},
+    {url = "https://files.pythonhosted.org/packages/ef/fe/e7e2678e5c534987c6794fcca09c3aac7a82853af04600bf86cfeea4e163/web3client-1.1.11-py3-none-any.whl", hash = "sha256:e9fee1e5d91f02e1170cc52aca3e22aab1c4b62ff4e11006b7292343d27a88a9"},
 ]
 "websockets 11.0.1" = [
     {url = "https://files.pythonhosted.org/packages/03/4c/3a31d65a0f54879b9e9b84d51f84decf512735bf5ec21f79cf2e92118c14/websockets-11.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:e2654e94c705ce9b768441d8e3a387a84951ca1056efdc4a26a4a6ee723c01b6"},
