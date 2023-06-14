@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "1.1.4"
+version = "1.1.5"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -16,7 +16,7 @@ dependencies = [
     "cement[yaml]>=3.0.8",
     "cement[tabulate]>=3.0.8",
     "web3>=6.0.0",
-    "web3client>=1.1.11",
+    "web3client>=1.1.12",
     "peewee>=3.15.3",
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
