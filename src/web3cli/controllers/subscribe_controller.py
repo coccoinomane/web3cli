@@ -1,10 +1,11 @@
 import asyncio
 import json
-from typing import Any, Awaitable, Callable
+from typing import Any
 
 import requests
 from cement import ex
-from web3client.types import SubscriptionType
+from web3.types import TxData
+from web3client.types import AsyncSubscriptionCallback, SubscriptionType
 
 from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
@@ -44,6 +45,9 @@ class SubscribeController(Controller):
             make_client(self.app).async_subscribe(
                 on_notification=self.get_callback(),
                 subscription_type="newHeads",
+                on_connection_closed=lambda _, __: self.app.log.warning(
+                    "Connection closed, reconnecting..."
+                ),
             )
         )
 
@@ -74,6 +78,9 @@ class SubscribeController(Controller):
                     f"Fetched tx {tx['hash'].hex()} from {tx['from']}"
                 ),
                 tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
+                on_connection_closed=lambda _, __: self.app.log.warning(
+                    "Connection closed, reconnecting..."
+                ),
             )
         )
 
@@ -123,14 +130,17 @@ class SubscribeController(Controller):
                     f"Fetched tx {tx['hash'].hex()} from {tx['from']}"
                 ),
                 tx_on_fetch_error=lambda e, data: self.app.log.warning(e),
+                on_connection_closed=lambda _, __: self.app.log.warning(
+                    "Connection closed, reconnecting..."
+                ),
             )
         )
 
-    def get_callback(self) -> Callable[[Any, SubscriptionType], Awaitable[None]]:
+    def get_callback(self) -> AsyncSubscriptionCallback:
         """Return the callback to invoke when a notification is received,
         based on the command arguments."""
 
-        async def callback(data: Any, sub_type: SubscriptionType) -> None:
+        async def callback(data: Any, sub_type: SubscriptionType, tx: TxData) -> None:
             # PRINT CALLBACK
             if self.app.pargs.print:
                 render(self.app, data)
@@ -145,15 +155,15 @@ class SubscribeController(Controller):
                     block = None
                 # Find tx hash
                 try:
-                    tx = data.get("transactionHash", None)
+                    tx_hash = data.get("transactionHash", None)
                 except:
-                    tx = data if type(data) is str else None
+                    tx_hash = data if type(data) is str else None
                 # Replace placeholders in the message
                 msg = replace_all(
                     self.app.pargs.message,
                     {
                         "{data}": json.dumps(data, indent=4),
-                        "{tx}": tx,
+                        "{tx}": tx_hash,
                         "{block}": block,
                     },
                 )
