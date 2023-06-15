@@ -36,9 +36,9 @@ web3cli:
   ### Telegram options, see the Github wiki for more details.
   telegram_api_key: null
   telegram_chat_id: null
-  telegram_send_timeout: 5
+  telegram_send_timeout: 15
   ### Time to wait when sending a notification callback (e.g. from subscribe)
-  post_callback_timeout: 5
+  post_callback_timeout: 15
   
 log.colorlog:
   ### Where the log file lives (no log file by default)

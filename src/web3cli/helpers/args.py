@@ -510,8 +510,12 @@ def subscribe_post(
     *name_or_flags: str, **kwargs: Any
 ) -> Tuple[List[str], dict[str, Any]]:
     return (
-        list(name_or_flags) or ["--post"],
-        {"help": "Send post notifications to this URL", "nargs": 1} | kwargs,
+        list(name_or_flags) or ["--post", "--webhook"],
+        {
+            "help": "Send a post notifications to this URL.  The body will be a JSON with fields: notification_data, notification_type and tx_data.  The latter field will be populated only when the --senders/--from argument is provided.",
+            "nargs": 1,
+        }
+        | kwargs,
     )
 
 

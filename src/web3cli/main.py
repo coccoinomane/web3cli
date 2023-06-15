@@ -49,8 +49,8 @@ CONFIG["web3cli"] = {
     "output_table_wrap": 33,
     "telegram_api_key": "",
     "telegram_chat_id": "",
-    "telegram_send_timeout": 5,
-    "post_callback_timeout": 5,
+    "telegram_send_timeout": 15,
+    "post_callback_timeout": 15,
 }
 
 

@@ -182,11 +182,21 @@ class SubscribeController(Controller):
                 url = self.app.pargs.post[0]
                 if not is_valid_url(url):
                     raise Web3CliError(f"Invalid URL: {url}")
-                requests.post(
+                payload = {
+                    "notification_data": data,
+                    "notification_type": sub_type,
+                    "tx_data": tx,
+                }
+                response = requests.post(
                     url=url,
-                    data=json.dumps(data),
+                    data=json.dumps(payload),
                     headers={"Content-Type": "application/json"},
                     timeout=self.app.config.get("web3cli", "post_callback_timeout"),
                 )
+                self.app.log.debug(f"POST callback response: {response.text}")
+                if response.status_code != 200:
+                    self.app.log.error(
+                        f"POST callback failed with code {response.status_code} and response: {response.text}"
+                    )
 
         return callback

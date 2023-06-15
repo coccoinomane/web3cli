@@ -24,7 +24,7 @@ def send_tg_message(
 
     api_key = app.config.get("web3cli", "telegram_api_key")
     chat_id = chat_id or app.config.get("web3cli", "telegram_chat_id")
-    timeout = app.config.get("web3cli", "telegram_send_timeout") or 5
+    timeout = int(app.config.get("web3cli", "telegram_send_timeout")) or 5
 
     if not api_key or not chat_id:
         raise Web3CliError(
