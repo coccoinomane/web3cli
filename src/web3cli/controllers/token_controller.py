@@ -18,7 +18,7 @@ class TokenController(Controller):
 
     class Meta:
         label = "token"
-        help = "transfer and approve tokens"
+        help = "interact with ERC20 tokens"
         stacked_type = "nested"
         stacked_on = "base"
 
@@ -133,6 +133,10 @@ class TokenController(Controller):
         allowance_in_wei = client.functions["allowance"](owner, spender).call()
         allowance = allowance_in_wei / 10**decimals
         render(self.app, allowance)
+
+    @ex(help="Transfer tokens.  Not implemented yet.  Use `w3 send` instead.")
+    def transfer(self) -> None:
+        self.app.log.warning("Not implemented yet.  Use `w3 send` instead.")
 
     #    ____                      _
     #   / ___|  _ __   _   _    __| |
