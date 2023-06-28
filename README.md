@@ -144,7 +144,7 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
 
 # Smart Contract support
 
-`web3cli` comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
+web3cli comes preloaded with some popular smart contracts, including ERC20 tokens and Uniswap clones.
 
 See the available contracts with `w3 contract list`:
 
@@ -217,7 +217,7 @@ w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver ad
 
 # Multichain support
 
-`web3cli` comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
+web3cli comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
 
 Pass the chain name using the flag `--chain` or the shorthand `-c`:
 
@@ -243,7 +243,7 @@ w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain eth # eth chain
 
 # Use custom RPC
 
-By default, `web3cli` will connect to the blockchain using a pre-configured public node.  You can see the list of such nodes with the command `w3 rpc list`.
+By default, web3cli will connect to the blockchain using a pre-configured public node.  You can see the list of such nodes with the command `w3 rpc list`.
 
 To use a custom mode, please specify the `--rpc` flag.  For example, to use Ankr's node to Ethereum:
 
@@ -354,8 +354,8 @@ Check the [project's wiki on Github](https://github.com/coccoinomane/web3cli/wik
 
 # Contributing
 
-All contributions are welcome! To start improving `web3cli`, please refer to our [__contribution guide__](./CONTRIBUTING.md).
+All contributions are welcome! To start improving web3cli, please refer to our [__contribution guide__](./CONTRIBUTING.md).
 
 # Acknowledgements
 
-Thank you very much to the communities behind [web3.py](https://github.com/ethereum/web3.py) and the [Ape Framework](https://github.com/ApeWorX/ape): `web3cli` would not exist without your efforts!
+Thank you very much to the communities behind [web3.py](https://github.com/ethereum/web3.py) and the [Ape Framework](https://github.com/ApeWorX/ape): web3cli would not exist without your efforts!
