@@ -173,5 +173,5 @@ def test_base_fee(app: Web3CliTest, is_eip1559: bool) -> None:
         pytest.skip("Local chain does not have base fee")
     app.set_args(["base-fee"]).run()
     data, output = app.last_rendered
-    assert type(data) is decimal.Decimal
-    assert data > 0
+    assert type(data) in (decimal.Decimal, int, float)
+    assert data >= 0

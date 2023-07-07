@@ -23,7 +23,9 @@ class Signer(BaseModel):
     @classmethod
     def create_encrypt(cls, name: str, key: str, pwd: bytes) -> Signer:
         """Create a signer with encryped private key"""
-        return cls.instantiate_encrypt(name, key, pwd).save()
+        signer = cls.instantiate_encrypt(name, key, pwd)
+        signer.save()
+        return signer
 
     @classmethod
     def instantiate_encrypt(cls, name: str, key: str, pwd: bytes) -> Signer:
