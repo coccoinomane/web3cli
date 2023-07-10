@@ -26,7 +26,7 @@ class BaseController(Controller):
             )
         ]
 
-    @ex(help="Show the version of web3cli")
+    @ex(help="Show the app version")
     def version(self) -> None:
         render(self.app, get_version_message())
 

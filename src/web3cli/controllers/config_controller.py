@@ -12,7 +12,7 @@ class ConfigController(Controller):
 
     class Meta:
         label = "config"
-        help = "show, add or edit web3cli's setting values"
+        help = "Manage the app settings"
         stacked_type = "nested"
         stacked_on = "base"
         aliases = ["option"]

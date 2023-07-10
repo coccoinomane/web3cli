@@ -12,7 +12,7 @@ class DbController(Controller):
 
     class Meta:
         label = "db"
-        help = "Interact with the local database of web3cli"
+        help = "Interact with the local database of the app"
         stacked_type = "nested"
         stacked_on = "base"
 
