@@ -47,9 +47,7 @@ def init_and_attach_db(app: App) -> None:
     controllers can access it. If the database file does not exist,
     create it and seed it"""
     db_path = get_db_filepath(app)
-    do_populate = (
-        not isfile(db_path) and app.config.get("web3cli", "populate_db") == True
-    )
+    do_populate = not isfile(db_path) and app.get_option("populate_db") == True
     if not isfile(db_path):
         app.log.debug("Creating database...")
     app.extend("db", init_db(DB, MODELS, db_path))
@@ -60,7 +58,7 @@ def init_and_attach_db(app: App) -> None:
 def maybe_create_app_key(app: App) -> None:
     """Create an app key if it does not exist already;
     extend the app object with the app key"""
-    if not app.config.get("web3cli", "app_key"):
+    if not app.get_option("app_key"):
         new_key = secrets.token_bytes(32)
         update_setting_in_config_file(
             app,
@@ -69,10 +67,10 @@ def maybe_create_app_key(app: App) -> None:
             do_log=False,
             is_global=True,
         )
-        app.config.set("web3cli", "app_key", str(new_key))
+        app.set_option("app_key", str(new_key))
 
     # Create the shortcut app.app_key
-    key = app.config.get("web3cli", "app_key")
+    key = app.get_option("app_key")
     app.extend("app_key", ast.literal_eval(key))
 
 
@@ -80,6 +78,6 @@ def customize_extensions(app: App) -> None:
     """Customize the behaviour of cement extensions
     (https://docs.builtoncement.com/core-foundation/extensions-1)"""
     # Set the output format for tables
-    cement.ext.ext_tabulate.TabulateOutputHandler.Meta.format = app.config.get(
-        "web3cli", "output_table_format"
+    cement.ext.ext_tabulate.TabulateOutputHandler.Meta.format = app.get_option(
+        "output_table_format"
     )

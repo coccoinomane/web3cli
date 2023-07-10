@@ -10,8 +10,8 @@ def set(
     filepath: str,
     setting: str,
     value: Any,
+    section: str,
     logger: Logger = None,
-    section: str = "web3cli",
 ) -> None:
     """Update a value in the given yaml file. IMPORTANT: use only for
     string settings, non-string settings are not supported yet!

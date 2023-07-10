@@ -73,8 +73,8 @@ def parse_chain(app: App) -> Chain:
     Otherwise, raise a Web3CliError."""
     if app.pargs.chain:
         chain_name = app.pargs.chain
-    elif app.config.get("web3cli", "default_chain"):
-        chain_name = app.config.get("web3cli", "default_chain")
+    elif app.get_option("default_chain"):
+        chain_name = app.get_option("default_chain")
     elif Chain.select().count() == 1:
         return Chain.select().get()
     else:
@@ -116,8 +116,8 @@ def parse_signer(app: App) -> Signer:
     """
     if app.pargs.signer:
         return get_signer(app, app.pargs.signer)
-    elif app.config.get("web3cli", "default_signer"):
-        return get_signer(app, app.config.get("web3cli", "default_signer"))
+    elif app.get_option("default_signer"):
+        return get_signer(app, app.get_option("default_signer"))
     elif Signer.select().count() == 1:
         return Signer.select().get()
     else:
@@ -132,7 +132,7 @@ def parse_priority_fee(app: App) -> int:
     if app.pargs.priority_fee:
         priority_fee = app.pargs.priority_fee
     else:
-        priority_fee = app.config.get("web3cli", "default_priority_fee")
+        priority_fee = app.get_option("default_priority_fee")
     if not priority_fee:
         raise Web3CliError("Priority fee not defined, should not be here")
     return priority_fee

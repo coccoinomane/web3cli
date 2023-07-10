@@ -3,10 +3,8 @@
 import os
 import secrets
 import string
-from typing import Any
 
-from web3cli.main import Web3Cli
-from web3core.helpers import yaml
+from cement import App
 
 
 def get_test_config_file() -> str:
@@ -16,22 +14,11 @@ def get_test_config_file() -> str:
     )
 
 
-def delete_test_config_file(app: Web3Cli) -> None:
+def delete_test_config_file(app: App) -> None:
     """Delete the configuration file for the test app"""
     file = get_test_config_file()
     if os.path.isfile(file):
         os.remove(file)
-
-
-def update_setting_in_test_config_file(setting: str, value: Any) -> None:
-    """Set the value of a setting in the test config file"""
-    yaml.set(
-        filepath=get_test_config_file(),
-        setting=setting,
-        value=value,
-        logger=None,
-        section="web3cli",
-    )
 
 
 def get_random_string(

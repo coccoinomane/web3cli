@@ -17,7 +17,7 @@ def seed_local_chain(app: Web3Cli, chain_name: str, make_default: bool = True) -
     """Add the given local chain to the DB and make it the default network"""
     chain = seed_chain(getattr(chain_seeds, f"{chain_name}"))
     if make_default:
-        app.config.set("web3cli", "default_chain", chain.name)
+        app.set_option("default_chain", chain.name)
     return chain
 
 
@@ -51,7 +51,7 @@ def seed_local_accounts(
             raise Web3CliError("Mismatch between ape accounts and signers")
     # Optionally set default signer
     if default_signer:
-        app.config.set("web3cli", "default_signer", default_signer)
+        app.set_option("default_signer", default_signer)
     return accounts
 
 
@@ -70,7 +70,7 @@ def seed_local_contract(
     return Contract.create(
         name=name,
         desc=f"'{name}' contract imported from ape",
-        chain=chain_name or app.config.get("web3cli", "default_chain"),
+        chain=chain_name or app.get_option("default_chain"),
         address=ape_contract.address,
         type=type,
         abi=None if type else ape_contract.contract_type.dict()["abi"],
@@ -85,7 +85,7 @@ def seed_local_token(
     return Contract.create(
         name=token.symbol().lower(),
         desc=token.name(),
-        chain=chain_name or app.config.get("web3cli", "default_chain"),
+        chain=chain_name or app.get_option("default_chain"),
         address=token.address,
         type="erc20",
         abi=token.contract_type.dict()["abi"],

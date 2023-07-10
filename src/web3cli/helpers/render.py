@@ -22,7 +22,7 @@ def prepare_for_table(app: App, value: Any, wrap: int = None) -> str:
     """Prepare a value before it is printed in a table"""
     # Parse wrap parameter
     if wrap == None:
-        wrap = app.config.get("web3cli", "output_table_wrap")
+        wrap = app.get_option("output_table_wrap")
     elif wrap == 0:
         wrap = 100000
     # Wrap value

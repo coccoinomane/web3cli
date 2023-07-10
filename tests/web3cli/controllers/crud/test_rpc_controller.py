@@ -16,10 +16,7 @@ def test_rpc_list(chains: List[ChainFields]) -> None:
         data, output = app.last_rendered
         for c in chains:
             for r in c["rpcs"]:
-                assert (
-                    r["url"][0 : app.config.get("web3cli", "output_table_wrap")]
-                    in output
-                )
+                assert r["url"][0 : app.get_option("output_table_wrap")] in output
 
 
 def test_rpc_add(chains: List[ChainFields]) -> None:

@@ -77,7 +77,7 @@ def test_chain_active(chains: List[ChainFields]) -> None:
     for chain in chains:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.config.set("web3cli", "default_chain", chain["name"])
+            app.set_option("default_chain", chain["name"])
             app.set_args(["chain", "active"]).run()
             data, output = app.last_rendered
             assert data == chain["name"]

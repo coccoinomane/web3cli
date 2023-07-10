@@ -31,11 +31,11 @@ class ConfigController(Controller):
     )
     def get(self) -> None:
         if self.app.pargs.setting:
-            render(self.app, self.app.config.get("web3cli", self.app.pargs.setting))
+            render(self.app, self.app.get_option(self.app.pargs.setting))
         else:
             output = {}
             all_config = self.app.config.get_dict()
-            for section in ["web3cli"]:
+            for section in [self.app._meta.config_section]:
                 output[section] = all_config[section]
             render_yaml(self.app, output)
 

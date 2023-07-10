@@ -55,7 +55,7 @@ def test_signer_active_with_default_signer(signers: List[Dict[str, Any]]) -> Non
     s = signers[0]
     with Web3CliTest() as app:
         seed_signers(signers, app.app_key)
-        app.config.set("web3cli", "default_signer", s["name"])
+        app.set_option("default_signer", s["name"])
         app.set_args(["signer", "active"]).run()
         data, output = app.last_rendered
         assert data == s["address"]

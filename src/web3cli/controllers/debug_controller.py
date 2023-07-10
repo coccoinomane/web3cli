@@ -23,9 +23,7 @@ class DebugController(Controller):
         ],
     )
     def telegram(self) -> None:
-        chat_id = self.app.pargs.chat or self.app.config.get(
-            "web3cli", "telegram_chat_id"
-        )
+        chat_id = self.app.pargs.chat or self.app.get_option("telegram_chat_id")
         if send_tg_message(self.app, self.app.pargs.message, chat_id):
             render(self.app, "Ok ✅")
         else:

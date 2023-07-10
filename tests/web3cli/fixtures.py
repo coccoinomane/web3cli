@@ -24,7 +24,7 @@ def base_app(app_key: bytes) -> Iterator[Web3CliTest]:
     arguments with app.set_argv() and run the CLI with app.run()"""
     app = Web3CliTest()
     app.setup()
-    app.config.set("web3cli", "app_key", app_key)
+    app.set_option("app_key", app_key)
     yield app
     app.close()
 

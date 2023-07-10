@@ -22,9 +22,9 @@ def send_tg_message(
         Send a silent, so that it doesn't make the phone vibrate or make a sound.
     """
 
-    api_key = app.config.get("web3cli", "telegram_api_key")
-    chat_id = chat_id or app.config.get("web3cli", "telegram_chat_id")
-    timeout = int(app.config.get("web3cli", "telegram_send_timeout")) or 5
+    api_key = app.get_option("telegram_api_key")
+    chat_id = chat_id or app.get_option("telegram_chat_id")
+    timeout = int(app.get_option("telegram_send_timeout")) or 5
 
     if not api_key or not chat_id:
         raise Web3CliError(

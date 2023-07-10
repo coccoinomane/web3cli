@@ -191,7 +191,7 @@ class SubscribeController(Controller):
                     url=url,
                     data=json.dumps(payload),
                     headers={"Content-Type": "application/json"},
-                    timeout=self.app.config.get("web3cli", "post_callback_timeout"),
+                    timeout=self.app.get_option("post_callback_timeout"),
                 )
                 self.app.log.debug(f"POST callback response: {response.text}")
                 if response.status_code != 200:

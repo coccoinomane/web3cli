@@ -31,8 +31,8 @@ def update_setting_in_config_file(
         filepath=filepath,
         setting=setting,
         value=value,
+        section=app._meta.config_section,
         logger=app.log.info if do_log else None,
-        section="web3cli",
     )
 
 
@@ -44,3 +44,13 @@ def get_local_configuration_file(app: App) -> str:
 def get_global_configuration_file(app: App) -> str:
     """Return the path of the global configuration file"""
     return app.Meta.config_files[0]
+
+
+def get_option(app: App, option: str) -> Any:
+    """Shorthand to access app options"""
+    return app.config.get(app._meta.config_section, option)
+
+
+def set_option(app: App, option: str, value: Any) -> Any:
+    """Shorthand to set access app options"""
+    return app.config.set(app._meta.config_section, option, value)

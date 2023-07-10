@@ -28,7 +28,7 @@ class AppKeyController(Controller):
     )
     def create(self) -> None:
         # If the app key already exists, warn the user before replacing it
-        key_exists = True if self.get_option("web3cli.app_key") else False
+        key_exists = True if self.app.get_option("app_key") else False
         if key_exists and not self.app.pargs.force:
             self.app.log.error(
                 "App key already exists, run `w3 app-key create --force` to replace it.\nIf you do so, signers added with the old key will need to be recreated."

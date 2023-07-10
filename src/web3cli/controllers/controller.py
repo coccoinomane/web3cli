@@ -1,5 +1,3 @@
-from typing import Any
-
 from cement import App
 from cement import Controller as CementController
 from cement.core.config import ConfigInterface
@@ -26,10 +24,3 @@ class Controller(CementController):
     def get_config(self) -> ConfigInterface:
         """Get config object, with typing"""
         return self.app.config
-
-    def get_option(self, option: str) -> Any:
-        """Quickly access options Laravel style.
-        Use the dot to separate section & option name.
-        Example: get_option("section.option")"""
-        parts = option.split(".", 1)
-        return self.get_config().get(parts[0], parts[1])
