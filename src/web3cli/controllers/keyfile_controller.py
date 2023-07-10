@@ -2,7 +2,7 @@ import json
 
 from cement import ex
 
-from web3cli.controllers.controller import Controller
+from web3cli.framework.controller import Controller
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_to_keyfile
 from web3cli.helpers.render import render
 

@@ -1,8 +1,7 @@
 import os
 
-from cement import App
-
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.app import App
 from web3core.db import DB
 from web3core.models import MODELS
 

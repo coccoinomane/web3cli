@@ -1,6 +1,6 @@
 from cement import ex
 
-from web3cli.controllers.controller import Controller
+from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.database import delete_db_file, get_db_filepath
 from web3cli.helpers.render import render

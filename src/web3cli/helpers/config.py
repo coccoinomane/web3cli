@@ -1,8 +1,7 @@
 import os
 from typing import Any
 
-from cement import App
-
+from web3cli.framework.app import App
 from web3core.helpers import yaml
 from web3core.helpers.os import create_folder
 

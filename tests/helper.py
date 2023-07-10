@@ -4,7 +4,7 @@ import os
 import secrets
 import string
 
-from cement import App
+from web3cli.framework.app import App
 
 
 def get_test_config_file() -> str:

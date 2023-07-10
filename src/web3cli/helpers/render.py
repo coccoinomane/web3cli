@@ -1,9 +1,9 @@
 import json
 from typing import Any, List
 
-from cement import App
 from web3 import Web3
 
+from web3cli.framework.app import App
 from web3core.helpers.format import wrap as wrap_
 
 

@@ -1,9 +1,8 @@
 import json
 from typing import Any
 
-from cement import App
-
 from web3cli.exceptions import SignerNotResolved
+from web3cli.framework.app import App
 from web3cli.helpers.crypto import decrypt_keyfile_dict
 from web3core.models.signer import Signer
 

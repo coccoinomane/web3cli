@@ -1,10 +1,10 @@
 from typing import Any
 
-from cement import App
 from web3.contract.contract import ContractFunction
 from web3.types import Nonce, Wei
 from web3client.base_client import BaseClient
 
+from web3cli.framework.app import App
 from web3cli.helpers import args
 from web3core.helpers.tx import send_contract_tx as _send_contract_tx
 

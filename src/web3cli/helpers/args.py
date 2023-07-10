@@ -3,10 +3,10 @@ import json
 import os
 from typing import Any, List, Literal, Tuple, Union
 
-from cement import App
 from web3.types import ABI
 
 from web3cli.exceptions import SignerNotResolved, Web3CliError
+from web3cli.framework.app import App
 from web3cli.helpers.signer import get_signer
 from web3core.exceptions import RpcIsInvalid
 from web3core.helpers.blocks import BLOCK_PREDEFINED_IDENTIFIERS, get_block_type

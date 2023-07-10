@@ -15,9 +15,10 @@ to check both the input and the output of app.print.
 import decimal
 from typing import Any
 
-from cement import App
 from cement.core import output
 from cement.utils.misc import minimal_logger
+
+from web3cli.framework.app import App
 
 LOG = minimal_logger(__name__)
 

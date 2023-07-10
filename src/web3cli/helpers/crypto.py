@@ -3,10 +3,10 @@ import getpass
 import json
 from typing import Any
 
-from cement import App
 from eth_account import Account
 
 from web3cli.exceptions import InvalidConfig, Web3CliError
+from web3cli.framework.app import App
 from web3core.helpers.crypto import decrypt_string, encrypt_string
 
 

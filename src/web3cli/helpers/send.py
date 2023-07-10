@@ -4,11 +4,11 @@ to an arbitrary address"""
 from decimal import Decimal
 from typing import Union
 
-from cement import App
 from eth_typing.encoding import HexStr
 from web3 import Web3
 
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.app import App
 from web3cli.helpers.client_factory import make_erc20_wallet, make_wallet
 from web3core.helpers.resolve import resolve_address
 from web3core.models.address import Address

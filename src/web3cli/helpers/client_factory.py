@@ -1,8 +1,8 @@
 from typing import Any, cast
 
-from cement import App
 from web3client.base_client import BaseClient
 
+from web3cli.framework.app import App
 from web3core.helpers.client_factory import make_base_client, make_base_wallet
 from web3core.helpers.client_factory import (
     make_contract_client as make_contract_client_,

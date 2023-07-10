@@ -5,9 +5,9 @@ import secrets
 from os.path import isfile
 
 import cement
-from cement import App
 from genericpath import isfile
 
+from web3cli.framework.app import App
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_filepath
 from web3core.db import DB

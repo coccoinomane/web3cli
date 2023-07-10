@@ -1,9 +1,9 @@
 import configparser
 import os
-from typing import Any, Callable
+from typing import Callable
 
 import web3
-from cement import App, init_defaults
+from cement import init_defaults
 from cement.core.exc import CaughtSignal
 
 from web3cli import hooks
@@ -30,8 +30,8 @@ from web3cli.controllers.token_controller import TokenController
 from web3cli.controllers.transact_controller import TransactController
 from web3cli.controllers.tx_controller import TxController
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.app import App
 from web3cli.helpers.args import override_arg
-from web3cli.helpers.config import get_option, set_option
 from web3core.exceptions import Web3CoreError
 
 # Configuration defaults
@@ -128,14 +128,6 @@ class Web3Cli(App):
             ("post_setup", hooks.post_setup),
             ("post_argument_parsing", hooks.post_argument_parsing),
         ]
-
-    def get_option(self, option: str) -> Any:
-        """Shorthand to access app options"""
-        return get_option(self, option)
-
-    def set_option(self, option: str, value: Any) -> Any:
-        """Shorthand to set access app options"""
-        return set_option(self, option, value)
 
 
 def main(filter_app: Callable[[App], App] = None) -> None:

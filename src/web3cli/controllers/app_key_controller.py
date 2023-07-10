@@ -3,7 +3,7 @@ import sys
 
 from cement import ex
 
-from web3cli.controllers.controller import Controller
+from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.render import render

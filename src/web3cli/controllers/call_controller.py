@@ -1,8 +1,8 @@
 import web3
 from cement import ex
 
-from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_contract_client

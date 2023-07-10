@@ -3,8 +3,8 @@ import getpass
 from cement import ex
 from eth_account import Account
 
-from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.crypto import decrypt_keyfile, encrypt_string_with_app_key
 from web3cli.helpers.render import render, render_table

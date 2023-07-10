@@ -1,6 +1,6 @@
-from cement import App
 from cement import Controller as CementController
-from cement.core.config import ConfigInterface
+
+from web3cli.framework.app import App
 
 
 class Controller(CementController):
@@ -11,7 +11,7 @@ class Controller(CementController):
         self.app.args.print_help()
 
     def __init__(self) -> None:
-        """Make app attributes discoverable by IDEs. See
+        """Make self.app attributes discoverable by IDEs. See
         https://github.com/datafolklabs/cement/issues/599
         for more details"""
         super().__init__()
@@ -20,7 +20,3 @@ class Controller(CementController):
     def get_app(self) -> App:
         """Get app object, with typing"""
         return self.app
-
-    def get_config(self) -> ConfigInterface:
-        """Get config object, with typing"""
-        return self.app.config

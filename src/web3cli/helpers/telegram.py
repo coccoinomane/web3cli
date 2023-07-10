@@ -1,9 +1,8 @@
 from typing import Any
 
-from cement import App
-
 import web3core.helpers.telegram
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.app import App
 
 
 def send_tg_message(

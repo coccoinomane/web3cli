@@ -7,8 +7,8 @@ from cement import ex
 from web3.types import TxData
 from web3client.types import AsyncSubscriptionCallback, SubscriptionType
 
-from web3cli.controllers.controller import Controller
 from web3cli.exceptions import Web3CliError
+from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_client
 from web3cli.helpers.render import render
