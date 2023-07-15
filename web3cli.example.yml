@@ -1,13 +1,15 @@
-### Web3 Cli Configuration Settings
+### Web3Cli configuration file
 ###
-### All settings can be overriden using snake case environment
-### variables, for example 'WEB3CLI_DEFAULT_CHAIN=eth w3 <command>'
+### Copy this file to web3cli.yml to set local settings.
 ###
-### Copy this file to ~/.web3cli/conf/web3cli.yml if you need
-### to change a settings in a more permanent way.
-###
-### Please be aware that any value specified by means of an environment
-### variable take precedence on the file's content.
+### Copy this file to ~/.web3cli/conf/web3cli.yml to set
+### global settings.  Local settings take precedence over
+### global settings.
+### 
+### All settings can be overriden via environment
+### variables; for example: 'WEB3CLI_DEFAULT_CHAIN=eth'.
+### Values specified via env variables take precedence
+### on configuration files.
 ---
 
 web3cli:
