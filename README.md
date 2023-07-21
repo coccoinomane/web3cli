@@ -17,8 +17,8 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - [Advanced examples](#advanced-examples)
 - [Smart Contract support](#smart-contract-support)
     + [Read from a smart contract](#read-from-a-smart-contract)
-    + [Write to a smart contract](#write-to-a-smart-contract)
-- [Multichain support](#multichain-support)
+    + [Send a transaction to a smart contract](#send-a-transaction-to-a-smart-contract)
+- [Multi-chain support](#multi-chain-support)
 - [Use custom RPC](#use-custom-rpc)
 - [Add custom chains](#add-custom-chains)
 - [Address book](#address-book)
@@ -215,7 +215,7 @@ w3 transact usdc approve uniswap_v2 1e6
 w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver address> 9e9
 ```
 
-# Multichain support
+# Multi-chain support
 
 web3cli comes with out-of-the-box support for many chains.  To see the list of available chains, [visit the Wiki](https://github.com/coccoinomane/web3cli/wiki/%E2%9B%93-Supported-chains) or run the command `w3 chain list`.
 
