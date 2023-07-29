@@ -1,5 +1,6 @@
 from typing import Any, Type, Union
 
+from web3.contract.contract import Contract as Web3Contract
 from web3client.base_client import BaseClient
 
 from web3core.helpers.crypto import decrypt_string
@@ -95,3 +96,9 @@ def make_contract_wallet(
     )
     client.set_contract(contract.address, contract.resolve_abi())
     return client
+
+
+def make_web3_contract(contract_name: str, chain: Chain) -> Web3Contract:
+    """Given a contract name and a chain, return the corresponding
+    web3py contract object"""
+    return make_contract_client(contract_name, chain).contract
