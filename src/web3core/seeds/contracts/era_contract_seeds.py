@@ -24,4 +24,13 @@ weth: ContractFields = {
     "chain": "era",
 }
 
-all = [usdc, vc, weth]
+nusdc: ContractFields = {
+    "name": "nusdc",
+    "desc": "Eralend nUSDC pool",
+    "type": "compound_v2_pool",
+    "address": "0x1181D7BE04D80A8aE096641Ee1A87f7D557c6aeb",
+    "chain": "era",
+}
+
+
+all = [usdc, vc, weth, nusdc]
