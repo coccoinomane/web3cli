@@ -2,9 +2,9 @@ import configparser
 import os
 from typing import Callable
 
-import web3
 from cement import init_defaults
 from cement.core.exc import CaughtSignal
+from web3 import exceptions as web3_exceptions
 
 from web3cli import hooks
 from web3cli.controllers.abi_controller import AbiController
@@ -20,7 +20,8 @@ from web3cli.controllers.crud.rpc_controller import RpcController
 from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
 from web3cli.controllers.debug_controller import DebugController
-from web3cli.controllers.eralend_controller import EralendController
+from web3cli.controllers.eralend_spam_controller import EralendSpamController
+from web3cli.controllers.eralend_watch_controller import EralendWatchController
 from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.replay_controller import ReplayController
@@ -122,7 +123,8 @@ class Web3Cli(App):
             ReplayController,
             SubscribeController,
             DebugController,
-            EralendController,
+            EralendWatchController,
+            EralendSpamController,
         ]
 
         # extend the app with cement hook system
@@ -163,31 +165,32 @@ def main(filter_app: Callable[[App], App] = None) -> None:
                 traceback.print_exc()
 
         except (
-            web3.exceptions.BadFunctionCallOutput,
-            web3.exceptions.BlockNumberOutofRange,
-            web3.exceptions.CannotHandleRequest,
-            web3.exceptions.InvalidAddress,
-            web3.exceptions.NameNotFound,
-            web3.exceptions.StaleBlockchain,
-            web3.exceptions.MismatchedABI,
-            web3.exceptions.ABIEventFunctionNotFound,
-            web3.exceptions.ABIFunctionNotFound,
-            web3.exceptions.FallbackNotFound,
-            web3.exceptions.ValidationError,
-            web3.exceptions.ExtraDataLengthError,
-            web3.exceptions.NoABIFunctionsFound,
-            web3.exceptions.NoABIFound,
-            web3.exceptions.NoABIEventsFound,
-            web3.exceptions.InsufficientData,
-            web3.exceptions.TimeExhausted,
-            web3.exceptions.TransactionNotFound,
-            web3.exceptions.BlockNotFound,
-            web3.exceptions.LogTopicError,
-            web3.exceptions.InvalidEventABI,
-            web3.exceptions.ContractLogicError,
-            web3.exceptions.InvalidTransaction,
-            web3.exceptions.TransactionTypeMismatch,
-            web3.exceptions.BadResponseFormat,
+            web3_exceptions.BadFunctionCallOutput,
+            web3_exceptions.BlockNumberOutofRange,
+            web3_exceptions.CannotHandleRequest,
+            web3_exceptions.InvalidAddress,
+            web3_exceptions.NameNotFound,
+            web3_exceptions.StaleBlockchain,
+            web3_exceptions.MismatchedABI,
+            web3_exceptions.ABIEventFunctionNotFound,
+            web3_exceptions.ABIFunctionNotFound,
+            web3_exceptions.FallbackNotFound,
+            web3_exceptions.ValidationError,
+            web3_exceptions.ExtraDataLengthError,
+            web3_exceptions.NoABIFunctionsFound,
+            web3_exceptions.NoABIFound,
+            web3_exceptions.NoABIEventsFound,
+            web3_exceptions.InsufficientData,
+            web3_exceptions.TimeExhausted,
+            web3_exceptions.TransactionNotFound,
+            web3_exceptions.BlockNotFound,
+            web3_exceptions.LogTopicError,
+            web3_exceptions.InvalidEventABI,
+            web3_exceptions.ContractLogicError,
+            web3_exceptions.InvalidTransaction,
+            web3_exceptions.TransactionTypeMismatch,
+            web3_exceptions.BadResponseFormat,
+            web3_exceptions.ContractCustomError,
         ) as e:
             print("web3.py error > %s" % e.args[0])
             app.exit_code = 1
