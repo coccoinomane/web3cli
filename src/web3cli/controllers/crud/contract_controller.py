@@ -1,13 +1,10 @@
 from cement import ex
-from eth_utils import encode_hex, function_abi_to_4byte_selector
 from playhouse.shortcuts import model_to_dict
-from web3._utils.abi import abi_to_signature
 
 from web3cli.exceptions import Web3CliError
 from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.render import render, render_table
-from web3core.helpers.client_factory import make_web3_contract
 from web3core.helpers.seed import seed_contracts
 from web3core.models.contract import Contract
 from web3core.seeds import contract_seeds
@@ -143,33 +140,3 @@ class ContractController(Controller):
         self.app.log.info(
             f"Imported {len(contract_seeds.all)} contracts, run `w3 contract list` to show them"
         )
-
-    @ex(
-        help="Given input data for a contract call, return the signature of the function and its decoded arguments",
-        arguments=[
-            (["contract"], {"help": "Name of the contract"}),
-            (
-                ["data"],
-                {"help": "Input data"},
-            ),
-            (
-                ["--function", "--fn"],
-                {
-                    "help": "Provide the function name if you did not include the function selector in the data"
-                },
-            ),
-            args.chain(),
-        ],
-    )
-    def decode_function_data(self) -> None:
-        web3_contract = make_web3_contract(self.app.pargs.contract, self.app.chain)
-        # Prepend selector if --function is specified
-        if self.app.pargs.function:
-            func_obj = web3_contract.get_function_by_name(self.app.pargs.function)
-            selector = encode_hex(function_abi_to_4byte_selector(func_obj.abi))
-            if not self.app.pargs.data.startswith(selector):
-                self.app.pargs.data = selector + self.app.pargs.data
-        # Decode the function params
-        func_obj, func_params = web3_contract.decode_function_input(self.app.pargs.data)
-        func_params["__function_signature"] = abi_to_signature(func_obj.abi)
-        render(self.app, func_params)

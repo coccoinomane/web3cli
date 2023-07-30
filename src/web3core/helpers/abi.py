@@ -1,7 +1,8 @@
 import csv
-from typing import Any, Callable, List, Tuple, Union, cast
+from typing import Any, Callable, Dict, List, Tuple, Union, cast
 
-import web3
+from eth_utils import encode_hex, function_abi_to_4byte_selector
+from web3 import Web3
 from web3._utils.abi import (
     abi_to_signature,
     filter_by_name,
@@ -147,7 +148,7 @@ def parse_abi_value(
     elif is_address_type(abi_type):
         value = resolve_address_fn(string_value)
         if checksum_addresses:
-            value = web3.Web3.to_checksum_address(value)
+            value = Web3.to_checksum_address(value)
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
         csv_reader = csv.reader([string_value], skipinitialspace=True)
@@ -254,6 +255,30 @@ def does_function_write_to_state(abi: ABIFunction) -> bool:
 
 
 def _inputs(abi: Union[ABIFunction, ABIEvent]) -> str:
+    """Private helper function"""
     types_list = get_type_strings(abi["inputs"])
     params = zip([i["name"] for i in abi["inputs"]], types_list)
     return ", ".join(f"{i[1]}{' '+i[0] if i[0] else ''}" for i in params)
+
+
+def decode_function_data(
+    abi: ABI, data: str, name: str = None
+) -> Tuple[Dict[str, Any], str]:
+    """Given input data for a contract function, return the
+    decoded arguments and the signature of the function"""
+    web3_contract = Web3().eth.contract(abi=abi)
+    # Prepend selector if function name is specified
+    if name:
+        try:
+            func_obj = web3_contract.get_function_by_name(name)
+        except ValueError as e:
+            raise Web3CliError(f"Could not find function {name}: {e}")
+        selector = encode_hex(function_abi_to_4byte_selector(func_obj.abi))
+        if not data.startswith(selector):
+            data = selector + data
+    # Decode the function params
+    try:
+        func_obj, func_params = web3_contract.decode_function_input(data)
+    except ValueError as e:
+        raise Web3CliError(f"Could not decode function input: {e}")
+    return func_params, abi_to_signature(func_obj.abi)

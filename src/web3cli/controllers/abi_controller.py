@@ -7,6 +7,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.render import render
+from web3core.helpers.abi import decode_function_data as _decode_function_data
 from web3core.helpers.abi import (
     filter_abi_by_type_and_name,
     get_event_full_signatures,
@@ -14,6 +15,7 @@ from web3core.helpers.abi import (
     get_function_full_signatures,
     get_function_signatures,
 )
+from web3core.helpers.contract import get_web3_contract
 from web3core.models.contract import Contract, ContractType
 
 
@@ -115,6 +117,34 @@ class AbiController(Controller):
                 f"Function or event '{self.app.pargs.function_name}' not found"
             )
         render(self.app, obj)
+
+    @ex(
+        help="Given input data for a contract function, return its decoded arguments and, optionally, the function signature",
+        arguments=[
+            (["contract"], {"help": "Name of the contract"}),
+            (["data"], {"help": "Input data"}),
+            (
+                ["--name"],
+                {"help": "Specify the function name rather than its selector"},
+            ),
+            (
+                ["--signature"],
+                {
+                    "help": "Include function signature in the output, with key __function_signature",
+                    "action": "store_true",
+                },
+            ),
+            args.chain(),
+        ],
+    )
+    def decode_function_data(self) -> None:
+        web3_contract = get_web3_contract(self.app.pargs.contract, self.app.chain)
+        params, signature = _decode_function_data(
+            web3_contract.abi, self.app.pargs.data, self.app.pargs.name
+        )
+        if self.app.pargs.signature:
+            params["__function_signature"] = signature
+        render(self.app, params)
 
     def parse_abi(self) -> ABI:
         """Parse the 'contract' and '--abi' arguments and return the ABI"""

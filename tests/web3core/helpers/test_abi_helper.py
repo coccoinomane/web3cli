@@ -4,6 +4,7 @@ from web3.types import ABI
 
 from web3core.exceptions import AbiOverflow
 from web3core.helpers.abi import (
+    decode_function_data,
     get_event_full_signatures,
     get_event_names,
     get_event_signatures,
@@ -236,3 +237,26 @@ def test_parse_abi_value_string() -> None:
     )
     assert parse_abi_value("string", "3") == "3"
     assert parse_abi_value("string", "False") == "False"
+
+
+def test_decode_function_data(erc20_abi: ABI) -> None:
+    # transferFrom transaction on USDC contract (https://etherscan.io/tx/0x3f024aeca5e02128c5453d6f028b33fb43e061eb7ad584a8e090a9790f9b8d64)
+    selector = "0x23b872dd"
+    function_name = "transferFrom"
+    signature = "transferFrom(address,address,uint256)"
+    data_without_selector = "0000000000000000000000001c4d7f0c4df4c48d8628dcb913f2cb6b81bc0abb000000000000000000000000f16e9b0d03470827a95cdfd0cb8a8a3b46969b9100000000000000000000000000000000000000000000000000000000b2d05e00"
+    data = selector + data_without_selector
+    expected_parameters = {
+        "_from": "0x1c4d7f0c4df4C48d8628DCB913F2Cb6B81Bc0Abb",
+        "_to": "0xf16E9B0D03470827A95CDfd0Cb8a8A3b46969B91",
+        "_value": 3000000000,
+    }
+    assert decode_function_data(erc20_abi, data)[0] == expected_parameters
+    assert (
+        decode_function_data(erc20_abi, data_without_selector, function_name)[0]
+        == expected_parameters
+    )
+    assert (
+        decode_function_data(erc20_abi, data_without_selector, function_name)[1]
+        == signature
+    )

@@ -20,6 +20,7 @@ from web3cli.controllers.crud.rpc_controller import RpcController
 from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
 from web3cli.controllers.debug_controller import DebugController
+from web3cli.controllers.eralend_controller import EralendController
 from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.replay_controller import ReplayController
@@ -121,6 +122,7 @@ class Web3Cli(App):
             ReplayController,
             SubscribeController,
             DebugController,
+            EralendController,
         ]
 
         # extend the app with cement hook system
