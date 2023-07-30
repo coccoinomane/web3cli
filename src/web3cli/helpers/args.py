@@ -588,6 +588,12 @@ def signer_and_gas() -> List[Tuple[List[str], dict[str, Any]]]:
     return [signer(), priority_fee()]
 
 
+def tx_args() -> List[Tuple[List[str], dict[str, Any]]]:
+    """Shortcut for commands that want to use the
+    send_contract_tx helper function"""
+    return [tx_return(), tx_dry_run(), tx_call(), tx_gas_limit()]
+
+
 def chain_and_rpc() -> List[Tuple[List[str], dict[str, Any]]]:
     """Shortcut for commands accepting both chain and rpc arguments"""
     return [chain(), rpc()]
