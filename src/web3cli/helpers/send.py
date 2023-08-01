@@ -9,7 +9,7 @@ from web3 import Web3
 
 from web3cli.exceptions import Web3CliError
 from web3cli.framework.app import App
-from web3cli.helpers.client_factory import make_erc20_wallet, make_wallet
+from web3cli.helpers.client_factory import make_contract_wallet, make_wallet
 from web3core.helpers.resolve import resolve_address
 from web3core.models.address import Address
 from web3core.models.chain import Chain
@@ -108,7 +108,7 @@ def send_erc20_token_in_decimals(
 
     TODO: This should use send_contract_tx, to have gas settings + output
     management."""
-    client = make_erc20_wallet(app, ticker)
+    client = make_contract_wallet(app, ticker)
     return client.transact(
         client.functions.transfer(resolve_address(to, [Address, Signer]), amount)
     )
@@ -126,7 +126,7 @@ def send_erc20_token_in_token_units(
     This is a wrapper around `send_erc20_token` that automatically converts the
     amount to the smallest subdivision of the token, which depends on the
     token's decimals."""
-    client = make_erc20_wallet(app, ticker)
+    client = make_contract_wallet(app, ticker)
     decimals = client.functions.decimals().call()
     amount = int(Decimal(amount) * 10**decimals)
     return send_erc20_token_in_decimals(app, ticker, to, amount)

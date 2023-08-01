@@ -404,7 +404,7 @@ def swap_approve(
     return (
         list(name_or_flags) or ["--approve"],
         {
-            "help": "Whether to approve the DEX to spend the input token",
+            "help": "Whether to approve the contract to spend the input token",
             "action": argparse.BooleanOptionalAction,
             "default": True,
         }

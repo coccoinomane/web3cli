@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any, Union, cast
 
 from web3client.base_client import BaseClient
 
@@ -7,9 +7,12 @@ from web3core.helpers.client_factory import make_base_client, make_base_wallet
 from web3core.helpers.client_factory import (
     make_contract_client as make_contract_client_,
 )
+from web3core.helpers.client_factory import make_contract_client_from_address_and_abi
 from web3core.helpers.client_factory import (
     make_contract_wallet as make_contract_wallet_,
 )
+from web3core.helpers.client_factory import make_contract_wallet_from_address_and_abi
+from web3core.models.contract import Contract
 
 
 def make_client(app: App, log: bool = False, **client_args: Any) -> BaseClient:
@@ -39,13 +42,13 @@ def make_wallet(app: App, log: bool = False, **client_args: Any) -> BaseClient:
 
 def make_contract_client(
     app: App,
-    contract_name: str,
+    contract: Union[Contract, str],
     log: bool = False,
     **client_args: Any,
 ) -> BaseClient:
     """Client suitable to interact with the given smart contract"""
     return make_contract_client_(
-        contract_name=contract_name,
+        contract=contract,
         chain=app.chain,
         node_uri=app.rpc.url,
         logger=app.log.info if log else None,
@@ -55,13 +58,13 @@ def make_contract_client(
 
 def make_contract_wallet(
     app: App,
-    contract_name: str,
+    contract: Union[Contract, str],
     log: bool = False,
     **client_args: Any,
 ) -> BaseClient:
     """Client suitable to interact with the given smart contract"""
     return make_contract_wallet_(
-        contract_name=contract_name,
+        contract=contract,
         chain=app.chain,
         signer=app.signer,
         password=app.app_key,
@@ -74,5 +77,38 @@ def make_contract_wallet(
 def make_erc20_wallet(
     app: App, token_name: str, log: bool = False, **client_args: Any
 ) -> BaseClient:
-    """Client suitable to interact with the given ERC20 token"""
+    """Client suitable to interact with the given ERC20 token
+    TODO: Remove, useless"""
     return make_contract_wallet(app, token_name, log, **client_args)
+
+
+def make_erc20_client_from_address(
+    app: App, token_address: str, log: bool = False, **client_args: Any
+) -> BaseClient:
+    """Wrapper to make_contract_client that returns a client
+    even if the contract is not saved at database."""
+    return make_contract_client_from_address_and_abi(
+        address=token_address,
+        chain=app.chain,
+        type="erc20",
+        node_uri=app.rpc.url,
+        logger=app.log.info if log else None,
+        **client_args,
+    )
+
+
+def make_erc20_wallet_from_address(
+    app: App, token_address: str, log: bool = False, **client_args: Any
+) -> BaseClient:
+    """Wrapper to make_contract_client that returns a client
+    even if the contract is not saved at database."""
+    return make_contract_wallet_from_address_and_abi(
+        address=token_address,
+        chain=app.chain,
+        signer=app.signer,
+        password=app.app_key,
+        type="erc20",
+        node_uri=app.rpc.url,
+        logger=app.log.info if log else None,
+        **client_args,
+    )
