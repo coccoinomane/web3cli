@@ -10,11 +10,13 @@
 - Tests: subscribe controller
 - Tests: test get_signer() switch function
 - Ignore case in contract names, including tokens
-- Command to import/resolve tokens from ethereum-lists
 - Make web3cli extensible
 
 ### Backlog
 
+- Tests: approve helper
+- Command to import/resolve tokens from ethereum-lists
+- Tests: compound-v2 commands
 - Subscribe: cache tx for logs subscription (and possibly use it in callback)
 - Tests: test add liq + swap
 - Swap: refactor in web3core + tests

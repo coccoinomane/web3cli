@@ -8,7 +8,8 @@ from web3cli.exceptions import Web3CliError
 from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_contract_wallet
-from web3cli.helpers.render import render_web3py
+from web3cli.helpers.render import render
+from web3cli.helpers.token import approve
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers import dex
 from web3core.helpers.misc import yes_or_exit
@@ -129,25 +130,13 @@ class SwapController(Controller):
             yes_or_exit(logger=self.app.log.info)
         # Approve
         if self.app.pargs.approve:
-            self.app.log.debug("Checking token allowance...")
-            # Check allowance
-            allowance = token_in_client.functions["allowance"](
-                signer.address, router_client.contract_address
-            ).call()
-            # If allowance is not sufficient, approve
-            if allowance < amount_in:
-                approve_function = token_in_client.functions["approve"](
-                    router_client.contract_address, amount_in
-                )
-                send_contract_tx(
-                    self.app,
-                    token_in_client,
-                    approve_function,
-                    fetch_data=False,
-                    fetch_receipt=True,
-                )
-            else:
-                self.app.log.debug("Token allowance is already sufficient")
+            approve(
+                app=self.app,
+                token_client=token_in_client,
+                spender=router_client.contract_address,
+                amount_in_wei=amount_in,
+                check_allowance=True,
+            )
         # Build swap function
         swap_function = dex.get_swap_function(
             router_client,
@@ -161,4 +150,4 @@ class SwapController(Controller):
         # Swap or simulate
         output = send_contract_tx(self.app, router_client, swap_function)
         # Print output
-        render_web3py(self.app, output)
+        render(self.app, output)

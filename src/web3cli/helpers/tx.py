@@ -47,14 +47,9 @@ def send_contract_tx(
         "max_priority_fee_in_gwei": app.priority_fee,
     } | kwargs
     # Inform user
-    if not dry_run:
-        app.log.debug(
-            f"Sending tx '{function.fn_name}' {tx_call and '(with call)' or ''}..."
-        )
-    elif dry_run and tx_call:
-        app.log.debug(f"Sending tx '{function.fn_name}'... (dry run with call)")
-    else:
-        app.log.debug(f"Sending tx '{function.fn_name}'... (dry run)")
+    app.log.debug(
+        f"Sending tx '{function.fn_name}' [dry_run={dry_run}, value={value_in_wei}, nonce={nonce}, extra_args={extra_args}]..."
+    )
     # Send transaction
     tx_life = _send_contract_tx(**(fixed_args | extra_args))
     # Return tx details according to tx_return
