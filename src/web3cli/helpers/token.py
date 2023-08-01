@@ -41,3 +41,12 @@ def approve(
         tx_return_dest="_return",
         **({"fetch_receipt": True} | send_contract_tx_kwargs),
     )
+
+
+def revoke(
+    app: App, token_client: BaseClient, spender: str, **send_contract_tx_kwargs: Any
+) -> None:
+    """Revoke token spending permissions from the given spender"""
+    return approve(
+        app, token_client, spender, 0, check_allowance=False, **send_contract_tx_kwargs
+    )

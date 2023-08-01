@@ -6,7 +6,7 @@ from web3cli.exceptions import Web3CliError
 from web3cli.framework.controller import Controller
 from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_contract_client, make_contract_wallet
-from web3cli.helpers.render import render, render_table, render_web3py
+from web3cli.helpers.render import render, render_table
 from web3cli.helpers.tx import send_contract_tx
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
@@ -83,14 +83,43 @@ class TokenController(Controller):
                 f"You are about to approve {spender} on chain {self.app.chain.name} to spend {what} on behalf of {signer.user_address}"
             )
             yes_or_exit(logger=self.app.log.info)
-        self.app.log.debug("Approving DEX spender spend token...")
+        self.app.log.debug("Approving spender to spend token...")
         output = send_contract_tx(
             self.app,
             signer,
             signer.functions["approve"](spender, amount_in_wei),
         )
         # Print output
-        render_web3py(self.app, output)
+        render(self.app, output)
+
+    @ex(
+        help="Revoke spending permissions from the given spender",
+        arguments=[
+            (["token"], {"help": "Token to approve"}),
+            (["spender"], {"help": "Address or name of the spender to be revoked"}),
+            *args.tx_args(),
+            *args.chain_and_rpc(),
+            *args.signer_and_gas(),
+            args.force(),
+        ],
+    )
+    def revoke(self) -> None:
+        spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
+        signer = make_contract_wallet(self.app, self.app.pargs.token)
+        # Confirm
+        if not self.app.pargs.force:
+            print(
+                f"Revoke permissions to {spender} on chain {self.app.chain.name} to spend on behalf of {signer.user_address}?"
+            )
+            yes_or_exit(logger=self.app.log.info)
+        self.app.log.debug("Revoking spender to spend token...")
+        output = send_contract_tx(
+            self.app,
+            signer,
+            signer.functions["approve"](spender, 0),
+        )
+        # Print output
+        render(self.app, output)
 
     @ex(
         help="Show the balance of the given token for the given address",
