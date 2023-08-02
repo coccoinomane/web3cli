@@ -9,7 +9,7 @@ from web3cli.helpers import args
 from web3cli.helpers.args import parse_block
 from web3cli.helpers.client_factory import make_client
 from web3cli.helpers.render import render
-from web3core.helpers.client_factory import make_base_wallet
+from web3core.helpers.client_factory import make_base_client
 from web3core.helpers.resolve import resolve_address
 
 
@@ -78,7 +78,7 @@ class MiscController(Controller):
         arguments=[(["msg"], {"action": "store"}), args.signer()],
     )
     def sign(self) -> None:
-        wallet = make_base_wallet(
+        wallet = make_base_client(
             chain=None, signer=self.app.signer, password=self.app.app_key, node_uri=None
         )
         signed_message = wallet.sign_message(self.app.pargs.msg)
