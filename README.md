@@ -36,6 +36,7 @@ Interact with blockchains and smart contracts using the command line: no coding 
 - No configuration needed
 - Label addresses, tokens and contracts for ease of use
 - Swap with Uniswap, TraderJoe, PancakeSwap, etc
+- Support for the Compound V2 lending protocol and its forks (e.g. Eralend)
 - Transfer tokens via their ticker
 - Set Telegram alerts based on pending transactions, new blocks and contract events
 - Replay transactions just with the tx hash

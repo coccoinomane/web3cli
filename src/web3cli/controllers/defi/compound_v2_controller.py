@@ -26,7 +26,7 @@ class CompoundV2Controller(Controller):
 
     class Meta:
         label = "compound-v2"
-        help = "Interact with lending protocols that are cloned from Compound V2 (https://docs.compound.finance/v2/).  To use, create a Compound pool contract with `w3 contract add <name> <pool address> --type compound_v2_pool`"
+        help = "Interact with the Compound V2 lending protocol (https://docs.compound.finance/v2/).  It also works with Compound forks, like Eralend on zkSync Era. Requires a Compound pool contract: create one with `w3 contract add <name> <pool address> --type compound_v2_pool`."
         stacked_type = "nested"
         stacked_on = "base"
         aliases = ["eralend"]
