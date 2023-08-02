@@ -21,7 +21,6 @@ from web3cli.controllers.crud.signer_controller import SignerController
 from web3cli.controllers.db_controller import DbController
 from web3cli.controllers.debug_controller import DebugController
 from web3cli.controllers.defi.compound_v2_controller import CompoundV2Controller
-from web3cli.controllers.eralend_watch_controller import EralendWatchController
 from web3cli.controllers.keyfile_controller import KeyfileController
 from web3cli.controllers.misc_controller import MiscController
 from web3cli.controllers.replay_controller import ReplayController
@@ -123,7 +122,6 @@ class Web3Cli(App):
             ReplayController,
             SubscribeController,
             DebugController,
-            EralendWatchController,
             CompoundV2Controller,
         ]
 
