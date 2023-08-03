@@ -8,6 +8,7 @@ from web3core.helpers.crypto import decrypt_string
 from web3core.models.chain import Chain
 from web3core.models.contract import Contract, ContractType
 from web3core.models.signer import Signer
+from web3core.seeds import contract_type_seeds
 from web3core.types import Logger
 
 
@@ -110,6 +111,31 @@ def make_contract_client_from_address_and_abi(
     return make_contract_client(
         contract=contract,
         chain=chain,
+        node_uri=node_uri,
+        base=base,
+        signer=signer,
+        password=password,
+        logger=logger,
+        **client_args,
+    )
+
+
+def make_erc20_client_from_address(
+    address: str,
+    chain: Chain,
+    node_uri: str = None,
+    base: Type[BaseClient] = BaseClient,
+    signer: Union[Signer, str] = None,
+    password: bytes = None,
+    logger: Logger = lambda msg: None,
+    **client_args: Any,
+) -> BaseClient:
+    """Wrapper to make_contract_client that returns an ERC20
+    token client even if the contract is not saved at database."""
+    return make_contract_client_from_address_and_abi(
+        address=address,
+        chain=chain,
+        abi=contract_type_seeds.erc20.abi,
         node_uri=node_uri,
         base=base,
         signer=signer,
