@@ -6,8 +6,6 @@ from web3cli.helpers.render import render
 from web3cli.helpers.send import send_coin_or_token
 from web3core.helpers.misc import to_number, yes_or_exit
 from web3core.helpers.resolve import resolve_address
-from web3core.models.address import Address
-from web3core.models.signer import Signer
 
 
 class SendController(Controller):
@@ -47,7 +45,7 @@ class SendController(Controller):
     )
     def send(self) -> None:
         # Parse arguments
-        to_address = resolve_address(self.app.pargs.to, [Address, Signer])
+        to_address = resolve_address(self.app.pargs.to, chain=self.app.chain.name)
         amount = to_number(self.app.pargs.amount)
         ticker = self.app.pargs.ticker.lower()
         if not self.app.pargs.force:

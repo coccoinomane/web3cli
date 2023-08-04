@@ -32,5 +32,21 @@ nusdc: ContractFields = {
     "chain": "era",
 }
 
+rfeth: ContractFields = {
+    "name": "rfeth",
+    "desc": "ReactorFusion rfETH pool",
+    "type": "compound_v2_pool",
+    "address": "0xC5db68F30D21cBe0C9Eac7BE5eA83468d69297e6",
+    "chain": "era",
+}
 
-all = [usdc, vc, weth, nusdc]
+rfusdc: ContractFields = {
+    "name": "rfusdc",
+    "desc": "ReactorFusion rfUSDC pool",
+    "type": "compound_v2_pool",
+    "address": "0x04e9Db37d8EA0760072e1aCE3F2A219988Fdac29",
+    "chain": "era",
+}
+
+
+all = [usdc, vc, weth, nusdc, rfeth, rfusdc]

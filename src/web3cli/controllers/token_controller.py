@@ -1,4 +1,5 @@
 import argparse
+import decimal
 
 from cement import ex
 
@@ -137,7 +138,9 @@ class TokenController(Controller):
         if self.app.pargs.wei:
             render(self.app, balance_in_wei)
         else:
-            balance = balance_in_wei / 10 ** client.functions["decimals"]().call()
+            balance = balance_in_wei / decimal.Decimal(
+                10 ** client.functions["decimals"]().call()
+            )
             render(self.app, balance)
 
     @ex(
