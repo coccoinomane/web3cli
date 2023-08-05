@@ -12,6 +12,7 @@ from web3cli.helpers import args
 from web3cli.helpers.client_factory import (
     make_contract_client,
     make_contract_wallet,
+    make_erc20_client_from_address,
     make_erc20_wallet_from_address,
 )
 from web3cli.helpers.render import render
@@ -26,7 +27,7 @@ class CompoundV2Controller(Controller):
 
     class Meta:
         label = "compound-v2"
-        help = "Interact with the Compound V2 lending protocol (https://docs.compound.finance/v2/).  It also works with Compound forks, like Eralend on zkSync Era. Requires a Compound pool contract: create one with `w3 contract add <name> <pool address> --type compound_v2_pool`."
+        help = "Interact with the Compound V2 lending protocol (https://docs.compound.finance/v2/).  It also works with Compound forks, like Eralend on zkSync Era. Requires a Compound pool contract: create one with `w3 contract add <name> <pool address> --type compound_v2_erc20`."
         stacked_type = "nested"
         stacked_on = "base"
         aliases = ["eralend"]
@@ -38,19 +39,15 @@ class CompoundV2Controller(Controller):
             (["address"], {"help": "User address to check"}),
             *args.chain_and_rpc(),
         ],
+        aliases=["debt"],
     )
-    def debt(self) -> None:
+    def borrowed(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=pool.functions["underlying"]().call()
-        )
+        token, symbol, decimals = self.get_underlying(pool)
         amount = pool.functions["borrowBalanceCurrent"](
             resolve_address(self.app.pargs.address)
         ).call()
-        render(
-            self.app,
-            amount / decimal.Decimal(10**underlying.decimals),
-        )
+        render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
         help="Show total amount of debt owed to the given pool",
@@ -58,38 +55,44 @@ class CompoundV2Controller(Controller):
             (["contract"], {"help": "Name of the pool contract"}),
             *args.chain_and_rpc(),
         ],
+        aliases=["total-debt"],
     )
-    def total_debt(self) -> None:
+    def total_borrow(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=pool.functions["underlying"]().call()
-        )
+        token, symbol, decimals = self.get_underlying(pool)
         amount = pool.functions["totalBorrowsCurrent"]().call()
-        render(
-            self.app,
-            amount / decimal.Decimal(10**underlying.decimals),
-        )
+        render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
-        help="Show amount of collateral in the given pool for the given address",
+        help="Show amount of collateral supplied to the given pool by the given address",
         arguments=[
             (["contract"], {"help": "Name of the pool contract"}),
             (["address"], {"help": "User address to check"}),
             *args.chain_and_rpc(),
         ],
+        aliases=["collateral"],
     )
-    def collateral(self) -> None:
+    def supplied(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=pool.functions["underlying"]().call()
-        )
+        token, symbol, decimals = self.get_underlying(pool)
         amount = pool.functions["balanceOfUnderlying"](
             resolve_address(self.app.pargs.address)
         ).call()
-        render(
-            self.app,
-            amount / decimal.Decimal(10**underlying.decimals),
-        )
+        render(self.app, amount / decimal.Decimal(10**decimals))
+
+    @ex(
+        help="Show total amount of collateral supplied to the given pool",
+        arguments=[
+            (["contract"], {"help": "Name of the pool contract"}),
+            *args.chain_and_rpc(),
+        ],
+        aliases=["total-collateral"],
+    )
+    def total_supply(self) -> None:
+        pool = make_contract_client(self.app, self.app.pargs.contract)
+        token, symbol, decimals = self.get_underlying(pool)
+        amount = pool.functions["totalSupply"]().call()
+        render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
         help="Show total amount of liquid collateral (cash) in the given pool",
@@ -100,20 +103,24 @@ class CompoundV2Controller(Controller):
     )
     def liquidity(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=pool.functions["underlying"]().call()
-        )
+        token, symbol, decimals = self.get_underlying(pool)
         amount = pool.functions["getCash"]().call()
-        render(
-            self.app,
-            amount / decimal.Decimal(10**underlying.decimals),
-        )
+        render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
         help="Repay debt to the given pool",
         arguments=[
             (["contract"], {"help": "Name of the pool contract"}),
-            (["amount"], {"help": "Amount of tokens to repay", "type": float}),
+            (
+                ["amount"],
+                {
+                    "help": "Amount of tokens to repay; specify 0 to repay all debt",
+                    "type": float,
+                },
+            ),
+            args.swap_approve(
+                help="Automatically approve pool to use your tokens.  Ignored for ETH pools."
+            ),
             *args.signer_and_gas(),
             *args.tx_args(),
             *args.chain_and_rpc(),
@@ -123,21 +130,90 @@ class CompoundV2Controller(Controller):
     def repay(self) -> None:
         # Get amount in wei
         signer = make_contract_wallet(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=signer.functions["underlying"]().call()
-        )
-        amount_in_wei = int(self.app.pargs.amount * 10**underlying.decimals)
+        token, symbol, decimals = self.get_underlying(signer)
+        amount = self.app.pargs.amount
+        amount_in_wei = int(amount * 10**decimals)
+
+        # Allow to repay all debt
+        if self.app.pargs.amount == 0:
+            amount_in_wei = signer.functions["borrowBalanceCurrent"](
+                signer.user_address
+            ).call()
+            amount = amount_in_wei / 10**decimals
+
         # Confirm
         if not self.app.pargs.force:
             print(
-                f"You are about to repay {self.app.pargs.amount} {underlying.symbol} to the '{self.app.pargs.contract}' pool"
+                f"You are about to repay {amount} {symbol} to the '{self.app.pargs.contract}' pool"
             )
             yes_or_exit(logger=self.app.log.info)
+
+        if token:
+            # Approve token spending
+            if self.app.pargs.approve:
+                approve(
+                    app=self.app,
+                    token_client=token,
+                    spender=signer.contract_address,
+                    amount_in_wei=amount_in_wei,
+                    check_allowance=True,
+                )
+            # Send transaction
+            output = send_contract_tx(
+                self.app, signer, signer.functions["repayBorrow"](amount_in_wei)
+            )
+        else:
+            # ETH pool: send payable transaction
+            output = send_contract_tx(
+                self.app,
+                signer,
+                signer.functions["repayBorrow"](),
+                value_in_wei=amount_in_wei,
+            )
+        render(self.app, output)
+
+    # Withdraw function, similar to repay function:
+    @ex(
+        help="Withdraw collateral from the given pool.  IMPORTANT: To avoid liquidation, make sure to always leave enough collateral",
+        arguments=[
+            (["contract"], {"help": "Name of the pool contract"}),
+            (
+                ["amount"],
+                {
+                    "help": "Amount of tokens to withdraw; specify 0 to withdraw all collateral",
+                    "type": float,
+                },
+            ),
+            *args.signer_and_gas(),
+            *args.tx_args(),
+            *args.chain_and_rpc(),
+            args.force(),
+        ],
+    )
+    def withdraw(self) -> None:
+        # Get amount in wei
+        signer = make_contract_wallet(self.app, self.app.pargs.contract)
+        token, symbol, decimals = self.get_underlying(signer)
+        amount = self.app.pargs.amount
+        amount_in_wei = int(amount * 10**decimals)
+
+        # Allow to withdraw all collateral
+        if self.app.pargs.amount == 0:
+            amount_in_wei = signer.functions["balanceOfUnderlying"](
+                signer.user_address
+            ).call()
+            amount = amount_in_wei / 10**decimals
+
+        # Confirm
+        if not self.app.pargs.force:
+            print(
+                f"You are about to withdraw {amount} {symbol} from the '{self.app.pargs.contract}' pool"
+            )
+            yes_or_exit(logger=self.app.log.info)
+
         # Send transaction
         output = send_contract_tx(
-            self.app,
-            signer,
-            signer.functions["repayBorrow"](amount_in_wei),
+            self.app, signer, signer.functions["redeemUnderlying"](amount_in_wei)
         )
         render(self.app, output)
 
@@ -153,7 +229,9 @@ class CompoundV2Controller(Controller):
                     "action": "store_true",
                 },
             ),
-            args.swap_approve(),
+            args.swap_approve(
+                help="Automatically approve pool to use your tokens.  Ignored for ETH pools."
+            ),
             *args.signer_and_gas(),
             *args.tx_args(),
             *args.chain_and_rpc(),
@@ -165,35 +243,42 @@ class CompoundV2Controller(Controller):
             raise NotImplementedError(
                 f"Flat --collateral to enable collateral not implemented yet"
             )
+
         # Get amount in wei
         signer = make_contract_wallet(self.app, self.app.pargs.contract)
         token, symbol, decimals = self.get_underlying(signer)
         amount_in_wei = int(self.app.pargs.amount * 10**decimals)
+
         # Confirm
         if not self.app.pargs.force:
             print(
                 f"You are about to supply {self.app.pargs.amount} {symbol} to the '{self.app.pargs.contract}' pool"
             )
             yes_or_exit(logger=self.app.log.info)
-        # Approve token spending
-        if self.app.pargs.approve:
-            approve(
-                app=self.app,
-                token_client=token,
-                spender=signer.contract_address,
-                amount_in_wei=amount_in_wei,
-                check_allowance=True,
+
+        if token:
+            # Approve token spending
+            if self.app.pargs.approve:
+                approve(
+                    app=self.app,
+                    token_client=token,
+                    spender=signer.contract_address,
+                    amount_in_wei=amount_in_wei,
+                    check_allowance=True,
+                )
+            # Send transaction
+            mint_tx = send_contract_tx(
+                self.app, signer, signer.functions["mint"](amount_in_wei)
             )
-        # Send transaction
-        mint_tx = send_contract_tx(
-            self.app,
-            signer,
-            signer.functions["mint"](amount_in_wei),
-        )
+        else:
+            # ETH pool: send payable transaction
+            mint_tx = send_contract_tx(
+                self.app, signer, signer.functions["mint"](), value_in_wei=amount_in_wei
+            )
         render(self.app, mint_tx)
 
     @ex(
-        help="Borrow tokens from the given pool",
+        help="Borrow tokens from the given pool.  IMPORTANT: To avoid liquidation, make sure to borrow within your collateral ratio",
         arguments=[
             (["contract"], {"help": "Name of the pool contract"}),
             (["amount"], {"help": "Amount of tokens to borrow", "type": float}),
@@ -206,21 +291,17 @@ class CompoundV2Controller(Controller):
     def borrow(self) -> None:
         # Get amount in wei
         signer = make_contract_wallet(self.app, self.app.pargs.contract)
-        underlying = Erc20Client(
-            self.app.rpc.url, contract_address=signer.functions["underlying"]().call()
-        )
-        amount_in_wei = int(self.app.pargs.amount * 10**underlying.decimals)
+        _, symbol, decimals = self.get_underlying(signer)
+        amount_in_wei = int(self.app.pargs.amount * 10**decimals)
         # Confirm
         if not self.app.pargs.force:
             print(
-                f"You are about to borrow {self.app.pargs.amount} {underlying.symbol} from the '{self.app.pargs.contract}' pool"
+                f"You are about to borrow {self.app.pargs.amount} {symbol} from the '{self.app.pargs.contract}' pool"
             )
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
         output = send_contract_tx(
-            self.app,
-            signer,
-            signer.functions["borrow"](amount_in_wei),
+            self.app, signer, signer.functions["borrow"](amount_in_wei)
         )
         render(self.app, output)
 
@@ -326,10 +407,19 @@ class CompoundV2Controller(Controller):
                 sleep(self.app.pargs.interval)
 
     def get_underlying(self, pool: BaseClient) -> Tuple[BaseClient, str, int]:
-        """Return underlying token client, symbol and decimals"""
-        token_client = make_erc20_wallet_from_address(
-            self.app, pool.functions["underlying"]().call()
-        )
+        """Return underlying token client, symbol and decimals.  For ETH pools,
+        the token client will be None."""
+
+        # Case of ETH pool
+        if not hasattr(pool.functions, "underlying"):
+            return None, "ETH", 18
+
+        # Case of ERC20 pool
+        underlying_address = pool.functions["underlying"]().call()
+        if hasattr(self.app.pargs, "signer"):
+            token_client = make_erc20_wallet_from_address(self.app, underlying_address)
+        else:
+            token_client = make_erc20_client_from_address(self.app, underlying_address)
         return (
             token_client,
             token_client.functions["symbol"]().call(),

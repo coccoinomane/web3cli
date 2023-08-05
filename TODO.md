@@ -1,19 +1,20 @@
 ### Top priority
 
-- Subscribe: immediate exit on ctrl-c
-- Fix usage message (still refers to `web3cli`)
-- Config: non-string support via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 chain list`
-- Config: non-string support in `config set`, e.g. `w3 config set populate_db false`
+- Make web3cli extensible
 
 ### To do
 
 - Tests: subscribe controller
+- Tests: compound-v2 controller
 - Tests: test get_signer() switch function
 - Ignore case in contract names, including tokens
-- Make web3cli extensible
 
 ### Backlog
 
+- Subscribe: immediate exit on ctrl-c
+- Fix usage message (still refers to `web3cli`)
+- Config: non-string support via env, e.g. `WEB3CLI_POPULATE_DB=0 w3 chain list`
+- Config: non-string support in `config set`, e.g. `w3 config set populate_db false`
 - Tests: approve helper
 - Command to import/resolve tokens from ethereum-lists
 - Tests: compound-v2 commands
