@@ -45,18 +45,22 @@ def init_and_attach_db(app: App) -> None:
     controllers can access it. If the database file does not exist,
     create it and optionally seed it"""
 
-    # Check that the db object and models are defined in the app meta
-    if not hasattr(app._meta, "db_instance"):
-        raise ValueError("You must define the db object in the app meta")
-    if not hasattr(app._meta, "db_models"):
-        raise ValueError("You must define the db models in the app meta")
+    # Continue only if db instance and models are defined in the app meta
+    if not hasattr(app._meta, "db_instance") or not hasattr(app._meta, "db_models"):
+        return
+
+    # Extend the app with the db instance and models
+    app.extend("db", app._meta.db_instance)
+    app.extend("models", app._meta.db_models)
 
     # Create the database and populate it if it does not exist
     db_path = get_db_filepath(app)
     do_populate = not isfile(db_path) and app.get_option("populate_db") == True
     if not isfile(db_path):
         app.log.debug("Creating database...")
-    app.extend("db", init_db(app._meta.db_instance, app._meta.db_models, db_path))
+    init_db(app.db, app.models, db_path)
+
+    # Populate database if needed
     if do_populate:
         populate_db()
 

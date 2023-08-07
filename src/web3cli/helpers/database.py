@@ -2,8 +2,6 @@ import os
 
 from web3cli.exceptions import Web3CliError
 from web3cli.framework.app import App
-from web3core.db import DB
-from web3core.models import MODELS
 
 
 def db_ready_or_raise(app: App) -> None:
@@ -30,7 +28,7 @@ def delete_db_file(app: App) -> bool:
     file = get_db_filepath(app)
     if os.path.isfile(file):
         try:
-            DB.close()
+            app.db.close()
         except:
             pass
         os.remove(file)
@@ -41,5 +39,5 @@ def delete_db_file(app: App) -> bool:
 def truncate_tables(app: App) -> None:
     """Empty all tables in the database"""
     db_ready_or_raise(app)
-    for model in MODELS:
+    for model in app.models:
         model.delete().execute()
