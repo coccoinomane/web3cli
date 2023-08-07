@@ -10,10 +10,8 @@ from genericpath import isfile
 from web3cli.framework.app import App
 from web3cli.helpers.config import update_setting_in_config_file
 from web3cli.helpers.database import get_db_filepath
-from web3core.db import DB
 from web3core.helpers.database import init_db
 from web3core.helpers.seed import populate_db
-from web3core.models import MODELS
 
 ####################
 # Register hooks
@@ -45,12 +43,20 @@ def post_argument_parsing(app: App) -> None:
 def init_and_attach_db(app: App) -> None:
     """Attach the production database to the app object, so that the
     controllers can access it. If the database file does not exist,
-    create it and seed it"""
+    create it and optionally seed it"""
+
+    # Check that the db object and models are defined in the app meta
+    if not hasattr(app._meta, "db_instance"):
+        raise ValueError("You must define the db object in the app meta")
+    if not hasattr(app._meta, "db_models"):
+        raise ValueError("You must define the db models in the app meta")
+
+    # Create the database and populate it if it does not exist
     db_path = get_db_filepath(app)
     do_populate = not isfile(db_path) and app.get_option("populate_db") == True
     if not isfile(db_path):
         app.log.debug("Creating database...")
-    app.extend("db", init_db(DB, MODELS, db_path))
+    app.extend("db", init_db(app._meta.db_instance, app._meta.db_models, db_path))
     if do_populate:
         populate_db()
 

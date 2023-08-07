@@ -33,7 +33,9 @@ from web3cli.controllers.tx_controller import TxController
 from web3cli.exceptions import Web3CliError
 from web3cli.framework.app import App
 from web3cli.helpers.args import override_arg
+from web3core.db import DB
 from web3core.exceptions import Web3CoreError
+from web3core.models import MODELS
 
 # Configuration defaults
 CONFIG = init_defaults("web3cli")
@@ -124,6 +126,10 @@ class Web3Cli(App):
             DebugController,
             CompoundV2Controller,
         ]
+
+        # database object & models
+        db_instance = DB
+        db_models = MODELS
 
         # extend the app with cement hook system
         hooks = [

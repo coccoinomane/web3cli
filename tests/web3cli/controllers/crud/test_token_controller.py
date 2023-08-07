@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import List
 
 import pytest
@@ -23,7 +24,7 @@ def test_token_balance(
     seed_local_token(app, TST)
     app.set_args(["token", "balance", "tst", "bob"]).run()
     data, output = app.last_rendered
-    assert type(data) is float
+    assert type(data) is Decimal
     assert data == bob_balance + amount / 10**18
 
 
