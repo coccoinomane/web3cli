@@ -16,6 +16,7 @@ class App(CementApp):
     def __init__(self, *args: Any, **kw: Any) -> None:
         """For mypy"""
         super().__init__(*args, **kw)
+        self.app_key: bytes
         self.log: Logger
         self.signer: Signer
         self.chain: Chain

@@ -15,8 +15,4 @@ class Controller(CementController):
         https://github.com/datafolklabs/cement/issues/599
         for more details"""
         super().__init__()
-        self.app = self.get_app()
-
-    def get_app(self) -> App:
-        """Get app object, with typing"""
-        return self.app
+        self.app: App
