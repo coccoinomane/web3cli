@@ -3,7 +3,7 @@ from __future__ import annotations
 from peewee import BlobField, TextField
 from web3 import Account
 
-from web3core.helpers.crypto import encrypt_string
+from web3core.helpers.crypto import decrypt_string, encrypt_string
 from web3core.models.base_model import BaseModel
 
 
@@ -34,9 +34,7 @@ class Signer(BaseModel):
         address = Account.from_key(key).address
         return Signer(name=name, address=address, key=encrypt_string(key, pwd))
 
-    @classmethod
-    def get_address(cls, name: str) -> str:
-        """Return the address of the signer with the given name; raise
-        error if the signer does not exist"""
-        signer = Signer.get_by_name_or_raise(name)
-        return signer.address
+    def get_private_key(self, pwd: bytes) -> str:
+        """Return the private key of this signer, decrypted with the given
+        password"""
+        return decrypt_string(self.key, pwd)

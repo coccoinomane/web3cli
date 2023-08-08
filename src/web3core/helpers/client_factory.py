@@ -4,7 +4,6 @@ from web3.types import ABI
 from web3client.base_client import BaseClient
 
 from web3core.exceptions import Web3CoreError
-from web3core.helpers.crypto import decrypt_string
 from web3core.models.chain import Chain
 from web3core.models.contract import Contract, ContractType
 from web3core.models.signer import Signer
@@ -49,7 +48,7 @@ def make_base_client(
             signer = Signer.get_by_name_or_raise(signer)
         if logger:
             logger(f"Using signer '{signer.name}' with address {signer.address}")
-        client.set_account(decrypt_string(signer.key, password))
+        client.set_account(signer.get_private_key(password))
     return client
 
 

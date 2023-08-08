@@ -37,13 +37,6 @@ class Address(BaseModel):
         because in that case it would mess up the address resolver"""
         return not cls.is_valid_address(name)
 
-    @classmethod
-    def get_address(cls, name: str) -> str:
-        """Return the address with the given name; raise error
-        if no such address is found"""
-        address = Address.get_by_name_or_raise(name)
-        return address.address
-
 
 @pre_save(sender=Address)
 def validate(model_class: Address, instance: Type[Address], created: bool) -> None:
