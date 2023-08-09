@@ -8,6 +8,7 @@ from tests.web3cli.main import Web3CliTest
 from web3cli.exceptions import Web3CliError
 from web3core.helpers.seed import seed_chains, seed_contracts
 from web3core.models.types import ChainFields, ContractFields
+from web3core.seeds.contracts import eth_contract_seeds
 
 
 @pytest.mark.local
@@ -124,12 +125,16 @@ def test_call_local_token_transfer(
 @pytest.mark.remote
 # Test calling the Uniswap Router V2 contract's getAmountsOut function
 # (2 arguments of which one is an array)
-def test_call_eth_uniswap_v2_get_amounts_out(
-    contracts: List[ContractFields], chains: List[ChainFields]
-) -> None:
+def test_call_eth_uniswap_v2_get_amounts_out(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)
-        seed_contracts(contracts)
+        seed_contracts(
+            [
+                eth_contract_seeds.uniswap_v2,
+                eth_contract_seeds.usdc,
+                eth_contract_seeds.usdt,
+            ]
+        )
         app.set_args(
             [
                 "call",
@@ -153,12 +158,10 @@ def test_call_eth_uniswap_v2_get_amounts_out(
 @pytest.mark.remote
 # Test calling the WETH contract's totalSupply function
 # (0 arguments)
-def test_call_eth_weth_total_supply(
-    contracts: List[ContractFields], chains: List[ChainFields]
-) -> None:
+def test_call_eth_weth_total_supply(chains: List[ChainFields]) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)
-        seed_contracts(contracts)
+        seed_contracts([eth_contract_seeds.weth])
         app.set_args(
             [
                 "call",
@@ -194,7 +197,7 @@ def test_call_eth_weth_total_supply_two_blocks_ago(
 
     with Web3CliTest() as app:
         seed_chains(chains)
-        seed_contracts(contracts)
+        seed_contracts([eth_contract_seeds.weth])
         app.set_args(
             [
                 "call",
@@ -218,7 +221,7 @@ def test_call_eth_weth_transfer_without_from_address(
 ) -> None:
     with Web3CliTest() as app:
         seed_chains(chains)
-        seed_contracts(contracts)
+        seed_contracts([eth_contract_seeds.weth])
         with pytest.raises(Web3CliError, match="Please specify a from address"):
             app.set_args(
                 [

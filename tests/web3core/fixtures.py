@@ -10,6 +10,7 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 from web3core.db import DB
 from web3core.helpers.database import init_db
 from web3core.models import MODELS
+from web3core.models.chain import Chain
 from web3core.models.types import AddressFields, ChainFields, ContractFields, TxFields
 from web3core.seeds import chain_seeds, contract_seeds
 
@@ -106,12 +107,24 @@ def txs() -> List[TxFields]:
 
 @pytest.fixture(scope="session")
 def chains() -> List[ChainFields]:
-    return chain_seeds.all
+    """Chains to seed the test DB with.  Keep the
+    number of chains low lest we slow down tests."""
+    return [chain_seeds.eth, chain_seeds.bnb, chain_seeds.era]
 
 
 @pytest.fixture(scope="session")
-def contracts() -> List[ContractFields]:
-    return contract_seeds.all
+def contracts(chains: List[Chain]) -> List[ContractFields]:
+    """List of contracts to seed the test DB with.  Keep the
+    number of contracts low lest we slow down tests."""
+    contracts = []
+    for chain in chains:
+        chain_contracts = [
+            contract
+            for contract in contract_seeds.all
+            if chain["name"] == contract["chain"]
+        ]
+        contracts += chain_contracts[:3]
+    return contracts
 
 
 @pytest.fixture(scope="session")
