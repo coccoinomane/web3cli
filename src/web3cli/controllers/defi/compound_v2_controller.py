@@ -44,7 +44,7 @@ class CompoundV2Controller(Controller):
     def borrowed(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
         token, symbol, decimals = self.get_underlying(pool)
-        amount = pool.functions["borrowBalanceCurrent"](
+        amount = pool.functions["borrowBalanceStored"](
             resolve_address(self.app.pargs.address)
         ).call()
         render(self.app, amount / decimal.Decimal(10**decimals))
@@ -60,7 +60,7 @@ class CompoundV2Controller(Controller):
     def total_borrow(self) -> None:
         pool = make_contract_client(self.app, self.app.pargs.contract)
         token, symbol, decimals = self.get_underlying(pool)
-        amount = pool.functions["totalBorrowsCurrent"]().call()
+        amount = pool.functions["totalBorrows"]().call()
         render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
@@ -81,7 +81,7 @@ class CompoundV2Controller(Controller):
         render(self.app, amount / decimal.Decimal(10**decimals))
 
     @ex(
-        help="Show total amount of collateral supplied to the given pool",
+        help="Show total amount of cTokens in existence for the given pool",
         arguments=[
             (["contract"], {"help": "Name of the pool contract"}),
             *args.chain_and_rpc(),
@@ -136,7 +136,7 @@ class CompoundV2Controller(Controller):
 
         # Allow to repay all debt
         if self.app.pargs.amount == 0:
-            amount_in_wei = signer.functions["borrowBalanceCurrent"](
+            amount_in_wei = signer.functions["borrowBalanceStored"](
                 signer.user_address
             ).call()
             amount = amount_in_wei / 10**decimals
@@ -341,17 +341,17 @@ class CompoundV2Controller(Controller):
         amount = self.app.pargs.amount
         amount_in_wei = int(amount * 10**underlying.decimals)
         # We must have at least 'amount' of both debt and borrow
-        debt_balance = signer.functions["borrowBalanceCurrent"](
+        debt_balance = signer.functions["borrowBalanceStored"](
             signer.user_address
         ).call()
         self.app.log.info(
-            f"Your current debt is {debt_balance/10**underlying.decimals} {underlying.symbol}"
+            f"Your debt is {debt_balance/10**underlying.decimals} {underlying.symbol}"
         )
         supply_balance = signer.functions["balanceOfUnderlying"](
             signer.user_address
         ).call()
         self.app.log.info(
-            f"Your current collateral is {supply_balance/10**underlying.decimals} {underlying.symbol}"
+            f"Your collateral is {supply_balance/10**underlying.decimals} {underlying.symbol}"
         )
         # Adjust amount
         if amount_in_wei > debt_balance or amount_in_wei > supply_balance:

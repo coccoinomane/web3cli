@@ -57,6 +57,31 @@ uniswap_v3: ContractFields = {
 }
 
 
+compound_v2_eth: ContractFields = {
+    "name": "compound_v2_eth",
+    "desc": "Compound V2: ETH market",
+    "type": "compound_v2_eth",
+    "address": "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",
+    "chain": "eth",
+}
+
+compound_v2_usdc: ContractFields = {
+    "name": "compound_v2_usdc",
+    "desc": "Compound V2: USDC market",
+    "type": "compound_v2_erc20",
+    "address": "0x39AA39c021dfbaE8faC545936693aC917d5E7563",
+    "chain": "eth",
+}
+
+compound_v2_comptroller_v7: ContractFields = {
+    "name": "compound_v2_comptroller_v7",
+    "desc": "Compound V2: Comptroller V7",
+    "type": "compound_v2_comptroller_v7",
+    "address": "0xBafE01ff935C7305907c33BF824352eE5979B526",
+    "chain": "eth",
+}
+
+
 all = [
     usdc,
     weth,
@@ -65,4 +90,7 @@ all = [
     uniswap_v2_factory,
     uniswap_v2_usdc_usdt,
     uniswap_v3,
+    compound_v2_eth,
+    compound_v2_usdc,
+    compound_v2_comptroller_v7,
 ]

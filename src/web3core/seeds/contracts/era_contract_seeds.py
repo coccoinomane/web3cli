@@ -26,7 +26,7 @@ weth: ContractFields = {
 
 neth: ContractFields = {
     "name": "neth",
-    "desc": "Eralend nETH pool",
+    "desc": "Eralend: ETH market",
     "type": "compound_v2_eth",
     "address": "0x1BbD33384869b30A323e15868Ce46013C82B86FB",
     "chain": "era",
@@ -34,7 +34,7 @@ neth: ContractFields = {
 
 nusdc: ContractFields = {
     "name": "nusdc",
-    "desc": "Eralend nUSDC pool",
+    "desc": "Eralend: USDC market",
     "type": "compound_v2_erc20",
     "address": "0x1181D7BE04D80A8aE096641Ee1A87f7D557c6aeb",
     "chain": "era",
@@ -42,7 +42,7 @@ nusdc: ContractFields = {
 
 rfeth: ContractFields = {
     "name": "rfeth",
-    "desc": "ReactorFusion rfETH pool",
+    "desc": "ReactorFusion: ETH market",
     "type": "compound_v2_eth",
     "address": "0xC5db68F30D21cBe0C9Eac7BE5eA83468d69297e6",
     "chain": "era",
@@ -50,7 +50,7 @@ rfeth: ContractFields = {
 
 rfusdc: ContractFields = {
     "name": "rfusdc",
-    "desc": "ReactorFusion rfUSDC pool",
+    "desc": "ReactorFusion: USDC market",
     "type": "compound_v2_erc20",
     "address": "0x04e9Db37d8EA0760072e1aCE3F2A219988Fdac29",
     "chain": "era",
