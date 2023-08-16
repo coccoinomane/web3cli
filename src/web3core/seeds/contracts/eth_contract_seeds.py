@@ -73,11 +73,11 @@ compound_v2_usdc: ContractFields = {
     "chain": "eth",
 }
 
-compound_v2_comptroller_v7: ContractFields = {
-    "name": "compound_v2_comptroller_v7",
-    "desc": "Compound V2: Comptroller V7",
+compound_v2_comptroller: ContractFields = {
+    "name": "compound_v2_comptroller",
+    "desc": "Compound V2: Comptroller Proxy",
     "type": "compound_v2_comptroller_v7",
-    "address": "0xBafE01ff935C7305907c33BF824352eE5979B526",
+    "address": "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B",
     "chain": "eth",
 }
 
@@ -92,5 +92,5 @@ all = [
     uniswap_v3,
     compound_v2_eth,
     compound_v2_usdc,
-    compound_v2_comptroller_v7,
+    compound_v2_comptroller,
 ]
