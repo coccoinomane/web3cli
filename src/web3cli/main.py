@@ -2,9 +2,10 @@ import configparser
 import os
 from typing import Callable
 
+import peewee
 from cement import init_defaults
 from cement.core.exc import CaughtSignal
-from web3 import exceptions as web3_exceptions
+from web3.exceptions import Web3Exception
 
 from web3cli import hooks
 from web3cli.controllers.abi_controller import AbiController
@@ -146,7 +147,7 @@ def main(filter_app: Callable[[App], App] = None) -> None:
             app.run()
 
         except AssertionError as e:
-            print("AssertionError > %s" % e.args[0])
+            print("AssertionError > %s" % e)
             app.exit_code = 1
 
             if app.debug is True:
@@ -159,6 +160,7 @@ def main(filter_app: Callable[[App], App] = None) -> None:
             Web3CoreError,
             configparser.NoOptionError,
             NotImplementedError,
+            peewee.PeeweeException,
         ) as e:
             print("Web3CliError > %s" % e)
             app.exit_code = 1
@@ -168,35 +170,8 @@ def main(filter_app: Callable[[App], App] = None) -> None:
 
                 traceback.print_exc()
 
-        except (
-            web3_exceptions.BadFunctionCallOutput,
-            web3_exceptions.BlockNumberOutofRange,
-            web3_exceptions.CannotHandleRequest,
-            web3_exceptions.InvalidAddress,
-            web3_exceptions.NameNotFound,
-            web3_exceptions.StaleBlockchain,
-            web3_exceptions.MismatchedABI,
-            web3_exceptions.ABIEventFunctionNotFound,
-            web3_exceptions.ABIFunctionNotFound,
-            web3_exceptions.FallbackNotFound,
-            web3_exceptions.ValidationError,
-            web3_exceptions.ExtraDataLengthError,
-            web3_exceptions.NoABIFunctionsFound,
-            web3_exceptions.NoABIFound,
-            web3_exceptions.NoABIEventsFound,
-            web3_exceptions.InsufficientData,
-            web3_exceptions.TimeExhausted,
-            web3_exceptions.TransactionNotFound,
-            web3_exceptions.BlockNotFound,
-            web3_exceptions.LogTopicError,
-            web3_exceptions.InvalidEventABI,
-            web3_exceptions.ContractLogicError,
-            web3_exceptions.InvalidTransaction,
-            web3_exceptions.TransactionTypeMismatch,
-            web3_exceptions.BadResponseFormat,
-            web3_exceptions.ContractCustomError,
-        ) as e:
-            print("web3.py error > %s" % e.args[0])
+        except Web3Exception as e:
+            print("web3.py error > %s" % e)
             app.exit_code = 1
 
             if app.debug is True:
