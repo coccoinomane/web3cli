@@ -1,5 +1,6 @@
 ### Top priority
 
+- Store private keys as keyfiles in signer table
 - Make web3cli extensible
 
 ### To do
