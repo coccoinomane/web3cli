@@ -1,3 +1,4 @@
+import binascii
 from pprint import pformat
 
 from cement import ex
@@ -108,3 +109,30 @@ class MiscController(Controller):
             )
         base_fee_in_gwei = Web3.from_wei(base_fee_in_wei, "gwei")
         render(self.app, base_fee_in_gwei)
+
+    @ex(
+        help="Return the Keccak-256 hash of the given text",
+        arguments=[(["text"], {"action": "store"})],
+    )
+    def keccak_text(
+        self,
+    ) -> None:
+        keccak = Web3.keccak(text=self.app.pargs.text).hex()
+        if keccak.startswith("0x"):
+            keccak = keccak[2:]
+        render(self.app, keccak)
+
+    @ex(
+        help="Return the Keccak-256 hash of the given hex string",
+        arguments=[(["hexstring"], {"action": "store"})],
+    )
+    def keccak_hex(
+        self,
+    ) -> None:
+        try:
+            keccak = Web3.keccak(hexstr=self.app.pargs.hexstring).hex()
+        except binascii.Error as e:
+            raise Web3CliError(f"Not a hex string: {e}")
+        if keccak.startswith("0x"):
+            keccak = keccak[2:]
+        render(self.app, keccak)

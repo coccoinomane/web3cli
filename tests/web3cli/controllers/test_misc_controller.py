@@ -8,6 +8,7 @@ from web3 import Web3
 
 import ape
 from tests.web3cli.main import Web3CliTest
+from web3cli.exceptions import Web3CliError
 from web3core.helpers.seed import seed_signers
 
 
@@ -175,3 +176,59 @@ def test_base_fee(app: Web3CliTest, is_eip1559: bool) -> None:
     data, output = app.last_rendered
     assert type(data) in (decimal.Decimal, int, float)
     assert data >= 0
+
+
+@pytest.mark.parametrize(
+    ["input", "expected"],
+    [
+        (
+            "Hello world!",
+            "ecd0e108a98e192af1d2c25055f4e3bed784b5c877204e73219a5203251feaab",
+        ),
+        (
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam pulvinar lacus erat, et sollicitudin purus rutrum sed. Aliquam pulvinar nunc nec sagittis sagittis. Nunc efficitur lacus urna, sed dapibus lacus varius id. Nam laoreet convallis nisl, ut lacinia sem congue eu. Phasellus eu nisi in lectus lobortis viverra a at diam. Nulla dolor nisl, mollis efficitur venenatis in, elementum consequat quam. Sed a euismod justo, quis maximus velit. Maecenas varius augue dolor, sit amet elementum lacus pretium vitae. Fusce egestas condimentum quam eget elementum. Suspendisse vulputate ut urna a pretium. Nunc semper a sem fermentum dapibus.",
+            "804eaa4641d030cfc532d0758a6b6d376c69ec015b4482bf34bd01507fe90331",
+        ),
+        (
+            "I will copiously donate to coccoinomane",
+            "a81899236a0e6c4afcb165399e8054b5a70e97e5f688765b55c98902b5277c7a",
+        ),
+    ],
+)
+def test_keccak_text(input: str, expected: str) -> None:
+    with Web3CliTest() as app:
+        app.set_args(["keccak-text", input]).run()
+        data, output = app.last_rendered
+        assert type(data) is str
+        assert data == expected
+
+
+@pytest.mark.parametrize(
+    ["input", "expected"],
+    [
+        (
+            "ecd0e108a98e192af1d2c25055f4e3bed784b5c877204e73219a5203251feaabecd0e108a98e192af1d2c25055f4e3bed784b5c877204e73219a5203251feaab",
+            "b495b1154ef1b26093ba688283e0c4467f41aeeaa209efb98f4ec311872091c9",
+        ),
+        (
+            "804eaa4641d030cfc532d0758a6b6d376c69ec015b4482bf34bd01507fe90331",
+            "c2e7a8dc1f6df00a9960461480c0fa110930762bb76599f1abaf7e9f4cb8ede4",
+        ),
+        (
+            "a81899236a0e6c4afcb165399e8054b5a70e97e5f688765b",
+            "d0fb4524b61dbfd4bec6ef4c9fb2bc2b9d66056dae4e7f99cf6148a2a6a591d7",
+        ),
+    ],
+)
+def test_keccak_hex(input: str, expected: str) -> None:
+    with Web3CliTest() as app:
+        app.set_args(["keccak-hex", input]).run()
+        data, output = app.last_rendered
+        assert type(data) is str
+        assert data == expected
+
+
+def test_keccak_hex_not_a_hexstring() -> None:
+    with Web3CliTest() as app:
+        with pytest.raises(Web3CliError, match="Not a hex string"):
+            app.set_args(["keccak-hex", "qwerty"]).run()

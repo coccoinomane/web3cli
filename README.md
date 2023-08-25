@@ -104,6 +104,12 @@ Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cl
    w3 sign 'Hello world!'
    ```
 
+- Get Keccak256 hashes starting from a text or a hex-string:
+   ```bash
+   w3 keccak-text 'Hello world!'
+   w3 keccak-hex 'b495b1154ef1b2'
+   ```
+
 # Advanced examples
 
 - Send coins or tokens to any address:
