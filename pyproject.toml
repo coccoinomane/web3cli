@@ -8,7 +8,7 @@ authors = [
 readme = "README.md"
 keywords = ["web3", "w3", "cli", "evm", "blockchain", "ethereum", "binance", "avalanche"]
 license = {text = "MIT"}
-requires-python = ">=3.9,<=3.11"
+requires-python = ">=3.9"
 dependencies = [
     "cement>=3.0.8",
     "cement[colorlog]>=3.0.8",
@@ -16,7 +16,7 @@ dependencies = [
     "cement[yaml]>=3.0.8",
     "cement[tabulate]>=3.0.8",
     "web3>=6.0.0",
-    "web3client>=1.1.17",
+    "web3client>=1.2.4",
     "peewee>=3.15.3",
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
