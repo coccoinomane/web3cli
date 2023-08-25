@@ -57,7 +57,7 @@ Soon:
 
 # Install
 
-Make sure you have at least Python 3.7 installed, then run:
+Make sure you have at least Python 3.9 installed, then run:
 
 ```bash
 pip3 install -U web3cli
