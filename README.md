@@ -63,7 +63,19 @@ Make sure you have at least Python 3.9 installed, then run:
 pip3 install -U web3cli
 ```
 
-Windows user? [Here's a tutorial for you](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)!
+The same command will also upgrade web3cli to the latest version.
+
+*Windows user?* [Here's a tutorial for you](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AA%9F-Run-web3cli-on-Windows)!
+
+## Install via pipx
+
+Fan of isolated environments?  Install web3cli via [pipx](https://pypa.github.io/pipx/):
+
+```bash
+pipx install web3cli
+```
+
+To upgrade web3cli, run `pipx upgrade web3cli`.
 
 # Simple examples
 

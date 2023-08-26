@@ -1,6 +1,5 @@
 ### Top priority
 
-- Make web3cli installable via pipx
 - Tox win32 tests
 
 ### To do
