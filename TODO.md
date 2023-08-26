@@ -1,10 +1,12 @@
 ### Top priority
 
-- Store private keys as keyfiles in signer table
-- Make web3cli extensible
+- Make web3cli installable via pipx
+- Tox win32 tests
 
 ### To do
 
+- Make web3cli extensible
+- Store private keys as keyfiles in signer table
 - Tests: subscribe controller
 - Tests: compound-v2 controller
 - Tests: test get_signer() switch function
