@@ -60,5 +60,7 @@ def render(app: App, data: Any) -> None:
         render_web3py(app, data)
     elif type(data) in [dict, list]:
         render_json(app, data)
+    elif type(data) in [set]:
+        render_json(app, list(data))
     else:  # strings, booleans and everything else
         app.print(data)
