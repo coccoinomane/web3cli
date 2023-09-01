@@ -232,3 +232,8 @@ def w3erat() -> None:
 def w3gno() -> None:
     """Shorthand command to use gnosis chain"""
     main(lambda a: override_arg(a, "chain", "gno"))
+
+
+def w3op() -> None:
+    """Shorthand command to use optimism OP chain"""
+    main(lambda a: override_arg(a, "chain", "op"))

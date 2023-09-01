@@ -135,6 +135,26 @@ gno: ChainFields = {
     ],
 }
 
+op: ChainFields = {
+    "name": "op",
+    "desc": "Optimism OP Mainnet",
+    "chain_id": 10,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://mainnet.optimism.io",
+        },
+        {
+            "url": "https://rpc.ankr.com/optimism",
+        },
+        {
+            "url": "https://rpc.ankr.com/gnosis",
+        },
+    ],
+}
+
 
 ganache: ChainFields = {
     "name": "ganache",
@@ -174,6 +194,7 @@ all: List[ChainFields] = [
     era,
     erat,
     gno,
+    op,
     ganache,
     anvil,
 ]

@@ -9,6 +9,7 @@ from web3core.seeds.contracts import (
     erat_contract_seeds,
     eth_contract_seeds,
     gno_contract_seeds,
+    op_contract_seeds,
 )
 
 all: List[ContractFields] = (
@@ -19,4 +20,5 @@ all: List[ContractFields] = (
     + era_contract_seeds.all
     + erat_contract_seeds.all
     + gno_contract_seeds.all
+    + op_contract_seeds.all
 )
