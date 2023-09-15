@@ -88,6 +88,10 @@ includes = ["src"]
 [tool.black]
 line-length = 88
 
+[tool.setuptools.package-data]
+"web3cli" = ["py.typed"]
+"web3core" = ["py.typed"]
+
 [tool.mypy]
 check_untyped_defs = true
 disallow_any_generics = true
