@@ -1,5 +1,4 @@
 {
-  "python.formatting.provider": "black",
   "editor.formatOnSave": true,
   "[solidity]": {
     "editor.formatOnSave": false
@@ -14,10 +13,8 @@
     "pypi-*/": true
   },
   "python.analysis.typeCheckingMode": "off",
-  "python.linting.mypyEnabled": true,
   "python.languageServer": "Pylance",
   "python.analysis.autoImportCompletions": true,
-  "python.linting.enabled": true,
   "rewrap.autoWrap.enabled": true,
   "rewrap.wrappingColumn": 80,
   "python.testing.pytestArgs": [
@@ -25,5 +22,14 @@
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
-  "solidity.enabledAsYouTypeCompilationErrorCheck": false
+  "solidity.enabledAsYouTypeCompilationErrorCheck": false,
+  "black-formatter.importStrategy": "fromEnvironment",
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "mypy-type-checker.path": [
+    ".venv/bin/mypy"
+  ],
+  "mypy-type-checker.interpreter": [
+    ".venv/bin/python"
+  ]
 }
