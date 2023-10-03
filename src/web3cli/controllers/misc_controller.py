@@ -86,7 +86,7 @@ class MiscController(Controller):
         render(self.app, pformat(signed_message._asdict()))
 
     @ex(
-        help="Get the current gas price in gwei by calling the eth_gasPrice method. For EIP1559 chains, this should return the max priority fee per gas.",
+        help="Get the current gas price in gwei by calling the eth_gasPrice method.  For EIP1559 chains, use `w3 base-fee`.",
         arguments=[*args.chain_and_rpc()],
     )
     def gas_price(self) -> None:
