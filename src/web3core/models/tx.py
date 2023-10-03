@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import Type
 
-from peewee import BigIntegerField, DateTimeField, TextField
+from peewee import BigIntegerField, DateTimeField, IntegerField, TextField
 from playhouse.signals import pre_save
 
 from web3core.exceptions import AddressIsInvalid, TxIsInvalid, TxNotFound
@@ -18,16 +18,17 @@ class Tx(TimestampsModel):
         table_name = "txs"
 
     hash = TextField(unique=True)
+    desc = TextField(null=True)
     chain = TextField()
     to = TextField()
     from_ = TextField(column_name="from")
     value = TextField(null=True)
     gas = BigIntegerField(null=True)
-    gas_price = TextField(null=True)
-    # timestamp = BigIntegerField(null=True)
-    # block = BigIntegerField(null=True)
-    desc = TextField(null=True)
-    data = TextField(null=True)
+    gas_price = TextField(null=True)  # legacy
+    max_fee_per_gas = TextField(null=True)
+    nonce = BigIntegerField(null=True)
+    type_ = IntegerField(null=True)
+    data = TextField(null=True, column_name="type")
     receipt = TextField(null=True)
     created_at = DateTimeField(null=True)
     updated_at = DateTimeField(null=True)

@@ -1,6 +1,6 @@
 [project]
 name = "web3cli"
-version = "1.1.20"
+version = "1.1.21"
 description = "Interact with blockchains and smart contracts using the command line"
 authors = [
     {name = "coccoinomane", email = "coccoinomane@gmail.com"},
@@ -21,7 +21,7 @@ dependencies = [
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
     "eth-account>=0.8.0",
-]
+]   
 
 [tool.pdm.dev-dependencies]
 dev = [
