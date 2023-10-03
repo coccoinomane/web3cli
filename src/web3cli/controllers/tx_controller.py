@@ -48,7 +48,7 @@ class TxController(Controller):
         arguments=[(["raw_tx"], {"help": "Raw transaction to decode in hex format"})],
         aliases=["parse-raw-tx"],
     )
-    def decode_raw_tx(self) -> None:
+    def parse_raw(self) -> None:
         decoded_tx = parse_raw_tx(self.app.pargs.raw_tx)
         render(self.app, AttributeDict(decoded_tx))
 
