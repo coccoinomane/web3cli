@@ -16,7 +16,7 @@ dependencies = [
     "cement[yaml]>=3.0.8",
     "cement[tabulate]>=3.0.8",
     "web3>=6.0.0",
-    "web3client>=1.2.5",
+    "web3client>=1.2.10",
     "peewee>=3.15.3",
     "cryptography>=38.0.3",
     "ruamel.yaml>=0.17.21",
@@ -61,6 +61,10 @@ docker = "pdm run clean && docker build -t web3cli:latest ."
 
 release = "gh release create v{args} dist/web3cli-{args}.tar.gz dist/web3cli-{args}-py3-none-any.whl --generate-notes"
 
+[tool.pdm.build]
+includes = ["src"]
+
+
 [project.scripts]
 w3 = "web3cli.main:main"
 w3eth = "web3cli.main:w3eth"
@@ -81,9 +85,6 @@ repository = "https://github.com/coccoinomane/web3cli"
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
 build-backend = "pdm.pep517.api"
-
-[tool.pdm.build]
-includes = ["src"]
 
 [tool.black]
 line-length = 88

@@ -4,7 +4,8 @@
 
 ### To do
 
-- Make web3cli extensible
+- Make web3cli extensible >
+  https://snakecharmers.ethereum.org/web3-py-patterns-external-modules/ ?
 - Store private keys as keyfiles in signer table
 - Tests: subscribe controller
 - Tests: compound-v2 controller

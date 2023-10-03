@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:2f1e62a072469161c9eb218502b593a8f6afe3248926ce6e1823d6c8d372fbfe"
+content_hash = "sha256:d08e485ceaff544bb68dbf84b72e69091b847783db85036ce6b536b702254aba"
 
 [[package]]
 name = "aiohttp"
@@ -2972,20 +2972,19 @@ files = [
 
 [[package]]
 name = "web3client"
-version = "1.2.5"
+version = "1.2.10"
 requires_python = ">=3.9"
+editable = true
+path = "/Users/coccoinomane/code/web3/web3client"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
     "eth-typing>=2.3.0",
     "pre-commit>=2.21.0",
+    "py-evm>=0.7.0a4",
     "setuptools>=67.2.0",
     "typing-extensions>=4.4.0",
     "web3>=6.0.0",
     "websockets>=10.0",
-]
-files = [
-    {file = "web3client-1.2.5-py3-none-any.whl", hash = "sha256:86bd919ef65622cf64cb1effec8dd70f0950c4ae39cc2a4176affe68bda2a2e7"},
-    {file = "web3client-1.2.5.tar.gz", hash = "sha256:a4d74c0467b65b26855422e0306fb9ba346322b3e9f58b94d155c01b63247bd8"},
 ]
 
 [[package]]
