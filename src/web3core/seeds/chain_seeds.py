@@ -99,14 +99,14 @@ gno: ChainFields = {
 
 matic: ChainFields = {
     "name": "matic",
-    "desc": "Polygon Mainnet",
+    "desc": "Polygon POS Mainnet",
     "chain_id": 137,
     "coin": "MATIC",
     "tx_type": 1,
     "middlewares": "geth_poa_middleware",
     "rpcs": [
         {
-            "url": "https://polygon-rpc.com/",
+            "url": "https://polygon-rpc.com",
         }
     ],
 }
@@ -180,7 +180,7 @@ scroll: ChainFields = {
     "chain_id": 534352,
     "coin": "ETH",
     "tx_type": 2,
-    "middlewares": "",
+    "middlewares": "geth_poa_middleware",
     "rpcs": [
         {
             "url": "https://mainnet-rpc.scroll.io",
