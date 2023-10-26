@@ -48,6 +48,7 @@ w3era = {cmd = "w3era", help = "Run the CLI in dev mode, on zkSync Era chain"}
 w3erat = {cmd = "w3erat", help = "Run the CLI in dev mode, on zkSync Era testnet chain"}
 w3gno = {cmd = "w3gno", help = "Run the CLI in dev mode, on Gnosis (xDAI) chain"}
 w3op = {cmd = "w3op", help = "Run the CLI in dev mode, on Optimism OP chain"}
+w3scroll = {cmd = "w3scroll", help = "Run the CLI in dev mode, on Scroll ZK chain"}
 
 test = "ape test tests --network ::foundry"
 test_verbose = "ape test tests -s --network ::foundry"
@@ -77,6 +78,7 @@ w3era = "web3cli.main:w3era"
 w3erat = "web3cli.main:w3erat"
 w3gno = "web3cli.main:w3gno"
 w3op = "web3cli.main:w3op"
+w3scroll = "web3cli.main:w3scroll"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

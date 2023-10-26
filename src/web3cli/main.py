@@ -237,3 +237,8 @@ def w3gno() -> None:
 def w3op() -> None:
     """Shorthand command to use optimism OP chain"""
     main(lambda a: override_arg(a, "chain", "op"))
+
+
+def w3scroll() -> None:
+    """Shorthand command to use Scroll ZK chain"""
+    main(lambda a: override_arg(a, "chain", "scroll"))

@@ -2,6 +2,14 @@ from typing import List
 
 from web3core.models.types import ChainFields
 
+"""
+  _      _      ___   _             _
+ | |    / |    / __| | |_    __ _  (_)  _ _    ___
+ | |__  | |   | (__  | ' \  / _` | | | | ' \  (_-<
+ |____| |_|    \___| |_||_| \__,_| |_| |_||_| /__/
+
+"""
+
 eth: ChainFields = {
     "name": "eth",
     "desc": "Ethereum Mainnet",
@@ -44,6 +52,51 @@ avax: ChainFields = {
     ],
 }
 
+cro: ChainFields = {
+    "name": "cro",
+    "desc": "Cronos Mainnet Beta",
+    "chain_id": 25,
+    "coin": "CRO",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://evm.cronos.org",
+        }
+    ],
+}
+
+
+gno: ChainFields = {
+    "name": "gno",
+    "desc": "Gnosis",
+    "chain_id": 100,
+    "coin": "xDAI",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://rpc.gnosischain.com/",
+        },
+        {
+            "url": "https://rpc.gnosis.gateway.fm",
+        },
+        {
+            "url": "https://rpc.ankr.com/gnosis",
+        },
+    ],
+}
+
+
+"""
+  _      ___     ___   _             _
+ | |    |_  )   / __| | |_    __ _  (_)  _ _    ___
+ | |__   / /   | (__  | ' \  / _` | | | | ' \  (_-<
+ |____| /___|   \___| |_||_| \__,_| |_| |_||_| /__/
+
+"""
+
+
 matic: ChainFields = {
     "name": "matic",
     "desc": "Polygon Mainnet",
@@ -58,19 +111,6 @@ matic: ChainFields = {
     ],
 }
 
-cro: ChainFields = {
-    "name": "cro",
-    "desc": "Cronos Mainnet Beta",
-    "chain_id": 25,
-    "coin": "CRO",
-    "tx_type": 2,
-    "middlewares": "",
-    "rpcs": [
-        {
-            "url": "https://evm.cronos.org",
-        }
-    ],
-}
 
 arb: ChainFields = {
     "name": "arb",
@@ -114,27 +154,6 @@ erat: ChainFields = {
     ],
 }
 
-
-gno: ChainFields = {
-    "name": "gno",
-    "desc": "Gnosis",
-    "chain_id": 100,
-    "coin": "xDAI",
-    "tx_type": 2,
-    "middlewares": "",
-    "rpcs": [
-        {
-            "url": "https://rpc.gnosischain.com/",
-        },
-        {
-            "url": "https://rpc.gnosis.gateway.fm",
-        },
-        {
-            "url": "https://rpc.ankr.com/gnosis",
-        },
-    ],
-}
-
 op: ChainFields = {
     "name": "op",
     "desc": "Optimism OP Mainnet",
@@ -155,6 +174,30 @@ op: ChainFields = {
     ],
 }
 
+scroll: ChainFields = {
+    "name": "scroll",
+    "desc": "Scroll Mainnet",
+    "chain_id": 534352,
+    "coin": "ETH",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://mainnet-rpc.scroll.io",
+        },
+        {
+            "url": "https://rpc.ankr.com/scroll",
+        },
+    ],
+}
+
+"""
+  _                        _         _             _
+ | |     ___   __   __ _  | |   __  | |_    __ _  (_)  _ _    ___
+ | |__  / _ \ / _| / _` | | |  / _| | ' \  / _` | | | | ' \  (_-<
+ |____| \___/ \__| \__,_| |_|  \__| |_||_| \__,_| |_| |_||_| /__/
+
+"""
 
 ganache: ChainFields = {
     "name": "ganache",
@@ -185,16 +228,20 @@ anvil: ChainFields = {
 }
 
 all: List[ChainFields] = [
+    # L1s
     eth,
     bnb,
     avax,
-    matic,
     cro,
+    gno,
+    # L2s
+    matic,
     arb,
     era,
     erat,
-    gno,
     op,
+    scroll,
+    # Local
     ganache,
     anvil,
 ]
