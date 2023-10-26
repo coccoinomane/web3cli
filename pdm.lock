@@ -3,10 +3,9 @@
 
 [metadata]
 groups = ["default", "dev"]
-cross_platform = true
-static_urls = false
-lock_version = "4.3"
-content_hash = "sha256:bd55c4fae0d1bf415c1676607ea5adc36df07e32b0f1cf53152dc0fbb3d1ef65"
+strategy = ["cross_platform"]
+lock_version = "4.4"
+content_hash = "sha256:6fd20c3191aeed49aff5092acc9031b15bb5ac3375e82cf1494555d4eeb551fb"
 
 [[package]]
 name = "aiohttp"
@@ -2972,7 +2971,7 @@ files = [
 
 [[package]]
 name = "web3client"
-version = "1.2.10"
+version = "1.3.3"
 requires_python = ">=3.9"
 summary = "Batteries-included client to interact with blockchains and smart contracts"
 dependencies = [
@@ -2985,8 +2984,8 @@ dependencies = [
     "websockets>=10.0",
 ]
 files = [
-    {file = "web3client-1.2.10-py3-none-any.whl", hash = "sha256:1bdac523f02db84f951859b3f0f31233070cda8d62d112b5e15df6c5034487e4"},
-    {file = "web3client-1.2.10.tar.gz", hash = "sha256:987986c660c1f78c51e59ec666f90d2ffec87e82a5ebc637813ab087486a626a"},
+    {file = "web3client-1.3.3-py3-none-any.whl", hash = "sha256:f6c28c3e871ca18e3c1efb105d5dbbc2158703db9b007bb24cf526e398fe6c2c"},
+    {file = "web3client-1.3.3.tar.gz", hash = "sha256:2eb6d17286a370c98bca245e954c3f693b57774c23d66d64bd8b7806c6a5f6ee"},
 ]
 
 [[package]]
