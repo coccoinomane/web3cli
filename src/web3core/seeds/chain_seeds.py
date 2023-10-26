@@ -179,7 +179,7 @@ scroll: ChainFields = {
     "desc": "Scroll Mainnet",
     "chain_id": 534352,
     "coin": "ETH",
-    "tx_type": 2,
+    "tx_type": 1,
     "middlewares": "geth_poa_middleware",
     "rpcs": [
         {
