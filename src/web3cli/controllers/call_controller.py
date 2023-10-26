@@ -37,6 +37,7 @@ class CallController(Controller):
                     "help": "From address.  Needed when simulating write operations, e.g. a swap or a token transfer.",
                 },
             ),
+            (["--value"], {"help": "Send some value, in wei", "type": int}),
             *args.chain_and_rpc(),
         ],
     )
@@ -73,11 +74,13 @@ class CallController(Controller):
             allow_exp_notation=True,
         )
 
+        # Transaction base args
+        tx_args = {}
+        if from_address:
+            tx_args["from"] = from_address
+        if self.app.pargs.value:
+            tx_args["value"] = self.app.pargs.value
+
         # Call the function
-        if from_address is None:
-            result = function(*function_args).call(block_identifier=block)
-        else:  # from address needed
-            result = function(*function_args).call(
-                {"from": from_address}, block_identifier=block
-            )
+        result = function(*function_args).call(tx_args, block_identifier=block)
         render(self.app, result)

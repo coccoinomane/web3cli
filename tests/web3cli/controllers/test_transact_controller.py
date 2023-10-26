@@ -1,6 +1,7 @@
 from typing import Any, List
 
 import pytest
+from web3.exceptions import Web3ValidationError
 
 import ape
 from tests.seed import seed_local_token
@@ -368,3 +369,34 @@ def test_transact_call_with_gas_limit(
     assert "gas" in data
     assert type(data["gas"]) is int
     assert data["gas"] == gas_limit
+
+
+@pytest.mark.local
+# Test that the value is correctly passed to the transaction
+def test_transact_call_with_value(
+    app: Web3CliTest,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+) -> None:
+    seed_local_token(app, TST)
+    value = 10**16
+    with pytest.raises(
+        Web3ValidationError, match="Please ensure that transaction's value is 0"
+    ):
+        app.set_args(
+            [
+                "transact",
+                "tst",
+                "transfer",
+                "bob",
+                "1e18",
+                "--value",
+                str(value),
+                "--return",
+                "data",
+                "--signer",
+                "alice",
+                "--force",
+            ]
+        ).run()

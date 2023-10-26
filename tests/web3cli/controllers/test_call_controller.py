@@ -1,6 +1,7 @@
 from typing import List
 
 import pytest
+from web3.exceptions import Web3ValidationError
 
 import ape
 from tests.seed import seed_local_token
@@ -120,6 +121,34 @@ def test_call_local_token_transfer(
     print(data)
     assert type(data) is bool
     assert data == True
+
+
+@pytest.mark.local
+# Test that sending value with a token trasfer is not allowed
+def test_call_local_token_transfer_with_value(
+    app: Web3CliTest,
+    TST: ape.contracts.ContractInstance,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+) -> None:
+    seed_local_token(app, TST)
+    value = 10**16
+    with pytest.raises(
+        Web3ValidationError, match="Please ensure that transaction's value is 0"
+    ):
+        app.set_args(
+            [
+                "call",
+                "tst",
+                "transfer",
+                "bob",
+                "1e18",
+                "--from",
+                "alice",
+                "--value",
+                str(value),
+            ]
+        ).run()
 
 
 @pytest.mark.remote

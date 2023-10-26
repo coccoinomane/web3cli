@@ -30,6 +30,7 @@ class TransactController(Controller):
             (["contract"], {"action": "store"}),
             (["function"], {"action": "store"}),
             (["args"], {"action": "store", "nargs": "*"}),
+            (["--value"], {"help": "Send some value, in wei", "type": int}),
             *args.tx_args(),
             *args.chain_and_rpc(),
             *args.signer_and_gas(),
@@ -62,6 +63,11 @@ class TransactController(Controller):
                 print(f"  {input_names[i]}: {arg}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
-        output = send_contract_tx(self.app, client, function(*function_args))
+        output = send_contract_tx(
+            self.app,
+            client,
+            function(*function_args),
+            value_in_wei=self.app.pargs.value,
+        )
         # Print output
         render_web3py(self.app, output)
