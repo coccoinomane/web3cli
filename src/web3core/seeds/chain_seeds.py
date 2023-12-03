@@ -191,6 +191,20 @@ scroll: ChainFields = {
     ],
 }
 
+base: ChainFields = {
+    "name": "base",
+    "desc": "Base Mainnet",
+    "chain_id": 8453,
+    "coin": "ETH",
+    "tx_type": 1,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://mainnet.base.org",
+        }
+    ],
+}
+
 """
   _                        _         _             _
  | |     ___   __   __ _  | |   __  | |_    __ _  (_)  _ _    ___
@@ -241,6 +255,7 @@ all: List[ChainFields] = [
     erat,
     op,
     scroll,
+    base,
     # Local
     ganache,
     anvil,

@@ -4,6 +4,7 @@ from web3core.models.types import ContractFields
 from web3core.seeds.contracts import (
     arb_contract_seeds,
     avax_contract_seeds,
+    base_contract_seeds,
     bnb_contract_seeds,
     era_contract_seeds,
     erat_contract_seeds,
@@ -23,4 +24,5 @@ all: List[ContractFields] = (
     + gno_contract_seeds.all
     + op_contract_seeds.all
     + scroll_contract_seeds.all
+    + base_contract_seeds.all
 )

@@ -242,3 +242,8 @@ def w3op() -> None:
 def w3scroll() -> None:
     """Shorthand command to use Scroll ZK chain"""
     main(lambda a: override_arg(a, "chain", "scroll"))
+
+
+def w3base() -> None:
+    """Shorthand command to use Base chain"""
+    main(lambda a: override_arg(a, "chain", "base"))
