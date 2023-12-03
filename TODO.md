@@ -1,6 +1,7 @@
 ### Top priority
 
 - Tox win32 tests
+- Test block-time
 
 ### To do
 

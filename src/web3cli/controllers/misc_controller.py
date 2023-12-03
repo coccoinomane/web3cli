@@ -1,4 +1,5 @@
 import binascii
+from datetime import datetime
 from pprint import pformat
 
 from cement import ex
@@ -66,13 +67,37 @@ class MiscController(Controller):
         render(self.app, nonce)
 
     @ex(
-        help="Get the latest block, or the block corresponding to the given identifier",
+        help="Get the given block; defaults to the latest block",
         arguments=[args.block("block_identifier", nargs="?"), *args.chain_and_rpc()],
     )
     def block(self) -> None:
         block_identifier = parse_block(self.app, "block_identifier")
         block = make_client(self.app).w3.eth.get_block(block_identifier)
         render(self.app, block)
+
+    @ex(
+        help="Get the time of the given block, as an ISO8601 date; defaults to the latest block",
+        arguments=[
+            args.block("block", nargs="?"),
+            (
+                ["--unix"],
+                {"help": "Return a Unix timestamp, instead", "action": "store_true"},
+            ),
+            *args.chain_and_rpc(),
+        ],
+    )
+    def block_time(self) -> None:
+        block_identifier = parse_block(self.app, "block")
+        block = make_client(self.app).w3.eth.get_block(block_identifier)
+        timestamp = block.get("timestamp")
+        if timestamp is None:
+            raise Web3CliError(
+                f"Could not find block timestamp; maybe chain '{self.app.chain.name}' does not support timestamps?"
+            )
+        if self.app.pargs.unix:
+            render(self.app, timestamp)
+        else:
+            render(self.app, datetime.utcfromtimestamp(timestamp).isoformat())
 
     @ex(
         help="Sign the given message and show the signed message, as returned by web3.py",
