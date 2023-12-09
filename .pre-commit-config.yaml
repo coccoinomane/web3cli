@@ -5,18 +5,18 @@ repos:
       - id: isort
 
 -   repo: https://github.com/PyCQA/autoflake
-    rev: v2.2.0
+    rev: v2.2.1
     hooks:
     -   id: autoflake
 
 -   repo: https://github.com/psf/black
-    rev: 23.7.0
+    rev: 23.11.0
     hooks:
       - id: black
         name: black
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.5.1
+    rev: v1.7.1
     hooks:
     -   id: mypy
         additional_dependencies: [mypy-extensions, types-setuptools, types-requests, typing_extensions]
