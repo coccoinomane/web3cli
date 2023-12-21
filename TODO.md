@@ -1,7 +1,8 @@
 ### Top priority
 
 - Tox win32 tests
-- Test block-time
+- block-time tests, docs & wiki
+
 
 ### To do
 

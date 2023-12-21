@@ -205,6 +205,20 @@ base: ChainFields = {
     ],
 }
 
+zkf: ChainFields = {
+    "name": "zkf",
+    "desc": "ZKFair Mainnet",
+    "chain_id": 42766,
+    "coin": "USDC",
+    "tx_type": 0,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://rpc.zkfair.io",
+        }
+    ],
+}
+
 """
   _                        _         _             _
  | |     ___   __   __ _  | |   __  | |_    __ _  (_)  _ _    ___
@@ -256,6 +270,7 @@ all: List[ChainFields] = [
     op,
     scroll,
     base,
+    zkf,
     # Local
     ganache,
     anvil,

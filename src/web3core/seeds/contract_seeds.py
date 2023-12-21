@@ -12,6 +12,7 @@ from web3core.seeds.contracts import (
     gno_contract_seeds,
     op_contract_seeds,
     scroll_contract_seeds,
+    zkf_contract_seeds,
 )
 
 all: List[ContractFields] = (
@@ -25,4 +26,5 @@ all: List[ContractFields] = (
     + op_contract_seeds.all
     + scroll_contract_seeds.all
     + base_contract_seeds.all
+    + zkf_contract_seeds.all
 )
