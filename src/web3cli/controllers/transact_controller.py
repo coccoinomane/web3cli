@@ -61,6 +61,8 @@ class TransactController(Controller):
             )
             for i, arg in enumerate(function_args):
                 print(f"  {input_names[i]}: {arg}")
+            if self.app.pargs.value:
+                print(f"  value: {self.app.pargs.value:,}")
             yes_or_exit(logger=self.app.log.info)
         # Send transaction
         output = send_contract_tx(

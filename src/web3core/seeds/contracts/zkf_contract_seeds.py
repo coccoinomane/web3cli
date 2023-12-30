@@ -49,4 +49,48 @@ wbtc: ContractFields = {
     "chain": "zkf",
 }
 
-all = [wusdc, zkf, eth, usdt, dai, wbtc]
+sideswap: ContractFields = {
+    "name": "sideswap",
+    "desc": "SideSwap: Router",
+    "type": "uniswap_v2",
+    "address": "0x72E25Dd6a6E75fC8f7820bA2eDEc3F89bB61f7A4",
+    "chain": "zkf",
+}
+
+sideswap_factory: ContractFields = {
+    "name": "sideswap_factory",
+    "desc": "Sideswap: Factory",
+    "type": "uniswap_v2_factory",
+    "address": "0x3F5a6e62cccD2C9AAF3dE431e127D65BC457000a",
+    "chain": "zkf",
+}
+
+
+sideswap_eth_usdc: ContractFields = {
+    "name": "sideswap_eth_usdc",
+    "desc": "SideSwap: Pool ETH/USDC",
+    "type": "uniswap_v2_pool",
+    "address": "0xe0dd622547525b81a53Cc788a88a7f085ea634FE",
+    "chain": "zkf",
+}
+sideswap_usdt_usdc: ContractFields = {
+    "name": "sideswap_usdt_usdc",
+    "desc": "SideSwap: Pool USDT/USDC",
+    "type": "uniswap_v2_pool",
+    "address": "0x79cAABe653D37e56246d13895b26676cC57cc463",
+    "chain": "zkf",
+}
+
+
+all = [
+    wusdc,
+    zkf,
+    eth,
+    usdt,
+    dai,
+    wbtc,
+    sideswap,
+    sideswap_factory,
+    sideswap_eth_usdc,
+    sideswap_usdt_usdc,
+]
