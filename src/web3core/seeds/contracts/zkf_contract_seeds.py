@@ -3,7 +3,7 @@ from web3core.models.types import ContractFields
 wusdc: ContractFields = {
     "name": "wusdc",
     "desc": "Wrapped USDC",
-    "type": "erc20",
+    "type": "weth",
     "address": "0xD33Db7EC50A98164cC865dfaa64666906d79319C",
     "chain": "zkf",
 }

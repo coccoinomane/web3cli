@@ -35,7 +35,7 @@ wbtc: ContractFields = {
 weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
-    "type": "erc20",
+    "type": "weth",
     "address": "0x33f1fbe337a19bebca41a3dcba896752729286ea",
     "chain": "erat",
 }

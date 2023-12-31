@@ -21,7 +21,7 @@ usdt: ContractFields = {
 weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
-    "type": "erc20",
+    "type": "weth",
     "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     "chain": "arb",
 }

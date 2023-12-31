@@ -9,6 +9,7 @@
 - Make web3cli extensible >
   https://snakecharmers.ethereum.org/web3-py-patterns-external-modules/ ?
 - Store private keys as keyfiles in signer table
+- Wrap / unwrap WETH command
 - Tests: subscribe controller
 - Tests: compound-v2 controller
 - Tests: test get_signer() switch function

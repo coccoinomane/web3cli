@@ -19,7 +19,7 @@ vc: ContractFields = {
 weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
-    "type": "erc20",
+    "type": "weth",
     "address": "0x5AEa5775959fBC2557Cc8789bC1bf90A239D9a91",
     "chain": "era",
 }

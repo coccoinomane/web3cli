@@ -3,7 +3,7 @@ from web3core.models.types import ContractFields
 weth: ContractFields = {
     "name": "weth",
     "desc": "Wrapped Ether",
-    "type": "erc20",
+    "type": "weth",
     "address": "0x4200000000000000000000000000000000000006",
     "chain": "base",
 }
