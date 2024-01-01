@@ -50,7 +50,7 @@ def send_coin_or_token(
 
     # Try to send token but first check if a contract exist with name=ticker
     token = Contract.get_by_name_and_chain(ticker, app.chain.name)
-    if not token or not token.type == "erc20":
+    if not token or not token.type in ("erc20", "weth"):
         raise Web3CliError(f"No ERC20 contract with name {ticker} on {app.chain.name}")
     return send_erc20_token(app, ticker, to, amount, unit)
 

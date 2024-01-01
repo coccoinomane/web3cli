@@ -220,7 +220,7 @@ class TokenController(Controller):
             data=[
                 [c.name, c.chain, c.type, "Yes" if bool(c.abi) else "No", c.address]
                 for c in Contract.get_all(Contract.name)
-                if c.chain == self.app.chain.name and c.type == "erc20"
+                if c.chain == self.app.chain.name and c.type in ("erc20", "weth")
             ],
             headers=["NAME", "CHAIN", "TYPE", "ABI", "ADDRESS"],
             wrap=42,
