@@ -65,7 +65,6 @@ sideswap_factory: ContractFields = {
     "chain": "zkf",
 }
 
-
 sideswap_eth_usdc: ContractFields = {
     "name": "sideswap_eth_usdc",
     "desc": "SideSwap: Pool ETH/USDC",
@@ -73,11 +72,20 @@ sideswap_eth_usdc: ContractFields = {
     "address": "0xe0dd622547525b81a53Cc788a88a7f085ea634FE",
     "chain": "zkf",
 }
+
 sideswap_usdt_usdc: ContractFields = {
     "name": "sideswap_usdt_usdc",
     "desc": "SideSwap: Pool USDT/USDC",
     "type": "uniswap_v2_pool",
     "address": "0x79cAABe653D37e56246d13895b26676cC57cc463",
+    "chain": "zkf",
+}
+
+izumi: ContractFields = {
+    "name": "izumi",
+    "desc": "Izumi: Swap router",
+    "type": "izumi",
+    "address": "0x02F55D53DcE23B4AA962CC68b0f685f26143Bdb2",
     "chain": "zkf",
 }
 
@@ -93,4 +101,5 @@ all = [
     sideswap_factory,
     sideswap_eth_usdc,
     sideswap_usdt_usdc,
+    izumi,
 ]
