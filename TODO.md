@@ -2,7 +2,7 @@
 
 - Tox win32 tests
 - block-time tests, docs & wiki
-
+- Docs: token documentation in README
 
 ### To do
 

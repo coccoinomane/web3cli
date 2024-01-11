@@ -128,18 +128,22 @@ class TokenController(Controller):
             (["token"], {"help": "Token to check, by name"}),
             (["address"], {"help": "Address or name of the account to check"}),
             (["--wei"], {"help": "Print the output in wei", "action": "store_true"}),
+            args.block(),
             *args.chain_and_rpc(),
         ],
     )
     def balance(self) -> None:
         address = resolve_address(self.app.pargs.address, chain=self.app.chain.name)
         client = make_contract_client(self.app, self.app.pargs.token)
-        balance_in_wei = client.functions["balanceOf"](address).call()
+        block = args.parse_block(self.app, "block")
+        balance_in_wei = client.functions["balanceOf"](address).call(
+            block_identifier=block
+        )
         if self.app.pargs.wei:
             render(self.app, balance_in_wei)
         else:
             balance = balance_in_wei / decimal.Decimal(
-                10 ** client.functions["decimals"]().call()
+                10 ** client.functions["decimals"]().call(block_identifier=block)
             )
             render(self.app, balance)
 
@@ -149,6 +153,7 @@ class TokenController(Controller):
             (["token"], {"help": "Token to check, by name"}),
             (["owner"], {"help": "Address or name of the account to check"}),
             (["spender"], {"help": "Address or name of the spender to check"}),
+            args.block(),
             *args.chain_and_rpc(),
         ],
     )
@@ -156,10 +161,13 @@ class TokenController(Controller):
         # Parse arguments
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         owner = resolve_address(self.app.pargs.owner, chain=self.app.chain.name)
+        block = args.parse_block(self.app, "block")
         # Initialize client
         client = make_contract_client(self.app, self.app.pargs.token)
-        decimals = client.functions["decimals"]().call()
-        allowance_in_wei = client.functions["allowance"](owner, spender).call()
+        decimals = client.functions["decimals"]().call(block_identifier=block)
+        allowance_in_wei = client.functions["allowance"](owner, spender).call(
+            block_identifier=block
+        )
         allowance = allowance_in_wei / 10**decimals
         render(self.app, allowance)
 
