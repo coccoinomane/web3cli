@@ -56,6 +56,14 @@ uniswap_v3: ContractFields = {
     "chain": "eth",
 }
 
+uniswap_v3_factory: ContractFields = {
+    "name": "uniswap_v3_factory",
+    "desc": "Uniswap V3: Factory",
+    "type": "uniswap_v3_factory",
+    "address": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    "chain": "eth",
+}
+
 
 compound_v2_eth: ContractFields = {
     "name": "compound_v2_eth",
@@ -90,6 +98,7 @@ all = [
     uniswap_v2_factory,
     uniswap_v2_usdc_usdt,
     uniswap_v3,
+    uniswap_v3_factory,
     compound_v2_eth,
     compound_v2_usdc,
     compound_v2_comptroller,
