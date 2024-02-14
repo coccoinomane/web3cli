@@ -123,6 +123,18 @@ class TokenController(Controller):
         render(self.app, output)
 
     @ex(
+        help="Show the decimals of the given token",
+        arguments=[
+            (["token"], {"help": "Token to check, by name"}),
+            *args.chain_and_rpc(),
+        ],
+    )
+    def decimals(self) -> None:
+        client = make_contract_client(self.app, self.app.pargs.token)
+        decimals = client.functions["decimals"]().call()
+        render(self.app, decimals)
+
+    @ex(
         help="Show the balance of the given token for the given address",
         arguments=[
             (["token"], {"help": "Token to check, by name"}),
