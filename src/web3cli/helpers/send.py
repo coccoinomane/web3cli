@@ -12,7 +12,6 @@ from web3cli.framework.app import App
 from web3cli.helpers.client_factory import make_contract_wallet, make_wallet
 from web3core.helpers.resolve import resolve_address
 from web3core.models.address import Address
-from web3core.models.chain import Chain
 from web3core.models.contract import Contract
 from web3core.models.signer import Signer
 
@@ -41,11 +40,7 @@ def send_coin_or_token(
         the token's decimals. See erc20_token_in_decimals for more details.
     """
     # Try to send native coin
-    if ticker.lower() in [c.coin.lower() for c in Chain.get_all()]:
-        if ticker.lower() != app.chain.coin.lower():
-            raise Web3CliError(
-                f"Please change chain: on {app.chain.name} chain you can only send {app.chain.coin}"
-            )
+    if ticker.lower() == app.chain.coin.lower():
         return send_native_coin(app, to, amount, unit)
 
     # Try to send token but first check if a contract exist with name=ticker
