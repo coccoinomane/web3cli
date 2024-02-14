@@ -24,6 +24,14 @@ weth: ContractFields = {
     "chain": "eth",
 }
 
+dai: ContractFields = {
+    "name": "dai",
+    "desc": "Dai Stablecoin",
+    "type": "erc20",
+    "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "chain": "eth",
+}
+
 uniswap_v2: ContractFields = {
     "name": "uniswap_v2",
     "desc": "Uniswap V2: Router 2",
@@ -64,7 +72,6 @@ uniswap_v3_factory: ContractFields = {
     "chain": "eth",
 }
 
-
 compound_v2_eth: ContractFields = {
     "name": "compound_v2_eth",
     "desc": "Compound V2: ETH market",
@@ -93,6 +100,7 @@ compound_v2_comptroller: ContractFields = {
 all = [
     usdc,
     weth,
+    dai,
     usdt,
     uniswap_v2,
     uniswap_v2_factory,
