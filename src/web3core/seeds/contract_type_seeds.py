@@ -116,6 +116,7 @@ all = [
     uniswap_v2_pool,
     uniswap_v2_factory,
     uniswap_v3,
+    uniswap_v3_factory,
     uniswap_v3_nonfungible_position_manager,
     traderjoe_v3,
     izumi,
