@@ -225,6 +225,7 @@ def test_parse_abi_value_array_csv() -> None:
         True,
         False,
     ]
+    assert parse_abi_value("123", "int256[]") == [123]
     assert parse_abi_value("-2,-1,0,1,2", "int256[]") == [-2, -1, 0, 1, 2]
     assert parse_abi_value("0,1,2,3,4", "uint256[]") == [0, 1, 2, 3, 4]
     assert parse_abi_value("0,1,2,3,4", "string[]") == ["0", "1", "2", "3", "4"]
