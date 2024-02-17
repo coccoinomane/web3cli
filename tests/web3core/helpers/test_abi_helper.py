@@ -1,7 +1,9 @@
 import pytest
+from hexbytes import HexBytes
 from web3.exceptions import InvalidAddress
 from web3.types import ABI
 
+from web3cli.exceptions import Web3CliError
 from web3core.exceptions import AbiOverflow
 from web3core.helpers.abi import (
     decode_function_data,
@@ -237,6 +239,12 @@ def test_parse_abi_value_string() -> None:
     )
     assert parse_abi_value("string", "3") == "3"
     assert parse_abi_value("string", "False") == "False"
+
+
+def test_parse_abi_value_bytes() -> None:
+    assert parse_abi_value("bytes", "0") == HexBytes("0")
+    assert parse_abi_value("bytes", "123") == HexBytes("123")
+    assert pytest.raises(Web3CliError, parse_abi_value, "bytes", "q")
 
 
 def test_decode_function_data(erc20_abi: ABI) -> None:
