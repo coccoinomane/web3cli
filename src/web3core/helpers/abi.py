@@ -20,7 +20,7 @@ from web3._utils.abi import (
     sub_type_of_array_type,
 )
 from web3._utils.validation import validate_abi_value
-from web3.types import ABI, ABIEvent, ABIFunction
+from web3.types import ABI, ABIEvent, ABIFunction, ABIFunctionParams
 
 from web3cli.exceptions import Web3CliError
 from web3core.exceptions import AbiOverflow, NotSupportedYet
@@ -110,26 +110,34 @@ def filter_abi_by_type_and_name(abi: ABI, type: str = None, name: str = None) ->
 
 
 def parse_abi_value(
-    abi_type: str,
     string_value: str,
+    abi_type: str = None,
+    abi_input: ABIFunctionParams = None,
     checksum_addresses: bool = True,
     resolve_address_fn: Callable[[str], str] = lambda x: x,
     allow_exp_notation: bool = True,
 ) -> Any:
     """Convert an ABI value from a string to a python type.
 
-    For array types, the string value must be a comma-separated
-    list of values; to use spaces or commas in a value, enclose
-    it in double quotes.
+    For iterable types (lists, arrays tuples), please use the
+    `parse_iterable_abi_value` function.
 
     Args:
-        abi_type: The ABI type of the value to convert.
+        abi_type: The ABI type of the value to convert, e.g. `string` or
+        `tuple`.
         string_value: The value to convert.
-        checksum_addresses: Whether to convert addresses to checksum addresses.
+        abi_input: The full ABI inuput dictionary for this argument, if
+            available.  It is required only for parsing a tuple, so that the
+            function can access its `components`. checksum_addresses: Whether
+            to convert addresses to checksum addresses.
         resolve_address_fn: A function to resolve addresses from strings.
         allow_exp_notation: Whether to allow exponential notation for integers
-        (e.g. 5e18 will be translated to 5000000000000000000).
+            (e.g. 5e18 will be translated to 5000000000000000000).
     """
+    if abi_type is None and abi_input is None:
+        raise ValueError("Either abi_type or abi_input must be provided")
+    if abi_input:
+        abi_type = abi_input["type"]
     value: Any = None
     if is_bool_type(abi_type):
         value = to_bool(string_value)
@@ -158,13 +166,45 @@ def parse_abi_value(
             value = Web3.to_checksum_address(value)
     elif is_array_type(abi_type):
         sub_type = sub_type_of_array_type(abi_type)
+        if is_array_type(sub_type):
+            raise NotSupportedYet("Nested arrays are not supported yet.")
         csv_reader = csv.reader([string_value], skipinitialspace=True)
         value = [
             parse_abi_value(
-                sub_type, v, checksum_addresses, resolve_address_fn, allow_exp_notation
+                string_value=v,
+                abi_type=sub_type,
+                checksum_addresses=checksum_addresses,
+                resolve_address_fn=resolve_address_fn,
+                allow_exp_notation=allow_exp_notation,
             )
             for v in next(csv_reader)
         ]
+    elif abi_type == "tuple":
+        if abi_input is None:
+            raise ValueError(
+                "The full ABI input dictionary is required to parse a tuple"
+            )
+        sub_names = [c["name"] for c in abi_input["components"]]
+        sub_types = [c["type"] for c in abi_input["components"]]
+        sub_args = list(csv.reader([string_value], skipinitialspace=True))[0]
+        if len(sub_args) != len(sub_types):
+            raise Web3CliError(
+                f"Provided {len(sub_args)} values for tuple argument {abi_input['name']}, expected {len(sub_types)}.  You provided {sub_args}, expected {sub_types}."
+            )
+        value = {}
+        for i, sub_arg in enumerate(sub_args):
+            if sub_types[i] == "tuple":
+                raise NotSupportedYet("Tuple of tuples not supported")
+            if is_array_type(sub_types[i]):
+                raise NotSupportedYet("Tuple of arrays not supported")
+            sub_key = sub_names[i]
+            value[sub_key] = parse_abi_value(
+                string_value=sub_arg,
+                abi_type=sub_types[i],
+                checksum_addresses=checksum_addresses,
+                resolve_address_fn=resolve_address_fn,
+                allow_exp_notation=allow_exp_notation,
+            )
     else:
         raise Web3CliError(f"Unsupported ABI type: {abi_type}")
 
@@ -178,7 +218,9 @@ def parse_abi_value(
                 f"max value is {max_int - 1}"
             )
 
-    validate_abi_value(abi_type, value)
+    # Check that the value is valid for the type (tuple not supported)
+    if abi_type != "tuple":
+        validate_abi_value(abi_type, value)
 
     return value
 
@@ -219,14 +261,12 @@ def parse_abi_values(
         )
     # Convert the string list into python arguments for the function
     converted_args: List[Any] = []
-    for i, input in enumerate(function_inputs):
+    for i, abi_input in enumerate(function_inputs):
         string_value = args[i]
-        abi_name = input["name"]
-        abi_type = input["type"]
         try:
             converted_value = parse_abi_value(
-                abi_type,
-                string_value,
+                string_value=string_value,
+                abi_input=abi_input,
                 checksum_addresses=checksum_addresses,
                 resolve_address_fn=resolve_address_fn,
                 allow_exp_notation=allow_exp_notation,
@@ -234,7 +274,7 @@ def parse_abi_values(
             converted_args.append(converted_value)
         except TypeError as e:
             raise Web3CliError(
-                f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted.  TypeError: {e}"
+                f"Argument '{abi_input['name']}' expects type '{abi_input['type']}', but received value '{string_value}' could not be converted.  TypeError: {e}"
             )
     return (converted_args, [i["name"] for i in function_inputs])
 
