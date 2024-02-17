@@ -1,7 +1,9 @@
+import binascii
 import csv
 from typing import Any, Callable, Dict, List, Tuple, Union, cast
 
 from eth_utils import encode_hex, function_abi_to_4byte_selector
+from hexbytes import HexBytes
 from web3 import Web3
 from web3._utils.abi import (
     abi_to_signature,
@@ -142,7 +144,12 @@ def parse_abi_value(
         if value < 0:
             raise ValueError("Unsigned integers must be positive")
     elif is_bytes_type(abi_type):
-        raise NotSupportedYet("Bytes type is not supported yet")
+        try:
+            value = HexBytes(string_value)
+        except binascii.Error as e:
+            raise Web3CliError(
+                f"Value '{string_value}' is not a valid hex string ({e})"
+            )
     elif is_string_type(abi_type):
         value = str(string_value)
     elif is_address_type(abi_type):
@@ -225,9 +232,9 @@ def parse_abi_values(
                 allow_exp_notation=allow_exp_notation,
             )
             converted_args.append(converted_value)
-        except TypeError:
+        except TypeError as e:
             raise Web3CliError(
-                f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted"
+                f"Argument '{abi_name}' expects type '{abi_type}', but received value '{string_value}' could not be converted.  TypeError: {e}"
             )
     return (converted_args, [i["name"] for i in function_inputs])
 
