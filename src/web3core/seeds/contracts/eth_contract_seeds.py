@@ -24,6 +24,14 @@ weth: ContractFields = {
     "chain": "eth",
 }
 
+wbtc: ContractFields = {
+    "name": "wbtc",
+    "desc": "Wrapped Bitcoin",
+    "type": "erc20",
+    "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "chain": "eth",
+}
+
 dai: ContractFields = {
     "name": "dai",
     "desc": "Dai Stablecoin",
@@ -100,6 +108,7 @@ compound_v2_comptroller: ContractFields = {
 all = [
     usdc,
     weth,
+    wbtc,
     dai,
     usdt,
     uniswap_v2,
