@@ -59,7 +59,9 @@ class CallController(Controller):
             if self.app.pargs.from_ is None:
                 raise Web3CliError("Please specify a from address with --from")
             else:
-                from_address = resolve_address(self.app.pargs.from_)
+                from_address = resolve_address(
+                    self.app.pargs.from_, chain=self.app.chain.name
+                )
 
         # Parse block identifier
         block = parse_block(self.app, "block")
