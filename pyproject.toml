@@ -51,6 +51,7 @@ w3op = {cmd = "w3op", help = "Run the CLI in dev mode, on Optimism OP chain"}
 w3scroll = {cmd = "w3scroll", help = "Run the CLI in dev mode, on Scroll ZK chain"}
 w3base = {cmd = "w3base", help = "Run the CLI in dev mode, on Base chain"}
 w3zkf = {cmd = "w3zkf", help = "Run the CLI in dev mode, on ZKFair chain"}
+w3manta = {cmd = "w3manta", help = "Run the CLI in dev mode, on Manta Pacific chain"}
 
 test = "ape test tests --network ::foundry"
 test_verbose = "ape test tests -s --network ::foundry"
@@ -83,6 +84,7 @@ w3op = "web3cli.main:w3op"
 w3scroll = "web3cli.main:w3scroll"
 w3base = "web3cli.main:w3base"
 w3zkf = "web3cli.main:w3zkf"
+w3manta = "web3cli.main:w3manta"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

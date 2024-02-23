@@ -252,3 +252,8 @@ def w3base() -> None:
 def w3zkf() -> None:
     """Shorthand command to use ZKFair chain"""
     main(lambda a: override_arg(a, "chain", "zkf"))
+
+
+def w3manta() -> None:
+    """Shorthand command to use Manta Pacific chain"""
+    main(lambda a: override_arg(a, "chain", "manta"))

@@ -219,6 +219,20 @@ zkf: ChainFields = {
     ],
 }
 
+manta: ChainFields = {
+    "name": "manta",
+    "desc": "Manta Pacific Mainnet",
+    "chain_id": 169,
+    "coin": "ETH",
+    "tx_type": 0,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://pacific-rpc.manta.network/http",
+        }
+    ],
+}
+
 """
   _                        _         _             _
  | |     ___   __   __ _  | |   __  | |_    __ _  (_)  _ _    ___
@@ -271,6 +285,7 @@ all: List[ChainFields] = [
     scroll,
     base,
     zkf,
+    manta,
     # Local
     ganache,
     anvil,
