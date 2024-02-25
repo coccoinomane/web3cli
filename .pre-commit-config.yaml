@@ -1,28 +1,28 @@
 repos:
--   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.10.1
+-   repo: https://github.com/pycqa/isort
+    rev: 5.13.2
     hooks:
       - id: isort
 
 -   repo: https://github.com/PyCQA/autoflake
-    rev: v2.2.1
+    rev: v2.3.0
     hooks:
     -   id: autoflake
 
 -   repo: https://github.com/psf/black
-    rev: 23.11.0
+    rev: 24.2.0
     hooks:
       - id: black
         name: black
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.7.1
+    rev: v1.8.0
     hooks:
     -   id: mypy
         additional_dependencies: [mypy-extensions, types-setuptools, types-requests, typing_extensions]
 
 -   repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.10.1
+    rev: v0.16
     hooks:
       - id: validate-pyproject
 
