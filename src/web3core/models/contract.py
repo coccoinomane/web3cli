@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Type
+from typing import List, Type
 
 from peewee import TextField
 from playhouse.signals import pre_save
@@ -63,19 +63,27 @@ class Contract(BaseModel):
             )
 
     @classmethod
+    def get_by_name_chain_and_types_or_raise(
+        cls, name: str, chain: str, types: List[str]
+    ) -> Contract:
+        """Return the contract with the given name on the given chain,
+        with one of the given types, or raise if it does not exist"""
+        try:
+            return cls.get(
+                (cls.name == name) & (cls.chain == chain) & (cls.type << types)
+            )
+        except cls.DoesNotExist:
+            raise ContractNotFound(
+                f"Could not find the '{name}' contract with type in '{types}' on chain '{chain}'"
+            )
+
+    @classmethod
     def get_by_name_chain_and_type_or_raise(
         cls, name: str, chain: str, type: str
     ) -> Contract:
         """Return the contract with the given name on the given chain,
         with the given type, or raise if it does not exist"""
-        try:
-            return cls.get(
-                (cls.name == name) & (cls.chain == chain) & (cls.type == type)
-            )
-        except cls.DoesNotExist:
-            raise ContractNotFound(
-                f"Could not find the '{name}' contract with type '{name}' on chain '{chain}'"
-            )
+        return cls.get_by_name_chain_and_types_or_raise(name, chain, [type])
 
     @classmethod
     def upsert(cls, fields: ContractFields, logger: Logger = None) -> Contract:

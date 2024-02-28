@@ -137,7 +137,7 @@ def test_token_list(contracts: List[ContractFields], chains: List[ChainFields]) 
             chain_tokens = [
                 c
                 for c in contracts
-                if c["chain"] == chain["name"] and c["type"] == "erc20"
+                if c["chain"] == chain["name"] and c["type"] in ["erc20", "weth"]
             ]
             app.set_args(["token", "list", "-c", chain["name"]]).run()
             data, output = app.last_rendered
@@ -149,7 +149,7 @@ def test_token_list(contracts: List[ContractFields], chains: List[ChainFields]) 
 
 
 def test_token_add(contracts: List[ContractFields], chains: List[ChainFields]) -> None:
-    tokens = [c for c in contracts if c["type"] == "erc20"]
+    tokens = [c for c in contracts if c["type"] in ["erc20", "weth"]]
     for t in tokens:
         with Web3CliTest() as app:
             seed_chains(chains)
@@ -180,7 +180,7 @@ def test_token_delete(
         with Web3CliTest() as app:
             seed_chains(chains)
             seed_contracts(contracts)
-            if c["type"] != "erc20":
+            if c["type"] not in ["erc20", "weth"]:
                 with pytest.raises(ContractNotFound):
                     app.set_args(
                         [
