@@ -126,8 +126,39 @@ def test_token_allowance(
     assert data == 2.0
 
 
+#    ___                   _
+#   / __|  _ _   _  _   __| |
+#  | (__  | '_| | || | / _` |
+#   \___| |_|    \_,_| \__,_|
+
+
+def test_token_get(contracts: List[ContractFields], chains: List[ChainFields]) -> None:
+    for c in contracts:
+        with Web3CliTest() as app:
+            seed_chains(chains)
+            seed_contracts(contracts)
+            args = [
+                "token",
+                "get",
+                c["name"],
+                "--chain",
+                c["chain"],
+            ]
+            if c["type"] not in ["erc20", "weth"]:
+                with pytest.raises(ContractNotFound):
+                    app.set_args(args).run()
+                continue
+            app.set_args(args).run()
+            data, output = app.last_rendered
+            print(data)
+            assert c["name"] == data["name"]
+            assert c["chain"] == data["chain"]
+            assert c["type"] == data["type"]
+            assert c["address"] == data["address"]
+
+
 def test_token_list(contracts: List[ContractFields], chains: List[ChainFields]) -> None:
-    """Add contracts and check that they are listed alphabetically
+    """Add tokens and check that they are listed alphabetically
     by name and chain"""
     contracts = sorted(contracts, key=lambda c: c["name"])
     for chain in chains:

@@ -10,6 +10,7 @@ from web3cli.helpers import args
 from web3cli.helpers.client_factory import make_contract_client, make_contract_wallet
 from web3cli.helpers.render import render, render_table
 from web3cli.helpers.tx import send_contract_tx
+from web3core.exceptions import ContractNotFound
 from web3core.helpers.misc import yes_or_exit
 from web3core.helpers.resolve import resolve_address
 from web3core.models.contract import Contract
@@ -202,9 +203,14 @@ class TokenController(Controller):
         ],
     )
     def get(self) -> None:
-        contract = Contract.get_by_name_chain_and_types_or_raise(
-            self.app.pargs.name, self.app.chain.name, ["erc20", "weth"]
-        )
+        try:
+            contract = Contract.get_by_name_chain_and_types_or_raise(
+                self.app.pargs.name, self.app.chain.name, ["erc20", "weth"]
+            )
+        except ContractNotFound:
+            raise ContractNotFound(
+                f"Could not find a token named '{self.app.pargs.name}' on chain '{self.app.chain.name}'"
+            )
         render(self.app, model_to_dict(contract))
 
     @ex(

@@ -115,7 +115,9 @@ def chains() -> List[ChainFields]:
 @pytest.fixture(scope="session")
 def contracts(chains: List[Chain]) -> List[ContractFields]:
     """List of contracts to seed the test DB with.  Keep the
-    number of contracts low lest we slow down tests."""
+    number of contracts low lest we slow down tests.
+
+    TODO: Make sure to include both token and non-token contracts."""
     contracts = []
     for chain in chains:
         chain_contracts = [
