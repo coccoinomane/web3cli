@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 import pytest
@@ -100,11 +101,11 @@ def test_contract_add(
                 ]
             ).run()
             contract = Contract.get_by_name_and_chain(c["name"], c["chain"])
-            assert contract.select().count() == 1
-            assert Contract.name == c["name"]
-            assert Contract.desc == c["desc"]
-            assert Contract.type == c["type"]
-            assert Contract.address == c["address"]
+            assert Contract.select().count() == 1
+            assert contract.name == c["name"]
+            assert contract.desc == c["desc"]
+            assert contract.type == c["type"]
+            assert contract.address == c["address"]
 
 
 # If neither --type nor --abi is provided, should throw an error
@@ -151,12 +152,12 @@ def test_contract_add_with_abi_string(
             ]
         ).run()
         contract = Contract.get_by_name_and_chain(c["name"], c["chain"])
-        assert contract.select().count() == 1
-        assert Contract.name == c["name"]
-        assert Contract.desc == c["desc"]
-        assert Contract.type == c["type"]
-        assert Contract.address == c["address"]
-        assert Contract.abi == erc20_abi_string
+        assert Contract.select().count() == 1
+        assert contract.name == c["name"]
+        assert contract.desc == c["desc"]
+        assert contract.type == None
+        assert contract.address == c["address"]
+        assert contract.abi == json.loads(erc20_abi_string)
 
 
 # Test that a contract can be added with an ABI from a file
@@ -181,12 +182,12 @@ def test_contract_add_with_abi_file(
             ]
         ).run()
         contract = Contract.get_by_name_and_chain(c["name"], c["chain"])
-        assert contract.select().count() == 1
-        assert Contract.name == c["name"]
-        assert Contract.desc == c["desc"]
-        assert Contract.type == c["type"]
-        assert Contract.address == c["address"]
-        assert Contract.abi == read_json(erc20_abi_file)
+        assert Contract.select().count() == 1
+        assert contract.name == c["name"]
+        assert contract.desc == c["desc"]
+        assert contract.type == None
+        assert contract.address == c["address"]
+        assert contract.abi == read_json(erc20_abi_file)
 
 
 def test_contract_update(
@@ -215,9 +216,9 @@ def test_contract_update(
         contract = Contract.get_by_name_and_chain(
             contracts[0]["name"], contracts[0]["chain"]
         )
-        assert Contract.desc == contracts[1]["desc"]
-        assert Contract.type == contracts[1]["type"]
-        assert Contract.address == contracts[1]["address"]
+        assert contract.desc == contracts[1]["desc"]
+        assert contract.type == contracts[1]["type"]
+        assert contract.address == contracts[1]["address"]
 
 
 def test_contract_delete(
