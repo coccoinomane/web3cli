@@ -2,6 +2,7 @@ import argparse
 import decimal
 
 from cement import ex
+from playhouse.shortcuts import model_to_dict
 
 from web3cli.exceptions import Web3CliError
 from web3cli.framework.controller import Controller
@@ -194,6 +195,19 @@ class TokenController(Controller):
     #   \____| |_|     \__,_|  \__,_|
 
     @ex(
+        help="show details of token by name and optionally chain",
+        arguments=[
+            (["name"], {"help": "name of the token"}),
+            args.chain(),
+        ],
+    )
+    def get(self) -> None:
+        contract = Contract.get_by_name_chain_and_types_or_raise(
+            self.app.pargs.name, self.app.chain.name, ["erc20", "weth"]
+        )
+        render(self.app, model_to_dict(contract))
+
+    @ex(
         help="add a new token to the database",
         arguments=[
             (["name"], {"help": "name of the token"}),
@@ -201,6 +215,13 @@ class TokenController(Controller):
             (
                 ["address"],
                 {"help": "address of the contract on the blockchain (0x...)"},
+            ),
+            (
+                ["--weth"],
+                {
+                    "help": "if the token is a wrapped native token, set this flag",
+                    "action": "store_true",
+                },
             ),
             (
                 ["-u", "--update"],
@@ -222,7 +243,7 @@ class TokenController(Controller):
                 {
                     "name": self.app.pargs.name,
                     "desc": self.app.pargs.desc,
-                    "type": "erc20",
+                    "type": "weth" if self.app.pargs.weth else "erc20",
                     "address": self.app.pargs.address,
                     "chain": self.app.chain.name,
                 },
@@ -251,8 +272,8 @@ class TokenController(Controller):
         arguments=[(["name"], {"help": "name of the token to delete"}), args.chain()],
     )
     def delete(self) -> None:
-        contract = Contract.get_by_name_chain_and_type_or_raise(
-            self.app.pargs.name, self.app.chain.name, "erc20"
+        contract = Contract.get_by_name_chain_and_types_or_raise(
+            self.app.pargs.name, self.app.chain.name, ["erc20", "weth"]
         )
         contract.delete_instance()
         self.app.log.info(

@@ -153,24 +153,25 @@ def test_token_add(contracts: List[ContractFields], chains: List[ChainFields]) -
     for t in tokens:
         with Web3CliTest() as app:
             seed_chains(chains)
-            app.set_args(
-                [
-                    "token",
-                    "add",
-                    t["name"],
-                    t["address"],
-                    "--desc",
-                    t["desc"],
-                    "--chain",
-                    t["chain"],
-                ]
-            ).run()
+            args = [
+                "token",
+                "add",
+                t["name"],
+                t["address"],
+                "--desc",
+                t["desc"],
+                "--chain",
+                t["chain"],
+            ]
+            if t["type"] == "weth":
+                args += ["--weth"]
+            app.set_args(args).run()
             contract = Contract.get_by_name_and_chain(t["name"], t["chain"])
-            assert contract.select().count() == 1
-            assert Contract.name == t["name"]
-            assert Contract.desc == t["desc"]
-            assert Contract.type == t["type"]
-            assert Contract.address == t["address"]
+            assert Contract.select().count() == 1
+            assert contract.name == t["name"]
+            assert contract.desc == t["desc"]
+            assert contract.type == t["type"]
+            assert contract.address == t["address"]
 
 
 def test_token_delete(
