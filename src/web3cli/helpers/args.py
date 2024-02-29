@@ -445,7 +445,7 @@ def priority_fee(
         {
             "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
             "type": float,
-            "default": 1,
+            # default set in `parse_priority_fee`
         }
         | kwargs,
     )
