@@ -45,7 +45,7 @@ CONFIG["web3cli"] = {
     "debug": False,
     "default_chain": "eth",
     "default_signer": None,
-    "default_priority_fee": 1,
+    "default_priority_fee": 0.1,
     "db_file": os.path.join(
         os.path.expanduser("~"), ".web3cli", "database", "web3cli.sqlite"
     ),
