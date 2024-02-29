@@ -444,7 +444,7 @@ def priority_fee(
         list(name_or_flags) or ["--priority-fee", "--tip"],
         {
             "help": "max priority fee (tip) in gwei you are willing to spend for a transaction",
-            "type": int,
+            "type": float,
             "default": 1,
         }
         | kwargs,

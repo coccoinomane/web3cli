@@ -21,7 +21,7 @@ class App(CementApp):
         self.signer: Signer
         self.chain: Chain
         self.rpc: Rpc
-        self.priority_fee: int
+        self.priority_fee: float
         self.db: SqliteDatabase
         self.models: List[Model]
 

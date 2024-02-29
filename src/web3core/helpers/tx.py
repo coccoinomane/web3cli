@@ -19,7 +19,7 @@ def send_contract_tx(
     value_in_wei: Wei = None,
     nonce: Nonce = None,
     gas_limit: int = None,
-    max_priority_fee_in_gwei: int = None,
+    max_priority_fee_in_gwei: float = None,
 ) -> TxLife:
     """Send a transaction to a contract function, and return its details
 
@@ -45,7 +45,7 @@ def send_contract_tx(
     - value_in_wei (Wei): The value to send with the transaction.
     - nonce (Nonce): The nonce to use for the transaction.
     - gas_limit (int): The gas limit to use for the transaction.
-    - max_priority_fee_in_gwei (int): The max priority fee per gas to use
+    - max_priority_fee_in_gwei (float): The max priority fee per gas to use
       for the transaction.
 
     RETURNS
