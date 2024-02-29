@@ -67,6 +67,30 @@ def test_token_approve(
     assert TST.allowance(alice, bob) == 1.234 * 10**18
 
 
+def test_token_approve_wei(
+    app: Web3CliTest,
+    alice: ape.api.AccountAPI,
+    bob: ape.api.AccountAPI,
+    TST: ape.contracts.ContractInstance,
+) -> None:
+    seed_local_token(app, TST)
+    app.set_args(
+        [
+            "token",
+            "approve",
+            "tst",
+            "bob",
+            "1234",
+            "-s",
+            "alice",
+            "--no-check",
+            "--wei",
+            "--force",
+        ]
+    ).run()
+    assert TST.allowance(alice, bob) == 1234
+
+
 def test_token_approve_check(
     app: Web3CliTest,
     alice: ape.api.AccountAPI,

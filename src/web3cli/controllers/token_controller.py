@@ -33,7 +33,7 @@ class TokenController(Controller):
             (
                 ["amount"],
                 {
-                    "help": "Amount of tokens to approve. Leave empty to approve the maximum amount",
+                    "help": "Amount of tokens to approve, in token units; leave empty to approve the maximum amount",
                     "type": float,
                     "nargs": "?",
                 },
@@ -44,6 +44,14 @@ class TokenController(Controller):
                     "help": "Whether to stop if the spender already has enough allowance",
                     "action": argparse.BooleanOptionalAction,
                     "default": True,
+                },
+            ),
+            (
+                ["--wei"],
+                {
+                    "help": "Use the smallest unit of the token instead of the token's unit",
+                    "action": argparse.BooleanOptionalAction,
+                    "default": False,
                 },
             ),
             *args.tx_args(),
@@ -57,12 +65,18 @@ class TokenController(Controller):
         spender = resolve_address(self.app.pargs.spender, chain=self.app.chain.name)
         # Initialize client
         signer = make_contract_wallet(self.app, self.app.pargs.token)
-        # Compute amount in
+        # Compute amount in token units, and amount in wei
         if not self.app.pargs.amount:
+            amount = None
             amount_in_wei = 2**256 - 1
+        elif self.app.pargs.wei:
+            decimals = signer.functions["decimals"]().call()
+            amount_in_wei = int(self.app.pargs.amount)
+            amount = amount_in_wei / 10**decimals
         else:
             decimals = signer.functions["decimals"]().call()
-            amount_in_wei = int(self.app.pargs.amount * 10**decimals)
+            amount = self.app.pargs.amount
+            amount_in_wei = int(amount * 10**decimals)
         # Approve
         if self.app.pargs.check:
             self.app.log.debug("Checking token allowance...")
@@ -78,9 +92,14 @@ class TokenController(Controller):
         # Confirm
         if not self.app.pargs.force:
             what = (
-                (str(self.app.pargs.amount) if self.app.pargs.amount else "infinite")
+                (
+                    str(amount_in_wei if self.app.pargs.wei else amount)
+                    if amount is not None
+                    else "infinite"
+                )
                 + " "
                 + self.app.pargs.token
+                + (" (wei)" if self.app.pargs.wei else "")
             )
             print(
                 f"You are about to approve {spender} on chain {self.app.chain.name} to spend {what} on behalf of {signer.user_address}"
