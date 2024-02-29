@@ -66,9 +66,17 @@ uniswap_v2_usdc_usdt: ContractFields = {
 
 uniswap_v3: ContractFields = {
     "name": "uniswap_v3",
-    "desc": "Uniswap V3: SwapRouter",
+    "desc": "Uniswap V3: Periphery SwapRouter",
     "type": "uniswap_v3",
     "address": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+    "chain": "eth",
+}
+
+uniswap_v3_swaprouter02: ContractFields = {
+    "name": "uniswap_v3_swaprouter02",
+    "desc": "Uniswap V3: SwapRouter02",
+    "type": "uniswap_v3_swaprouter02",
+    "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
     "chain": "eth",
 }
 
@@ -115,6 +123,7 @@ all = [
     uniswap_v2_factory,
     uniswap_v2_usdc_usdt,
     uniswap_v3,
+    uniswap_v3_swaprouter02,
     uniswap_v3_factory,
     compound_v2_eth,
     compound_v2_usdc,
