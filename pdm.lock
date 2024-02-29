@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:131e841422ab6151acadbd0dbe9237d001632a12e0514bcc1f33f594f5bbc779"
+content_hash = "sha256:74b214e995b2b1698dc832c494f107f979ee90c547e7069f79b8d8e4e86983bb"
 
 [[package]]
 name = "aiohttp"
@@ -510,60 +510,77 @@ files = [
 
 [[package]]
 name = "cement"
-version = "3.0.9"
+version = "3.0.10"
 requires_python = ">=3.8"
-git = "https://github.com/datafolklabs/cement.git"
-ref = "434f17ca02a6856d5ba340e1b510879198dd661f"
-revision = "434f17ca02a6856d5ba340e1b510879198dd661f"
 summary = "Application Framework for Python"
 groups = ["default"]
+files = [
+    {file = "cement-3.0.10-py3-none-any.whl", hash = "sha256:8b70a26f0cfe53f1c90e972de27e2e78d180d13e386d11022dc8e65035b11f1e"},
+    {file = "cement-3.0.10.tar.gz", hash = "sha256:73d1015ebf9b8df13e6bc987edf0d4be3f1c8b4438921eea8d66cbb5504aee15"},
+]
 
 [[package]]
 name = "cement"
-version = "3.0.9"
+version = "3.0.10"
 extras = ["colorlog"]
 requires_python = ">=3.8"
 summary = "Application Framework for Python"
 groups = ["default"]
 dependencies = [
-    "cement==3.0.9",
+    "cement==3.0.10",
     "colorlog",
+]
+files = [
+    {file = "cement-3.0.10-py3-none-any.whl", hash = "sha256:8b70a26f0cfe53f1c90e972de27e2e78d180d13e386d11022dc8e65035b11f1e"},
+    {file = "cement-3.0.10.tar.gz", hash = "sha256:73d1015ebf9b8df13e6bc987edf0d4be3f1c8b4438921eea8d66cbb5504aee15"},
 ]
 
 [[package]]
 name = "cement"
-version = "3.0.9"
+version = "3.0.10"
 extras = ["jinja2"]
 requires_python = ">=3.8"
 summary = "Application Framework for Python"
 groups = ["default"]
 dependencies = [
-    "cement==3.0.9",
+    "cement==3.0.10",
     "jinja2",
+]
+files = [
+    {file = "cement-3.0.10-py3-none-any.whl", hash = "sha256:8b70a26f0cfe53f1c90e972de27e2e78d180d13e386d11022dc8e65035b11f1e"},
+    {file = "cement-3.0.10.tar.gz", hash = "sha256:73d1015ebf9b8df13e6bc987edf0d4be3f1c8b4438921eea8d66cbb5504aee15"},
 ]
 
 [[package]]
 name = "cement"
-version = "3.0.9"
+version = "3.0.10"
 extras = ["tabulate"]
 requires_python = ">=3.8"
 summary = "Application Framework for Python"
 groups = ["default"]
 dependencies = [
-    "cement==3.0.9",
+    "cement==3.0.10",
     "tabulate",
+]
+files = [
+    {file = "cement-3.0.10-py3-none-any.whl", hash = "sha256:8b70a26f0cfe53f1c90e972de27e2e78d180d13e386d11022dc8e65035b11f1e"},
+    {file = "cement-3.0.10.tar.gz", hash = "sha256:73d1015ebf9b8df13e6bc987edf0d4be3f1c8b4438921eea8d66cbb5504aee15"},
 ]
 
 [[package]]
 name = "cement"
-version = "3.0.9"
+version = "3.0.10"
 extras = ["yaml"]
 requires_python = ">=3.8"
 summary = "Application Framework for Python"
 groups = ["default"]
 dependencies = [
-    "cement==3.0.9",
+    "cement==3.0.10",
     "pyYaml",
+]
+files = [
+    {file = "cement-3.0.10-py3-none-any.whl", hash = "sha256:8b70a26f0cfe53f1c90e972de27e2e78d180d13e386d11022dc8e65035b11f1e"},
+    {file = "cement-3.0.10.tar.gz", hash = "sha256:73d1015ebf9b8df13e6bc987edf0d4be3f1c8b4438921eea8d66cbb5504aee15"},
 ]
 
 [[package]]
