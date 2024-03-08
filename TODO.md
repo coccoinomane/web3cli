@@ -1,8 +1,7 @@
 ### Top priority
 
-- Tox win32 tests
 - block-time tests, docs & wiki
-- Docs: token documentation in README
+- Docs: token documentation in README including revoke
 
 ### To do
 
