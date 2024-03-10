@@ -100,6 +100,18 @@ class MiscController(Controller):
             render(self.app, datetime.utcfromtimestamp(timestamp).isoformat())
 
     @ex(
+        help="Get the number of the given block, as an integer; defaults to the latest block",
+        arguments=[args.block("block", nargs="?"), *args.chain_and_rpc()],
+    )
+    def block_number(self) -> None:
+        block_identifier = parse_block(self.app, "block")
+        block = make_client(self.app).w3.eth.get_block(block_identifier)
+        block_number = block.get("number")
+        if block_number is None:
+            raise Web3CliError(f"Could not extract block number")
+        render(self.app, block.get("number"))
+
+    @ex(
         help="Sign the given message and show the signed message, as returned by web3.py",
         arguments=[(["msg"], {"action": "store"}), args.signer()],
     )

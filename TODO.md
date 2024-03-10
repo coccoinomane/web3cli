@@ -1,6 +1,6 @@
 ### Top priority
 
-- block-time tests, docs & wiki
+- Test: block-time, block-number + docs & wiki
 - Docs: token documentation in README including revoke
 
 ### To do
