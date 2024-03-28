@@ -88,6 +88,22 @@ uniswap_v3_factory: ContractFields = {
     "chain": "eth",
 }
 
+uniswap_v3_position_manager: ContractFields = {
+    "name": "uniswap_v3_position_manager",
+    "desc": "Uniswap V3: NonFungiblePositionManager",
+    "type": "uniswap_v3_nonfungible_position_manager",
+    "address": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    "chain": "eth",
+}
+
+uniswap_v3_position_descriptor: ContractFields = {
+    "name": "uniswap_v3_position_descriptor",
+    "desc": "Uniswap V3: NonFungiblePositionDescriptor",
+    "type": "uniswap_v3_nonfungible_position_descriptor",
+    "address": "0x91ae842A5Ffd8d12023116943e72A606179294f3",
+    "chain": "eth",
+}
+
 compound_v2_eth: ContractFields = {
     "name": "compound_v2_eth",
     "desc": "Compound V2: ETH market",
@@ -125,6 +141,8 @@ all = [
     uniswap_v3,
     uniswap_v3_swaprouter02,
     uniswap_v3_factory,
+    uniswap_v3_position_manager,
+    uniswap_v3_position_descriptor,
     compound_v2_eth,
     compound_v2_usdc,
     compound_v2_comptroller,
