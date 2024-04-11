@@ -74,6 +74,46 @@ usdm: ContractFields = {  # alias for wusdm
     "chain": "manta",
 }
 
+gai: ContractFields = {
+    "name": "gai",
+    "desc": "GAI Stablecoin",
+    "type": "erc20",
+    "address": "0xcd91716ef98798a85e79048b78287b13ae6b99b2",
+    "chain": "manta",
+}
+
+gok: ContractFields = {
+    "name": "gok",
+    "desc": "GOK Goku Money",
+    "type": "erc20",
+    "address": "0x387660BC95682587efC12C543c987ABf0fB9778f",
+    "chain": "manta",
+}
+
+maticx: ContractFields = {
+    "name": "maticx",
+    "desc": "Stader Liquid Staking Matic",
+    "type": "erc20",
+    "address": "0x01D27580C464d5B3B26F78Bee12E684901dbC02a",
+    "chain": "manta",
+}
+
+asm: ContractFields = {
+    "name": "asmatch",
+    "desc": "As Match token",
+    "type": "erc20",
+    "address": "0xcd5d6de3fdbce1895f0dac13a065673599ed6806",
+    "chain": "manta",
+}
+
+wsteth: ContractFields = {
+    "name": "wsteth",
+    "desc": "Wrapped liquid staked Ether 2.0",
+    "type": "erc20",
+    "address": "0x2FE3AD97a60EB7c79A976FC18Bb5fFD07Dd94BA5",
+    "chain": "manta",
+}
+
 firefly_v3_factory = {
     "name": "firefly_v3_factory",
     "desc": "Firefly V3 Factory",
@@ -84,4 +124,20 @@ firefly_v3_factory = {
     ),
 }
 
-all = [weth, manta, usdc, usdt, dai, wbtc, stone, wusdm, usdm, firefly_v3_factory]
+all = [
+    weth,
+    manta,
+    usdc,
+    usdt,
+    dai,
+    wbtc,
+    stone,
+    wusdm,
+    usdm,
+    gai,
+    gok,
+    maticx,
+    asm,
+    wsteth,
+    firefly_v3_factory,
+]
