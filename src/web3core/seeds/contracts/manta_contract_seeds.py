@@ -1,3 +1,5 @@
+import json
+
 from web3core.models.types import ContractFields
 
 weth: ContractFields = {
@@ -56,5 +58,30 @@ stone: ContractFields = {
     "chain": "manta",
 }
 
+wusdm: ContractFields = {
+    "name": "usdm",
+    "desc": "Mountain Protocol USD (Wrapped)",
+    "type": "erc20",
+    "address": "0xbdAd407F77f44F7Da6684B416b1951ECa461FB07",
+    "chain": "manta",
+}
 
-all = [weth, manta, usdc, usdt, dai, wbtc, stone]
+usdm: ContractFields = {  # alias for wusdm
+    "name": "wusdm",
+    "desc": "Mountain Protocol USD (Wrapped)",
+    "type": "erc20",
+    "address": "0xbdAd407F77f44F7Da6684B416b1951ECa461FB07",
+    "chain": "manta",
+}
+
+firefly_v3_factory = {
+    "name": "firefly_v3_factory",
+    "desc": "Firefly V3 Factory",
+    "address": "0x8666EF9DC0cA5336147f1B11f2C4fC2ecA809B95",
+    "chain": "manta",
+    "abi": json.loads(
+        '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint24","name":"fee","type":"uint24"},{"indexed":true,"internalType":"int24","name":"tickSpacing","type":"int24"}],"name":"FeeAmountEnabled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnerChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"token0","type":"address"},{"indexed":true,"internalType":"address","name":"token1","type":"address"},{"indexed":true,"internalType":"uint24","name":"fee","type":"uint24"},{"indexed":false,"internalType":"int24","name":"tickSpacing","type":"int24"},{"indexed":false,"internalType":"address","name":"pool","type":"address"}],"name":"PoolCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"tokenA","type":"address"},{"indexed":false,"internalType":"address","name":"tokenB","type":"address"},{"indexed":false,"internalType":"uint24","name":"fee","type":"uint24"}],"name":"WhitelistPair","type":"event"},{"inputs":[],"name":"INIT_CODE_PAIR_HASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"tokenA","type":"address"},{"internalType":"address","name":"tokenB","type":"address"},{"internalType":"uint24","name":"fee","type":"uint24"}],"name":"createPool","outputs":[{"internalType":"address","name":"pool","type":"address"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint24","name":"fee","type":"uint24"},{"internalType":"int24","name":"tickSpacing","type":"int24"}],"name":"enableFeeAmount","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint24","name":"","type":"uint24"}],"name":"feeAmountTickSpacing","outputs":[{"internalType":"int24","name":"","type":"int24"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"tokenA","type":"address"},{"internalType":"address","name":"tokenB","type":"address"}],"name":"getPairWhitelist","outputs":[{"internalType":"uint24","name":"fee","type":"uint24"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"uint24","name":"","type":"uint24"}],"name":"getPool","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"parameters","outputs":[{"internalType":"address","name":"factory","type":"address"},{"internalType":"address","name":"token0","type":"address"},{"internalType":"address","name":"token1","type":"address"},{"internalType":"uint24","name":"fee","type":"uint24"},{"internalType":"int24","name":"tickSpacing","type":"int24"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_owner","type":"address"}],"name":"setOwner","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenA","type":"address"},{"internalType":"address","name":"tokenB","type":"address"},{"internalType":"uint24","name":"fee","type":"uint24"}],"name":"whitelistPair","outputs":[],"stateMutability":"nonpayable","type":"function"}]'
+    ),
+}
+
+all = [weth, manta, usdc, usdt, dai, wbtc, stone, wusdm, usdm, firefly_v3_factory]
