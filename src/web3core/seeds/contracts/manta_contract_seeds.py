@@ -34,6 +34,14 @@ usdt: ContractFields = {
     "chain": "manta",
 }
 
+tia: ContractFields = {
+    "name": "tia",
+    "desc": "Celestia Token",
+    "type": "erc20",
+    "address": "0x6Fae4D9935E2fcb11fC79a64e917fb2BF14DaFaa",
+    "chain": "manta",
+}
+
 dai: ContractFields = {
     "name": "dai",
     "desc": "DAI Maker stablecoin",
@@ -74,6 +82,14 @@ usdm: ContractFields = {  # alias for wusdm
     "chain": "manta",
 }
 
+labm: ContractFields = {
+    "name": "labm",
+    "desc": "LayerBank Token",
+    "type": "erc20",
+    "address": "0x20a512dbdc0d006f46e6ca11329034eb3d18c997",
+    "chain": "manta",
+}
+
 gai: ContractFields = {
     "name": "gai",
     "desc": "GAI Stablecoin",
@@ -99,7 +115,7 @@ maticx: ContractFields = {
 }
 
 asm: ContractFields = {
-    "name": "asmatch",
+    "name": "asm",
     "desc": "As Match token",
     "type": "erc20",
     "address": "0xcd5d6de3fdbce1895f0dac13a065673599ed6806",
@@ -129,11 +145,13 @@ all = [
     manta,
     usdc,
     usdt,
+    tia,
     dai,
     wbtc,
     stone,
     wusdm,
     usdm,
+    labm,
     gai,
     gok,
     maticx,
