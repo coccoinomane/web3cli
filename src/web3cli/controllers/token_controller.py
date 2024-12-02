@@ -208,6 +208,28 @@ class TokenController(Controller):
     def transfer(self) -> None:
         self.app.log.warning("Not implemented yet.  Use `w3 send` instead.")
 
+    @ex(
+        help="Show the total supply of the given token",
+        arguments=[
+            (["token"], {"help": "Token to check, by name"}),
+            (["--wei"], {"help": "Print the output in wei", "action": "store_true"}),
+            args.block(),
+            *args.chain_and_rpc(),
+        ],
+        aliases=["totalSupply"],
+    )
+    def supply(self) -> None:
+        block = args.parse_block(self.app, "block")
+        client = make_contract_client(self.app, self.app.pargs.token)
+        supply_in_wei = client.functions["totalSupply"]().call(block_identifier=block)
+        if self.app.pargs.wei:
+            render(self.app, supply_in_wei)
+        else:
+            supply = supply_in_wei / decimal.Decimal(
+                10 ** client.functions["decimals"]().call(block_identifier=block)
+            )
+            render(self.app, supply)
+
     #    ____                      _
     #   / ___|  _ __   _   _    __| |
     #  | |     | '__| | | | |  / _` |
