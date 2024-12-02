@@ -87,6 +87,20 @@ gno: ChainFields = {
     ],
 }
 
+fantom: ChainFields = {
+    "name": "fantom",
+    "desc": "Fantom Opera Mainnet",
+    "chain_id": 250,
+    "coin": "FTM",
+    "tx_type": 2,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://rpc.ftm.tools",
+        }
+    ],
+}
+
 
 """
   _      ___     ___   _             _
@@ -276,6 +290,7 @@ all: List[ChainFields] = [
     avax,
     cro,
     gno,
+    fantom,
     # L2s
     matic,
     arb,
