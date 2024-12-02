@@ -102,6 +102,7 @@ class MiscController(Controller):
     @ex(
         help="Get the number of the given block, as an integer; defaults to the latest block",
         arguments=[args.block("block", nargs="?"), *args.chain_and_rpc()],
+        aliases=["bnum"],
     )
     def block_number(self) -> None:
         block_identifier = parse_block(self.app, "block")
