@@ -79,6 +79,17 @@ To upgrade web3cli, run `pipx upgrade web3cli`.
 
 # Simple examples
 
+- Get list of available commands:
+   ```bash
+   w3 --help
+   ```
+  or visit the Wiki page [List of commands](https://github.com/coccoinomane/web3cli/wiki/%F0%9F%AB%A1-List-of-commands).
+
+- Get help for a given command:
+   ```bash
+   w3 balance --help
+   ```
+
 - Get the ETH balance of any address:
    ```
    w3 balance 0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae
@@ -167,7 +178,7 @@ web3cli comes preloaded with some popular smart contracts, including ERC20 token
 
 See the available contracts with `w3 contract list`:
 
-```
+```bash
 w3 contract list               # contracts on Ethereum
 w3 contract list --chain bnb   # contracts on BNB chain
 w3 contract list --type erc20  # tokens on Ethereum
@@ -175,22 +186,28 @@ w3 contract list --type erc20  # tokens on Ethereum
 
 You can also add custom contracts with `w3 contract add`:
 
-```
+```bash
 w3 contract add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 --type erc20
 w3 contract add sushi 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F --type uniswap_v2
 ```
 
 To add or list new tokens, you can use the `w3 token` shorthand:
 
-```
+```bash
 w3 token add weth 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
 w3 token list
 w3 token delete weth
 ```
 
-See available functions and events on a contract with `w3 abi functions` and `w3 abi events`:
+A more complex example: check USDT total supply on Arbitrum 100,000 blocks ago:
 
+```bash
+w3arb token supply usdt --block $(($(w3arb bnum)-100000))
 ```
+
+For any given contract, see available functions and events with `w3 abi functions` and `w3 abi events`:
+
+```bash
 w3 abi fns weth           # functions on WETH token
 w3 abi evs uniswap_v2     # events on Uniswap V2
 w3 abi fns --abi abi.json # functions of an arbitrary ABI
@@ -201,13 +218,13 @@ w3 abi fns --abi abi.json # functions of an arbitrary ABI
 To read from a smart contract, use `w3 call`. For example, to get the total
 supply of the WETH token, run:
 
-```
+```bash
 w3 call weth totalSupply
 ```
 
 Function arguments are parsed automatically, so you can call `balanceOf` with:
 
-```
+```bash
 w3 call weth balanceOf 0xA59B29d7dbC9794d1e7f45123C48b2b8d0a34636
 ```
 
@@ -223,13 +240,13 @@ w3 call uniswap_v2 getAmountsOut 100e6 usdc,usdt | jq -r '.[1]'
 To write to the blockchain, use `w3 transact`. For example, to transfer 1 ETH to 
 address, run:
 
-```
+```bash
 w3 transact weth transfer <address> 1e18
 ```
 
 To swap 1 USDC for USDT on Uniswap, accepting no less than 0.9 USDT in return, run:
 
-```
+```bash
 w3 transact usdc approve uniswap_v2 1e6
 w3 transact uniswap_v2 swapExactTokensForTokens 1e6 0.9e6 usdc,usdt <receiver address> 9e9
 ```
@@ -240,21 +257,21 @@ web3cli comes with out-of-the-box support for many chains.  To see the list of a
 
 Pass the chain name using the flag `--chain` or the shorthand `-c`:
 
-```
+```bash
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain bnb  # bnb chain
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain avax # avax chain
 ```
 
 You can also use one of the provided aliases, like `w3bnb`, `w3avax`, or `w3arb`:
 
-```
+```bash
 w3bnb balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3  # bnb chain
 w3avax balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 # avax chain
 ```
 
 If you are focussing on a specific chain, set it as the default:
 
-```
+```bash
 w3 config set default_chain bnb
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3             # bnb chain
 w3 balance 0x8894e0a0c962cb723c1976a4421c95949be2d4e3 --chain eth # eth chain
@@ -292,13 +309,13 @@ Using a custom node is most useful in the following situations:
 
 Add new chains with `w3 chain add`:
 
-```
+```bash
 w3 chain add cronos 25 CRO --tx-type 2 --rpc https://evm.cronos.org
 ```
 
 Use the custom chain with `--chain`:
 
-```
+```bash
 w3 balance 0x7de9ab1e6a60ac7a70ce96d1d95a0dfcecf7bfb7 --chain cronos
 ```
 
