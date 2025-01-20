@@ -257,3 +257,8 @@ def w3zkf() -> None:
 def w3fantom() -> None:
     """Shorthand command to use Fantom Opera chain"""
     main(lambda a: override_arg(a, "chain", "fantom"))
+
+
+def w3sonic() -> None:
+    """Shorthand command to use Sonic Mainnet chain"""
+    main(lambda a: override_arg(a, "chain", "sonic"))

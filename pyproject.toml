@@ -54,6 +54,7 @@ w3zkf = {cmd = "w3zkf", help = "Run the CLI in dev mode, on ZKFair chain"}
 w3manta = {cmd = "w3manta", help = "Run the CLI in dev mode, on Manta Pacific chain"}
 w3ftm = {cmd = "w3fantom", help = "Run the CLI in dev mode, on Fantom Opera chain"}
 w3fantom = {cmd = "w3fantom", help = "Run the CLI in dev mode, on Fantom Opera chain"}
+w3sonic = {cmd = "w3sonic", help = "Run the CLI in dev mode, on Sonic Mainnet chain"}
 
 test = "ape test tests --network ::foundry"
 test_verbose = "ape test tests -s --network ::foundry"
@@ -89,6 +90,7 @@ w3zkf = "web3cli.main:w3zkf"
 w3manta = "web3cli.main:w3manta"
 w3ftm = "web3cli.main:w3fantom"
 w3fantom = "web3cli.main:w3fantom"
+w3sonic = "web3cli.main:w3sonic"
 
 [project.urls]
 homepage = "https://github.com/coccoinomane/web3cli"

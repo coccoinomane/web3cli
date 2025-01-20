@@ -101,6 +101,20 @@ fantom: ChainFields = {
     ],
 }
 
+sonic: ChainFields = {
+    "name": "sonic",
+    "desc": "Sonic Mainnet",
+    "chain_id": 146,
+    "coin": "S",
+    "tx_type": 0,
+    "middlewares": "",
+    "rpcs": [
+        {
+            "url": "https://rpc.soniclabs.com",
+        }
+    ],
+}
+
 
 """
   _      ___     ___   _             _
@@ -291,6 +305,7 @@ all: List[ChainFields] = [
     cro,
     gno,
     fantom,
+    sonic,
     # L2s
     matic,
     arb,
